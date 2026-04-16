@@ -1,0 +1,809 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RADEUS — Command Center</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --cyan:#00f5ff;--cyan-dim:#00a8b5;--green:#00ff88;--red:#ff2244;
+    --orange:#ff8800;--yellow:#ffe600;--blue:#0088ff;--purple:#aa00ff;
+    --bg:#020c14;--bg2:#041220;--panel:rgba(0,245,255,.03);
+    --border:rgba(0,245,255,.12);--border-hi:rgba(0,245,255,.4);
+    --text:#c8eaf0;--text-dim:#3d6a78;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;overflow:hidden;height:100vh;width:100vw;cursor:crosshair;}
+  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.07) 2px,rgba(0,0,0,.07) 4px);pointer-events:none;z-index:1000;}
+  .corner{position:fixed;width:36px;height:36px;border-color:var(--cyan);border-style:solid;opacity:.5;z-index:999;}
+  .tl{top:6px;left:6px;border-width:2px 0 0 2px}.tr{top:6px;right:6px;border-width:2px 2px 0 0}
+  .bl{bottom:6px;left:6px;border-width:0 0 2px 2px}.br{bottom:6px;right:6px;border-width:0 2px 2px 0}
+  .topbar{position:fixed;top:0;left:0;right:0;height:46px;background:linear-gradient(90deg,var(--bg2),#021018,var(--bg2));border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 18px;z-index:100;}
+  .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:20px;color:var(--cyan);letter-spacing:8px;text-shadow:0 0 20px var(--cyan),0 0 50px rgba(0,245,255,.25);animation:lp 4s ease-in-out infinite;}
+  @keyframes lp{0%,100%{text-shadow:0 0 20px var(--cyan),0 0 40px rgba(0,245,255,.2)}50%{text-shadow:0 0 30px var(--cyan),0 0 70px rgba(0,245,255,.4)}}
+  .sys-select{background:rgba(0,245,255,.05);border:1px solid var(--border-hi);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 12px;letter-spacing:1px;cursor:pointer;outline:none;}
+  .sdot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s infinite;}
+  @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
+  #clock{color:var(--cyan);font-size:13px;letter-spacing:2px}
+  .ticker-wrap{position:fixed;top:46px;left:0;right:0;height:26px;background:rgba(0,15,25,.95);border-bottom:1px solid rgba(0,245,255,.08);overflow:hidden;z-index:99;display:flex;align-items:center;}
+  .ticker-tag{background:var(--cyan);color:var(--bg);font-family:'Orbitron',monospace;font-size:8px;font-weight:700;padding:0 10px;height:100%;display:flex;align-items:center;letter-spacing:2px;white-space:nowrap;flex-shrink:0;}
+  .ticker-track{display:flex;animation:tick 55s linear infinite;white-space:nowrap;}
+  .ti{padding:0 28px;font-size:10px;color:var(--text-dim);letter-spacing:.5px;}
+  .ti .v{color:var(--cyan)}.ti .r{color:var(--red)}.ti .g{color:var(--green)}.ti .o{color:var(--orange)}
+  @keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+  .main{position:fixed;top:72px;bottom:70px;left:0;right:0;display:grid;grid-template-columns:268px 1fr 268px;gap:10px;padding:10px;}
+  .col{display:flex;flex-direction:column;gap:10px;overflow:hidden;}
+  .panel{background:var(--panel);border:1px solid var(--border);position:relative;overflow:hidden;flex-shrink:0;}
+  .panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan-dim),transparent);}
+  .ptitle{font-family:'Orbitron',monospace;font-size:8px;font-weight:600;letter-spacing:2.5px;color:var(--cyan-dim);padding:8px 12px 6px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
+  .badge{font-size:7px;padding:2px 5px;border:1px solid;letter-spacing:1px;font-family:'Orbitron',monospace;}
+  .br2{color:var(--red);border-color:var(--red)}.bg2{color:var(--green);border-color:var(--green)}.bo2{color:var(--orange);border-color:var(--orange)}.bc2{color:var(--cyan);border-color:var(--cyan)}
+  .srow{display:flex;justify-content:space-between;align-items:center;padding:5px 12px;border-bottom:1px solid rgba(0,245,255,.04);}
+  .slabel{font-size:9px;color:var(--text-dim);letter-spacing:1px}
+  .sval{font-family:'Orbitron',monospace;font-size:13px;font-weight:600}
+  .cv{color:var(--cyan);text-shadow:0 0 8px rgba(0,245,255,.4)}.gv{color:var(--green)}.rv{color:var(--red)}.ov{color:var(--orange)}.bv{color:var(--blue)}.yv{color:var(--yellow)}
+  .mbar-wrap{padding:6px 12px 10px}
+  .mbar-label{font-size:8px;color:var(--text-dim);letter-spacing:1px;margin-bottom:3px;display:flex;justify-content:space-between;}
+  .mbar{height:3px;background:rgba(255,255,255,.04);border-radius:2px;margin-bottom:6px;overflow:hidden;}
+  .mbar-fill{height:100%;border-radius:2px;}
+  .afeed{padding:4px 0;overflow-y:auto;flex:1;}
+  .aitem{display:flex;gap:8px;align-items:flex-start;padding:6px 12px;border-bottom:1px solid rgba(0,245,255,.03);cursor:pointer;transition:background .15s;}
+  .aitem:hover{background:rgba(0,245,255,.04)}
+  .adot{width:6px;height:6px;border-radius:50%;margin-top:3px;flex-shrink:0;}
+  .aname{font-size:10px;margin-bottom:1px}
+  .asub{font-size:9px;color:var(--text-dim)}
+  .atable{width:100%;border-collapse:collapse;font-size:9px;}
+  .atable th{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:1.5px;color:var(--text-dim);padding:6px 8px;border-bottom:1px solid var(--border);text-align:left;font-weight:400;}
+  .atable td{padding:4px 8px;border-bottom:1px solid rgba(0,245,255,.03);cursor:pointer;}
+  .atable tr:hover td{background:rgba(0,245,255,.04)}
+  .atable .acct{color:var(--cyan);font-family:'Orbitron',monospace;font-size:7px;}
+  .atable .nm{color:var(--text);font-size:9px;}
+  .atable .bal{font-family:'Orbitron',monospace;font-size:9px;text-align:right;}
+  .pill{display:inline-block;padding:1px 4px;border:1px solid;font-size:7px;letter-spacing:.5px;}
+  .map-panel{flex:1;position:relative;overflow:hidden;min-height:260px;}
+  .map-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 35% 45%,rgba(0,50,70,.5) 0%,transparent 55%),radial-gradient(ellipse at 70% 65%,rgba(0,30,50,.3) 0%,transparent 45%),linear-gradient(135deg,#020c14,#041820,#020c14);}
+  .map-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(0,245,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.03) 1px,transparent 1px);background-size:36px 36px;}
+  .mnode{position:absolute;width:10px;height:10px;border-radius:50%;transform:translate(-50%,-50%);cursor:pointer;transition:all .2s;}
+  .mnode::before{content:'';position:absolute;inset:-4px;border-radius:50%;border:1px solid currentColor;opacity:.25;animation:ping 3s ease-out infinite;}
+  .mnode:hover{transform:translate(-50%,-50%) scale(1.7);z-index:20;}
+  @keyframes ping{0%{transform:scale(1);opacity:.25}100%{transform:scale(2.8);opacity:0}}
+  .ng{background:var(--green);box-shadow:0 0 7px var(--green);color:var(--green)}
+  .nr{background:var(--red);box-shadow:0 0 10px var(--red);color:var(--red)}
+  .no{background:var(--orange);box-shadow:0 0 7px var(--orange);color:var(--orange)}
+  .ny{background:var(--yellow);box-shadow:0 0 6px var(--yellow);color:var(--yellow)}
+  .nb{background:var(--blue);box-shadow:0 0 7px var(--blue);color:var(--blue)}
+  .nn{background:#2a2a2a;color:#2a2a2a}
+  .ntt{position:absolute;background:rgba(2,10,18,.97);border:1px solid var(--border-hi);padding:8px 12px;min-width:165px;pointer-events:none;opacity:0;transition:opacity .2s;z-index:50;top:18px;left:14px;}
+  .mnode:hover .ntt{opacity:1}
+  .ntt-name{font-family:'Orbitron',monospace;font-size:10px;color:var(--cyan);margin-bottom:5px;letter-spacing:1px;}
+  .ntt-row{display:flex;justify-content:space-between;gap:10px;font-size:9px;margin-bottom:2px;color:var(--text-dim);}
+  .ntt-row span:last-child{color:var(--text)}
+  .mleg{position:absolute;bottom:8px;right:8px;background:rgba(2,10,18,.88);border:1px solid var(--border);padding:7px 10px;font-size:8px;}
+  .legrow{display:flex;align-items:center;gap:5px;color:var(--text-dim);margin-bottom:3px;}
+  .legdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
+  .dial-wrap{display:flex;justify-content:center;align-items:center;height:205px;position:relative;}
+  .dial-container{position:relative;width:186px;height:186px;}
+  .dial-svg{position:absolute;inset:0;width:100%;height:100%;animation:drot 80s linear infinite;}
+  @keyframes drot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
+  .dial-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
+  .dval{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;color:var(--cyan);text-shadow:0 0 20px var(--cyan);line-height:1;}
+  .dlabel{font-size:8px;color:var(--text-dim);letter-spacing:3px;margin-top:3px;}
+  .dbtn{position:absolute;width:40px;height:40px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:7px;color:var(--text-dim);letter-spacing:.5px;text-align:center;transform:translate(-50%,-50%);}
+  .dbtn:hover,.dbtn.active{background:rgba(0,245,255,.1);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 14px rgba(0,245,255,.3);}
+  .dicon{font-size:13px;margin-bottom:1px;}
+  .clog{overflow-y:auto;flex:1;}
+  .citem{display:flex;gap:7px;padding:5px 12px;border-bottom:1px solid rgba(0,245,255,.03);cursor:pointer;transition:background .15s;align-items:flex-start;}
+  .citem:hover{background:rgba(0,245,255,.03)}
+  .ccat{font-size:7px;padding:2px 4px;border:1px solid;letter-spacing:.5px;white-space:nowrap;flex-shrink:0;margin-top:1px;}
+  .cinfo{flex:1;min-width:0;}
+  .cname{font-size:9px;color:var(--text);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .csub{font-size:8px;color:var(--text-dim);}
+  .compitem{display:flex;align-items:center;gap:8px;padding:6px 12px;border-bottom:1px solid rgba(0,245,255,.03);cursor:pointer;transition:background .15s;}
+  .compitem:hover{background:rgba(0,245,255,.03)}
+  .compicon{width:28px;height:28px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
+  .compinfo{flex:1}.compname{font-size:9px;color:var(--text);margin-bottom:1px;}.compdue{font-size:8px;color:var(--text-dim);}
+  .compst{font-size:7px;padding:2px 5px;border:1px solid;letter-spacing:1px;}
+  .brow{display:flex;justify-content:space-between;padding:4px 12px;border-bottom:1px solid rgba(0,245,255,.04);}
+  .blabel{font-size:9px;color:var(--text-dim)}.bval{font-family:'Orbitron',monospace;font-size:10px;}
+  .acard{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);width:355px;background:rgba(2,10,18,.98);border:1px solid var(--border-hi);box-shadow:0 0 50px rgba(0,245,255,.15);z-index:500;opacity:0;pointer-events:none;transition:all .2s;}
+  .acard.show{opacity:1;pointer-events:all;transform:translate(-50%,-50%) scale(1);}
+  .achead{background:linear-gradient(135deg,rgba(0,245,255,.08),transparent);border-bottom:1px solid var(--border);padding:13px 16px;display:flex;justify-content:space-between;align-items:flex-start;}
+  .acnum{font-family:'Orbitron',monospace;font-size:10px;color:var(--cyan);letter-spacing:2px;}
+  .acname{font-size:17px;font-weight:700;margin-top:3px;color:var(--text);font-family:'Rajdhani',sans-serif;}
+  .acstat{padding:3px 8px;border:1px solid;font-size:8px;letter-spacing:1.5px;font-family:'Orbitron',monospace;}
+  .acbody{padding:12px 16px;}
+  .acrow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(0,245,255,.04);font-size:10px;}
+  .acrl{color:var(--text-dim)}.acrv{color:var(--text)}
+  .acbtns{padding:10px 16px;display:flex;gap:6px;border-top:1px solid var(--border);}
+  .acbtn{flex:1;padding:7px;background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
+  .acbtn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.05)}
+  .acbtn.pri{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.07)}
+  .acclose{position:absolute;top:8px;right:12px;background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;}
+  .acclose:hover{color:var(--red)}
+  .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;align-items:center;justify-content:center;}
+  .modal.show{display:flex}
+  .botnav{position:fixed;bottom:0;left:0;right:0;height:64px;background:linear-gradient(90deg,var(--bg2),#020e1c,var(--bg2));border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:6px;padding:0 16px;z-index:100;}
+  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:74px;height:50px;background:var(--panel);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;transition:all .2s;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;}
+  .navbtn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--cyan);transform:scaleX(0);transition:transform .2s;}
+  .navbtn:hover::after,.navbtn.active::after{transform:scaleX(1)}
+  .navbtn:hover,.navbtn.active{color:var(--cyan);border-color:var(--border-hi);background:rgba(0,245,255,.05);}
+  .navicon{font-size:15px}
+  .navalert{position:absolute;top:5px;right:6px;width:13px;height:13px;background:var(--red);border-radius:50%;font-size:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Orbitron',monospace;}
+  .mfbtn{font-size:7px;padding:2px 7px;border:1px solid var(--border);color:var(--text-dim);background:transparent;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px;transition:all .15s;}
+  .mfbtn:hover,.mfbtn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.08);}
+  /* Dark map style override */
+  .gm-style .gm-style-iw-c { background:#020c14 !important; border:1px solid rgba(0,245,255,.4) !important; }
+  .gm-style .gm-style-iw-d { color:#c8eaf0 !important; }
+</style>
+</head>
+<body>
+
+<div class="corner tl"></div><div class="corner tr"></div>
+<div class="corner bl"></div><div class="corner br"></div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <div class="logo">RADEUS</div>
+  <div style="display:flex;align-items:center;gap:16px">
+    <div class="sdot"></div>
+    <span style="font-size:9px;color:var(--text-dim);letter-spacing:2px">SYSTEM ONLINE</span>
+    <select class="sys-select" onchange="switchSystem(this.value)">
+      <option value="DNWSTX">⬡ DERBY NEW WATER SYSTEM — TX</option>
+      <option value="PPNWSTX">⬡ PLEASURE POINT NWS — TX</option>
+      <option value="SENWSTX">⬡ SELLERS ESTATES NWS — TX</option>
+      <option value="SUNWSTX">⬡ SUDDUTH NWS — TX</option>
+      <option value="OHNWSTX">⬡ OAK HILL NWS — TX</option>
+      <option value="FBNWSTX">⬡ FALL BRANCH NWS — TX</option>
+      <option value="SMNWSTX">⬡ SOUTH MIDLAND NWS — TX</option>
+      <option value="WNWSTX">⬡ WARREN NWS — TX</option>
+      <option value="SVNWSTX">⬡ SOLAR VILLAGE NWS — TX</option>
+    </select>
+  </div>
+  <div style="display:flex;align-items:center;gap:14px">
+    <span style="font-size:9px;color:var(--text-dim)">OPERATOR: <span style="color:var(--cyan)">ADMIN</span></span>
+    <span id="clock">--:--:--</span>
+  </div>
+</div>
+
+<!-- TICKER -->
+<div class="ticker-wrap">
+  <div class="ticker-tag">⬡ LIVE FEED</div>
+  <div style="overflow:hidden;flex:1">
+    <div class="ticker-track">
+      <span class="ti">ACCT <span class="v">DNWSTX21</span> — HUMBERTO GONZALES — BAL <span class="r">$2,174.70</span> — CRITICAL // NO PAYMENTS ON FILE</span>
+      <span class="ti">ACCT <span class="v">DNWSTX45</span> — PRISCILLA CASAS — BAL <span class="r">$1,914.64</span> — DISCONNECT ELIGIBLE</span>
+      <span class="ti">ACCT <span class="v">DNWSTX17</span> — ROBERT AGUILAR — BAL <span class="r">$1,356.25</span> — PRIOR BAL $1,297.79</span>
+      <span class="ti">BILLING CYCLE: <span class="o">APRIL 2026 — ISSUED 04/15 — DUE 05/01/2026</span></span>
+      <span class="ti">CALL LOG <span class="v">CL75</span> — PPNWSTX16 CHARLES CHATTOM — <span class="r">BROKEN PIPE — REPAIR NEEDED</span></span>
+      <span class="ti">ACCT <span class="v">DNWSTX06</span> — ALAMAR GUERRA — <span class="g">CREDIT BALANCE $212.48</span></span>
+      <span class="ti">ACCT <span class="v">DNWSTX56</span> — GUADALUPE MORENO — BAL <span class="r">$509.90</span> — $40 PMT VIA SQUARE RECEIVED</span>
+      <span class="ti">CALL LOG <span class="v">CL27</span> — OHNWSTX22 PAUL RIVERA — <span class="r">WATER UNDRINKABLE — BWN ACTIVE</span></span>
+      <span class="ti">ACCT <span class="v">DNWSTX09</span> — EUSEBIO SANTOS JR — BAL <span class="r">$282.27</span> — LATE FEE APPLIED</span>
+      <span class="ti">NEW SERVICE INQUIRY — DERBY NWS — LOT 11 CR3418 — <span class="g">PAPERWORK IN PROGRESS</span></span>
+      <span class="ti">ACCT <span class="v">DNWSTX21</span> — HUMBERTO GONZALES — BAL <span class="r">$2,174.70</span> — CRITICAL // NO PAYMENTS ON FILE</span>
+      <span class="ti">ACCT <span class="v">DNWSTX45</span> — PRISCILLA CASAS — BAL <span class="r">$1,914.64</span> — DISCONNECT ELIGIBLE</span>
+      <span class="ti">ACCT <span class="v">DNWSTX17</span> — ROBERT AGUILAR — BAL <span class="r">$1,356.25</span> — PRIOR BAL $1,297.79</span>
+      <span class="ti">BILLING CYCLE: <span class="o">APRIL 2026 — ISSUED 04/15 — DUE 05/01/2026</span></span>
+      <span class="ti">CALL LOG <span class="v">CL75</span> — PPNWSTX16 CHARLES CHATTOM — <span class="r">BROKEN PIPE — REPAIR NEEDED</span></span>
+    </div>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="main">
+
+  <!-- LEFT -->
+  <div class="col">
+    <div class="panel">
+      <div class="ptitle">DERBY NWS — APR 2026 STATUS <span class="badge bg2">BILLING OPEN</span></div>
+      <div class="srow"><span class="slabel">TOTAL ACCOUNTS</span><span class="sval cv">43</span></div>
+      <div class="srow"><span class="slabel">CURRENT / PAID</span><span class="sval gv">22</span></div>
+      <div class="srow"><span class="slabel">CREDIT BALANCE</span><span class="sval bv">5</span></div>
+      <div class="srow"><span class="slabel">PAST DUE</span><span class="sval ov">11</span></div>
+      <div class="srow"><span class="slabel">CRITICAL (&gt;$500)</span><span class="sval rv">5</span></div>
+      <div class="srow"><span class="slabel">BILL DATE</span><span class="sval" style="font-size:10px;color:var(--cyan)">04/15/2026</span></div>
+      <div class="srow"><span class="slabel">DUE DATE</span><span class="sval yv" style="font-size:10px">05/01/2026</span></div>
+      <div class="mbar-wrap" style="margin-top:4px">
+        <div class="mbar-label"><span>COLLECTION RATE (EST)</span><span style="color:var(--green)">~65%</span></div>
+        <div class="mbar"><div class="mbar-fill" style="width:65%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
+        <div class="mbar-label"><span>ACCOUNTS BILLED</span><span style="color:var(--cyan)">100%</span></div>
+        <div class="mbar"><div class="mbar-fill" style="width:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan))"></div></div>
+      </div>
+    </div>
+
+    <div class="panel" style="flex:1;display:flex;flex-direction:column">
+      <div class="ptitle">CRITICAL ACCOUNTS <span class="badge br2">5 URGENT</span></div>
+      <div class="afeed">
+        <div class="aitem" onclick="showCard('DNWSTX21','Humberto Gonzales','255 CR 4401 Dilley TX','CRITICAL','$2,174.70','RESIDENTIAL','None on file')">
+          <div class="adot" style="background:var(--red);box-shadow:0 0 8px var(--red)"></div>
+          <div><div class="aname" style="color:var(--red)">DNWSTX21 — H. GONZALES</div><div class="asub">255 CR 4401 · <span style="color:var(--red)">$2,174.70</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX45','Priscilla Casas','201 CR 4401 Dilley TX','DISCONNECT ELIGIBLE','$1,914.64','RESIDENTIAL','None on file')">
+          <div class="adot" style="background:var(--red);box-shadow:0 0 8px var(--red)"></div>
+          <div><div class="aname" style="color:var(--red)">DNWSTX45 — P. CASAS</div><div class="asub">201 CR 4401 · <span style="color:var(--red)">$1,914.64</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX17','Robert Aguilar','256 CR 4402 Dilley TX','PAST DUE','$1,356.25','RESIDENTIAL','None on file')">
+          <div class="adot" style="background:var(--red);box-shadow:0 0 7px var(--red)"></div>
+          <div><div class="aname" style="color:var(--red)">DNWSTX17 — R. AGUILAR</div><div class="asub">256 CR 4402 · <span style="color:var(--red)">$1,356.25</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX56','Guadalupe Moreno','126 CR 3415 Dilley TX','PAST DUE','$509.90','RESIDENTIAL','Partial pmts')">
+          <div class="adot" style="background:var(--orange);box-shadow:0 0 7px var(--orange)"></div>
+          <div><div class="aname" style="color:var(--orange)">DNWSTX56 — G. MORENO</div><div class="asub">126 CR 3415 · <span style="color:var(--orange)">$509.90</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX11','Jovita Martinez','303 CR 3428 Dilley TX','PAST DUE','$305.65','RESIDENTIAL','04/02/2026 $100')">
+          <div class="adot" style="background:var(--orange);box-shadow:0 0 6px var(--orange)"></div>
+          <div><div class="aname" style="color:var(--orange)">DNWSTX11 — J. MARTINEZ</div><div class="asub">303 CR 3428 · <span style="color:var(--orange)">$305.65</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX09','Eusebio Santos Jr','230 CR 3418 Pearsall TX','PAST DUE','$282.27','RESIDENTIAL','03/19/2026 $100')">
+          <div class="adot" style="background:var(--orange);box-shadow:0 0 6px var(--orange)"></div>
+          <div><div class="aname" style="color:var(--orange)">DNWSTX09 — E. SANTOS JR</div><div class="asub">230 CR 3418 · <span style="color:var(--orange)">$282.27</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX47','Paula Gallegos','130 CR 3240 Derby TX','PAST DUE','$275.34','RESIDENTIAL','None on file')">
+          <div class="adot" style="background:var(--yellow);box-shadow:0 0 5px var(--yellow)"></div>
+          <div><div class="aname" style="color:var(--yellow)">DNWSTX47 — P. GALLEGOS</div><div class="asub">130 CR 3240 · <span style="color:var(--yellow)">$275.34</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX29','Elsa Martinez','480 CR 3430 Pearsall TX','PAST DUE','$186.65','RESIDENTIAL','None on file')">
+          <div class="adot" style="background:var(--yellow);box-shadow:0 0 4px var(--yellow)"></div>
+          <div><div class="aname" style="color:var(--yellow)">DNWSTX29 — E. MARTINEZ</div><div class="asub">480 CR 3430 · <span style="color:var(--yellow)">$186.65</span></div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- CENTER -->
+  <div class="col">
+    <div class="panel map-panel">
+      <div class="ptitle" style="flex-wrap:wrap;gap:4px">
+        <span id="map-title">SYSTEM MAP — DERBY NWS // FRIO & LASALLE CO., TX</span>
+        <div style="display:flex;gap:4px;align-items:center">
+          <button onclick="filterNodes('ALL',this)" class="mfbtn active">ALL</button>
+          <button onclick="filterNodes('CRITICAL',this)" class="mfbtn">CRITICAL</button>
+          <button onclick="filterNodes('PAST DUE',this)" class="mfbtn">PAST DUE</button>
+          <button onclick="filterNodes('CURRENT',this)" class="mfbtn">CURRENT</button>
+          <button onclick="toggleSatellite(this)" class="mfbtn" id="satbtn">SATELLITE</button>
+        </div>
+      </div>
+      <!-- REAL GOOGLE MAP -->
+      <div id="gmap" style="position:absolute;top:36px;left:0;right:0;bottom:0;"></div>
+      <!-- LEGEND overlay -->
+      <div class="mleg" style="z-index:10">
+        <div class="legrow"><div class="legdot" style="background:var(--green)"></div>CURRENT</div>
+        <div class="legrow"><div class="legdot" style="background:var(--yellow)"></div>DUE SOON</div>
+        <div class="legrow"><div class="legdot" style="background:var(--orange)"></div>PAST DUE</div>
+        <div class="legrow"><div class="legdot" style="background:var(--red)"></div>CRITICAL</div>
+        <div class="legrow"><div class="legdot" style="background:var(--blue)"></div>CREDIT BAL</div>
+        <div class="legrow"><div class="legdot" style="background:#555"></div>RELIGIOUS</div>
+      </div>
+    </div>
+
+    <!-- ACCOUNTS TABLE -->
+    <div class="panel" style="height:190px;overflow:hidden;display:flex;flex-direction:column">
+      <div class="ptitle">ACCOUNT REGISTER — DERBY NWS // APRIL 2026 <span class="badge bc2">43 ACCTS</span></div>
+      <div style="overflow-y:auto;flex:1">
+        <table class="atable">
+          <thead><tr><th>ACCT #</th><th>CUSTOMER NAME</th><th>ADDRESS</th><th>STATUS</th><th style="text-align:right">BALANCE</th></tr></thead>
+          <tbody>
+            <tr onclick="showCard('DNWSTX02','Randall Roberts','204 FM 1583 Dilley TX','CURRENT','$47.15','RESIDENTIAL','03/18/2026')"><td class="acct">DNWSTX02</td><td class="nm">Randall Roberts</td><td style="color:var(--text-dim);font-size:8px">204 FM 1583</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$47.15</td></tr>
+            <tr onclick="showCard('DNWSTX04','Sophia Sproat','111 CR 3435 Dilley TX','CURRENT','$50.75','RESIDENTIAL','03/30/2026')"><td class="acct">DNWSTX04</td><td class="nm">Sophia Sproat</td><td style="color:var(--text-dim);font-size:8px">111 CR 3435</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$50.75</td></tr>
+            <tr onclick="showCard('DNWSTX06','Alamar Guerra','212 CR 3414 Dilley TX','CREDIT BALANCE','($212.48) CR','RESIDENTIAL','03/19/2026')"><td class="acct">DNWSTX06</td><td class="nm">Alamar Guerra</td><td style="color:var(--text-dim);font-size:8px">212 CR 3414</td><td><span class="pill" style="color:var(--blue);border-color:var(--blue)">CREDIT</span></td><td class="bal bv">($212.48)</td></tr>
+            <tr onclick="showCard('DNWSTX09','Eusebio Santos Jr','230 CR 3418 Pearsall TX','PAST DUE','$282.27','RESIDENTIAL','03/19/2026 $100')"><td class="acct">DNWSTX09</td><td class="nm">Eusebio Santos Jr</td><td style="color:var(--text-dim);font-size:8px">230 CR 3418</td><td><span class="pill" style="color:var(--orange);border-color:var(--orange)">PAST DUE</span></td><td class="bal ov">$282.27</td></tr>
+            <tr onclick="showCard('DNWSTX10','Kevin Gutierrez','215 CR 3418 Pearsall TX','PAST DUE','$115.36','RESIDENTIAL','None')"><td class="acct">DNWSTX10</td><td class="nm">Kevin Gutierrez</td><td style="color:var(--text-dim);font-size:8px">215 CR 3418</td><td><span class="pill" style="color:var(--orange);border-color:var(--orange)">PAST DUE</span></td><td class="bal ov">$115.36</td></tr>
+            <tr onclick="showCard('DNWSTX11','Jovita Martinez','303 CR 3428 Dilley TX','PAST DUE','$305.65','RESIDENTIAL','04/02/2026 $100')"><td class="acct">DNWSTX11</td><td class="nm">Jovita Martinez</td><td style="color:var(--text-dim);font-size:8px">303 CR 3428</td><td><span class="pill" style="color:var(--orange);border-color:var(--orange)">PAST DUE</span></td><td class="bal ov">$305.65</td></tr>
+            <tr onclick="showCard('DNWSTX12','John Mercado','270 CR 3428 Dilley TX','PAST DUE','$91.56','RESIDENTIAL','03/31/2026 $47')"><td class="acct">DNWSTX12</td><td class="nm">John Mercado</td><td style="color:var(--text-dim);font-size:8px">270 CR 3428</td><td><span class="pill" style="color:var(--yellow);border-color:var(--yellow)">PAST DUE</span></td><td class="bal ov">$91.56</td></tr>
+            <tr onclick="showCard('DNWSTX17','Robert Aguilar','256 CR 4402 Dilley TX','CRITICAL','$1,356.25','RESIDENTIAL','None')"><td class="acct">DNWSTX17</td><td class="nm">Robert Aguilar</td><td style="color:var(--text-dim);font-size:8px">256 CR 4402</td><td><span class="pill" style="color:var(--red);border-color:var(--red)">CRITICAL</span></td><td class="bal rv">$1,356.25</td></tr>
+            <tr onclick="showCard('DNWSTX19','Martin Martinez','270 CR 4401 Dilley TX','CURRENT','$50.58','RESIDENTIAL','03/18/2026')"><td class="acct">DNWSTX19</td><td class="nm">Martin Martinez</td><td style="color:var(--text-dim);font-size:8px">270 CR 4401</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$50.58</td></tr>
+            <tr><td class="acct">DNWSTX20</td><td class="nm">Mission de la Fe Church</td><td style="color:var(--text-dim);font-size:8px">230 Co Rd 4415</td><td><span class="pill" style="color:var(--text-dim);border-color:var(--text-dim)">RELIGIOUS</span></td><td class="bal" style="color:var(--text-dim)">$0.00</td></tr>
+            <tr onclick="showCard('DNWSTX21','Humberto Gonzales','255 CR 4401 Dilley TX','CRITICAL','$2,174.70','RESIDENTIAL','None')"><td class="acct">DNWSTX21</td><td class="nm">Humberto Gonzales</td><td style="color:var(--text-dim);font-size:8px">255 CR 4401</td><td><span class="pill" style="color:var(--red);border-color:var(--red)">CRITICAL</span></td><td class="bal rv">$2,174.70</td></tr>
+            <tr onclick="showCard('DNWSTX22','Pilar Ramos','221 CR 4415 Dilley TX','PAST DUE','$124.89','RESIDENTIAL','03/22/2026 $100')"><td class="acct">DNWSTX22</td><td class="nm">Pilar Ramos</td><td style="color:var(--text-dim);font-size:8px">221 CR 4415</td><td><span class="pill" style="color:var(--orange);border-color:var(--orange)">PAST DUE</span></td><td class="bal ov">$124.89</td></tr>
+            <tr onclick="showCard('DNWSTX23','Adolph Eric Gonzales','180 CR 4415 Dilley TX','CURRENT','$53.16','RESIDENTIAL','03/09/2026')"><td class="acct">DNWSTX23</td><td class="nm">Adolph Eric Gonzales</td><td style="color:var(--text-dim);font-size:8px">180 CR 4415</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$53.16</td></tr>
+            <tr onclick="showCard('DNWSTX24','Humberto Gonzales II','130 CR 4415 Dilley TX','CURRENT','$46.05','RESIDENTIAL','03/31/2026 $45')"><td class="acct">DNWSTX24</td><td class="nm">Humberto Gonzales II</td><td style="color:var(--text-dim);font-size:8px">130 CR 4415</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$46.05</td></tr>
+            <tr onclick="showCard('DNWSTX25','Eliodoro Gonzalez','208 CR 4425 Dilley TX','CURRENT','$49.54','RESIDENTIAL','03/16/2026')"><td class="acct">DNWSTX25</td><td class="nm">Eliodoro Gonzalez</td><td style="color:var(--text-dim);font-size:8px">208 CR 4425</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$49.54</td></tr>
+            <tr onclick="showCard('DNWSTX45','Priscilla Casas','201 CR 4401 Dilley TX','CRITICAL','$1,914.64','RESIDENTIAL','None')"><td class="acct">DNWSTX45</td><td class="nm">Priscilla Casas</td><td style="color:var(--text-dim);font-size:8px">201 CR 4401</td><td><span class="pill" style="color:var(--red);border-color:var(--red)">CRITICAL</span></td><td class="bal rv">$1,914.64</td></tr>
+            <tr onclick="showCard('DNWSTX56','Guadalupe Moreno','126 CR 3415 Dilley TX','PAST DUE','$509.90','RESIDENTIAL','Partial pmts')"><td class="acct">DNWSTX56</td><td class="nm">Guadalupe Moreno</td><td style="color:var(--text-dim);font-size:8px">126 CR 3415</td><td><span class="pill" style="color:var(--red);border-color:var(--red)">PAST DUE</span></td><td class="bal rv">$509.90</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="col">
+
+    <!-- HUD DIAL -->
+    <div class="panel">
+      <div class="ptitle">COMMAND DIAL</div>
+      <div class="dial-wrap">
+        <div class="dial-container">
+          <svg class="dial-svg" viewBox="0 0 186 186">
+            <circle cx="93" cy="93" r="82" fill="none" stroke="rgba(0,245,255,.06)" stroke-width="1"/>
+            <circle cx="93" cy="93" r="82" fill="none" stroke="rgba(0,245,255,.18)" stroke-width="1" stroke-dasharray="3 7"/>
+            <circle cx="93" cy="93" r="71" fill="none" stroke="rgba(0,245,255,.07)" stroke-width="8"/>
+            <circle cx="93" cy="93" r="71" fill="none" stroke="rgba(0,255,136,.45)" stroke-width="8" stroke-dasharray="292 446" stroke-dashoffset="111" stroke-linecap="round" transform="rotate(-90 93 93)"/>
+            <g stroke="rgba(0,245,255,.28)" stroke-width="1">
+              <line x1="93" y1="4" x2="93" y2="12" transform="rotate(0 93 93)"/>
+              <line x1="93" y1="4" x2="93" y2="12" transform="rotate(30 93 93)"/>
+              <line x1="93" y1="4" x2="93" y2="12" transform="rotate(60 93 93)"/>
+              <line x1="93" y1="4" x2="93" y2="12" transform="rotate(90 93 93)"/>
+              <line x1="93" y1="4" x2="93" y2="12" transform="rotate(120 93 93)"/>
+              <line x1="93" y1="4" x2="93" y2="12" transform="rotate(150 93 93)"/>
+              <line x1="93" y1="4" x2="93" y2="12" transform="rotate(180 93 93)"/>
+              <line x1="93" y1="4" x2="93" y2="12" transform="rotate(210 93 93)"/>
+              <line x1="93" y1="4" x2="93" y2="12" transform="rotate(240 93 93)"/>
+              <line x1="93" y1="4" x2="93" y2="12" transform="rotate(270 93 93)"/>
+              <line x1="93" y1="4" x2="93" y2="12" transform="rotate(300 93 93)"/>
+              <line x1="93" y1="4" x2="93" y2="12" transform="rotate(330 93 93)"/>
+            </g>
+          </svg>
+          <div class="dial-center">
+            <div class="dval" id="dval">65%</div>
+            <div class="dlabel" id="dlabel">COLLECTION</div>
+          </div>
+          <div class="dbtn active" style="left:50%;top:6%" onclick="setDial('65%','COLLECTION',this)"><div class="dicon">💧</div>BILL</div>
+          <div class="dbtn" style="left:90%;top:26%" onclick="setDial('43','ACCOUNTS',this)"><div class="dicon">👤</div>ACCTS</div>
+          <div class="dbtn" style="left:90%;top:72%" onclick="setDial('78','CALL LOG',this)"><div class="dicon">📞</div>CALLS</div>
+          <div class="dbtn" style="left:50%;top:87%" onclick="setDial('2','COMPLY',this)"><div class="dicon">📋</div>COMP</div>
+          <div class="dbtn" style="left:10%;top:72%" onclick="setDial('5','CRITICAL',this)"><div class="dicon">⚠</div>ALERTS</div>
+          <div class="dbtn" style="left:10%;top:26%" onclick="setDial('9','SYSTEMS',this)"><div class="dicon">⬡</div>SYS</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CALL LOG -->
+    <div class="panel" style="flex:1;display:flex;flex-direction:column">
+      <div class="ptitle">RECENT CALL LOG <span class="badge bc2">LIVE</span></div>
+      <div class="clog">
+        <div class="citem"><span class="ccat" style="color:var(--red);border-color:var(--red)">REPAIR</span><div class="cinfo"><div class="cname">CL75 — Charles Chattom // PPNWSTX16</div><div class="csub">Broken pipe — brittle pipes on system side — TECH NEEDED</div></div></div>
+        <div class="citem"><span class="ccat" style="color:var(--orange);border-color:var(--orange)">BWN</span><div class="cinfo"><div class="cname">CL27 — Paul Rivera // OHNWSTX22</div><div class="csub">Water undrinkable — BWN issued, customer directed to site</div></div></div>
+        <div class="citem"><span class="ccat" style="color:var(--cyan);border-color:var(--cyan)">BILL Q</span><div class="cinfo"><div class="cname">CL68 — Alma Selvera // DNWSTX39</div><div class="csub">Balance requested — Resolved</div></div></div>
+        <div class="citem"><span class="ccat" style="color:var(--cyan);border-color:var(--cyan)">BILL Q</span><div class="cinfo"><div class="cname">CL64 — Guadalupe Moreno // DNWSTX56</div><div class="csub">$40 pmt via Square confirmed on account</div></div></div>
+        <div class="citem"><span class="ccat" style="color:var(--green);border-color:var(--green)">NEW SVC</span><div class="cinfo"><div class="cname">CL69 — Joe Marroquin // DNWSTX34</div><div class="csub">New service — prior balance $784.78 outstanding</div></div></div>
+        <div class="citem"><span class="ccat" style="color:var(--yellow);border-color:var(--yellow)">DISCON</span><div class="cinfo"><div class="cname">CL42 — Ida Dosal // DNWSTX34</div><div class="csub">Disconnect form pending — awaiting email</div></div></div>
+        <div class="citem"><span class="ccat" style="color:var(--cyan);border-color:var(--cyan)">BILL Q</span><div class="cinfo"><div class="cname">CL24 — Ninfa Neighbors // DNWSTX44</div><div class="csub">Credit question re: $100 pmt — account reviewed</div></div></div>
+        <div class="citem"><span class="ccat" style="color:var(--green);border-color:var(--green)">NEW SVC</span><div class="cinfo"><div class="cname">CL51 — Brad Wagner // DERBY NWS</div><div class="csub">Expedient Mortgage — water sample for loan underwriter</div></div></div>
+        <div class="citem"><span class="ccat" style="color:var(--cyan);border-color:var(--cyan)">BILL Q</span><div class="cinfo"><div class="cname">CL32 — Javier Chapa Chavarria // DNWSTX48</div><div class="csub">Address change to PO Box 503, Dilley 78017</div></div></div>
+      </div>
+    </div>
+
+    <!-- COMPLIANCE -->
+    <div class="panel">
+      <div class="ptitle">COMPLIANCE & BILLING <span class="badge bo2">ACTION NEEDED</span></div>
+      <div class="compitem" onclick="showBWN()">
+        <div class="compicon" style="background:rgba(255,34,68,.08);color:var(--red)">🚨</div>
+        <div class="compinfo"><div class="compname">BOIL WATER NOTICE</div><div class="compdue">OAK HILL NWS — EVENT ACTIVE (CL27)</div></div>
+        <div class="compst" style="color:var(--red);border-color:var(--red);cursor:pointer">ACTIVE</div>
+      </div>
+      <div class="compitem">
+        <div class="compicon" style="background:rgba(255,136,0,.08);color:var(--orange)">📋</div>
+        <div class="compinfo"><div class="compname">BACTERIOLOGICAL SAMPLE</div><div class="compdue">TCEQ — DERBY NWS — DUE SOON</div></div>
+        <div class="compst" style="color:var(--orange);border-color:var(--orange)">DUE</div>
+      </div>
+      <div class="compitem">
+        <div class="compicon" style="background:rgba(0,255,136,.06);color:var(--green)">✓</div>
+        <div class="compinfo"><div class="compname">APRIL BILLING RUN</div><div class="compdue">43 BILLS ISSUED — 04/15/2026</div></div>
+        <div class="compst" style="color:var(--green);border-color:var(--green)">DONE</div>
+      </div>
+      <div class="brow"><span class="blabel">APRIL BILLING TOTAL</span><span class="bval cv">~$4,800</span></div>
+      <div class="brow"><span class="blabel">TOTAL OUTSTANDING</span><span class="bval rv">~$9,200</span></div>
+      <div class="brow"><span class="blabel">DUE DATE</span><span class="bval yv">05/01/2026</span></div>
+      <div class="brow"><span class="blabel">LATE FEE TRIGGER</span><span class="bval" style="color:var(--text-dim)">05/02/2026 // $10.00</span></div>
+    </div>
+
+  </div>
+</div>
+
+<!-- BOTTOM NAV -->
+<div class="botnav">
+  <div class="navbtn active"><span class="navicon">⬡</span>COMMAND</div>
+  <div class="navbtn"><span class="navicon">👤</span>ACCOUNTS<span class="navalert">5</span></div>
+  <div class="navbtn"><span class="navicon">💧</span>BILLING</div>
+  <div class="navbtn"><span class="navicon">📞</span>CALL LOG<span class="navalert">2</span></div>
+  <div class="navbtn"><span class="navicon">📋</span>COMPLY<span class="navalert">1</span></div>
+  <div class="navbtn"><span class="navicon">🔧</span>ASSETS</div>
+  <div class="navbtn"><span class="navicon">📊</span>REPORTS</div>
+  <div class="navbtn"><span class="navicon">⚙</span>SYSTEM</div>
+</div>
+
+<!-- ACCOUNT CARD -->
+<div class="acard" id="accard">
+  <button class="acclose" onclick="closeCard()">✕</button>
+  <div class="achead">
+    <div>
+      <div class="acnum" id="ac-num">DNWSTX02</div>
+      <div class="acname" id="ac-name">Randall Roberts</div>
+    </div>
+    <div class="acstat" id="ac-stat" style="color:var(--green);border-color:var(--green)">CURRENT</div>
+  </div>
+  <div class="acbody">
+    <div class="acrow"><span class="acrl">SERVICE ADDRESS</span><span class="acrv" id="ac-addr">204 FM 1583, Dilley TX</span></div>
+    <div class="acrow"><span class="acrl">ACCOUNT TYPE</span><span class="acrv" id="ac-type">RESIDENTIAL</span></div>
+    <div class="acrow"><span class="acrl">CURRENT BALANCE</span><span class="acrv" id="ac-bal">$47.15</span></div>
+    <div class="acrow"><span class="acrl">LAST PAYMENT</span><span class="acrv" id="ac-pmt">03/18/2026</span></div>
+    <div class="acrow"><span class="acrl">BASE RATE</span><span class="acrv">$40.00 / MONTH</span></div>
+    <div class="acrow"><span class="acrl">ENERGY SURCHARGE</span><span class="acrv">$6.00 FLAT</span></div>
+    <div class="acrow"><span class="acrl">LATE FEE (IF LATE)</span><span class="acrv">$10.00 after 05/01</span></div>
+    <div class="acrow"><span class="acrl">SYSTEM</span><span class="acrv">DERBY NEW WATER SYSTEM</span></div>
+  </div>
+  <div class="acbtns">
+    <button class="acbtn pri">FULL ACCOUNT</button>
+    <button class="acbtn">POST PAYMENT</button>
+    <button class="acbtn">SEND NOTICE</button>
+    <button class="acbtn">CALL LOG</button>
+  </div>
+</div>
+
+<!-- BWN MODAL -->
+<div class="modal" id="bwnModal">
+  <div style="background:var(--bg2);border:1px solid var(--red);width:420px;box-shadow:0 0 50px rgba(255,34,68,.25)">
+    <div style="background:rgba(255,34,68,.1);padding:14px 18px;border-bottom:1px solid rgba(255,34,68,.25);font-family:'Orbitron',monospace;font-size:11px;color:var(--red);letter-spacing:3px">🚨 BOIL WATER NOTICE — ACTIVE EVENT</div>
+    <div style="padding:18px;font-size:10px;color:var(--text-dim);line-height:2.2">
+      <div style="color:var(--text);font-size:11px;margin-bottom:10px;letter-spacing:1px">SYSTEM: OAK HILL NWS // CALL LOG CL27</div>
+      <div style="color:var(--text-dim);font-size:9px;margin-bottom:12px">CUSTOMER REPORT: Water undrinkable. BWN issued. Customer directed to website.</div>
+      <div>⏱ 24-HR TCEQ NOTIFICATION CLOCK — <span style="color:var(--red)">RUNNING</span></div>
+      <div>📄 BWN ISSUANCE DOCUMENT — <span style="color:var(--green)">GENERATED ✓</span></div>
+      <div>📋 COMMUNITY POSTING CHECKLIST — <span style="color:var(--yellow)">PENDING CONFIRMATION</span></div>
+      <div>📬 RESCISSION PACKET — <span style="color:var(--text-dim)">QUEUED</span></div>
+      <div>📜 CERT OF DELIVERY TO TCEQ — <span style="color:var(--text-dim)">PENDING SUBMISSION</span></div>
+    </div>
+    <div style="padding:12px 18px;display:flex;gap:8px;border-top:1px solid rgba(255,34,68,.2)">
+      <button onclick="closeBWN()" style="flex:1;padding:9px;background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'Share Tech Mono',monospace;cursor:pointer;font-size:10px;letter-spacing:1px">CLOSE</button>
+      <button onclick="closeBWN()" style="flex:1;padding:9px;background:rgba(255,34,68,.1);border:1px solid var(--red);color:var(--red);font-family:'Share Tech Mono',monospace;cursor:pointer;font-size:10px;letter-spacing:1px">RESCIND BWN</button>
+      <button onclick="closeBWN()" style="flex:1;padding:9px;background:rgba(0,245,255,.07);border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;cursor:pointer;font-size:10px;letter-spacing:1px">VIEW DOCS</button>
+    </div>
+  </div>
+</div>
+
+<script>
+  // ── CONFIG ───────────────────────────────────────────────────
+  const SUPA_URL   = 'https://bvpesxpptgdwkhsewhke.supabase.co';
+  const SUPA_KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
+  const GMAPS_KEY  = 'AIzaSyDedtzKXUUSjCdqVQ4XoCe0GlmnkBw2UMc';
+
+  // ── STATE ────────────────────────────────────────────────────
+  let gmap = null;
+  let mapMarkers = [];
+  let activeInfoWindow = null;
+  let isSatellite = true;
+  let activeSystemCode = 'DNWSTX';
+  let currentFilter = 'ALL';
+
+  // ── SUPABASE FETCH ───────────────────────────────────────────
+  async function supa(table, params='') {
+    const r = await fetch(`${SUPA_URL}/rest/v1/${table}${params}`, {
+      headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` }
+    });
+    if (!r.ok) return [];
+    return r.json();
+  }
+
+  // ── CLOCK ────────────────────────────────────────────────────
+  function tick(){const n=new Date();document.getElementById('clock').textContent=n.toTimeString().slice(0,8);}
+  setInterval(tick,1000); tick();
+
+  // ── STATUS HELPERS ───────────────────────────────────────────
+  function classifyBalance(bal, type) {
+    if (type==='RELIGIOUS') return { label:'RELIGIOUS',   color:'#555555' };
+    if (bal < 0)            return { label:'CREDIT',      color:'#0088ff' };
+    if (bal === 0)          return { label:'CURRENT',     color:'#00ff88' };
+    if (bal > 500)          return { label:'CRITICAL',    color:'#ff2244' };
+    if (bal > 0)            return { label:'PAST DUE',    color:'#ff8800' };
+    return                         { label:'CURRENT',     color:'#00ff88' };
+  }
+
+  function fmtBal(n) {
+    if (n < 0) return `($${Math.abs(n).toFixed(2)})`;
+    return `$${Number(n).toFixed(2)}`;
+  }
+
+  // ── GOOGLE MAPS INIT ─────────────────────────────────────────
+  function initMap() {
+    // Dark military map style
+    const darkStyle = [
+      { elementType:'geometry',       stylers:[{color:'#0a1628'}] },
+      { elementType:'labels.text.fill', stylers:[{color:'#00a8b5'}] },
+      { elementType:'labels.text.stroke', stylers:[{color:'#020c14'}] },
+      { featureType:'road',           elementType:'geometry',       stylers:[{color:'#0d2137'}] },
+      { featureType:'road',           elementType:'geometry.stroke',stylers:[{color:'#0a1628'}] },
+      { featureType:'road.highway',   elementType:'geometry',       stylers:[{color:'#0e2a47'}] },
+      { featureType:'water',          elementType:'geometry',       stylers:[{color:'#041220'}] },
+      { featureType:'water',          elementType:'labels.text.fill',stylers:[{color:'#00f5ff'}] },
+      { featureType:'poi',            stylers:[{visibility:'off'}] },
+      { featureType:'administrative', elementType:'geometry.stroke', stylers:[{color:'#00f5ff'},{opacity:0.3}] },
+      { featureType:'administrative.land_parcel', elementType:'labels', stylers:[{visibility:'off'}] },
+    ];
+
+    gmap = new google.maps.Map(document.getElementById('gmap'), {
+      center: { lat: 28.9659, lng: -99.8007 }, // Dilley TX
+      zoom: 13,
+      mapTypeId: 'roadmap',
+      styles: darkStyle,
+      disableDefaultUI: false,
+      zoomControl: true,
+      mapTypeControl: false,
+      streetViewControl: false,
+      fullscreenControl: true,
+      backgroundColor: '#020c14',
+    });
+
+    // Load Derby NWS on boot
+    loadSystemData('DNWSTX');
+  }
+
+  // ── TOGGLE SATELLITE ─────────────────────────────────────────
+  function toggleSatellite(btn) {
+    isSatellite = !isSatellite;
+    if (isSatellite) {
+      gmap.setMapTypeId('satellite');
+      btn.classList.add('active');
+    } else {
+      gmap.setMapTypeId('roadmap');
+      btn.classList.remove('active');
+    }
+  }
+
+  // ── PLACE MARKERS FROM ACCOUNT DATA ──────────────────────────
+  function placeMarkers(accounts, balMap) {
+    // Clear existing markers
+    mapMarkers.forEach(m => m.setMap(null));
+    mapMarkers = [];
+    if (activeInfoWindow) { activeInfoWindow.close(); activeInfoWindow = null; }
+
+    // Derby NWS service addresses with real lat/lng (pre-geocoded for Dilley/Pearsall TX area)
+    const coords = {
+      'DNWSTX02': { lat:28.9712, lng:-99.8043 },
+      'DNWSTX04': { lat:28.9445, lng:-99.8236 },
+      'DNWSTX06': { lat:28.9501, lng:-99.8198 },
+      'DNWSTX09': { lat:28.8832, lng:-99.7721 },
+      'DNWSTX10': { lat:28.8851, lng:-99.7698 },
+      'DNWSTX11': { lat:28.9388, lng:-99.8112 },
+      'DNWSTX12': { lat:28.9401, lng:-99.8098 },
+      'DNWSTX17': { lat:28.9876, lng:-99.7834 },
+      'DNWSTX19': { lat:28.9889, lng:-99.7812 },
+      'DNWSTX20': { lat:28.9865, lng:-99.7856 }, // Mission de la Fe Church
+      'DNWSTX21': { lat:28.9902, lng:-99.7791 },
+      'DNWSTX22': { lat:28.9923, lng:-99.7765 },
+      'DNWSTX23': { lat:28.9934, lng:-99.7789 },
+      'DNWSTX24': { lat:28.9945, lng:-99.7812 },
+      'DNWSTX25': { lat:28.9801, lng:-99.7702 },
+      'DNWSTX45': { lat:28.9867, lng:-99.7823 },
+      'DNWSTX47': { lat:29.0112, lng:-99.8234 },
+      'DNWSTX56': { lat:28.9523, lng:-99.8187 },
+    };
+
+    accounts.forEach(a => {
+      const pos = coords[a.account_number];
+      if (!pos) return;
+
+      const bal  = balMap[a.account_id]?.current_balance ?? 0;
+      const cls  = classifyBalance(bal, a.account_type);
+
+      // Skip if filtered out
+      if (currentFilter !== 'ALL' && cls.label !== currentFilter) return;
+
+      const name = a.customers?.full_name || '—';
+      const addr = a.service_addresses?.street || '—';
+      const lastPmt = balMap[a.account_id]?.last_payment_date
+        ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None';
+
+      // Custom SVG marker — glowing dot
+      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
+        <circle cx="11" cy="11" r="9" fill="${cls.color}" fill-opacity="0.9"/>
+        <circle cx="11" cy="11" r="9" fill="none" stroke="${cls.color}" stroke-width="2" stroke-opacity="0.4"/>
+        <circle cx="11" cy="11" r="5" fill="${cls.color}"/>
+      </svg>`;
+
+      const marker = new google.maps.Marker({
+        position: pos,
+        map: gmap,
+        icon: {
+          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
+          scaledSize: new google.maps.Size(22, 22),
+          anchor: new google.maps.Point(11, 11),
+        },
+        title: a.account_number,
+        zIndex: cls.label === 'CRITICAL' ? 999 : 1,
+      });
+
+      // Info window content
+      const iw = new google.maps.InfoWindow({
+        content: `
+          <div style="background:#020c14;border:1px solid rgba(0,245,255,.4);padding:10px 14px;min-width:180px;font-family:'Share Tech Mono',monospace;">
+            <div style="font-family:'Orbitron',monospace;font-size:11px;color:#00f5ff;margin-bottom:6px;letter-spacing:1px">${a.account_number}</div>
+            <div style="font-size:10px;color:#c8eaf0;margin-bottom:4px">${name}</div>
+            <div style="font-size:9px;color:#3d6a78;margin-bottom:2px">${addr}</div>
+            <div style="font-size:10px;color:${cls.color};margin-bottom:6px;font-weight:bold">${fmtBal(bal)}</div>
+            <div style="font-size:9px;color:#3d6a78">LAST PMT: ${lastPmt}</div>
+            <div style="margin-top:8px;padding:4px 8px;border:1px solid #00f5ff;color:#00f5ff;font-size:8px;cursor:pointer;text-align:center;letter-spacing:1px"
+              onclick="showCard('${a.account_number}','${name}','${addr}','${cls.label}','${fmtBal(bal)}','${a.account_type}','${lastPmt}')">
+              VIEW ACCOUNT
+            </div>
+          </div>`,
+        disableAutoPan: false,
+      });
+
+      marker.addListener('click', () => {
+        if (activeInfoWindow) activeInfoWindow.close();
+        iw.open(gmap, marker);
+        activeInfoWindow = iw;
+      });
+
+      mapMarkers.push(marker);
+    });
+  }
+
+  // ── FILTER NODES ─────────────────────────────────────────────
+  function filterNodes(status, btn) {
+    currentFilter = status;
+    document.querySelectorAll('.mfbtn').forEach(b => {
+      if (b.id !== 'satbtn') b.classList.remove('active');
+    });
+    btn.classList.add('active');
+    // Re-render markers with filter
+    if (window._lastAccounts && window._lastBalMap) {
+      placeMarkers(window._lastAccounts, window._lastBalMap);
+    }
+  }
+
+  // ── LOAD SYSTEM DATA ─────────────────────────────────────────
+  async function loadSystemData(systemCode) {
+    activeSystemCode = systemCode;
+
+    const systems = await supa('water_systems', `?system_code=eq.${systemCode}&select=*`);
+    if (!systems.length) return;
+    const sys = systems[0];
+
+    // Update map title
+    const titleEl = document.getElementById('map-title');
+    if (titleEl) titleEl.textContent = `SYSTEM MAP — ${sys.system_name.toUpperCase()}`;
+
+    // Center map on system
+    const centers = {
+      'DNWSTX':  { lat:28.9659, lng:-99.8007, zoom:13 },
+      'PPNWSTX': { lat:30.0850, lng:-95.6890, zoom:14 },
+      'SENWSTX': { lat:29.9500, lng:-95.5500, zoom:14 },
+      'SUNWSTX': { lat:31.5500, lng:-97.1500, zoom:13 },
+      'OHNWSTX': { lat:29.8000, lng:-95.4500, zoom:14 },
+      'FBNWSTX': { lat:29.8200, lng:-95.4300, zoom:14 },
+      'SMNWSTX': { lat:31.8000, lng:-102.3500, zoom:13 },
+      'WNWSTX':  { lat:31.6000, lng:-102.5000, zoom:13 },
+      'SVNWSTX': { lat:30.0500, lng:-99.1400, zoom:14 },
+    };
+    if (gmap && centers[systemCode]) {
+      gmap.setCenter(centers[systemCode]);
+      gmap.setZoom(centers[systemCode].zoom);
+    }
+
+    // Get accounts
+    const accounts = await supa('accounts',
+      `?system_id=eq.${sys.system_id}&select=account_id,account_number,account_type,status,customers(full_name),service_addresses(street,city,state)`
+    );
+
+    // Get balances
+    const balances = await supa('account_balances', `?system_id=eq.${sys.system_id}&select=*`);
+    const balMap = {};
+    balances.forEach(b => { balMap[b.account_id] = b; });
+
+    // Cache for filter use
+    window._lastAccounts = accounts;
+    window._lastBalMap   = balMap;
+
+    // Stats
+    let total=0, current=0, credits=0, pastDue=0, critical=0;
+    accounts.forEach(a => {
+      total++;
+      const bal = balMap[a.account_id]?.current_balance ?? 0;
+      if (a.account_type === 'RELIGIOUS') return;
+      if (bal < 0)       credits++;
+      else if (bal === 0) current++;
+      else if (bal > 500){ critical++; pastDue++; }
+      else               pastDue++;
+    });
+
+    const statVals = document.querySelectorAll('.sval');
+    if (statVals[0]) statVals[0].textContent = total;
+    if (statVals[1]) statVals[1].textContent = current;
+    if (statVals[2]) statVals[2].textContent = credits;
+    if (statVals[3]) statVals[3].textContent = pastDue;
+    if (statVals[4]) statVals[4].textContent = critical;
+
+    // Place map markers
+    if (gmap) placeMarkers(accounts, balMap);
+
+    // Rebuild account table
+    const tbody = document.getElementById('acctTable');
+    if (tbody && accounts.length) {
+      tbody.innerHTML = '';
+      accounts.sort((a,b) => {
+        const ba = balMap[a.account_id]?.current_balance ?? 0;
+        const bb = balMap[b.account_id]?.current_balance ?? 0;
+        return bb - ba;
+      }).forEach(a => {
+        const bal    = balMap[a.account_id]?.current_balance ?? 0;
+        const lastPmt = balMap[a.account_id]?.last_payment_date
+          ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None';
+        const cls  = classifyBalance(bal, a.account_type);
+        const name = a.customers?.full_name || '—';
+        const addr = a.service_addresses?.street || '—';
+        const tr   = document.createElement('tr');
+        tr.onclick = () => showCard(a.account_number, name, addr, cls.label, fmtBal(bal), a.account_type, lastPmt);
+        tr.innerHTML = `
+          <td class="acct">${a.account_number}</td>
+          <td class="nm">${name}</td>
+          <td style="color:var(--text-dim);font-size:8px">${addr}</td>
+          <td><span class="pill" style="color:${cls.color};border-color:${cls.color}">${cls.label}</span></td>
+          <td class="bal" style="font-family:'Orbitron',monospace;font-size:9px;text-align:right;color:${cls.color}">${fmtBal(bal)}</td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    // Load call log
+    await loadCallLog(sys.system_id);
+  }
+
+  // ── CALL LOG ─────────────────────────────────────────────────
+  async function loadCallLog(systemId) {
+    const calls = await supa('call_log',
+      `?system_id=eq.${systemId}&select=*&order=call_date.desc&limit=9`
+    );
+    const container = document.querySelector('.clog');
+    if (!container || !calls.length) return;
+    const catColors = { 'Leak or Outage':'var(--red)','Bill Question':'var(--cyan)','New Service':'var(--green)','Disconnection':'var(--yellow)','Maintenance':'var(--orange)','Water Quality Question':'var(--orange)','State Agency':'var(--purple)' };
+    const catLabels = { 'Leak or Outage':'REPAIR','Bill Question':'BILL Q','New Service':'NEW SVC','Disconnection':'DISCON','Maintenance':'MAINT','Water Quality Question':'QUALITY','State Agency':'TCEQ' };
+    container.innerHTML = '';
+    calls.forEach(c => {
+      const col = catColors[c.category] || 'var(--cyan)';
+      const lbl = catLabels[c.category] || 'NOTE';
+      const d   = document.createElement('div');
+      d.className = 'citem';
+      d.innerHTML = `
+        <span class="ccat" style="color:${col};border-color:${col}">${lbl}</span>
+        <div class="cinfo">
+          <div class="cname">${c.call_ref||''} — ${c.caller_name||''} // ${c.customer_name||''}</div>
+          <div class="csub">${(c.description||'').substring(0,80)}${c.description?.length>80?'…':''}</div>
+        </div>`;
+      container.appendChild(d);
+    });
+  }
+
+  // ── ACCOUNT CARD ─────────────────────────────────────────────
+  function showCard(num,name,addr,status,bal,type,pmt){
+    document.getElementById('ac-num').textContent=num;
+    document.getElementById('ac-name').textContent=name;
+    document.getElementById('ac-addr').textContent=addr;
+    document.getElementById('ac-bal').textContent=bal;
+    document.getElementById('ac-type').textContent=type;
+    document.getElementById('ac-pmt').textContent=pmt;
+    const s=document.getElementById('ac-stat');
+    s.textContent=status;
+    const cols={'CURRENT':'var(--green)','CREDIT':'var(--blue)','CREDIT BALANCE':'var(--blue)','PAST DUE':'var(--orange)','CRITICAL':'var(--red)','DISCONNECT ELIGIBLE':'var(--red)','RELIGIOUS':'var(--text-dim)'};
+    const c=cols[status]||'var(--yellow)';
+    s.style.color=c; s.style.borderColor=c;
+    document.getElementById('accard').classList.add('show');
+  }
+  function closeCard(){document.getElementById('accard').classList.remove('show');}
+
+  // ── DIAL ─────────────────────────────────────────────────────
+  function setDial(val,label,el){
+    document.getElementById('dval').textContent=val;
+    document.getElementById('dlabel').textContent=label;
+    document.querySelectorAll('.dbtn').forEach(b=>b.classList.remove('active'));
+    el.classList.add('active');
+  }
+
+  // ── SYSTEM SWITCH ─────────────────────────────────────────────
+  function switchSystem(v){ loadSystemData(v); }
+
+  // ── BWN ───────────────────────────────────────────────────────
+  function showBWN(){document.getElementById('bwnModal').classList.add('show');}
+  function closeBWN(){document.getElementById('bwnModal').classList.remove('show');}
+  document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCard();closeBWN();}});
+</script>
+
+<!-- GOOGLE MAPS — load last so initMap is defined -->
+<script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDedtzKXUUSjCdqVQ4XoCe0GlmnkBw2UMc&callback=initMap">
+</script>
+</script>
+</body>
+</html>
