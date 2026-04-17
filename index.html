@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RADEUS — Command Center</title>
+<title>RADEUS — Command Center v5</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -198,57 +198,26 @@
   <!-- LEFT -->
   <div class="col">
     <div class="panel">
-      <div class="ptitle">DERBY NWS — APR 2026 STATUS <span class="badge bg2">BILLING OPEN</span></div>
-      <div class="srow"><span class="slabel">TOTAL ACCOUNTS</span><span class="sval cv">43</span></div>
-      <div class="srow"><span class="slabel">CURRENT / PAID</span><span class="sval gv">22</span></div>
-      <div class="srow"><span class="slabel">CREDIT BALANCE</span><span class="sval bv">5</span></div>
-      <div class="srow"><span class="slabel">PAST DUE</span><span class="sval ov">11</span></div>
-      <div class="srow"><span class="slabel">CRITICAL (&gt;$500)</span><span class="sval rv">5</span></div>
-      <div class="srow"><span class="slabel">BILL DATE</span><span class="sval" style="font-size:10px;color:var(--cyan)">04/15/2026</span></div>
-      <div class="srow"><span class="slabel">DUE DATE</span><span class="sval yv" style="font-size:10px">05/01/2026</span></div>
+      <div class="ptitle" id="sys-status-title">DERBY NWS — APR 2026 STATUS <span class="badge bg2">BILLING OPEN</span></div>
+      <div class="srow"><span class="slabel">TOTAL ACCOUNTS</span><span class="sval cv" id="stat-total">43</span></div>
+      <div class="srow"><span class="slabel">CURRENT / PAID</span><span class="sval gv" id="stat-current">22</span></div>
+      <div class="srow"><span class="slabel">CREDIT BALANCE</span><span class="sval bv" id="stat-credit">5</span></div>
+      <div class="srow"><span class="slabel">PAST DUE</span><span class="sval ov" id="stat-pastdue">11</span></div>
+      <div class="srow"><span class="slabel">CRITICAL (&gt;$500)</span><span class="sval rv" id="stat-critical">5</span></div>
+      <div class="srow"><span class="slabel">BILL DATE</span><span class="sval" id="stat-billdate" style="font-size:10px;color:var(--cyan)">04/15/2026</span></div>
+      <div class="srow"><span class="slabel">DUE DATE</span><span class="sval yv" id="stat-duedate" style="font-size:10px">05/01/2026</span></div>
       <div class="mbar-wrap" style="margin-top:4px">
-        <div class="mbar-label"><span>COLLECTION RATE (EST)</span><span style="color:var(--green)">~65%</span></div>
-        <div class="mbar"><div class="mbar-fill" style="width:65%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
+        <div class="mbar-label"><span>COLLECTION RATE (EST)</span><span id="stat-collection" style="color:var(--green)">~65%</span></div>
+        <div class="mbar"><div class="mbar-fill" id="bar-collection" style="width:65%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
         <div class="mbar-label"><span>ACCOUNTS BILLED</span><span style="color:var(--cyan)">100%</span></div>
         <div class="mbar"><div class="mbar-fill" style="width:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan))"></div></div>
       </div>
     </div>
 
     <div class="panel" style="flex:1;display:flex;flex-direction:column">
-      <div class="ptitle">CRITICAL ACCOUNTS <span class="badge br2">5 URGENT</span></div>
-      <div class="afeed">
-        <div class="aitem" onclick="showCard('DNWSTX21','Humberto Gonzales','255 CR 4401 Dilley TX','CRITICAL','$2,174.70','RESIDENTIAL','None on file')">
-          <div class="adot" style="background:var(--red);box-shadow:0 0 8px var(--red)"></div>
-          <div><div class="aname" style="color:var(--red)">DNWSTX21 — H. GONZALES</div><div class="asub">255 CR 4401 · <span style="color:var(--red)">$2,174.70</span></div></div>
-        </div>
-        <div class="aitem" onclick="showCard('DNWSTX45','Priscilla Casas','201 CR 4401 Dilley TX','DISCONNECT ELIGIBLE','$1,914.64','RESIDENTIAL','None on file')">
-          <div class="adot" style="background:var(--red);box-shadow:0 0 8px var(--red)"></div>
-          <div><div class="aname" style="color:var(--red)">DNWSTX45 — P. CASAS</div><div class="asub">201 CR 4401 · <span style="color:var(--red)">$1,914.64</span></div></div>
-        </div>
-        <div class="aitem" onclick="showCard('DNWSTX17','Robert Aguilar','256 CR 4402 Dilley TX','PAST DUE','$1,356.25','RESIDENTIAL','None on file')">
-          <div class="adot" style="background:var(--red);box-shadow:0 0 7px var(--red)"></div>
-          <div><div class="aname" style="color:var(--red)">DNWSTX17 — R. AGUILAR</div><div class="asub">256 CR 4402 · <span style="color:var(--red)">$1,356.25</span></div></div>
-        </div>
-        <div class="aitem" onclick="showCard('DNWSTX56','Guadalupe Moreno','126 CR 3415 Dilley TX','PAST DUE','$509.90','RESIDENTIAL','Partial pmts')">
-          <div class="adot" style="background:var(--orange);box-shadow:0 0 7px var(--orange)"></div>
-          <div><div class="aname" style="color:var(--orange)">DNWSTX56 — G. MORENO</div><div class="asub">126 CR 3415 · <span style="color:var(--orange)">$509.90</span></div></div>
-        </div>
-        <div class="aitem" onclick="showCard('DNWSTX11','Jovita Martinez','303 CR 3428 Dilley TX','PAST DUE','$305.65','RESIDENTIAL','04/02/2026 $100')">
-          <div class="adot" style="background:var(--orange);box-shadow:0 0 6px var(--orange)"></div>
-          <div><div class="aname" style="color:var(--orange)">DNWSTX11 — J. MARTINEZ</div><div class="asub">303 CR 3428 · <span style="color:var(--orange)">$305.65</span></div></div>
-        </div>
-        <div class="aitem" onclick="showCard('DNWSTX09','Eusebio Santos Jr','230 CR 3418 Pearsall TX','PAST DUE','$282.27','RESIDENTIAL','03/19/2026 $100')">
-          <div class="adot" style="background:var(--orange);box-shadow:0 0 6px var(--orange)"></div>
-          <div><div class="aname" style="color:var(--orange)">DNWSTX09 — E. SANTOS JR</div><div class="asub">230 CR 3418 · <span style="color:var(--orange)">$282.27</span></div></div>
-        </div>
-        <div class="aitem" onclick="showCard('DNWSTX47','Paula Gallegos','130 CR 3240 Derby TX','PAST DUE','$275.34','RESIDENTIAL','None on file')">
-          <div class="adot" style="background:var(--yellow);box-shadow:0 0 5px var(--yellow)"></div>
-          <div><div class="aname" style="color:var(--yellow)">DNWSTX47 — P. GALLEGOS</div><div class="asub">130 CR 3240 · <span style="color:var(--yellow)">$275.34</span></div></div>
-        </div>
-        <div class="aitem" onclick="showCard('DNWSTX29','Elsa Martinez','480 CR 3430 Pearsall TX','PAST DUE','$186.65','RESIDENTIAL','None on file')">
-          <div class="adot" style="background:var(--yellow);box-shadow:0 0 4px var(--yellow)"></div>
-          <div><div class="aname" style="color:var(--yellow)">DNWSTX29 — E. MARTINEZ</div><div class="asub">480 CR 3430 · <span style="color:var(--yellow)">$186.65</span></div></div>
-        </div>
+      <div class="ptitle">CRITICAL ACCOUNTS <span class="badge br2" id="critical-badge">5 URGENT</span></div>
+      <div class="afeed" id="critical-feed">
+        <div class="aitem" style="padding:20px 12px;color:var(--text-dim);font-size:9px;letter-spacing:1px">LOADING...</div>
       </div>
     </div>
   </div>
@@ -281,28 +250,12 @@
 
     <!-- ACCOUNTS TABLE -->
     <div class="panel" style="height:190px;overflow:hidden;display:flex;flex-direction:column">
-      <div class="ptitle">ACCOUNT REGISTER — DERBY NWS // APRIL 2026 <span class="badge bc2">43 ACCTS</span></div>
+      <div class="ptitle" id="acct-table-title">ACCOUNT REGISTER — LOADING... <span class="badge bc2" id="acct-table-badge">...</span></div>
       <div style="overflow-y:auto;flex:1">
         <table class="atable">
           <thead><tr><th>ACCT #</th><th>CUSTOMER NAME</th><th>ADDRESS</th><th>STATUS</th><th style="text-align:right">BALANCE</th></tr></thead>
-          <tbody>
-            <tr onclick="showCard('DNWSTX02','Randall Roberts','204 FM 1583 Dilley TX','CURRENT','$47.15','RESIDENTIAL','03/18/2026')"><td class="acct">DNWSTX02</td><td class="nm">Randall Roberts</td><td class="addr">204 FM 1583</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$47.15</td></tr>
-            <tr onclick="showCard('DNWSTX04','Sophia Sproat','111 CR 3435 Dilley TX','CURRENT','$50.75','RESIDENTIAL','03/30/2026')"><td class="acct">DNWSTX04</td><td class="nm">Sophia Sproat</td><td class="addr">111 CR 3435</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$50.75</td></tr>
-            <tr onclick="showCard('DNWSTX06','Alamar Guerra','212 CR 3414 Dilley TX','CREDIT BALANCE','($212.48) CR','RESIDENTIAL','03/19/2026')"><td class="acct">DNWSTX06</td><td class="nm">Alamar Guerra</td><td class="addr">212 CR 3414</td><td><span class="pill" style="color:var(--blue);border-color:var(--blue)">CREDIT</span></td><td class="bal bv">($212.48)</td></tr>
-            <tr onclick="showCard('DNWSTX09','Eusebio Santos Jr','230 CR 3418 Pearsall TX','PAST DUE','$282.27','RESIDENTIAL','03/19/2026 $100')"><td class="acct">DNWSTX09</td><td class="nm">Eusebio Santos Jr</td><td class="addr">230 CR 3418</td><td><span class="pill" style="color:var(--orange);border-color:var(--orange)">PAST DUE</span></td><td class="bal ov">$282.27</td></tr>
-            <tr onclick="showCard('DNWSTX10','Kevin Gutierrez','215 CR 3418 Pearsall TX','PAST DUE','$115.36','RESIDENTIAL','None')"><td class="acct">DNWSTX10</td><td class="nm">Kevin Gutierrez</td><td class="addr">215 CR 3418</td><td><span class="pill" style="color:var(--orange);border-color:var(--orange)">PAST DUE</span></td><td class="bal ov">$115.36</td></tr>
-            <tr onclick="showCard('DNWSTX11','Jovita Martinez','303 CR 3428 Dilley TX','PAST DUE','$305.65','RESIDENTIAL','04/02/2026 $100')"><td class="acct">DNWSTX11</td><td class="nm">Jovita Martinez</td><td class="addr">303 CR 3428</td><td><span class="pill" style="color:var(--orange);border-color:var(--orange)">PAST DUE</span></td><td class="bal ov">$305.65</td></tr>
-            <tr onclick="showCard('DNWSTX12','John Mercado','270 CR 3428 Dilley TX','PAST DUE','$91.56','RESIDENTIAL','03/31/2026 $47')"><td class="acct">DNWSTX12</td><td class="nm">John Mercado</td><td class="addr">270 CR 3428</td><td><span class="pill" style="color:var(--yellow);border-color:var(--yellow)">PAST DUE</span></td><td class="bal ov">$91.56</td></tr>
-            <tr onclick="showCard('DNWSTX17','Robert Aguilar','256 CR 4402 Dilley TX','CRITICAL','$1,356.25','RESIDENTIAL','None')"><td class="acct">DNWSTX17</td><td class="nm">Robert Aguilar</td><td class="addr">256 CR 4402</td><td><span class="pill" style="color:var(--red);border-color:var(--red)">CRITICAL</span></td><td class="bal rv">$1,356.25</td></tr>
-            <tr onclick="showCard('DNWSTX19','Martin Martinez','270 CR 4401 Dilley TX','CURRENT','$50.58','RESIDENTIAL','03/18/2026')"><td class="acct">DNWSTX19</td><td class="nm">Martin Martinez</td><td class="addr">270 CR 4401</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$50.58</td></tr>
-            <tr><td class="acct">DNWSTX20</td><td class="nm">Mission de la Fe Church</td><td class="addr">230 Co Rd 4415</td><td><span class="pill" style="color:var(--text-dim);border-color:var(--text-dim)">RELIGIOUS</span></td><td class="bal" style="color:var(--text-dim)">$0.00</td></tr>
-            <tr onclick="showCard('DNWSTX21','Humberto Gonzales','255 CR 4401 Dilley TX','CRITICAL','$2,174.70','RESIDENTIAL','None')"><td class="acct">DNWSTX21</td><td class="nm">Humberto Gonzales</td><td class="addr">255 CR 4401</td><td><span class="pill" style="color:var(--red);border-color:var(--red)">CRITICAL</span></td><td class="bal rv">$2,174.70</td></tr>
-            <tr onclick="showCard('DNWSTX22','Pilar Ramos','221 CR 4415 Dilley TX','PAST DUE','$124.89','RESIDENTIAL','03/22/2026 $100')"><td class="acct">DNWSTX22</td><td class="nm">Pilar Ramos</td><td class="addr">221 CR 4415</td><td><span class="pill" style="color:var(--orange);border-color:var(--orange)">PAST DUE</span></td><td class="bal ov">$124.89</td></tr>
-            <tr onclick="showCard('DNWSTX23','Adolph Eric Gonzales','180 CR 4415 Dilley TX','CURRENT','$53.16','RESIDENTIAL','03/09/2026')"><td class="acct">DNWSTX23</td><td class="nm">Adolph Eric Gonzales</td><td class="addr">180 CR 4415</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$53.16</td></tr>
-            <tr onclick="showCard('DNWSTX24','Humberto Gonzales II','130 CR 4415 Dilley TX','CURRENT','$46.05','RESIDENTIAL','03/31/2026 $45')"><td class="acct">DNWSTX24</td><td class="nm">Humberto Gonzales II</td><td class="addr">130 CR 4415</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$46.05</td></tr>
-            <tr onclick="showCard('DNWSTX25','Eliodoro Gonzalez','208 CR 4425 Dilley TX','CURRENT','$49.54','RESIDENTIAL','03/16/2026')"><td class="acct">DNWSTX25</td><td class="nm">Eliodoro Gonzalez</td><td class="addr">208 CR 4425</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$49.54</td></tr>
-            <tr onclick="showCard('DNWSTX45','Priscilla Casas','201 CR 4401 Dilley TX','CRITICAL','$1,914.64','RESIDENTIAL','None')"><td class="acct">DNWSTX45</td><td class="nm">Priscilla Casas</td><td class="addr">201 CR 4401</td><td><span class="pill" style="color:var(--red);border-color:var(--red)">CRITICAL</span></td><td class="bal rv">$1,914.64</td></tr>
-            <tr onclick="showCard('DNWSTX56','Guadalupe Moreno','126 CR 3415 Dilley TX','PAST DUE','$509.90','RESIDENTIAL','Partial pmts')"><td class="acct">DNWSTX56</td><td class="nm">Guadalupe Moreno</td><td class="addr">126 CR 3415</td><td><span class="pill" style="color:var(--red);border-color:var(--red)">PAST DUE</span></td><td class="bal rv">$509.90</td></tr>
+          <tbody id="acctTable">
+            <tr><td colspan="5" style="padding:20px;color:var(--text-dim);font-size:9px;letter-spacing:1px;text-align:center">LOADING FROM DATABASE...</td></tr>
           </tbody>
         </table>
       </div>
@@ -691,25 +644,97 @@
 
     // Stats
     let total=0, current=0, credits=0, pastDue=0, critical=0;
+    const criticalAccounts = [];
+
     accounts.forEach(a => {
       total++;
       const bal = balMap[a.account_id]?.current_balance ?? 0;
       if (a.account_type === 'RELIGIOUS') return;
-      if (bal < 0)       credits++;
+      if (bal < 0)        credits++;
       else if (bal === 0) current++;
-      else if (bal > 500){ critical++; pastDue++; }
-      else               pastDue++;
+      else if (bal > 500) { critical++; pastDue++; criticalAccounts.push({a, bal}); }
+      else                pastDue++;
     });
 
-    const statVals = document.querySelectorAll('.sval');
-    if (statVals[0]) statVals[0].textContent = total;
-    if (statVals[1]) statVals[1].textContent = current;
-    if (statVals[2]) statVals[2].textContent = credits;
-    if (statVals[3]) statVals[3].textContent = pastDue;
-    if (statVals[4]) statVals[4].textContent = critical;
+    // Sort critical by balance descending
+    criticalAccounts.sort((x,y) => y.bal - x.bal);
+
+    // Update system status title
+    const now = new Date();
+    const monthName = now.toLocaleString('default',{month:'short'}).toUpperCase();
+    const yr = now.getFullYear();
+    document.getElementById('sys-status-title').innerHTML =
+      `${sys.system_name.toUpperCase()} — ${monthName} ${yr} <span class="badge bg2">BILLING OPEN</span>`;
+
+    // Update stat values
+    document.getElementById('stat-total').textContent    = total || '—';
+    document.getElementById('stat-current').textContent  = current || '0';
+    document.getElementById('stat-credit').textContent   = credits || '0';
+    document.getElementById('stat-pastdue').textContent  = pastDue || '0';
+    document.getElementById('stat-critical').textContent = critical || '0';
+
+    // Update collection rate bar
+    const pct = total > 0 ? Math.round((current/total)*100) : 0;
+    document.getElementById('stat-collection').textContent = `~${pct}%`;
+    document.getElementById('bar-collection').style.width = pct + '%';
+    document.getElementById('dval').textContent = pct + '%';
+
+    // Update critical accounts badge
+    document.getElementById('critical-badge').textContent =
+      critical > 0 ? `${critical} URGENT` : 'NONE';
+    document.getElementById('critical-badge').className =
+      critical > 0 ? 'badge br2' : 'badge bg2';
+
+    // Rebuild critical accounts feed
+    const feed = document.getElementById('critical-feed');
+    if (feed) {
+      if (criticalAccounts.length === 0) {
+        feed.innerHTML = `<div class="aitem" style="padding:20px 12px;color:var(--green);font-size:10px;letter-spacing:1px">✓ NO CRITICAL ACCOUNTS</div>`;
+      } else {
+        feed.innerHTML = '';
+        criticalAccounts.forEach(({a, bal}) => {
+          const name    = a.customers?.full_name || '—';
+          const addr    = a.service_addresses?.street || '—';
+          const cls     = classifyBalance(bal, a.account_type);
+          const lastPmt = balMap[a.account_id]?.last_payment_date
+            ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None on file';
+          const nameParts = name.split(' ');
+          const shortName = nameParts.length > 1
+            ? `${nameParts[0][0]}. ${nameParts.slice(1).join(' ')}`.toUpperCase()
+            : name.toUpperCase();
+          const div = document.createElement('div');
+          div.className = 'aitem';
+          div.onclick = () => showCard(a.account_number, name, addr, cls.label, fmtBal(bal), a.account_type, lastPmt);
+          div.innerHTML = `
+            <div class="adot" style="background:${cls.color};box-shadow:0 0 7px ${cls.color}"></div>
+            <div>
+              <div class="aname" style="color:${cls.color}">${a.account_number} — ${shortName}</div>
+              <div class="asub">${addr} · <span style="color:${cls.color}">${fmtBal(bal)}</span></div>
+            </div>`;
+          feed.appendChild(div);
+        });
+      }
+    }
+
+    // If no accounts for this system yet
+    if (accounts.length === 0) {
+      const feed = document.getElementById('critical-feed');
+      if (feed) feed.innerHTML = `<div class="aitem" style="padding:20px 12px;color:var(--text-dim);font-size:9px;letter-spacing:1px">NO ACCOUNTS IMPORTED YET</div>`;
+      const tbody = document.getElementById('acctTable');
+      if (tbody) tbody.innerHTML = `<tr><td colspan="5" style="padding:20px;color:var(--text-dim);font-size:9px;letter-spacing:1px;text-align:center">NO DATA — IMPORT PENDING</td></tr>`;
+      document.getElementById('dval').textContent = '—';
+      return;
+    }
 
     // Place map markers
     if (gmap) placeMarkers(accounts, balMap);
+
+    // Update account table title
+    const now2 = new Date();
+    const mo = now2.toLocaleString('default',{month:'short'}).toUpperCase();
+    const yr2 = now2.getFullYear();
+    const titleEl2 = document.getElementById('acct-table-title');
+    if (titleEl2) titleEl2.innerHTML = `ACCOUNT REGISTER — ${sys.system_name.toUpperCase()} // ${mo} ${yr2} <span class="badge bc2" id="acct-table-badge">${total} ACCTS</span>`;
 
     // Rebuild account table
     const tbody = document.getElementById('acctTable');
