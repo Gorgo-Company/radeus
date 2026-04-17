@@ -551,6 +551,7 @@
       if (currentFilter === 'CRITICAL')     return a.status==='ACTIVE' && a.bal > 500;
       if (currentFilter === 'CREDIT')       return a.status==='ACTIVE' && a.bal < 0;
       if (currentFilter === 'PMT PLAN')     return a.hasPlan === true;
+      return true;
     }).filter(a => {
       if (!search) return true;
       return a.account_number.toLowerCase().includes(search) ||
