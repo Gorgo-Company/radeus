@@ -291,9 +291,9 @@
 <div class="botnav">
   <a class="navbtn" href="index.html"><span class="navicon">⬡</span>COMMAND</a>
   <a class="navbtn active" href="accounts.html"><span class="navicon">👤</span>ACCOUNTS</a>
-  <a class="navbtn" href="readings.html"><span class="navicon">📡</span>READINGS</a>
-  <a class="navbtn" href="billing.html"><span class="navicon">💧</span>BILLING</a>
-  <a class="navbtn" href="comms.html"><span class="navicon">📞</span>COMMS</a>
+  <a class="navbtn" href="readings.html"><span class="navicon">🔢</span>READINGS</a>
+  <a class="navbtn" href="billing.html"><span class="navicon">🧾</span>BILLING</a>
+  <a class="navbtn" href="comms.html"><span class="navicon" style="font-size:11px;letter-spacing:-2px">📞✉</span>COMMS</a>
   <a class="navbtn" href="compliance.html"><span class="navicon">📋</span>COMPLY</a>
   <a class="navbtn" href="assets.html"><span class="navicon">🔧</span>ASSETS</a>
   <a class="navbtn" href="reports.html"><span class="navicon">📊</span>REPORTS</a>
@@ -586,7 +586,7 @@
         <td class="td-name">${a.name}</td>
         <td class="td-addr">${a.address}${a.city ? ', '+a.city : ''}</td>
         <td><span class="pill" style="color:${statusColor};border-color:${statusColor}">${a.status}</span>
-            ${a.bal>0&&a.status==='ACTIVE' ? '<br><span class='pill' style='color:'+a.cls.color+';border-color:'+a.cls.color+';margin-top:2px'>'+a.cls.label+'</span>' : ''}</td>
+            ${a.bal>0&&a.status==='ACTIVE' ? `<br><span class="pill" style="color:${a.cls.color};border-color:${a.cls.color};margin-top:2px">${a.cls.label}</span>` : ''}</td>
         <td>${hasPlan ? '<span class="plan-pill">ARRANGEMENT</span>' : '<span style="color:var(--text-dim);font-size:8px">—</span>'}</td>
         <td class="td-date">${fmtDate(a.lastPmt)}${a.lastPmtAmt ? '<br><span style="color:var(--green);font-size:8px">'+fmtBal(a.lastPmtAmt)+'</span>' : ''}</td>
         <td class="td-bal" style="color:${a.cls.color}">${fmtBal(a.bal)}</td>`;
