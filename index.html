@@ -41,7 +41,7 @@
   .br2{color:var(--red);border-color:var(--red)}.bg2{color:var(--green);border-color:var(--green)}.bo2{color:var(--orange);border-color:var(--orange)}.bc2{color:var(--cyan);border-color:var(--cyan)}
   .srow{display:flex;justify-content:space-between;align-items:center;padding:5px 12px;border-bottom:1px solid rgba(0,245,255,.04);}
   .slabel{font-size:9px;color:var(--text-dim);letter-spacing:1px}
-  .sval{font-family:'Orbitron',monospace;font-size:13px;font-weight:600}
+  .sval{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700}
   .cv{color:var(--cyan);text-shadow:0 0 8px rgba(0,245,255,.4)}.gv{color:var(--green)}.rv{color:var(--red)}.ov{color:var(--orange)}.bv{color:var(--blue)}.yv{color:var(--yellow)}
   .mbar-wrap{padding:6px 12px 10px}
   .mbar-label{font-size:8px;color:var(--text-dim);letter-spacing:1px;margin-bottom:3px;display:flex;justify-content:space-between;}
@@ -165,7 +165,7 @@
 <div class="ticker-wrap">
   <div class="ticker-tag">⬡ LIVE FEED</div>
   <div style="overflow:hidden;flex:1">
-    <div class="ticker-track">
+    <div class="ticker-track" id="tickerTrack">
       <span class="ti">ACCT <span class="v">DNWSTX21</span> — HUMBERTO GONZALES — BAL <span class="r">$2,174.70</span> — CRITICAL // NO PAYMENTS ON FILE</span>
       <span class="ti">ACCT <span class="v">DNWSTX45</span> — PRISCILLA CASAS — BAL <span class="r">$1,914.64</span> — DISCONNECT ELIGIBLE</span>
       <span class="ti">ACCT <span class="v">DNWSTX17</span> — ROBERT AGUILAR — BAL <span class="r">$1,356.25</span> — PRIOR BAL $1,297.79</span>
@@ -181,6 +181,11 @@
       <span class="ti">ACCT <span class="v">DNWSTX17</span> — ROBERT AGUILAR — BAL <span class="r">$1,356.25</span> — PRIOR BAL $1,297.79</span>
       <span class="ti">BILLING CYCLE: <span class="o">APRIL 2026 — ISSUED 04/15 — DUE 05/01/2026</span></span>
       <span class="ti">CALL LOG <span class="v">CL75</span> — PPNWSTX16 CHARLES CHATTOM — <span class="r">BROKEN PIPE — REPAIR NEEDED</span></span>
+      <span class="ti">ACCT <span class="v">DNWSTX06</span> — ALAMAR GUERRA — <span class="g">CREDIT BALANCE $212.48</span></span>
+      <span class="ti">ACCT <span class="v">DNWSTX56</span> — GUADALUPE MORENO — BAL <span class="r">$509.90</span> — $40 PMT VIA SQUARE RECEIVED</span>
+      <span class="ti">CALL LOG <span class="v">CL27</span> — OHNWSTX22 PAUL RIVERA — <span class="r">WATER UNDRINKABLE — BWN ACTIVE</span></span>
+      <span class="ti">ACCT <span class="v">DNWSTX09</span> — EUSEBIO SANTOS JR — BAL <span class="r">$282.27</span> — LATE FEE APPLIED</span>
+      <span class="ti">NEW SERVICE INQUIRY — DERBY NWS — LOT 11 CR3418 — <span class="g">PAPERWORK IN PROGRESS</span></span>
     </div>
   </div>
 </div>
@@ -191,24 +196,24 @@
   <!-- LEFT -->
   <div class="col">
     <div class="panel">
-      <div class="ptitle">DERBY NWS — APR 2026 STATUS <span class="badge bg2">BILLING OPEN</span></div>
-      <div class="srow"><span class="slabel">TOTAL ACCOUNTS</span><span class="sval cv">43</span></div>
-      <div class="srow"><span class="slabel">CURRENT / PAID</span><span class="sval gv">22</span></div>
-      <div class="srow"><span class="slabel">CREDIT BALANCE</span><span class="sval bv">5</span></div>
-      <div class="srow"><span class="slabel">PAST DUE</span><span class="sval ov">11</span></div>
-      <div class="srow"><span class="slabel">CRITICAL (&gt;$500)</span><span class="sval rv">5</span></div>
-      <div class="srow"><span class="slabel">BILL DATE</span><span class="sval" style="font-size:13px;color:var(--cyan);font-family:'Rajdhani',sans-serif;font-weight:700">04/15/2026</span></div>
-      <div class="srow"><span class="slabel">DUE DATE</span><span class="sval yv" style="font-size:13px;font-family:'Rajdhani',sans-serif;font-weight:700">05/01/2026</span></div>
+      <div class="ptitle" id="statusTitle">DERBY NWS — APR 2026 STATUS <span class="badge bg2">BILLING OPEN</span></div>
+      <div class="srow"><span class="slabel">TOTAL ACCOUNTS</span><span class="sval cv" id="stat-total">43</span></div>
+      <div class="srow"><span class="slabel">CURRENT / PAID</span><span class="sval gv" id="stat-current">22</span></div>
+      <div class="srow"><span class="slabel">CREDIT BALANCE</span><span class="sval bv" id="stat-credit">5</span></div>
+      <div class="srow"><span class="slabel">PAST DUE</span><span class="sval ov" id="stat-pastdue">11</span></div>
+      <div class="srow"><span class="slabel">CRITICAL (&gt;$500)</span><span class="sval rv" id="stat-critical">5</span></div>
+      <div class="srow"><span class="slabel">BILL DATE</span><span class="sval" id="stat-billdate" style="color:var(--cyan);font-weight:700">04/15/2026</span></div>
+      <div class="srow"><span class="slabel">DUE DATE</span><span class="sval yv" id="stat-duedate" style="font-weight:700">05/01/2026</span></div>
       <div class="mbar-wrap" style="margin-top:4px">
-        <div class="mbar-label"><span>COLLECTION RATE (EST)</span><span style="color:var(--green)">~65%</span></div>
-        <div class="mbar"><div class="mbar-fill" style="width:65%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
+        <div class="mbar-label"><span>COLLECTION RATE (EST)</span><span id="collRateLbl" style="color:var(--green)">~65%</span></div>
+        <div class="mbar"><div class="mbar-fill" id="collBar" style="width:65%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
         <div class="mbar-label"><span>ACCOUNTS BILLED</span><span style="color:var(--cyan)">100%</span></div>
-        <div class="mbar"><div class="mbar-fill" style="width:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan))"></div></div>
+        <div class="mbar"><div class="mbar-fill" id="billedBar" style="width:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan))"></div></div>
       </div>
     </div>
 
     <div class="panel" style="flex:1;display:flex;flex-direction:column">
-      <div class="ptitle">CRITICAL ACCOUNTS <span class="badge br2">5 URGENT</span></div>
+      <div class="ptitle" id="critTitle">CRITICAL ACCOUNTS <span class="badge br2" id="critBadge">5 URGENT</span></div>
       <div class="afeed">
         <div class="aitem" onclick="showCard('DNWSTX21','Humberto Gonzales','255 CR 4401 Dilley TX','CRITICAL','$2,174.70','RESIDENTIAL','None on file')">
           <div class="adot" style="background:var(--red);box-shadow:0 0 8px var(--red)"></div>
@@ -310,7 +315,7 @@
 
     <!-- ACCOUNTS TABLE -->
     <div class="panel" style="height:190px;overflow:hidden;display:flex;flex-direction:column">
-      <div class="ptitle">ACCOUNT REGISTER — DERBY NWS // APRIL 2026 <span class="badge bc2">43 ACCTS</span></div>
+      <div class="ptitle" id="regTitle">ACCOUNT REGISTER — DERBY NWS // APRIL 2026 <span class="badge bc2" id="regBadge">43 ACCTS</span></div>
       <div style="overflow-y:auto;flex:1">
         <table class="atable">
           <thead><tr><th>ACCT #</th><th>CUSTOMER NAME</th><th>ADDRESS</th><th>STATUS</th><th style="text-align:right">BALANCE</th></tr></thead>
@@ -414,9 +419,9 @@
         <div class="compinfo"><div class="compname">APRIL BILLING RUN</div><div class="compdue">43 BILLS ISSUED — 04/15/2026</div></div>
         <div class="compst" style="color:var(--green);border-color:var(--green)">DONE</div>
       </div>
-      <div class="brow"><span class="blabel">APRIL BILLING TOTAL</span><span class="bval cv">~$4,800</span></div>
-      <div class="brow"><span class="blabel">TOTAL OUTSTANDING</span><span class="bval rv">~$9,200</span></div>
-      <div class="brow"><span class="blabel">DUE DATE</span><span class="bval yv">05/01/2026</span></div>
+      <div class="brow"><span class="blabel">APRIL BILLING TOTAL</span><span class="bval cv" id="compBillTotal">~$4,800</span></div>
+      <div class="brow"><span class="blabel">TOTAL OUTSTANDING</span><span class="bval rv" id="compOutstanding">~$9,200</span></div>
+      <div class="brow"><span class="blabel">DUE DATE</span><span class="bval yv" id="compDueDate">05/01/2026</span></div>
     </div>
 
   </div>
@@ -450,10 +455,10 @@
     <div class="acrow"><span class="acrl">ACCOUNT TYPE</span><span class="acrv" id="ac-type">RESIDENTIAL</span></div>
     <div class="acrow"><span class="acrl">CURRENT BALANCE</span><span class="acrv" id="ac-bal">$47.15</span></div>
     <div class="acrow"><span class="acrl">LAST PAYMENT</span><span class="acrv" id="ac-pmt">03/18/2026</span></div>
-    <div class="acrow"><span class="acrl">BASE RATE</span><span class="acrv">$40.00 / MONTH</span></div>
-    <div class="acrow"><span class="acrl">ENERGY SURCHARGE</span><span class="acrv">$6.00 FLAT</span></div>
-    <div class="acrow"><span class="acrl">LATE FEE (IF LATE)</span><span class="acrv">$10.00 after 05/01</span></div>
-    <div class="acrow"><span class="acrl">SYSTEM</span><span class="acrv">DERBY NEW WATER SYSTEM</span></div>
+    <div class="acrow"><span class="acrl">BASE RATE</span><span class="acrv" id="ac-baserate">$40.00 / MONTH</span></div>
+    <div class="acrow"><span class="acrl">ENERGY SURCHARGE</span><span class="acrv" id="ac-surcharge">$6.00 FLAT</span></div>
+    <div class="acrow"><span class="acrl">LATE FEE (IF LATE)</span><span class="acrv" id="ac-latefee">$10.00 after 05/01</span></div>
+    <div class="acrow"><span class="acrl">SYSTEM</span><span class="acrv" id="ac-sysname">DERBY NEW WATER SYSTEM</span></div>
   </div>
   <div class="acbtns">
     <button class="acbtn pri">FULL ACCOUNT</button>
@@ -489,6 +494,9 @@
   const SUPA_URL = 'https://bvpesxpptgdwkhsewhke.supabase.co';
   const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
 
+  // ── GLOBAL STATE ─────────────────────────────────────────────
+  let currentSystem = null;
+
   // ── CLOCK ────────────────────────────────────────────────────
   function tick(){const n=new Date();document.getElementById('clock').textContent=n.toTimeString().slice(0,8);}
   setInterval(tick,1000);tick();
@@ -511,22 +519,77 @@
     return `$${n.toFixed(2)}`;
   }
 
+  // BUG 12 FIX: Use tolerance for zero check to avoid floating point issues
   function classify(bal, type) {
     if (type==='RELIGIOUS') return {label:'RELIGIOUS', color:'var(--text-dim)'};
-    if (bal < 0)   return {label:'CREDIT',   color:'var(--blue)'};
-    if (bal === 0) return {label:'CURRENT',   color:'var(--green)'};
-    if (bal > 500) return {label:'CRITICAL',  color:'var(--red)'};
-    return               {label:'PAST DUE',   color:'var(--orange)'};
+    if (bal < -0.01)         return {label:'CREDIT',   color:'var(--blue)'};
+    if (Math.abs(bal) < 0.01) return {label:'CURRENT',  color:'var(--green)'};
+    if (bal > 500)            return {label:'CRITICAL', color:'var(--red)'};
+    return                         {label:'PAST DUE',  color:'var(--orange)'};
+  }
+
+  // BUG 9 FIX: Deterministic pseudo-random map position from account number
+  function acctToMapPos(acctNum) {
+    let h = 0;
+    for (let c of acctNum) h = (h * 31 + c.charCodeAt(0)) & 0xffff;
+    const x = 8 + (h & 0xff) * (82 / 255);
+    const y = 10 + ((h >> 8) & 0xff) * (78 / 255);
+    return { x: x.toFixed(1), y: y.toFixed(1) };
+  }
+
+  // BUG 9 FIX: Rebuild map nodes from live accounts
+  function rebuildMap(accounts, balMap) {
+    // Remove all existing dynamic map nodes
+    document.querySelectorAll('.mnode').forEach(n => n.remove());
+    const mapPanel = document.querySelector('.map-panel');
+    if (!mapPanel) return;
+    accounts.forEach(a => {
+      const bal = Number(balMap[a.account_id]?.current_balance ?? 0);
+      const cls = classify(bal, a.account_type);
+      const { x, y } = acctToMapPos(a.account_number);
+      const colorClass = bal < -0.01 ? 'nb' : Math.abs(bal) < 0.01 ? 'ng' : bal > 500 ? 'nr' : a.account_type==='RELIGIOUS' ? 'nn' : 'no';
+      const name = a.customers?.full_name || '—';
+      const addr = a.service_addresses?.street || '—';
+      const lastPmt = balMap[a.account_id]?.last_payment_date
+        ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None';
+      const node = document.createElement('div');
+      node.className = `mnode ${colorClass}`;
+      node.style.cssText = `left:${x}%;top:${y}%`;
+      node.onclick = () => showCard(a.account_number, name, addr, cls.label, fmtBal(bal), a.account_type, lastPmt);
+      node.innerHTML = `<div class="ntt"><div class="ntt-name">${a.account_number}</div><div class="ntt-row"><span>NAME</span><span>${name.split(' ').slice(0,2).join(' ')}</span></div><div class="ntt-row"><span>BAL</span><span style="color:${cls.color}">${fmtBal(bal)}</span></div></div>`;
+      mapPanel.appendChild(node);
+    });
+  }
+
+  // BUG 8 FIX: Update ticker with system-specific critical accounts
+  function updateTicker(sys, criticals) {
+    const track = document.getElementById('tickerTrack');
+    if (!track) return;
+    const items = [];
+    if (criticals.length) {
+      criticals.slice(0,5).forEach(({a, bal}) => {
+        const name = (a.customers?.full_name || '—').toUpperCase();
+        const cls = classify(bal, a.account_type);
+        const colorTag = bal > 500 ? 'r' : 'o';
+        items.push(`<span class="ti">ACCT <span class="v">${a.account_number}</span> — ${name} — BAL <span class="${colorTag}">${fmtBal(bal)}</span> — ${cls.label}</span>`);
+      });
+    }
+    items.push(`<span class="ti">BILLING CYCLE: <span class="o">${sys.system_name.toUpperCase()} — APRIL 2026 — DUE 05/01/2026</span></span>`);
+    items.push(`<span class="ti">SYSTEM ONLINE: <span class="v">${sys.system_code}</span> — <span class="g">RADEUS ACTIVE</span></span>`);
+    // Double for seamless loop
+    const full = [...items, ...items].join('\n');
+    track.innerHTML = full;
   }
 
   // ── LOAD LIVE DATA FROM SUPABASE ─────────────────────────────
   async function loadLiveData(systemCode) {
-    // Get system
     const systems = await supa('water_systems', `?system_code=eq.${systemCode}&select=*`);
     if (!systems || !systems.length) { console.warn('No system found for', systemCode); return; }
     const sys = systems[0];
 
-    // Get accounts + balances
+    // BUG 6 FIX: Store system globally for account card
+    currentSystem = sys;
+
     const accounts = await supa('accounts',
       `?system_id=eq.${sys.system_id}&status=neq.INACTIVE&select=account_id,account_number,account_type,status,customers(full_name),service_addresses(street)`
     );
@@ -536,58 +599,114 @@
     const balMap = {};
     balances.forEach(b => { balMap[b.account_id] = b; });
 
-    // Stats
+    // BUG 5 FIX: Mutually exclusive categories (criticals do NOT inflate pastDue)
     let total=0, current=0, credits=0, pastDue=0, critical=0;
     const criticals = [];
     accounts.forEach(a => {
       total++;
       const bal = Number(balMap[a.account_id]?.current_balance ?? 0);
       if (a.account_type==='RELIGIOUS') return;
-      if (bal < 0)        credits++;
-      else if (bal === 0) current++;
-      else if (bal > 500) { critical++; pastDue++; criticals.push({a,bal}); }
-      else                pastDue++;
+      if (bal < -0.01)          credits++;
+      else if (Math.abs(bal) < 0.01) current++;
+      else if (bal > 500)       { critical++; criticals.push({a,bal}); }
+      else                      pastDue++;
     });
     criticals.sort((x,y) => y.bal - x.bal);
 
-    // Update system title
-    document.querySelector('.ptitle').childNodes[0].textContent =
-      `${sys.system_code} — APR 2026 STATUS `;
+    // BUG 4 FIX: Update all panel titles with system info
+    const sTitle = document.getElementById('statusTitle');
+    if (sTitle) sTitle.childNodes[0].textContent = `${sys.system_name} — APR 2026 STATUS `;
 
-    // Update stats
-    const sv = document.querySelectorAll('.sval');
-    if(sv[0]) sv[0].textContent = total;
-    if(sv[1]) sv[1].textContent = current;
-    if(sv[2]) sv[2].textContent = credits;
-    if(sv[3]) sv[3].textContent = pastDue;
-    if(sv[4]) sv[4].textContent = critical;
+    const rTitle = document.getElementById('regTitle');
+    if (rTitle) rTitle.childNodes[0].textContent = `ACCOUNT REGISTER — ${sys.system_code} // APRIL 2026 `;
+
+    const rBadge = document.getElementById('regBadge');
+    if (rBadge) rBadge.textContent = `${accounts.length} ACCTS`;
+
+    // BUG 2 FIX: Update stat values (now Rajdhani via CSS)
+    const s = (id, v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
+    s('stat-total', total);
+    s('stat-current', current);
+    s('stat-credit', credits);
+    s('stat-pastdue', pastDue);
+    s('stat-critical', critical);
+
+    // BUG 1 FIX: Always rebuild critical feed, update badge
+    const critBadge = document.getElementById('critBadge');
+    if (critBadge) critBadge.textContent = `${critical} URGENT`;
+
+    const feed = document.querySelector('.afeed');
+    if (feed) {
+      feed.innerHTML = '';
+      if (criticals.length === 0) {
+        feed.innerHTML = '<div style="padding:24px 12px;text-align:center;color:var(--text-dim);font-size:9px;letter-spacing:2px">NO CRITICAL ACCOUNTS</div>';
+      } else {
+        criticals.forEach(({a, bal}) => {
+          const name = a.customers?.full_name || '—';
+          const addr = a.service_addresses?.street || '—';
+          const cls  = classify(bal, a.account_type);
+          const lastPmt = balMap[a.account_id]?.last_payment_date
+            ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None on file';
+          const parts = name.split(' ');
+          const short = parts.length > 1 ? `${parts[0][0]}. ${parts.slice(1).join(' ')}` : name;
+          const div = document.createElement('div');
+          div.className = 'aitem';
+          div.onclick = () => showCard(a.account_number, name, addr, cls.label, fmtBal(bal), a.account_type, lastPmt);
+          div.innerHTML = `
+            <div class="adot" style="background:${cls.color};box-shadow:0 0 7px ${cls.color}"></div>
+            <div><div class="aname" style="color:${cls.color}">${a.account_number} — ${short.toUpperCase()}</div>
+            <div class="asub">${addr} · <span style="color:${cls.color}">${fmtBal(bal)}</span></div></div>`;
+          feed.appendChild(div);
+        });
+      }
+    }
 
     // Update dial
     const pct = total > 0 ? Math.round((current/total)*100) : 0;
     document.getElementById('dval').textContent = pct + '%';
 
-    // Rebuild critical feed
-    const feed = document.querySelector('.afeed');
-    if (feed && criticals.length) {
-      feed.innerHTML = '';
-      criticals.forEach(({a, bal}) => {
-        const name = a.customers?.full_name || '—';
-        const addr = a.service_addresses?.street || '—';
-        const cls  = classify(bal, a.account_type);
-        const lastPmt = balMap[a.account_id]?.last_payment_date
-          ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None on file';
-        const parts = name.split(' ');
-        const short = parts.length > 1 ? `${parts[0][0]}. ${parts.slice(1).join(' ')}` : name;
-        const div = document.createElement('div');
-        div.className = 'aitem';
-        div.onclick = () => showCard(a.account_number, name, addr, cls.label, fmtBal(bal), a.account_type, lastPmt);
-        div.innerHTML = `
-          <div class="adot" style="background:${cls.color};box-shadow:0 0 7px ${cls.color}"></div>
-          <div><div class="aname" style="color:${cls.color}">${a.account_number} — ${short.toUpperCase()}</div>
-          <div class="asub">${addr} · <span style="color:${cls.color}">${fmtBal(bal)}</span></div></div>`;
-        feed.appendChild(div);
-      });
+    // BUG 10 FIX: Update progress bars
+    const collBar = document.getElementById('collBar');
+    const collLbl = document.getElementById('collRateLbl');
+    if (collBar) collBar.style.width = pct + '%';
+    if (collLbl) collLbl.textContent = `~${pct}%`;
+
+    // BUG 11 FIX: Update nav alert badge
+    const navAlert = document.getElementById('nav-acct-alert');
+    if (navAlert) navAlert.textContent = critical > 0 ? critical : '';
+    if (navAlert) navAlert.style.display = critical > 0 ? 'flex' : 'none';
+
+    // BUG 9 FIX: Rebuild map
+    rebuildMap(accounts, balMap);
+
+    // BUG 8 FIX: Update ticker
+    updateTicker(sys, criticals);
+
+    // BUG 13 FIX: Pull billing cycle dates
+    const cycles = await supa('billing_cycles',
+      `?system_id=eq.${sys.system_id}&order=cycle_year.desc,cycle_month.desc&limit=1`
+    );
+    if (cycles && cycles.length) {
+      const c = cycles[0];
+      if (c.statement_date) {
+        const bd = new Date(c.statement_date);
+        s('stat-billdate', bd.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}));
+      }
+      if (c.due_date) {
+        const dd = new Date(c.due_date);
+        s('stat-duedate', dd.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}));
+        const compDue = document.getElementById('compDueDate');
+        if (compDue) compDue.textContent = dd.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});
+      }
     }
+
+    // BUG 7 FIX: Update compliance billing amounts from live balances
+    const totalOutstanding = balances.reduce((sum, b) => {
+      const bal = Number(b.current_balance ?? 0);
+      return sum + (bal > 0 ? bal : 0);
+    }, 0);
+    const compOut = document.getElementById('compOutstanding');
+    if (compOut && totalOutstanding > 0) compOut.textContent = `$${totalOutstanding.toFixed(2)}`;
 
     // Rebuild account table
     const tbody = document.getElementById('acctTable');
@@ -614,9 +733,9 @@
       });
     }
 
-    // Load call log
-    const calls = await supa('call_log',
-      `?system_id=eq.${sys.system_id}&select=*&order=call_date.desc&limit=9`
+    // BUG 3 FIX: Use correct table name 'communication_log' not 'call_log'
+    const calls = await supa('communication_log',
+      `?system_id=eq.${sys.system_id}&select=*&order=created_at.desc&limit=9`
     );
     if (calls && calls.length) {
       const clog = document.querySelector('.clog');
@@ -656,6 +775,18 @@
     const cols={'CURRENT':'var(--green)','CREDIT':'var(--blue)','CREDIT BALANCE':'var(--blue)','PAST DUE':'var(--orange)','CRITICAL':'var(--red)','DISCONNECT ELIGIBLE':'var(--red)','ACTIVE — RELIGIOUS':'var(--text-dim)','RELIGIOUS':'var(--text-dim)'};
     const c=cols[status]||'var(--yellow)';
     s.style.color=c;s.style.borderColor=c;
+
+    // BUG 6 FIX: Populate rates from currentSystem
+    if (currentSystem) {
+      const base = Number(currentSystem.base_rate||0);
+      const surcharge = Number(currentSystem.energy_surcharge||0);
+      const lateFee = Number(currentSystem.late_fee_amount||0);
+      document.getElementById('ac-baserate').textContent = `$${base.toFixed(2)} / MONTH`;
+      document.getElementById('ac-surcharge').textContent = surcharge > 0 ? `$${surcharge.toFixed(2)} FLAT` : 'N/A';
+      document.getElementById('ac-latefee').textContent = lateFee > 0 ? `$${lateFee.toFixed(2)} after due date` : 'N/A';
+      document.getElementById('ac-sysname').textContent = currentSystem.system_name;
+    }
+
     document.getElementById('accard').classList.add('show');
   }
   function closeCard(){document.getElementById('accard').classList.remove('show');}
@@ -678,7 +809,7 @@
   function closeBWN(){document.getElementById('bwnModal').classList.remove('show');}
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCard();closeBWN();}});
 
-  // ── BOOT — try to load live data on top of hardcoded display ─
+  // ── BOOT ─────────────────────────────────────────────────────
   loadLiveData('DNWSTX');
 </script>
 </body>
