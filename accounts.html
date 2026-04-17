@@ -163,7 +163,7 @@
 
   /* BOTTOM NAV */
   .botnav{position:fixed;bottom:0;left:0;right:0;height:64px;background:linear-gradient(90deg,var(--bg2),#020e1c,var(--bg2));border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:6px;padding:0 16px;z-index:100;}
-  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:74px;height:50px;background:var(--panel);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;transition:all .2s;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;}
+  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:68px;height:50px;background:var(--panel);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;transition:all .2s;font-size:7px;letter-spacing:1px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;}
   .navbtn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--cyan);transform:scaleX(0);transition:transform .2s;}
   .navbtn:hover::after,.navbtn.active::after{transform:scaleX(1);}
   .navbtn:hover,.navbtn.active{color:var(--cyan);border-color:var(--border-hi);background:rgba(0,245,255,.05);}
@@ -291,8 +291,9 @@
 <div class="botnav">
   <a class="navbtn" href="index.html"><span class="navicon">⬡</span>COMMAND</a>
   <a class="navbtn active" href="accounts.html"><span class="navicon">👤</span>ACCOUNTS</a>
+  <a class="navbtn" href="readings.html"><span class="navicon">📡</span>READINGS</a>
   <a class="navbtn" href="billing.html"><span class="navicon">💧</span>BILLING</a>
-  <a class="navbtn" href="calllog.html"><span class="navicon">📞</span>CALL LOG</a>
+  <a class="navbtn" href="comms.html"><span class="navicon">📞</span>COMMS</a>
   <a class="navbtn" href="compliance.html"><span class="navicon">📋</span>COMPLY</a>
   <a class="navbtn" href="assets.html"><span class="navicon">🔧</span>ASSETS</a>
   <a class="navbtn" href="reports.html"><span class="navicon">📊</span>REPORTS</a>
