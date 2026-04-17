@@ -189,10 +189,11 @@
 
   /* BOTTOM NAV */
   .botnav{position:fixed;bottom:0;left:0;right:0;height:64px;background:linear-gradient(90deg,#1a1200,#0c0900,#1a1200);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:6px;padding:0 16px;z-index:100;}
-  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:68px;height:50px;background:rgba(232,180,0,.02);border:1px solid rgba(232,180,0,.1);color:rgba(232,180,0,.3);cursor:pointer;transition:all .2s;font-size:7px;letter-spacing:1px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;}
+  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:68px;height:50px;background:rgba(232,180,0,.04);border:1px solid rgba(232,180,0,.25);color:rgba(232,180,0,.58);cursor:pointer;transition:all .2s;font-size:7px;letter-spacing:1px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;}
   .navbtn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--yellow);transform:scaleX(0);transition:transform .2s;}
   .navbtn:hover::after,.navbtn.active::after{transform:scaleX(1);}
-  .navbtn:hover,.navbtn.active{color:var(--yellow);border-color:var(--border-hi);background:rgba(232,180,0,.06);}
+  .navbtn:hover{color:rgba(232,180,0,.88);border-color:rgba(232,180,0,.5);background:rgba(232,180,0,.08);}
+  .navbtn.active{color:var(--yellow);border-color:var(--yellow);background:rgba(232,180,0,.11);box-shadow:0 0 16px rgba(232,180,0,.28),inset 0 0 14px rgba(232,180,0,.07);}
   .navicon{font-size:15px;}
 </style>
 </head>
