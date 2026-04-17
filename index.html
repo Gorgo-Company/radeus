@@ -603,15 +603,14 @@
   async function loadSystemData(systemCode) {
     activeSystemCode = systemCode;
 
+    // 1. Get system record
     const systems = await supa('water_systems', `?system_code=eq.${systemCode}&select=*`);
-    if (!systems.length) return;
+    if (!systems.length) { console.warn('System not found:', systemCode); return; }
     const sys = systems[0];
 
-    // Update map title
+    // 2. Update map title and center
     const titleEl = document.getElementById('map-title');
     if (titleEl) titleEl.textContent = `SYSTEM MAP — ${sys.system_name.toUpperCase()}`;
-
-    // Center map on system
     const centers = {
       'DNWSTX':  { lat:28.9659, lng:-99.8007, zoom:13 },
       'PPNWSTX': { lat:30.0850, lng:-95.6890, zoom:14 },
@@ -628,87 +627,94 @@
       gmap.setZoom(centers[systemCode].zoom);
     }
 
-    // Get accounts
+    // 3. Get accounts with nested customer + address
     const accounts = await supa('accounts',
       `?system_id=eq.${sys.system_id}&select=account_id,account_number,account_type,status,customers(full_name),service_addresses(street,city,state)`
     );
 
-    // Get balances
+    // 4. Get balances from view
     const balances = await supa('account_balances', `?system_id=eq.${sys.system_id}&select=*`);
     const balMap = {};
     balances.forEach(b => { balMap[b.account_id] = b; });
 
-    // Cache for filter use
+    // Cache for filter buttons
     window._lastAccounts = accounts;
     window._lastBalMap   = balMap;
 
-    // Stats
+    // 5. Handle empty system
+    const tbody = document.getElementById('acctTable');
+    if (!accounts.length) {
+      document.getElementById('sys-status-title').innerHTML =
+        `${sys.system_name.toUpperCase()} — NO DATA <span class="badge br2">IMPORT PENDING</span>`;
+      document.getElementById('stat-total').textContent = '0';
+      document.getElementById('stat-current').textContent = '0';
+      document.getElementById('stat-credit').textContent = '0';
+      document.getElementById('stat-pastdue').textContent = '0';
+      document.getElementById('stat-critical').textContent = '0';
+      document.getElementById('dval').textContent = '—';
+      const feed = document.getElementById('critical-feed');
+      if (feed) feed.innerHTML = `<div class="aitem" style="padding:20px 12px;color:var(--text-dim);font-size:9px;letter-spacing:1px">NO ACCOUNTS IMPORTED YET</div>`;
+      if (tbody) tbody.innerHTML = `<tr><td colspan="5" style="padding:20px;color:var(--text-dim);font-size:9px;letter-spacing:1px;text-align:center">NO DATA — IMPORT PENDING</td></tr>`;
+      return;
+    }
+
+    // 6. Compute stats
     let total=0, current=0, credits=0, pastDue=0, critical=0;
     const criticalAccounts = [];
-
     accounts.forEach(a => {
       total++;
-      const bal = balMap[a.account_id]?.current_balance ?? 0;
+      const bal = Number(balMap[a.account_id]?.current_balance ?? 0);
       if (a.account_type === 'RELIGIOUS') return;
-      if (bal < 0)        credits++;
-      else if (bal === 0) current++;
+      if (bal < 0)        { credits++; }
+      else if (bal === 0) { current++; }
       else if (bal > 500) { critical++; pastDue++; criticalAccounts.push({a, bal}); }
-      else                pastDue++;
+      else                { pastDue++; }
     });
-
-    // Sort critical by balance descending
     criticalAccounts.sort((x,y) => y.bal - x.bal);
 
-    // Update system status title
+    // 7. Update left panel stats
     const now = new Date();
     const monthName = now.toLocaleString('default',{month:'short'}).toUpperCase();
     const yr = now.getFullYear();
     document.getElementById('sys-status-title').innerHTML =
       `${sys.system_name.toUpperCase()} — ${monthName} ${yr} <span class="badge bg2">BILLING OPEN</span>`;
+    document.getElementById('stat-total').textContent    = total;
+    document.getElementById('stat-current').textContent  = current;
+    document.getElementById('stat-credit').textContent   = credits;
+    document.getElementById('stat-pastdue').textContent  = pastDue;
+    document.getElementById('stat-critical').textContent = critical;
 
-    // Update stat values
-    document.getElementById('stat-total').textContent    = total || '—';
-    document.getElementById('stat-current').textContent  = current || '0';
-    document.getElementById('stat-credit').textContent   = credits || '0';
-    document.getElementById('stat-pastdue').textContent  = pastDue || '0';
-    document.getElementById('stat-critical').textContent = critical || '0';
-
-    // Update collection rate bar
     const pct = total > 0 ? Math.round((current/total)*100) : 0;
     document.getElementById('stat-collection').textContent = `~${pct}%`;
     document.getElementById('bar-collection').style.width = pct + '%';
     document.getElementById('dval').textContent = pct + '%';
 
-    // Update critical accounts badge
-    document.getElementById('critical-badge').textContent =
-      critical > 0 ? `${critical} URGENT` : 'NONE';
-    document.getElementById('critical-badge').className =
-      critical > 0 ? 'badge br2' : 'badge bg2';
+    // 8. Update critical badge
+    document.getElementById('critical-badge').textContent = critical > 0 ? `${critical} URGENT` : 'NONE';
+    document.getElementById('critical-badge').className   = critical > 0 ? 'badge br2' : 'badge bg2';
 
-    // Rebuild critical accounts feed
+    // 9. Rebuild critical accounts feed
     const feed = document.getElementById('critical-feed');
     if (feed) {
+      feed.innerHTML = '';
       if (criticalAccounts.length === 0) {
         feed.innerHTML = `<div class="aitem" style="padding:20px 12px;color:var(--green);font-size:10px;letter-spacing:1px">✓ NO CRITICAL ACCOUNTS</div>`;
       } else {
-        feed.innerHTML = '';
         criticalAccounts.forEach(({a, bal}) => {
           const name    = a.customers?.full_name || '—';
           const addr    = a.service_addresses?.street || '—';
           const cls     = classifyBalance(bal, a.account_type);
           const lastPmt = balMap[a.account_id]?.last_payment_date
             ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None on file';
-          const nameParts = name.split(' ');
-          const shortName = nameParts.length > 1
-            ? `${nameParts[0][0]}. ${nameParts.slice(1).join(' ')}`.toUpperCase()
-            : name.toUpperCase();
+          const parts   = name.split(' ');
+          const short   = parts.length > 1 ? `${parts[0][0]}. ${parts.slice(1).join(' ')}`.toUpperCase() : name.toUpperCase();
           const div = document.createElement('div');
           div.className = 'aitem';
           div.onclick = () => showCard(a.account_number, name, addr, cls.label, fmtBal(bal), a.account_type, lastPmt);
           div.innerHTML = `
             <div class="adot" style="background:${cls.color};box-shadow:0 0 7px ${cls.color}"></div>
             <div>
-              <div class="aname" style="color:${cls.color}">${a.account_number} — ${shortName}</div>
+              <div class="aname" style="color:${cls.color}">${a.account_number} — ${short}</div>
               <div class="asub">${addr} · <span style="color:${cls.color}">${fmtBal(bal)}</span></div>
             </div>`;
           feed.appendChild(div);
@@ -716,36 +722,18 @@
       }
     }
 
-    // If no accounts for this system yet
-    if (accounts.length === 0) {
-      const feed = document.getElementById('critical-feed');
-      if (feed) feed.innerHTML = `<div class="aitem" style="padding:20px 12px;color:var(--text-dim);font-size:9px;letter-spacing:1px">NO ACCOUNTS IMPORTED YET</div>`;
-      const tbody = document.getElementById('acctTable');
-      if (tbody) tbody.innerHTML = `<tr><td colspan="5" style="padding:20px;color:var(--text-dim);font-size:9px;letter-spacing:1px;text-align:center">NO DATA — IMPORT PENDING</td></tr>`;
-      document.getElementById('dval').textContent = '—';
-      return;
-    }
-
-    // Place map markers
-    if (gmap) placeMarkers(accounts, balMap);
-
-    // Update account table title
-    const now2 = new Date();
-    const mo = now2.toLocaleString('default',{month:'short'}).toUpperCase();
-    const yr2 = now2.getFullYear();
+    // 10. Update account table title
     const titleEl2 = document.getElementById('acct-table-title');
-    if (titleEl2) titleEl2.innerHTML = `ACCOUNT REGISTER — ${sys.system_name.toUpperCase()} // ${mo} ${yr2} <span class="badge bc2" id="acct-table-badge">${total} ACCTS</span>`;
+    if (titleEl2) titleEl2.innerHTML =
+      `ACCOUNT REGISTER — ${sys.system_name.toUpperCase()} // ${monthName} ${yr} <span class="badge bc2">${total} ACCTS</span>`;
 
-    // Rebuild account table
-    const tbody = document.getElementById('acctTable');
-    if (tbody && accounts.length) {
+    // 11. Rebuild account table sorted by balance descending
+    if (tbody) {
       tbody.innerHTML = '';
-      accounts.sort((a,b) => {
-        const ba = balMap[a.account_id]?.current_balance ?? 0;
-        const bb = balMap[b.account_id]?.current_balance ?? 0;
-        return bb - ba;
+      [...accounts].sort((a,b) => {
+        return Number(balMap[b.account_id]?.current_balance ?? 0) - Number(balMap[a.account_id]?.current_balance ?? 0);
       }).forEach(a => {
-        const bal    = balMap[a.account_id]?.current_balance ?? 0;
+        const bal     = Number(balMap[a.account_id]?.current_balance ?? 0);
         const lastPmt = balMap[a.account_id]?.last_payment_date
           ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None';
         const cls  = classifyBalance(bal, a.account_type);
@@ -758,13 +746,15 @@
           <td class="nm">${name}</td>
           <td class="addr">${addr}</td>
           <td><span class="pill" style="color:${cls.color};border-color:${cls.color}">${cls.label}</span></td>
-          <td class="bal" style="font-family:'Share Tech Mono',monospace;font-size:10px;text-align:right;letter-spacing:.5px;color:${cls.color}">${fmtBal(bal)}</td>
-        `;
+          <td class="bal" style="font-family:'Share Tech Mono',monospace;font-size:10px;text-align:right;letter-spacing:.5px;color:${cls.color}">${fmtBal(bal)}</td>`;
         tbody.appendChild(tr);
       });
     }
 
-    // Load call log
+    // 12. Place map markers
+    if (gmap) placeMarkers(accounts, balMap);
+
+    // 13. Load call log
     await loadCallLog(sys.system_id);
   }
 
