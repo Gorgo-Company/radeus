@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RADEUS — Command Center v5</title>
+<title>RADEUS — Command Center</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -23,7 +23,6 @@
   .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:20px;color:var(--cyan);letter-spacing:8px;text-shadow:0 0 20px var(--cyan),0 0 50px rgba(0,245,255,.25);animation:lp 4s ease-in-out infinite;}
   @keyframes lp{0%,100%{text-shadow:0 0 20px var(--cyan),0 0 40px rgba(0,245,255,.2)}50%{text-shadow:0 0 30px var(--cyan),0 0 70px rgba(0,245,255,.4)}}
   .sys-select{background:rgba(0,245,255,.05);border:1px solid var(--border-hi);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 12px;letter-spacing:1px;cursor:pointer;outline:none;}
-  .sys-select option{background:#ffffff;color:#0d1b2a;font-family:Arial,sans-serif;letter-spacing:0;}
   .sdot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s infinite;}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
   #clock{color:var(--cyan);font-size:13px;letter-spacing:2px}
@@ -41,8 +40,8 @@
   .badge{font-size:7px;padding:2px 5px;border:1px solid;letter-spacing:1px;font-family:'Orbitron',monospace;}
   .br2{color:var(--red);border-color:var(--red)}.bg2{color:var(--green);border-color:var(--green)}.bo2{color:var(--orange);border-color:var(--orange)}.bc2{color:var(--cyan);border-color:var(--cyan)}
   .srow{display:flex;justify-content:space-between;align-items:center;padding:5px 12px;border-bottom:1px solid rgba(0,245,255,.04);}
-  .slabel{font-size:10px;color:#6a9aaa;letter-spacing:.5px;font-family:'Share Tech Mono',monospace;}
-  .sval{font-family:'Share Tech Mono',monospace;font-size:15px;letter-spacing:1px;font-weight:400}
+  .slabel{font-size:9px;color:var(--text-dim);letter-spacing:1px}
+  .sval{font-family:'Orbitron',monospace;font-size:13px;font-weight:600}
   .cv{color:var(--cyan);text-shadow:0 0 8px rgba(0,245,255,.4)}.gv{color:var(--green)}.rv{color:var(--red)}.ov{color:var(--orange)}.bv{color:var(--blue)}.yv{color:var(--yellow)}
   .mbar-wrap{padding:6px 12px 10px}
   .mbar-label{font-size:8px;color:var(--text-dim);letter-spacing:1px;margin-bottom:3px;display:flex;justify-content:space-between;}
@@ -54,14 +53,13 @@
   .adot{width:6px;height:6px;border-radius:50%;margin-top:3px;flex-shrink:0;}
   .aname{font-size:10px;margin-bottom:1px}
   .asub{font-size:9px;color:var(--text-dim)}
-  .atable{width:100%;border-collapse:collapse;}
+  .atable{width:100%;border-collapse:collapse;font-size:9px;}
   .atable th{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:1.5px;color:var(--text-dim);padding:6px 8px;border-bottom:1px solid var(--border);text-align:left;font-weight:400;}
-  .atable td{padding:5px 8px;border-bottom:1px solid rgba(0,245,255,.03);cursor:pointer;vertical-align:middle;}
+  .atable td{padding:4px 8px;border-bottom:1px solid rgba(0,245,255,.03);cursor:pointer;}
   .atable tr:hover td{background:rgba(0,245,255,.04)}
-  .atable .acct{color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.5px;}
-  .atable .nm{color:#c8eaf0;font-family:'Share Tech Mono',monospace;font-size:10px;font-weight:400;letter-spacing:.3px;}
-  .atable .addr{color:#8ab8c8;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.5px;}
-  .atable .bal{font-family:'Share Tech Mono',monospace;font-size:10px;text-align:right;letter-spacing:.5px;}
+  .atable .acct{color:var(--cyan);font-family:'Orbitron',monospace;font-size:7px;}
+  .atable .nm{color:var(--text);font-size:9px;}
+  .atable .bal{font-family:'Orbitron',monospace;font-size:9px;text-align:right;}
   .pill{display:inline-block;padding:1px 4px;border:1px solid;font-size:7px;letter-spacing:.5px;}
   .map-panel{flex:1;position:relative;overflow:hidden;min-height:260px;}
   .map-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 35% 45%,rgba(0,50,70,.5) 0%,transparent 55%),radial-gradient(ellipse at 70% 65%,rgba(0,30,50,.3) 0%,transparent 45%),linear-gradient(135deg,#020c14,#041820,#020c14);}
@@ -106,8 +104,8 @@
   .compicon{width:28px;height:28px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
   .compinfo{flex:1}.compname{font-size:9px;color:var(--text);margin-bottom:1px;}.compdue{font-size:8px;color:var(--text-dim);}
   .compst{font-size:7px;padding:2px 5px;border:1px solid;letter-spacing:1px;}
-  .brow{display:flex;justify-content:space-between;padding:5px 12px;border-bottom:1px solid rgba(0,245,255,.04);}
-  .blabel{font-size:10px;color:#6a9aaa;font-family:'Share Tech Mono',monospace;}.bval{font-family:'Share Tech Mono',monospace;font-size:11px;letter-spacing:.5px;}
+  .brow{display:flex;justify-content:space-between;padding:4px 12px;border-bottom:1px solid rgba(0,245,255,.04);}
+  .blabel{font-size:9px;color:var(--text-dim)}.bval{font-family:'Orbitron',monospace;font-size:10px;}
   .acard{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);width:355px;background:rgba(2,10,18,.98);border:1px solid var(--border-hi);box-shadow:0 0 50px rgba(0,245,255,.15);z-index:500;opacity:0;pointer-events:none;transition:all .2s;}
   .acard.show{opacity:1;pointer-events:all;transform:translate(-50%,-50%) scale(1);}
   .achead{background:linear-gradient(135deg,rgba(0,245,255,.08),transparent);border-bottom:1px solid var(--border);padding:13px 16px;display:flex;justify-content:space-between;align-items:flex-start;}
@@ -116,7 +114,7 @@
   .acstat{padding:3px 8px;border:1px solid;font-size:8px;letter-spacing:1.5px;font-family:'Orbitron',monospace;}
   .acbody{padding:12px 16px;}
   .acrow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(0,245,255,.04);font-size:10px;}
-  .acrl{color:var(--text-dim)}.acrv{color:var(--text);font-family:'Share Tech Mono',monospace;letter-spacing:.5px;}
+  .acrl{color:var(--text-dim)}.acrv{color:var(--text)}
   .acbtns{padding:10px 16px;display:flex;gap:6px;border-top:1px solid var(--border);}
   .acbtn{flex:1;padding:7px;background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
   .acbtn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.05)}
@@ -132,11 +130,6 @@
   .navbtn:hover,.navbtn.active{color:var(--cyan);border-color:var(--border-hi);background:rgba(0,245,255,.05);}
   .navicon{font-size:15px}
   .navalert{position:absolute;top:5px;right:6px;width:13px;height:13px;background:var(--red);border-radius:50%;font-size:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Orbitron',monospace;}
-  .mfbtn{font-size:7px;padding:2px 7px;border:1px solid var(--border);color:var(--text-dim);background:transparent;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px;transition:all .15s;}
-  .mfbtn:hover,.mfbtn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.08);}
-  /* Dark map style override */
-  .gm-style .gm-style-iw-c { background:#020c14 !important; border:1px solid rgba(0,245,255,.4) !important; }
-  .gm-style .gm-style-iw-d { color:#c8eaf0 !important; }
 </style>
 </head>
 <body>
@@ -198,26 +191,57 @@
   <!-- LEFT -->
   <div class="col">
     <div class="panel">
-      <div class="ptitle" id="sys-status-title">DERBY NWS — APR 2026 STATUS <span class="badge bg2">BILLING OPEN</span></div>
-      <div class="srow"><span class="slabel">TOTAL ACCOUNTS</span><span class="sval cv" id="stat-total">43</span></div>
-      <div class="srow"><span class="slabel">CURRENT / PAID</span><span class="sval gv" id="stat-current">22</span></div>
-      <div class="srow"><span class="slabel">CREDIT BALANCE</span><span class="sval bv" id="stat-credit">5</span></div>
-      <div class="srow"><span class="slabel">PAST DUE</span><span class="sval ov" id="stat-pastdue">11</span></div>
-      <div class="srow"><span class="slabel">CRITICAL (&gt;$500)</span><span class="sval rv" id="stat-critical">5</span></div>
-      <div class="srow"><span class="slabel">BILL DATE</span><span class="sval" id="stat-billdate" style="font-size:10px;color:var(--cyan)">04/15/2026</span></div>
-      <div class="srow"><span class="slabel">DUE DATE</span><span class="sval yv" id="stat-duedate" style="font-size:10px">05/01/2026</span></div>
+      <div class="ptitle">DERBY NWS — APR 2026 STATUS <span class="badge bg2">BILLING OPEN</span></div>
+      <div class="srow"><span class="slabel">TOTAL ACCOUNTS</span><span class="sval cv">43</span></div>
+      <div class="srow"><span class="slabel">CURRENT / PAID</span><span class="sval gv">22</span></div>
+      <div class="srow"><span class="slabel">CREDIT BALANCE</span><span class="sval bv">5</span></div>
+      <div class="srow"><span class="slabel">PAST DUE</span><span class="sval ov">11</span></div>
+      <div class="srow"><span class="slabel">CRITICAL (&gt;$500)</span><span class="sval rv">5</span></div>
+      <div class="srow"><span class="slabel">BILL DATE</span><span class="sval" style="font-size:10px;color:var(--cyan)">04/15/2026</span></div>
+      <div class="srow"><span class="slabel">DUE DATE</span><span class="sval yv" style="font-size:10px">05/01/2026</span></div>
       <div class="mbar-wrap" style="margin-top:4px">
-        <div class="mbar-label"><span>COLLECTION RATE (EST)</span><span id="stat-collection" style="color:var(--green)">~65%</span></div>
-        <div class="mbar"><div class="mbar-fill" id="bar-collection" style="width:65%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
+        <div class="mbar-label"><span>COLLECTION RATE (EST)</span><span style="color:var(--green)">~65%</span></div>
+        <div class="mbar"><div class="mbar-fill" style="width:65%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
         <div class="mbar-label"><span>ACCOUNTS BILLED</span><span style="color:var(--cyan)">100%</span></div>
         <div class="mbar"><div class="mbar-fill" style="width:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan))"></div></div>
       </div>
     </div>
 
     <div class="panel" style="flex:1;display:flex;flex-direction:column">
-      <div class="ptitle">CRITICAL ACCOUNTS <span class="badge br2" id="critical-badge">5 URGENT</span></div>
-      <div class="afeed" id="critical-feed">
-        <div class="aitem" style="padding:20px 12px;color:var(--text-dim);font-size:9px;letter-spacing:1px">LOADING...</div>
+      <div class="ptitle">CRITICAL ACCOUNTS <span class="badge br2">5 URGENT</span></div>
+      <div class="afeed">
+        <div class="aitem" onclick="showCard('DNWSTX21','Humberto Gonzales','255 CR 4401 Dilley TX','CRITICAL','$2,174.70','RESIDENTIAL','None on file')">
+          <div class="adot" style="background:var(--red);box-shadow:0 0 8px var(--red)"></div>
+          <div><div class="aname" style="color:var(--red)">DNWSTX21 — H. GONZALES</div><div class="asub">255 CR 4401 · <span style="color:var(--red)">$2,174.70</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX45','Priscilla Casas','201 CR 4401 Dilley TX','DISCONNECT ELIGIBLE','$1,914.64','RESIDENTIAL','None on file')">
+          <div class="adot" style="background:var(--red);box-shadow:0 0 8px var(--red)"></div>
+          <div><div class="aname" style="color:var(--red)">DNWSTX45 — P. CASAS</div><div class="asub">201 CR 4401 · <span style="color:var(--red)">$1,914.64</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX17','Robert Aguilar','256 CR 4402 Dilley TX','PAST DUE','$1,356.25','RESIDENTIAL','None on file')">
+          <div class="adot" style="background:var(--red);box-shadow:0 0 7px var(--red)"></div>
+          <div><div class="aname" style="color:var(--red)">DNWSTX17 — R. AGUILAR</div><div class="asub">256 CR 4402 · <span style="color:var(--red)">$1,356.25</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX56','Guadalupe Moreno','126 CR 3415 Dilley TX','PAST DUE','$509.90','RESIDENTIAL','Partial pmts')">
+          <div class="adot" style="background:var(--orange);box-shadow:0 0 7px var(--orange)"></div>
+          <div><div class="aname" style="color:var(--orange)">DNWSTX56 — G. MORENO</div><div class="asub">126 CR 3415 · <span style="color:var(--orange)">$509.90</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX11','Jovita Martinez','303 CR 3428 Dilley TX','PAST DUE','$305.65','RESIDENTIAL','04/02/2026 $100')">
+          <div class="adot" style="background:var(--orange);box-shadow:0 0 6px var(--orange)"></div>
+          <div><div class="aname" style="color:var(--orange)">DNWSTX11 — J. MARTINEZ</div><div class="asub">303 CR 3428 · <span style="color:var(--orange)">$305.65</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX09','Eusebio Santos Jr','230 CR 3418 Pearsall TX','PAST DUE','$282.27','RESIDENTIAL','03/19/2026 $100')">
+          <div class="adot" style="background:var(--orange);box-shadow:0 0 6px var(--orange)"></div>
+          <div><div class="aname" style="color:var(--orange)">DNWSTX09 — E. SANTOS JR</div><div class="asub">230 CR 3418 · <span style="color:var(--orange)">$282.27</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX47','Paula Gallegos','130 CR 3240 Derby TX','PAST DUE','$275.34','RESIDENTIAL','None on file')">
+          <div class="adot" style="background:var(--yellow);box-shadow:0 0 5px var(--yellow)"></div>
+          <div><div class="aname" style="color:var(--yellow)">DNWSTX47 — P. GALLEGOS</div><div class="asub">130 CR 3240 · <span style="color:var(--yellow)">$275.34</span></div></div>
+        </div>
+        <div class="aitem" onclick="showCard('DNWSTX29','Elsa Martinez','480 CR 3430 Pearsall TX','PAST DUE','$186.65','RESIDENTIAL','None on file')">
+          <div class="adot" style="background:var(--yellow);box-shadow:0 0 4px var(--yellow)"></div>
+          <div><div class="aname" style="color:var(--yellow)">DNWSTX29 — E. MARTINEZ</div><div class="asub">480 CR 3430 · <span style="color:var(--yellow)">$186.65</span></div></div>
+        </div>
       </div>
     </div>
   </div>
@@ -226,36 +250,88 @@
   <div class="col">
     <div class="panel map-panel">
       <div class="ptitle" style="flex-wrap:wrap;gap:4px">
-        <span id="map-title">SYSTEM MAP — DERBY NWS // FRIO & LASALLE CO., TX</span>
-        <div style="display:flex;gap:4px;align-items:center">
-          <button onclick="filterNodes('ALL',this)" class="mfbtn active">ALL</button>
-          <button onclick="filterNodes('CRITICAL',this)" class="mfbtn">CRITICAL</button>
-          <button onclick="filterNodes('PAST DUE',this)" class="mfbtn">PAST DUE</button>
-          <button onclick="filterNodes('CURRENT',this)" class="mfbtn">CURRENT</button>
-          <button onclick="toggleSatellite(this)" class="mfbtn" id="satbtn">SATELLITE</button>
+        SYSTEM MAP — DERBY NWS // FRIO & LASALLE CO., TX
+        <div style="display:flex;gap:4px">
+          <button onclick="filterMap('all',this)" style="font-size:7px;padding:2px 6px;border:1px solid var(--cyan);color:var(--cyan);background:rgba(0,245,255,.08);cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px">ALL</button>
+          <button onclick="filterMap('red',this)" style="font-size:7px;padding:2px 6px;border:1px solid var(--border);color:var(--text-dim);background:transparent;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px">CRITICAL</button>
+          <button onclick="filterMap('ok',this)" style="font-size:7px;padding:2px 6px;border:1px solid var(--border);color:var(--text-dim);background:transparent;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px">CURRENT</button>
         </div>
       </div>
-      <!-- REAL GOOGLE MAP -->
-      <div id="gmap" style="position:absolute;top:36px;left:0;right:0;bottom:0;"></div>
-      <!-- LEGEND overlay -->
-      <div class="mleg" style="z-index:10">
-        <div class="legrow"><div class="legdot" style="background:var(--green)"></div>CURRENT</div>
-        <div class="legrow"><div class="legdot" style="background:var(--yellow)"></div>DUE SOON</div>
-        <div class="legrow"><div class="legdot" style="background:var(--orange)"></div>PAST DUE</div>
-        <div class="legrow"><div class="legdot" style="background:var(--red)"></div>CRITICAL</div>
-        <div class="legrow"><div class="legdot" style="background:var(--blue)"></div>CREDIT BAL</div>
-        <div class="legrow"><div class="legdot" style="background:#555"></div>RELIGIOUS</div>
+      <div style="position:relative;height:calc(100% - 36px)">
+        <div class="map-bg"></div><div class="map-grid"></div>
+
+        <!-- CRITICAL RED -->
+        <div class="mnode nr" style="left:48%;top:28%" onclick="showCard('DNWSTX21','Humberto Gonzales','255 CR 4401 Dilley TX','CRITICAL','$2,174.70','RESIDENTIAL','None')"><div class="ntt"><div class="ntt-name">DNWSTX21</div><div class="ntt-row"><span>NAME</span><span>H. GONZALES</span></div><div class="ntt-row"><span>ADDR</span><span>255 CR 4401</span></div><div class="ntt-row"><span>BAL</span><span style="color:var(--red)">$2,174.70</span></div></div></div>
+        <div class="mnode nr" style="left:52%;top:63%" onclick="showCard('DNWSTX45','Priscilla Casas','201 CR 4401 Dilley TX','DISCONNECT ELIGIBLE','$1,914.64','RESIDENTIAL','None')"><div class="ntt"><div class="ntt-name">DNWSTX45</div><div class="ntt-row"><span>NAME</span><span>P. CASAS</span></div><div class="ntt-row"><span>BAL</span><span style="color:var(--red)">$1,914.64</span></div></div></div>
+        <div class="mnode nr" style="left:60%;top:40%" onclick="showCard('DNWSTX17','Robert Aguilar','256 CR 4402 Dilley TX','PAST DUE','$1,356.25','RESIDENTIAL','None')"><div class="ntt"><div class="ntt-name">DNWSTX17</div><div class="ntt-row"><span>NAME</span><span>R. AGUILAR</span></div><div class="ntt-row"><span>BAL</span><span style="color:var(--red)">$1,356.25</span></div></div></div>
+
+        <!-- ORANGE PAST DUE -->
+        <div class="mnode no" style="left:30%;top:36%" onclick="showCard('DNWSTX11','Jovita Martinez','303 CR 3428 Dilley TX','PAST DUE','$305.65','RESIDENTIAL','04/02')"><div class="ntt"><div class="ntt-name">DNWSTX11</div><div class="ntt-row"><span>NAME</span><span>J. MARTINEZ</span></div><div class="ntt-row"><span>BAL</span><span style="color:var(--orange)">$305.65</span></div></div></div>
+        <div class="mnode no" style="left:76%;top:54%" onclick="showCard('DNWSTX09','Eusebio Santos Jr','230 CR 3418 Pearsall TX','PAST DUE','$282.27','RESIDENTIAL','03/19')"><div class="ntt"><div class="ntt-name">DNWSTX09</div><div class="ntt-row"><span>NAME</span><span>E. SANTOS JR</span></div><div class="ntt-row"><span>BAL</span><span style="color:var(--orange)">$282.27</span></div></div></div>
+        <div class="mnode no" style="left:19%;top:60%" onclick="showCard('DNWSTX56','Guadalupe Moreno','126 CR 3415 Dilley TX','PAST DUE','$509.90','RESIDENTIAL','Partial')"><div class="ntt"><div class="ntt-name">DNWSTX56</div><div class="ntt-row"><span>NAME</span><span>G. MORENO</span></div><div class="ntt-row"><span>BAL</span><span style="color:var(--orange)">$509.90</span></div></div></div>
+        <div class="mnode no" style="left:39%;top:74%"></div>
+        <div class="mnode no" style="left:64%;top:20%"></div>
+
+        <!-- YELLOW -->
+        <div class="mnode ny" style="left:27%;top:20%"></div>
+        <div class="mnode ny" style="left:83%;top:36%"></div>
+        <div class="mnode ny" style="left:44%;top:52%"></div>
+
+        <!-- GREEN CURRENT -->
+        <div class="mnode ng" style="left:22%;top:30%" onclick="showCard('DNWSTX02','Randall Roberts','204 FM 1583 Dilley TX','CURRENT','$47.15','RESIDENTIAL','03/18/2026')"><div class="ntt"><div class="ntt-name">DNWSTX02</div><div class="ntt-row"><span>NAME</span><span>R. ROBERTS</span></div><div class="ntt-row"><span>BAL</span><span style="color:var(--yellow)">$47.15</span></div><div class="ntt-row"><span>DUE</span><span>05/01/2026</span></div></div></div>
+        <div class="mnode ng" style="left:42%;top:16%" onclick="showCard('DNWSTX04','Sophia Sproat','111 CR 3435 Dilley TX','CURRENT','$50.75','RESIDENTIAL','03/30/2026')"><div class="ntt"><div class="ntt-name">DNWSTX04</div><div class="ntt-row"><span>NAME</span><span>S. SPROAT</span></div><div class="ntt-row"><span>BAL</span><span style="color:var(--yellow)">$50.75</span></div></div></div>
+        <div class="mnode ng" style="left:69%;top:28%"></div>
+        <div class="mnode ng" style="left:56%;top:76%"></div>
+        <div class="mnode ng" style="left:14%;top:44%"></div>
+        <div class="mnode ng" style="left:86%;top:62%"></div>
+        <div class="mnode ng" style="left:38%;top:56%"></div>
+        <div class="mnode ng" style="left:71%;top:72%"></div>
+        <div class="mnode ng" style="left:24%;top:80%"></div>
+        <div class="mnode ng" style="left:89%;top:24%"></div>
+
+        <!-- BLUE CREDIT -->
+        <div class="mnode nb" style="left:34%;top:46%" onclick="showCard('DNWSTX06','Alamar Guerra','212 CR 3414 Dilley TX','CREDIT BALANCE','($212.48) CR','RESIDENTIAL','03/19/2026')"><div class="ntt"><div class="ntt-name">DNWSTX06</div><div class="ntt-row"><span>NAME</span><span>A. GUERRA</span></div><div class="ntt-row"><span>BAL</span><span style="color:var(--blue)">CREDIT $212.48</span></div></div></div>
+        <div class="mnode nb" style="left:79%;top:18%"></div>
+        <div class="mnode nb" style="left:11%;top:74%"></div>
+
+        <!-- GRAY INACTIVE/RELIGIOUS -->
+        <div class="mnode nn" style="left:61%;top:57%" onclick="showCard('DNWSTX20','Mission de la Fe Church','230 Co Rd 4415 Dilley TX','ACTIVE — RELIGIOUS','$0.00','RELIGIOUS — $0 BASE','N/A')"><div class="ntt"><div class="ntt-name">DNWSTX20</div><div class="ntt-row"><span>TYPE</span><span>RELIGIOUS</span></div><div class="ntt-row"><span>BAL</span><span>$0.00</span></div></div></div>
+
+        <div class="mleg">
+          <div class="legrow"><div class="legdot" style="background:var(--green)"></div>CURRENT</div>
+          <div class="legrow"><div class="legdot" style="background:var(--yellow)"></div>DUE SOON</div>
+          <div class="legrow"><div class="legdot" style="background:var(--orange)"></div>PAST DUE</div>
+          <div class="legrow"><div class="legdot" style="background:var(--red)"></div>CRITICAL</div>
+          <div class="legrow"><div class="legdot" style="background:var(--blue)"></div>CREDIT BAL</div>
+          <div class="legrow"><div class="legdot" style="background:#333"></div>RELIGIOUS/INACT</div>
+        </div>
       </div>
     </div>
 
     <!-- ACCOUNTS TABLE -->
     <div class="panel" style="height:190px;overflow:hidden;display:flex;flex-direction:column">
-      <div class="ptitle" id="acct-table-title">ACCOUNT REGISTER — LOADING... <span class="badge bc2" id="acct-table-badge">...</span></div>
+      <div class="ptitle">ACCOUNT REGISTER — DERBY NWS // APRIL 2026 <span class="badge bc2">43 ACCTS</span></div>
       <div style="overflow-y:auto;flex:1">
         <table class="atable">
           <thead><tr><th>ACCT #</th><th>CUSTOMER NAME</th><th>ADDRESS</th><th>STATUS</th><th style="text-align:right">BALANCE</th></tr></thead>
           <tbody id="acctTable">
-            <tr><td colspan="5" style="padding:20px;color:var(--text-dim);font-size:9px;letter-spacing:1px;text-align:center">LOADING FROM DATABASE...</td></tr>
+            <tr onclick="showCard('DNWSTX02','Randall Roberts','204 FM 1583 Dilley TX','CURRENT','$47.15','RESIDENTIAL','03/18/2026')"><td class="acct">DNWSTX02</td><td class="nm">Randall Roberts</td><td style="color:var(--text-dim);font-size:8px">204 FM 1583</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$47.15</td></tr>
+            <tr onclick="showCard('DNWSTX04','Sophia Sproat','111 CR 3435 Dilley TX','CURRENT','$50.75','RESIDENTIAL','03/30/2026')"><td class="acct">DNWSTX04</td><td class="nm">Sophia Sproat</td><td style="color:var(--text-dim);font-size:8px">111 CR 3435</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$50.75</td></tr>
+            <tr onclick="showCard('DNWSTX06','Alamar Guerra','212 CR 3414 Dilley TX','CREDIT BALANCE','($212.48) CR','RESIDENTIAL','03/19/2026')"><td class="acct">DNWSTX06</td><td class="nm">Alamar Guerra</td><td style="color:var(--text-dim);font-size:8px">212 CR 3414</td><td><span class="pill" style="color:var(--blue);border-color:var(--blue)">CREDIT</span></td><td class="bal bv">($212.48)</td></tr>
+            <tr onclick="showCard('DNWSTX09','Eusebio Santos Jr','230 CR 3418 Pearsall TX','PAST DUE','$282.27','RESIDENTIAL','03/19/2026 $100')"><td class="acct">DNWSTX09</td><td class="nm">Eusebio Santos Jr</td><td style="color:var(--text-dim);font-size:8px">230 CR 3418</td><td><span class="pill" style="color:var(--orange);border-color:var(--orange)">PAST DUE</span></td><td class="bal ov">$282.27</td></tr>
+            <tr onclick="showCard('DNWSTX10','Kevin Gutierrez','215 CR 3418 Pearsall TX','PAST DUE','$115.36','RESIDENTIAL','None')"><td class="acct">DNWSTX10</td><td class="nm">Kevin Gutierrez</td><td style="color:var(--text-dim);font-size:8px">215 CR 3418</td><td><span class="pill" style="color:var(--orange);border-color:var(--orange)">PAST DUE</span></td><td class="bal ov">$115.36</td></tr>
+            <tr onclick="showCard('DNWSTX11','Jovita Martinez','303 CR 3428 Dilley TX','PAST DUE','$305.65','RESIDENTIAL','04/02/2026 $100')"><td class="acct">DNWSTX11</td><td class="nm">Jovita Martinez</td><td style="color:var(--text-dim);font-size:8px">303 CR 3428</td><td><span class="pill" style="color:var(--orange);border-color:var(--orange)">PAST DUE</span></td><td class="bal ov">$305.65</td></tr>
+            <tr onclick="showCard('DNWSTX12','John Mercado','270 CR 3428 Dilley TX','PAST DUE','$91.56','RESIDENTIAL','03/31/2026 $47')"><td class="acct">DNWSTX12</td><td class="nm">John Mercado</td><td style="color:var(--text-dim);font-size:8px">270 CR 3428</td><td><span class="pill" style="color:var(--yellow);border-color:var(--yellow)">PAST DUE</span></td><td class="bal ov">$91.56</td></tr>
+            <tr onclick="showCard('DNWSTX17','Robert Aguilar','256 CR 4402 Dilley TX','CRITICAL','$1,356.25','RESIDENTIAL','None')"><td class="acct">DNWSTX17</td><td class="nm">Robert Aguilar</td><td style="color:var(--text-dim);font-size:8px">256 CR 4402</td><td><span class="pill" style="color:var(--red);border-color:var(--red)">CRITICAL</span></td><td class="bal rv">$1,356.25</td></tr>
+            <tr onclick="showCard('DNWSTX19','Martin Martinez','270 CR 4401 Dilley TX','CURRENT','$50.58','RESIDENTIAL','03/18/2026')"><td class="acct">DNWSTX19</td><td class="nm">Martin Martinez</td><td style="color:var(--text-dim);font-size:8px">270 CR 4401</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$50.58</td></tr>
+            <tr><td class="acct">DNWSTX20</td><td class="nm">Mission de la Fe Church</td><td style="color:var(--text-dim);font-size:8px">230 Co Rd 4415</td><td><span class="pill" style="color:var(--text-dim);border-color:var(--text-dim)">RELIGIOUS</span></td><td class="bal" style="color:var(--text-dim)">$0.00</td></tr>
+            <tr onclick="showCard('DNWSTX21','Humberto Gonzales','255 CR 4401 Dilley TX','CRITICAL','$2,174.70','RESIDENTIAL','None')"><td class="acct">DNWSTX21</td><td class="nm">Humberto Gonzales</td><td style="color:var(--text-dim);font-size:8px">255 CR 4401</td><td><span class="pill" style="color:var(--red);border-color:var(--red)">CRITICAL</span></td><td class="bal rv">$2,174.70</td></tr>
+            <tr onclick="showCard('DNWSTX22','Pilar Ramos','221 CR 4415 Dilley TX','PAST DUE','$124.89','RESIDENTIAL','03/22/2026 $100')"><td class="acct">DNWSTX22</td><td class="nm">Pilar Ramos</td><td style="color:var(--text-dim);font-size:8px">221 CR 4415</td><td><span class="pill" style="color:var(--orange);border-color:var(--orange)">PAST DUE</span></td><td class="bal ov">$124.89</td></tr>
+            <tr onclick="showCard('DNWSTX23','Adolph Eric Gonzales','180 CR 4415 Dilley TX','CURRENT','$53.16','RESIDENTIAL','03/09/2026')"><td class="acct">DNWSTX23</td><td class="nm">Adolph Eric Gonzales</td><td style="color:var(--text-dim);font-size:8px">180 CR 4415</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$53.16</td></tr>
+            <tr onclick="showCard('DNWSTX24','Humberto Gonzales II','130 CR 4415 Dilley TX','CURRENT','$46.05','RESIDENTIAL','03/31/2026 $45')"><td class="acct">DNWSTX24</td><td class="nm">Humberto Gonzales II</td><td style="color:var(--text-dim);font-size:8px">130 CR 4415</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$46.05</td></tr>
+            <tr onclick="showCard('DNWSTX25','Eliodoro Gonzalez','208 CR 4425 Dilley TX','CURRENT','$49.54','RESIDENTIAL','03/16/2026')"><td class="acct">DNWSTX25</td><td class="nm">Eliodoro Gonzalez</td><td style="color:var(--text-dim);font-size:8px">208 CR 4425</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">CURRENT</span></td><td class="bal gv">$49.54</td></tr>
+            <tr onclick="showCard('DNWSTX45','Priscilla Casas','201 CR 4401 Dilley TX','CRITICAL','$1,914.64','RESIDENTIAL','None')"><td class="acct">DNWSTX45</td><td class="nm">Priscilla Casas</td><td style="color:var(--text-dim);font-size:8px">201 CR 4401</td><td><span class="pill" style="color:var(--red);border-color:var(--red)">CRITICAL</span></td><td class="bal rv">$1,914.64</td></tr>
+            <tr onclick="showCard('DNWSTX56','Guadalupe Moreno','126 CR 3415 Dilley TX','PAST DUE','$509.90','RESIDENTIAL','Partial pmts')"><td class="acct">DNWSTX56</td><td class="nm">Guadalupe Moreno</td><td style="color:var(--text-dim);font-size:8px">126 CR 3415</td><td><span class="pill" style="color:var(--red);border-color:var(--red)">PAST DUE</span></td><td class="bal rv">$509.90</td></tr>
           </tbody>
         </table>
       </div>
@@ -410,333 +486,120 @@
 
 <script>
   // ── CONFIG ───────────────────────────────────────────────────
-  const SUPA_URL   = 'https://bvpesxpptgdwkhsewhke.supabase.co';
-  const SUPA_KEY   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
-  const GMAPS_KEY  = 'AIzaSyDedtzKXUUSjCdqVQ4XoCe0GlmnkBw2UMc';
-
-  // ── STATE ────────────────────────────────────────────────────
-  let gmap = null;
-  let mapMarkers = [];
-  let activeInfoWindow = null;
-  let isSatellite = true;
-  let activeSystemCode = 'DNWSTX';
-  let currentFilter = 'ALL';
-
-  // ── SUPABASE FETCH ───────────────────────────────────────────
-  async function supa(table, params='') {
-    const r = await fetch(`${SUPA_URL}/rest/v1/${table}${params}`, {
-      headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${SUPA_KEY}` }
-    });
-    if (!r.ok) return [];
-    return r.json();
-  }
+  const SUPA_URL = 'https://bvpesxpptgdwkhsewhke.supabase.co';
+  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
 
   // ── CLOCK ────────────────────────────────────────────────────
   function tick(){const n=new Date();document.getElementById('clock').textContent=n.toTimeString().slice(0,8);}
-  setInterval(tick,1000); tick();
+  setInterval(tick,1000);tick();
 
-  // ── STATUS HELPERS ───────────────────────────────────────────
-  function classifyBalance(bal, type) {
-    if (type==='RELIGIOUS') return { label:'RELIGIOUS',   color:'#555555' };
-    if (bal < 0)            return { label:'CREDIT',      color:'#0088ff' };
-    if (bal === 0)          return { label:'CURRENT',     color:'#00ff88' };
-    if (bal > 500)          return { label:'CRITICAL',    color:'#ff2244' };
-    if (bal > 0)            return { label:'PAST DUE',    color:'#ff8800' };
-    return                         { label:'CURRENT',     color:'#00ff88' };
+  // ── SUPABASE FETCH ───────────────────────────────────────────
+  async function supa(table, params='') {
+    try {
+      const r = await fetch(`${SUPA_URL}/rest/v1/${table}${params}`, {
+        headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`}
+      });
+      if (!r.ok) { console.warn('Supabase',r.status,table); return null; }
+      return await r.json();
+    } catch(e) { console.warn('Supabase offline:',e.message); return null; }
   }
 
+  // ── HELPERS ──────────────────────────────────────────────────
   function fmtBal(n) {
+    n = Number(n);
     if (n < 0) return `($${Math.abs(n).toFixed(2)})`;
-    return `$${Number(n).toFixed(2)}`;
+    return `$${n.toFixed(2)}`;
   }
 
-  // ── GOOGLE MAPS INIT ─────────────────────────────────────────
-  function initMap() {
-    // Dark military map style
-    const darkStyle = [
-      { elementType:'geometry',       stylers:[{color:'#0a1628'}] },
-      { elementType:'labels.text.fill', stylers:[{color:'#00a8b5'}] },
-      { elementType:'labels.text.stroke', stylers:[{color:'#020c14'}] },
-      { featureType:'road',           elementType:'geometry',       stylers:[{color:'#0d2137'}] },
-      { featureType:'road',           elementType:'geometry.stroke',stylers:[{color:'#0a1628'}] },
-      { featureType:'road.highway',   elementType:'geometry',       stylers:[{color:'#0e2a47'}] },
-      { featureType:'water',          elementType:'geometry',       stylers:[{color:'#041220'}] },
-      { featureType:'water',          elementType:'labels.text.fill',stylers:[{color:'#00f5ff'}] },
-      { featureType:'poi',            stylers:[{visibility:'off'}] },
-      { featureType:'administrative', elementType:'geometry.stroke', stylers:[{color:'#00f5ff'},{opacity:0.3}] },
-      { featureType:'administrative.land_parcel', elementType:'labels', stylers:[{visibility:'off'}] },
-    ];
-
-    gmap = new google.maps.Map(document.getElementById('gmap'), {
-      center: { lat: 28.9659, lng: -99.8007 }, // Dilley TX
-      zoom: 13,
-      mapTypeId: 'roadmap',
-      styles: darkStyle,
-      disableDefaultUI: false,
-      zoomControl: true,
-      mapTypeControl: false,
-      streetViewControl: false,
-      fullscreenControl: true,
-      backgroundColor: '#020c14',
-    });
-
-    // Map loaded — now load data with map active
-    loadSystemData('DNWSTX');
+  function classify(bal, type) {
+    if (type==='RELIGIOUS') return {label:'RELIGIOUS', color:'var(--text-dim)'};
+    if (bal < 0)   return {label:'CREDIT',   color:'var(--blue)'};
+    if (bal === 0) return {label:'CURRENT',   color:'var(--green)'};
+    if (bal > 500) return {label:'CRITICAL',  color:'var(--red)'};
+    return               {label:'PAST DUE',   color:'var(--orange)'};
   }
 
-  // ── TOGGLE SATELLITE ─────────────────────────────────────────
-  function toggleSatellite(btn) {
-    isSatellite = !isSatellite;
-    if (isSatellite) {
-      gmap.setMapTypeId('satellite');
-      btn.classList.add('active');
-    } else {
-      gmap.setMapTypeId('roadmap');
-      btn.classList.remove('active');
-    }
-  }
-
-  // ── PLACE MARKERS FROM ACCOUNT DATA ──────────────────────────
-  function placeMarkers(accounts, balMap) {
-    // Clear existing markers
-    mapMarkers.forEach(m => m.setMap(null));
-    mapMarkers = [];
-    if (activeInfoWindow) { activeInfoWindow.close(); activeInfoWindow = null; }
-
-    // Derby NWS service addresses with real lat/lng (pre-geocoded for Dilley/Pearsall TX area)
-    const coords = {
-      'DNWSTX02': { lat:28.9712, lng:-99.8043 },
-      'DNWSTX04': { lat:28.9445, lng:-99.8236 },
-      'DNWSTX06': { lat:28.9501, lng:-99.8198 },
-      'DNWSTX09': { lat:28.8832, lng:-99.7721 },
-      'DNWSTX10': { lat:28.8851, lng:-99.7698 },
-      'DNWSTX11': { lat:28.9388, lng:-99.8112 },
-      'DNWSTX12': { lat:28.9401, lng:-99.8098 },
-      'DNWSTX17': { lat:28.9876, lng:-99.7834 },
-      'DNWSTX19': { lat:28.9889, lng:-99.7812 },
-      'DNWSTX20': { lat:28.9865, lng:-99.7856 }, // Mission de la Fe Church
-      'DNWSTX21': { lat:28.9902, lng:-99.7791 },
-      'DNWSTX22': { lat:28.9923, lng:-99.7765 },
-      'DNWSTX23': { lat:28.9934, lng:-99.7789 },
-      'DNWSTX24': { lat:28.9945, lng:-99.7812 },
-      'DNWSTX25': { lat:28.9801, lng:-99.7702 },
-      'DNWSTX45': { lat:28.9867, lng:-99.7823 },
-      'DNWSTX47': { lat:29.0112, lng:-99.8234 },
-      'DNWSTX56': { lat:28.9523, lng:-99.8187 },
-    };
-
-    accounts.forEach(a => {
-      const pos = coords[a.account_number];
-      if (!pos) return;
-
-      const bal  = balMap[a.account_id]?.current_balance ?? 0;
-      const cls  = classifyBalance(bal, a.account_type);
-
-      // Skip if filtered out
-      if (currentFilter !== 'ALL' && cls.label !== currentFilter) return;
-
-      const name = a.customers?.full_name || '—';
-      const addr = a.service_addresses?.street || '—';
-      const lastPmt = balMap[a.account_id]?.last_payment_date
-        ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None';
-
-      // Custom SVG marker — glowing dot
-      const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="22" height="22">
-        <circle cx="11" cy="11" r="9" fill="${cls.color}" fill-opacity="0.9"/>
-        <circle cx="11" cy="11" r="9" fill="none" stroke="${cls.color}" stroke-width="2" stroke-opacity="0.4"/>
-        <circle cx="11" cy="11" r="5" fill="${cls.color}"/>
-      </svg>`;
-
-      const marker = new google.maps.Marker({
-        position: pos,
-        map: gmap,
-        icon: {
-          url: 'data:image/svg+xml;charset=UTF-8,' + encodeURIComponent(svg),
-          scaledSize: new google.maps.Size(22, 22),
-          anchor: new google.maps.Point(11, 11),
-        },
-        title: a.account_number,
-        zIndex: cls.label === 'CRITICAL' ? 999 : 1,
-      });
-
-      // Info window content
-      const iw = new google.maps.InfoWindow({
-        content: `
-          <div style="background:#020c14;border:1px solid rgba(0,245,255,.4);padding:10px 14px;min-width:180px;font-family:'Share Tech Mono',monospace;">
-            <div style="font-family:'Orbitron',monospace;font-size:11px;color:#00f5ff;margin-bottom:6px;letter-spacing:1px">${a.account_number}</div>
-            <div style="font-size:10px;color:#c8eaf0;margin-bottom:4px">${name}</div>
-            <div style="font-size:9px;color:#3d6a78;margin-bottom:2px">${addr}</div>
-            <div style="font-size:10px;color:${cls.color};margin-bottom:6px;font-weight:bold">${fmtBal(bal)}</div>
-            <div style="font-size:9px;color:#3d6a78">LAST PMT: ${lastPmt}</div>
-            <div style="margin-top:8px;padding:4px 8px;border:1px solid #00f5ff;color:#00f5ff;font-size:8px;cursor:pointer;text-align:center;letter-spacing:1px"
-              onclick="showCard('${a.account_number}','${name}','${addr}','${cls.label}','${fmtBal(bal)}','${a.account_type}','${lastPmt}')">
-              VIEW ACCOUNT
-            </div>
-          </div>`,
-        disableAutoPan: false,
-      });
-
-      marker.addListener('click', () => {
-        if (activeInfoWindow) activeInfoWindow.close();
-        iw.open(gmap, marker);
-        activeInfoWindow = iw;
-      });
-
-      mapMarkers.push(marker);
-    });
-  }
-
-  // ── FILTER NODES ─────────────────────────────────────────────
-  function filterNodes(status, btn) {
-    currentFilter = status;
-    document.querySelectorAll('.mfbtn').forEach(b => {
-      if (b.id !== 'satbtn') b.classList.remove('active');
-    });
-    btn.classList.add('active');
-    // Re-render markers with filter
-    if (window._lastAccounts && window._lastBalMap) {
-      placeMarkers(window._lastAccounts, window._lastBalMap);
-    }
-  }
-
-  // ── LOAD SYSTEM DATA ─────────────────────────────────────────
-  async function loadSystemData(systemCode) {
-    activeSystemCode = systemCode;
-
-    // 1. Get system record
+  // ── LOAD LIVE DATA FROM SUPABASE ─────────────────────────────
+  async function loadLiveData(systemCode) {
+    // Get system
     const systems = await supa('water_systems', `?system_code=eq.${systemCode}&select=*`);
-    if (!systems.length) { console.warn('System not found:', systemCode); return; }
+    if (!systems || !systems.length) { console.warn('No system found for', systemCode); return; }
     const sys = systems[0];
 
-    // 2. Update map title and center
-    const titleEl = document.getElementById('map-title');
-    if (titleEl) titleEl.textContent = `SYSTEM MAP — ${sys.system_name.toUpperCase()}`;
-    const centers = {
-      'DNWSTX':  { lat:28.9659, lng:-99.8007, zoom:13 },
-      'PPNWSTX': { lat:30.0850, lng:-95.6890, zoom:14 },
-      'SENWSTX': { lat:29.9500, lng:-95.5500, zoom:14 },
-      'SUNWSTX': { lat:31.5500, lng:-97.1500, zoom:13 },
-      'OHNWSTX': { lat:29.8000, lng:-95.4500, zoom:14 },
-      'FBNWSTX': { lat:29.8200, lng:-95.4300, zoom:14 },
-      'SMNWSTX': { lat:31.8000, lng:-102.3500, zoom:13 },
-      'WNWSTX':  { lat:31.6000, lng:-102.5000, zoom:13 },
-      'SVNWSTX': { lat:30.0500, lng:-99.1400, zoom:14 },
-    };
-    if (gmap && centers[systemCode]) {
-      gmap.setCenter(centers[systemCode]);
-      gmap.setZoom(centers[systemCode].zoom);
-    }
-
-    // 3. Get accounts with nested customer + address
+    // Get accounts + balances
     const accounts = await supa('accounts',
-      `?system_id=eq.${sys.system_id}&select=account_id,account_number,account_type,status,customers(full_name),service_addresses(street,city,state)`
+      `?system_id=eq.${sys.system_id}&select=account_id,account_number,account_type,status,customers(full_name),service_addresses(street)`
     );
-
-    // 4. Get balances from view
     const balances = await supa('account_balances', `?system_id=eq.${sys.system_id}&select=*`);
+    if (!accounts || !balances) return;
+
     const balMap = {};
     balances.forEach(b => { balMap[b.account_id] = b; });
 
-    // Cache for filter buttons
-    window._lastAccounts = accounts;
-    window._lastBalMap   = balMap;
-
-    // 5. Handle empty system
-    const tbody = document.getElementById('acctTable');
-    if (!accounts.length) {
-      document.getElementById('sys-status-title').innerHTML =
-        `${sys.system_name.toUpperCase()} — NO DATA <span class="badge br2">IMPORT PENDING</span>`;
-      document.getElementById('stat-total').textContent = '0';
-      document.getElementById('stat-current').textContent = '0';
-      document.getElementById('stat-credit').textContent = '0';
-      document.getElementById('stat-pastdue').textContent = '0';
-      document.getElementById('stat-critical').textContent = '0';
-      document.getElementById('dval').textContent = '—';
-      const feed = document.getElementById('critical-feed');
-      if (feed) feed.innerHTML = `<div class="aitem" style="padding:20px 12px;color:var(--text-dim);font-size:9px;letter-spacing:1px">NO ACCOUNTS IMPORTED YET</div>`;
-      if (tbody) tbody.innerHTML = `<tr><td colspan="5" style="padding:20px;color:var(--text-dim);font-size:9px;letter-spacing:1px;text-align:center">NO DATA — IMPORT PENDING</td></tr>`;
-      return;
-    }
-
-    // 6. Compute stats
+    // Stats
     let total=0, current=0, credits=0, pastDue=0, critical=0;
-    const criticalAccounts = [];
+    const criticals = [];
     accounts.forEach(a => {
       total++;
       const bal = Number(balMap[a.account_id]?.current_balance ?? 0);
-      if (a.account_type === 'RELIGIOUS') return;
-      if (bal < 0)        { credits++; }
-      else if (bal === 0) { current++; }
-      else if (bal > 500) { critical++; pastDue++; criticalAccounts.push({a, bal}); }
-      else                { pastDue++; }
+      if (a.account_type==='RELIGIOUS') return;
+      if (bal < 0)        credits++;
+      else if (bal === 0) current++;
+      else if (bal > 500) { critical++; pastDue++; criticals.push({a,bal}); }
+      else                pastDue++;
     });
-    criticalAccounts.sort((x,y) => y.bal - x.bal);
+    criticals.sort((x,y) => y.bal - x.bal);
 
-    // 7. Update left panel stats
-    const now = new Date();
-    const monthName = now.toLocaleString('default',{month:'short'}).toUpperCase();
-    const yr = now.getFullYear();
-    document.getElementById('sys-status-title').innerHTML =
-      `${sys.system_name.toUpperCase()} — ${monthName} ${yr} <span class="badge bg2">BILLING OPEN</span>`;
-    document.getElementById('stat-total').textContent    = total;
-    document.getElementById('stat-current').textContent  = current;
-    document.getElementById('stat-credit').textContent   = credits;
-    document.getElementById('stat-pastdue').textContent  = pastDue;
-    document.getElementById('stat-critical').textContent = critical;
+    // Update system title
+    document.querySelector('.ptitle').childNodes[0].textContent =
+      `${sys.system_code} — APR 2026 STATUS `;
 
+    // Update stats
+    const sv = document.querySelectorAll('.sval');
+    if(sv[0]) sv[0].textContent = total;
+    if(sv[1]) sv[1].textContent = current;
+    if(sv[2]) sv[2].textContent = credits;
+    if(sv[3]) sv[3].textContent = pastDue;
+    if(sv[4]) sv[4].textContent = critical;
+
+    // Update dial
     const pct = total > 0 ? Math.round((current/total)*100) : 0;
-    document.getElementById('stat-collection').textContent = `~${pct}%`;
-    document.getElementById('bar-collection').style.width = pct + '%';
     document.getElementById('dval').textContent = pct + '%';
 
-    // 8. Update critical badge
-    document.getElementById('critical-badge').textContent = critical > 0 ? `${critical} URGENT` : 'NONE';
-    document.getElementById('critical-badge').className   = critical > 0 ? 'badge br2' : 'badge bg2';
-
-    // 9. Rebuild critical accounts feed
-    const feed = document.getElementById('critical-feed');
-    if (feed) {
+    // Rebuild critical feed
+    const feed = document.querySelector('.afeed');
+    if (feed && criticals.length) {
       feed.innerHTML = '';
-      if (criticalAccounts.length === 0) {
-        feed.innerHTML = `<div class="aitem" style="padding:20px 12px;color:var(--green);font-size:10px;letter-spacing:1px">✓ NO CRITICAL ACCOUNTS</div>`;
-      } else {
-        criticalAccounts.forEach(({a, bal}) => {
-          const name    = a.customers?.full_name || '—';
-          const addr    = a.service_addresses?.street || '—';
-          const cls     = classifyBalance(bal, a.account_type);
-          const lastPmt = balMap[a.account_id]?.last_payment_date
-            ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None on file';
-          const parts   = name.split(' ');
-          const short   = parts.length > 1 ? `${parts[0][0]}. ${parts.slice(1).join(' ')}`.toUpperCase() : name.toUpperCase();
-          const div = document.createElement('div');
-          div.className = 'aitem';
-          div.onclick = () => showCard(a.account_number, name, addr, cls.label, fmtBal(bal), a.account_type, lastPmt);
-          div.innerHTML = `
-            <div class="adot" style="background:${cls.color};box-shadow:0 0 7px ${cls.color}"></div>
-            <div>
-              <div class="aname" style="color:${cls.color}">${a.account_number} — ${short}</div>
-              <div class="asub">${addr} · <span style="color:${cls.color}">${fmtBal(bal)}</span></div>
-            </div>`;
-          feed.appendChild(div);
-        });
-      }
+      criticals.forEach(({a, bal}) => {
+        const name = a.customers?.full_name || '—';
+        const addr = a.service_addresses?.street || '—';
+        const cls  = classify(bal, a.account_type);
+        const lastPmt = balMap[a.account_id]?.last_payment_date
+          ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None on file';
+        const parts = name.split(' ');
+        const short = parts.length > 1 ? `${parts[0][0]}. ${parts.slice(1).join(' ')}` : name;
+        const div = document.createElement('div');
+        div.className = 'aitem';
+        div.onclick = () => showCard(a.account_number, name, addr, cls.label, fmtBal(bal), a.account_type, lastPmt);
+        div.innerHTML = `
+          <div class="adot" style="background:${cls.color};box-shadow:0 0 7px ${cls.color}"></div>
+          <div><div class="aname" style="color:${cls.color}">${a.account_number} — ${short.toUpperCase()}</div>
+          <div class="asub">${addr} · <span style="color:${cls.color}">${fmtBal(bal)}</span></div></div>`;
+        feed.appendChild(div);
+      });
     }
 
-    // 10. Update account table title
-    const titleEl2 = document.getElementById('acct-table-title');
-    if (titleEl2) titleEl2.innerHTML =
-      `ACCOUNT REGISTER — ${sys.system_name.toUpperCase()} // ${monthName} ${yr} <span class="badge bc2">${total} ACCTS</span>`;
-
-    // 11. Rebuild account table sorted by balance descending
+    // Rebuild account table
+    const tbody = document.getElementById('acctTable');
     if (tbody) {
       tbody.innerHTML = '';
-      [...accounts].sort((a,b) => {
-        return Number(balMap[b.account_id]?.current_balance ?? 0) - Number(balMap[a.account_id]?.current_balance ?? 0);
-      }).forEach(a => {
-        const bal     = Number(balMap[a.account_id]?.current_balance ?? 0);
+      [...accounts].sort((a,b) =>
+        Number(balMap[b.account_id]?.current_balance??0) - Number(balMap[a.account_id]?.current_balance??0)
+      ).forEach(a => {
+        const bal  = Number(balMap[a.account_id]?.current_balance ?? 0);
         const lastPmt = balMap[a.account_id]?.last_payment_date
           ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None';
-        const cls  = classifyBalance(bal, a.account_type);
+        const cls  = classify(bal, a.account_type);
         const name = a.customers?.full_name || '—';
         const addr = a.service_addresses?.street || '—';
         const tr   = document.createElement('tr');
@@ -744,43 +607,40 @@
         tr.innerHTML = `
           <td class="acct">${a.account_number}</td>
           <td class="nm">${name}</td>
-          <td class="addr">${addr}</td>
+          <td style="color:#8ab8c8;font-family:'Share Tech Mono',monospace;font-size:9px">${addr}</td>
           <td><span class="pill" style="color:${cls.color};border-color:${cls.color}">${cls.label}</span></td>
-          <td class="bal" style="font-family:'Share Tech Mono',monospace;font-size:10px;text-align:right;letter-spacing:.5px;color:${cls.color}">${fmtBal(bal)}</td>`;
+          <td class="bal" style="text-align:right;color:${cls.color}">${fmtBal(bal)}</td>`;
         tbody.appendChild(tr);
       });
     }
 
-    // 12. Place map markers
-    if (gmap) placeMarkers(accounts, balMap);
-
-    // 13. Load call log
-    await loadCallLog(sys.system_id);
-  }
-
-  // ── CALL LOG ─────────────────────────────────────────────────
-  async function loadCallLog(systemId) {
+    // Load call log
     const calls = await supa('call_log',
-      `?system_id=eq.${systemId}&select=*&order=call_date.desc&limit=9`
+      `?system_id=eq.${sys.system_id}&select=*&order=call_date.desc&limit=9`
     );
-    const container = document.querySelector('.clog');
-    if (!container || !calls.length) return;
-    const catColors = { 'Leak or Outage':'var(--red)','Bill Question':'var(--cyan)','New Service':'var(--green)','Disconnection':'var(--yellow)','Maintenance':'var(--orange)','Water Quality Question':'var(--orange)','State Agency':'var(--purple)' };
-    const catLabels = { 'Leak or Outage':'REPAIR','Bill Question':'BILL Q','New Service':'NEW SVC','Disconnection':'DISCON','Maintenance':'MAINT','Water Quality Question':'QUALITY','State Agency':'TCEQ' };
-    container.innerHTML = '';
-    calls.forEach(c => {
-      const col = catColors[c.category] || 'var(--cyan)';
-      const lbl = catLabels[c.category] || 'NOTE';
-      const d   = document.createElement('div');
-      d.className = 'citem';
-      d.innerHTML = `
-        <span class="ccat" style="color:${col};border-color:${col}">${lbl}</span>
-        <div class="cinfo">
-          <div class="cname">${c.call_ref||''} — ${c.caller_name||''} // ${c.customer_name||''}</div>
-          <div class="csub">${(c.description||'').substring(0,80)}${c.description?.length>80?'…':''}</div>
-        </div>`;
-      container.appendChild(d);
-    });
+    if (calls && calls.length) {
+      const clog = document.querySelector('.clog');
+      if (clog) {
+        const catColors = {'Leak or Outage':'var(--red)','Bill Question':'var(--cyan)','New Service':'var(--green)','Disconnection':'var(--yellow)','Maintenance':'var(--orange)','Water Quality Question':'var(--orange)','State Agency':'var(--purple)'};
+        const catLabels = {'Leak or Outage':'REPAIR','Bill Question':'BILL Q','New Service':'NEW SVC','Disconnection':'DISCON','Maintenance':'MAINT','Water Quality Question':'QUALITY','State Agency':'TCEQ'};
+        clog.innerHTML = '';
+        calls.forEach(c => {
+          const col = catColors[c.category]||'var(--cyan)';
+          const lbl = catLabels[c.category]||'NOTE';
+          const d = document.createElement('div');
+          d.className = 'citem';
+          d.innerHTML = `
+            <span class="ccat" style="color:${col};border-color:${col}">${lbl}</span>
+            <div class="cinfo">
+              <div class="cname">${c.call_ref||''} — ${c.caller_name||''} // ${c.customer_name||''}</div>
+              <div class="csub">${(c.description||'').substring(0,80)}</div>
+            </div>`;
+          clog.appendChild(d);
+        });
+      }
+    }
+
+    console.log(`✓ Loaded ${accounts.length} accounts for ${sys.system_name}`);
   }
 
   // ── ACCOUNT CARD ─────────────────────────────────────────────
@@ -793,14 +653,13 @@
     document.getElementById('ac-pmt').textContent=pmt;
     const s=document.getElementById('ac-stat');
     s.textContent=status;
-    const cols={'CURRENT':'var(--green)','CREDIT':'var(--blue)','CREDIT BALANCE':'var(--blue)','PAST DUE':'var(--orange)','CRITICAL':'var(--red)','DISCONNECT ELIGIBLE':'var(--red)','RELIGIOUS':'var(--text-dim)'};
+    const cols={'CURRENT':'var(--green)','CREDIT':'var(--blue)','CREDIT BALANCE':'var(--blue)','PAST DUE':'var(--orange)','CRITICAL':'var(--red)','DISCONNECT ELIGIBLE':'var(--red)','ACTIVE — RELIGIOUS':'var(--text-dim)','RELIGIOUS':'var(--text-dim)'};
     const c=cols[status]||'var(--yellow)';
-    s.style.color=c; s.style.borderColor=c;
+    s.style.color=c;s.style.borderColor=c;
     document.getElementById('accard').classList.add('show');
   }
   function closeCard(){document.getElementById('accard').classList.remove('show');}
 
-  // ── DIAL ─────────────────────────────────────────────────────
   function setDial(val,label,el){
     document.getElementById('dval').textContent=val;
     document.getElementById('dlabel').textContent=label;
@@ -808,28 +667,19 @@
     el.classList.add('active');
   }
 
-  // ── SYSTEM SWITCH ─────────────────────────────────────────────
-  function switchSystem(v){ loadSystemData(v); }
+  function switchSystem(v){ loadLiveData(v); }
 
-  // ── BWN ───────────────────────────────────────────────────────
+  function filterMap(type,el){
+    document.querySelectorAll('[onclick^="filterMap"]').forEach(b=>{b.style.borderColor='var(--border)';b.style.color='var(--text-dim)';b.style.background='transparent';});
+    el.style.borderColor='var(--cyan)';el.style.color='var(--cyan)';el.style.background='rgba(0,245,255,.08)';
+  }
+
   function showBWN(){document.getElementById('bwnModal').classList.add('show');}
   function closeBWN(){document.getElementById('bwnModal').classList.remove('show');}
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCard();closeBWN();}});
-</script>
 
-<!-- GOOGLE MAPS — loads async, data loads independently below -->
-<script async defer
-  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDedtzKXUUSjCdqVQ4XoCe0GlmnkBw2UMc&callback=initMap&loading=async">
-</script>
-<script>
-  window.gm_authFailure = function() {
-    const mapDiv = document.getElementById('gmap');
-    if (mapDiv) {
-      mapDiv.innerHTML = '<div style="position:absolute;inset:0;background:linear-gradient(135deg,#020c14,#041820);display:flex;align-items:center;justify-content:center;"><div style="text-align:center;color:rgba(0,245,255,.3);font-family:monospace;font-size:11px;letter-spacing:3px;">MAP OFFLINE<br><span style="font-size:8px">ADD DOMAIN TO API KEY</span></div></div>';
-    }
-  };
-  // Direct call — always runs, no events, no callbacks
-  loadSystemData('DNWSTX');
+  // ── BOOT — try to load live data on top of hardcoded display ─
+  loadLiveData('DNWSTX');
 </script>
 </body>
 </html>
