@@ -480,7 +480,7 @@
       backgroundColor: '#020c14',
     });
 
-    // Load Derby NWS on boot
+    // Map loaded — now load data with map active
     loadSystemData('DNWSTX');
   }
 
@@ -817,27 +817,19 @@
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCard();closeBWN();}});
 </script>
 
-<!-- GOOGLE MAPS — load last so initMap is defined -->
-<script>
-  // If Google Maps fails to load, show the dark fallback map
-  window.gm_authFailure = function() {
-    const mapDiv = document.getElementById('gmap');
-    if (mapDiv) {
-      mapDiv.innerHTML = `
-        <div style="position:absolute;inset:0;background:radial-gradient(ellipse at 35% 45%,rgba(0,50,70,.5) 0%,transparent 55%),linear-gradient(135deg,#020c14,#041820,#020c14);">
-          <div style="position:absolute;inset:0;background-image:linear-gradient(rgba(0,245,255,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(0,245,255,.03) 1px,transparent 1px);background-size:36px 36px;"></div>
-          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;color:rgba(0,245,255,.3);font-family:'Orbitron',monospace;font-size:11px;letter-spacing:3px;">
-            <div style="margin-bottom:8px">MAP OFFLINE</div>
-            <div style="font-size:8px;color:rgba(0,245,255,.2)">ADD DOMAIN TO GOOGLE API KEY</div>
-          </div>
-        </div>`;
-    }
-    console.warn('Google Maps auth failed — add your domain to the API key restrictions');
-  };
-</script>
+<!-- GOOGLE MAPS — loads async, data loads independently below -->
 <script async defer
   src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDedtzKXUUSjCdqVQ4XoCe0GlmnkBw2UMc&callback=initMap&loading=async">
 </script>
+<script>
+  window.gm_authFailure = function() {
+    const mapDiv = document.getElementById('gmap');
+    if (mapDiv) {
+      mapDiv.innerHTML = '<div style="position:absolute;inset:0;background:linear-gradient(135deg,#020c14,#041820);display:flex;align-items:center;justify-content:center;"><div style="text-align:center;color:rgba(0,245,255,.3);font-family:monospace;font-size:11px;letter-spacing:3px;">MAP OFFLINE<br><span style="font-size:8px">ADD DOMAIN TO API KEY</span></div></div>';
+    }
+  };
+  // Direct call — always runs, no events, no callbacks
+  loadSystemData('DNWSTX');
 </script>
 </body>
 </html>
