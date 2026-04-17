@@ -59,7 +59,7 @@
   .atable tr:hover td{background:rgba(0,245,255,.04)}
   .atable .acct{color:var(--cyan);font-family:'Rajdhani',sans-serif;font-weight:400;font-size:12px;letter-spacing:.3px;}
   .atable .nm{color:var(--text);font-size:12px;font-family:'Rajdhani',sans-serif;font-weight:600;}
-  .atable .bal{font-family:'Share Tech Mono',monospace;font-size:10px;text-align:right;letter-spacing:.5px;}
+  .atable .bal{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;text-align:right;}
   .pill{display:inline-block;padding:1px 4px;border:1px solid;font-size:7px;letter-spacing:.5px;}
   .map-panel{flex:1;position:relative;overflow:hidden;min-height:260px;}
   .map-bg{position:absolute;inset:0;background:radial-gradient(ellipse at 35% 45%,rgba(0,50,70,.5) 0%,transparent 55%),radial-gradient(ellipse at 70% 65%,rgba(0,30,50,.3) 0%,transparent 45%),linear-gradient(135deg,#020c14,#041820,#020c14);}
@@ -124,10 +124,11 @@
   .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;align-items:center;justify-content:center;}
   .modal.show{display:flex}
   .botnav{position:fixed;bottom:0;left:0;right:0;height:64px;background:linear-gradient(90deg,var(--bg2),#020e1c,var(--bg2));border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:6px;padding:0 16px;z-index:100;}
-  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:68px;height:50px;background:var(--panel);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;transition:all .2s;font-size:7px;letter-spacing:1.5px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;}
+  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:68px;height:50px;background:rgba(0,245,255,.04);border:1px solid rgba(0,245,255,.25);color:rgba(0,245,255,.58);cursor:pointer;transition:all .2s;font-size:7px;letter-spacing:1px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;}
   .navbtn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--cyan);transform:scaleX(0);transition:transform .2s;}
   .navbtn:hover::after,.navbtn.active::after{transform:scaleX(1)}
-  .navbtn:hover,.navbtn.active{color:var(--cyan);border-color:var(--border-hi);background:rgba(0,245,255,.05);}
+  .navbtn:hover{color:rgba(0,245,255,.88);border-color:rgba(0,245,255,.5);background:rgba(0,245,255,.08);}
+  .navbtn.active{color:var(--cyan);border-color:var(--cyan);background:rgba(0,245,255,.11);box-shadow:0 0 16px rgba(0,245,255,.28),inset 0 0 14px rgba(0,245,255,.07);}
   .navicon{font-size:15px}
   .navalert{position:absolute;top:5px;right:6px;width:13px;height:13px;background:var(--red);border-radius:50%;font-size:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Orbitron',monospace;}
 </style>
@@ -435,7 +436,7 @@
   <a class="navbtn" href="billing.html"><span class="navicon">🧾</span>BILLING</a>
   <a class="navbtn" href="comms.html"><span class="navicon" style="font-size:11px;letter-spacing:-2px">📞✉</span>COMMS<span class="navalert" id="nav-comms-alert">2</span></a>
   <a class="navbtn" href="compliance.html"><span class="navicon">📋</span>COMPLY<span class="navalert" id="nav-comply-alert">1</span></a>
-  <a class="navbtn" href="assets.html"><span class="navicon">🔧</span>ASSETS</a>
+  <a class="navbtn" href="payments.html"><span class="navicon">💵</span>PAYMENTS</a>
   <a class="navbtn" href="reports.html"><span class="navicon">📊</span>REPORTS</a>
   <a class="navbtn" href="system.html"><span class="navicon">⚙</span>SYSTEM</a>
 </div>
