@@ -70,7 +70,7 @@
   .atable td{padding:7px 12px;border-bottom:1px solid rgba(0,245,255,.04);cursor:pointer;vertical-align:middle;}
   .atable tr:hover td{background:rgba(0,245,255,.04);}
   .atable tr.selected td{background:rgba(0,245,255,.08);border-left:2px solid var(--cyan);}
-  .td-acct{color:var(--cyan);font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;letter-spacing:.3px;white-space:nowrap;}
+  .td-acct{color:var(--cyan);font-family:'Orbitron',monospace;font-size:9px;letter-spacing:.5px;white-space:nowrap;}
   .td-name{color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;white-space:nowrap;}
   .td-addr{color:#8ab8c8;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:500;}
   .td-bal{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;text-align:right;white-space:nowrap;}
@@ -163,10 +163,11 @@
 
   /* BOTTOM NAV */
   .botnav{position:fixed;bottom:0;left:0;right:0;height:64px;background:linear-gradient(90deg,var(--bg2),#020e1c,var(--bg2));border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:6px;padding:0 16px;z-index:100;}
-  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:68px;height:50px;background:var(--panel);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;transition:all .2s;font-size:7px;letter-spacing:1px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;}
+  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:68px;height:50px;background:rgba(0,245,255,.04);border:1px solid rgba(0,245,255,.25);color:rgba(0,245,255,.58);cursor:pointer;transition:all .2s;font-size:7px;letter-spacing:1px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;}
   .navbtn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--cyan);transform:scaleX(0);transition:transform .2s;}
   .navbtn:hover::after,.navbtn.active::after{transform:scaleX(1);}
-  .navbtn:hover,.navbtn.active{color:var(--cyan);border-color:var(--border-hi);background:rgba(0,245,255,.05);}
+  .navbtn:hover{color:rgba(0,245,255,.88);border-color:rgba(0,245,255,.5);background:rgba(0,245,255,.08);}
+  .navbtn.active{color:var(--cyan);border-color:var(--cyan);background:rgba(0,245,255,.11);box-shadow:0 0 16px rgba(0,245,255,.28),inset 0 0 14px rgba(0,245,255,.07);}
   .navicon{font-size:15px;}
   .navalert{position:absolute;top:5px;right:6px;width:13px;height:13px;background:var(--red);border-radius:50%;font-size:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Orbitron',monospace;}
 
@@ -196,7 +197,7 @@
   <div class="logo"><a href="index.html">RADEUS</a></div>
   <div style="display:flex;align-items:center;gap:16px">
     <div class="sdot"></div>
-    <span style="font-size:9px;color:var(--text-dim);letter-spacing:2px">ACCOUNTS MODULE</span>
+    <span style="font-size:12px;color:var(--text-mid);letter-spacing:3px;font-family:'Share Tech Mono',monospace">ACCOUNTS</span>
     <select class="sys-select" id="sysSelect" onchange="switchSystem(this.value)">
       <option value="">⬡ LOADING SYSTEMS...</option>
     </select>
@@ -226,14 +227,15 @@
     <input class="search-input" id="searchInput" type="text" placeholder="SEARCH BY NAME, ACCOUNT #, OR ADDRESS..." oninput="filterAccounts()">
   </div>
   <div class="filter-btns">
-    <button class="fbtn" onclick="setFilter('ALL',this)">ALL</button>
-    <button class="fbtn active" onclick="setFilter('ACTIVE',this)">ACTIVE</button>
+    <button class="fbtn active" onclick="setFilter('ALL',this)">ALL</button>
+    <button class="fbtn" onclick="setFilter('ACTIVE',this)">ACTIVE</button>
     <button class="fbtn" onclick="setFilter('INACTIVE',this)">INACTIVE</button>
+    <button class="fbtn" onclick="setFilter('DISCONNECTED',this)">DISCONNECTED</button>
     <button class="fbtn" onclick="setFilter('CURRENT',this)" style="--fc:var(--green)">CURRENT</button>
     <button class="fbtn" onclick="setFilter('PAST DUE',this)">PAST DUE</button>
     <button class="fbtn" onclick="setFilter('CRITICAL',this)">CRITICAL</button>
     <button class="fbtn" onclick="setFilter('CREDIT',this)">CREDIT BAL</button>
-    <button class="fbtn" onclick="setFilter('ARRANGEMENTS',this)">ARRANGEMENTS</button>
+    <button class="fbtn" onclick="setFilter('PMT PLAN',this)">PMT PLAN</button>
   </div>
   <button class="new-acct-btn" onclick="openNewAcct()">+ NEW ACCOUNT</button>
 </div>
@@ -296,7 +298,7 @@
   <a class="navbtn" href="billing.html"><span class="navicon">🧾</span>BILLING</a>
   <a class="navbtn" href="comms.html"><span class="navicon" style="font-size:11px;letter-spacing:-2px">📞✉</span>COMMS</a>
   <a class="navbtn" href="compliance.html"><span class="navicon">📋</span>COMPLY</a>
-  <a class="navbtn" href="assets.html"><span class="navicon">🔧</span>ASSETS</a>
+  <a class="navbtn" href="payments.html"><span class="navicon">💵</span>PAYMENTS</a>
   <a class="navbtn" href="reports.html"><span class="navicon">📊</span>REPORTS</a>
   <a class="navbtn" href="system.html"><span class="navicon">⚙</span>SYSTEM</a>
 </div>
@@ -399,13 +401,12 @@
   // ── STATE ────────────────────────────────────────────────────
   let allAccounts   = [];
   let balMap        = {};
-  let currentFilter = 'ACTIVE';
+  let currentFilter = 'ALL';
   let currentSort   = {col:'balance', dir:'desc'};
   let selectedAcct  = null;
   let activeSystemId = null;
   let activeSystemCode = null;
   let activeSystemName = null;
-  let activeSystem   = null;
 
   // ── CLOCK ────────────────────────────────────────────────────
   function tick(){document.getElementById('clock').textContent=new Date().toTimeString().slice(0,8);}
@@ -438,13 +439,12 @@
     return new Date(d).toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'2-digit'});
   }
   function classify(bal, type, status) {
-    if (status==='DISCONNECTED') return {label:'DISCONNECTED', color:'var(--red)'};
-    if (status==='INACTIVE')     return {label:'INACTIVE',     color:'var(--text-dim)'};
-    if (type==='RELIGIOUS')      return {label:'RELIGIOUS',    color:'var(--text-dim)'};
-    if (bal < -0.01)              return {label:'CREDIT',       color:'var(--blue)'};
-    if (Math.abs(bal) < 0.01)    return {label:'CURRENT',      color:'var(--green)'};
-    if (bal > 500)                return {label:'CRITICAL',     color:'var(--red)'};
-    return                               {label:'PAST DUE',     color:'var(--orange)'};
+    if (status==='INACTIVE') return {label:'INACTIVE', color:'var(--text-dim)'};
+    if (type==='RELIGIOUS')  return {label:'RELIGIOUS', color:'var(--text-dim)'};
+    if (bal < 0)   return {label:'CREDIT',   color:'var(--blue)'};
+    if (bal === 0) return {label:'CURRENT',   color:'var(--green)'};
+    if (bal > 500) return {label:'CRITICAL',  color:'var(--red)'};
+    return               {label:'PAST DUE',   color:'var(--orange)'};
   }
 
   // ── LOAD SYSTEMS ─────────────────────────────────────────────
@@ -455,25 +455,20 @@
     sel.innerHTML = systems.map(s =>
       `<option value="${s.system_id}|${s.system_code}|${s.system_name}">⬡ ${s.system_name.toUpperCase()}</option>`
     ).join('');
-    sel._systemsData = systems;
     // Load first system
     const first = systems[0];
     activeSystemId   = first.system_id;
     activeSystemCode = first.system_code;
     activeSystemName = first.system_name;
-    activeSystem     = first;
     loadAccounts();
   }
 
   // ── SWITCH SYSTEM ─────────────────────────────────────────────
   function switchSystem(val) {
-    const parts = val.split('|');
-    activeSystemId   = parts[0];
-    activeSystemCode = parts[1];
-    activeSystemName = parts[2];
-    // Store full system object for rate info
-    const sel = document.getElementById('sysSelect');
-    activeSystem = sel._systemsData ? sel._systemsData.find(s=>s.system_id===activeSystemId) : null;
+    const [id, code, name] = val.split('|');
+    activeSystemId   = id;
+    activeSystemCode = code;
+    activeSystemName = name;
     closeDetail();
     loadAccounts();
   }
@@ -483,10 +478,9 @@
     document.getElementById('acctTable').innerHTML =
       '<tr class="loading-row"><td colspan="8">LOADING ACCOUNTS...</td></tr>';
 
-    const [accounts, balances, arrangements] = await Promise.all([
+    const [accounts, balances] = await Promise.all([
       supa('accounts', `?system_id=eq.${activeSystemId}&select=account_id,account_number,account_type,status,meter_id,notes,service_start,customers(full_name,phone_primary,email,billing_address,billing_city,billing_state),service_addresses(street,city,state,zip),meters(meter_number)`),
-      supa('account_balances', `?system_id=eq.${activeSystemId}&select=*`),
-      supa('communication_log', `?system_id=eq.${activeSystemId}&category=eq.Payment Arrangement&select=account_id`)
+      supa('account_balances', `?system_id=eq.${activeSystemId}&select=*`)
     ]);
 
     if (!accounts) {
@@ -497,7 +491,6 @@
 
     balMap = {};
     (balances||[]).forEach(b => { balMap[b.account_id] = b; });
-    const arrangementSet = new Set((arrangements||[]).map(a => a.account_id));
 
     allAccounts = accounts.map(a => {
       const bal = Number(balMap[a.account_id]?.current_balance ?? 0);
@@ -514,7 +507,6 @@
         billAddr: a.customers?.billing_address || '—',
         lastPmt: balMap[a.account_id]?.last_payment_date,
         lastPmtAmt: balMap[a.account_id]?.last_payment_amount,
-        hasArrangement: arrangementSet.has(a.account_id),
         cls: classify(bal, a.account_type, a.status)
       };
     });
@@ -526,11 +518,11 @@
   // ── STATS ─────────────────────────────────────────────────────
   function updateStats() {
     const active   = allAccounts.filter(a => a.status === 'ACTIVE');
-    const inactive = allAccounts.filter(a => a.status === 'INACTIVE' || a.status === 'DISCONNECTED');
-    const current  = allAccounts.filter(a => a.status==='ACTIVE' && Math.abs(a.bal) < 0.01);
-    const pastDue  = allAccounts.filter(a => a.status==='ACTIVE' && a.bal > 0.01 && a.bal <= 500);
+    const inactive = allAccounts.filter(a => a.status === 'INACTIVE');
+    const current  = allAccounts.filter(a => a.status==='ACTIVE' && a.bal === 0);
+    const pastDue  = allAccounts.filter(a => a.status==='ACTIVE' && a.bal > 0 && a.bal <= 500);
     const critical = allAccounts.filter(a => a.status==='ACTIVE' && a.bal > 500);
-    const credit   = allAccounts.filter(a => a.status==='ACTIVE' && a.bal < -0.01);
+    const credit   = allAccounts.filter(a => a.status==='ACTIVE' && a.bal < 0);
     const totalOwed = allAccounts.filter(a=>a.bal>0).reduce((s,a)=>s+a.bal,0);
     const collRate  = active.length > 0 ? Math.round((current.length/active.length)*100) : 0;
 
@@ -550,14 +542,15 @@
     const search = document.getElementById('searchInput').value.toLowerCase();
 
     let rows = allAccounts.filter(a => {
+      // Filter
       if (currentFilter === 'ACTIVE')       return a.status === 'ACTIVE';
-      if (currentFilter === 'INACTIVE')     return a.status === 'INACTIVE' || a.status === 'DISCONNECTED';
-      if (currentFilter === 'CURRENT')      return a.status==='ACTIVE' && Math.abs(a.bal) < 0.01;
-      if (currentFilter === 'PAST DUE')     return a.status==='ACTIVE' && a.bal > 0.01 && a.bal <= 500;
+      if (currentFilter === 'INACTIVE')     return a.status === 'INACTIVE';
+      if (currentFilter === 'DISCONNECTED') return a.status === 'DISCONNECTED';
+      if (currentFilter === 'CURRENT')      return a.status==='ACTIVE' && a.bal === 0;
+      if (currentFilter === 'PAST DUE')     return a.status==='ACTIVE' && a.bal > 0 && a.bal <= 500;
       if (currentFilter === 'CRITICAL')     return a.status==='ACTIVE' && a.bal > 500;
-      if (currentFilter === 'CREDIT')       return a.status==='ACTIVE' && a.bal < -0.01;
-      if (currentFilter === 'ARRANGEMENTS') return a.hasArrangement === true;
-      return true;
+      if (currentFilter === 'CREDIT')       return a.status==='ACTIVE' && a.bal < 0;
+      if (currentFilter === 'PMT PLAN')     return a.hasPlan === true;
     }).filter(a => {
       if (!search) return true;
       return a.account_number.toLowerCase().includes(search) ||
@@ -601,7 +594,7 @@
         </td>
         <td><span class="pill" style="color:${a.cls.color};border-color:${a.cls.color}">${a.cls.label}</span></td>
         <td>${hasPlan ? '<span class="plan-pill">PLAN</span>' : '<span style="color:var(--text-dim);font-size:11px">—</span>'}</td>
-        <td class="td-date">${fmtDate(a.lastPmt)}${a.lastPmtAmt ? '<br><span style="color:var(--green);font-size:8px">'+fmtBal(a.lastPmtAmt)+'</span>' : ''}</td>
+        <td class="td-date">${fmtDate(a.lastPmt)}${a.lastPmtAmt ? '<br><span style="color:var(--green);font-size:11px;font-family:\'Rajdhani\',sans-serif;font-weight:600">'+fmtBal(a.lastPmtAmt)+'</span>' : ''}</td>
         <td class="td-bal" style="color:${a.cls.color}">${fmtBal(a.bal)}</td>`;
       tbody.appendChild(tr);
     });
@@ -667,8 +660,8 @@
         <div class="dp-row"><span class="dp-label">CURRENT BALANCE</span><span class="dp-val" style="color:${a.cls.color};font-size:14px">${fmtBal(a.bal)}</span></div>
         <div class="dp-row"><span class="dp-label">LAST PAYMENT DATE</span><span class="dp-val">${fmtDate(a.lastPmt)}</span></div>
         <div class="dp-row"><span class="dp-label">LAST PAYMENT AMOUNT</span><span class="dp-val" style="color:var(--green)">${a.lastPmtAmt ? fmtBal(a.lastPmtAmt) : '—'}</span></div>
-        <div class="dp-row"><span class="dp-label">BASE RATE</span><span class="dp-val">${activeSystem ? '$'+Number(activeSystem.base_rate||0).toFixed(2)+' / MONTH' : '—'}</span></div>
-        <div class="dp-row"><span class="dp-label">LATE FEE</span><span class="dp-val">${activeSystem ? '$'+Number(activeSystem.late_fee_amount||0).toFixed(2)+' after due date' : '—'}</span></div>
+        <div class="dp-row"><span class="dp-label">BASE RATE</span><span class="dp-val">$40.00 / MONTH</span></div>
+        <div class="dp-row"><span class="dp-label">LATE FEE</span><span class="dp-val">$10.00 after due date</span></div>
       </div>
       <div class="dp-section">
         <div class="dp-section-title">TRANSACTION REGISTER <span style="color:var(--text-dim);font-size:7px;margin-left:8px">LOADING...</span></div>
@@ -683,73 +676,39 @@
     loadTransactions(a.account_id);
   }
 
-  // ── LOAD TRANSACTIONS (unified ledger) ───────────────────────
+  // ── LOAD TRANSACTIONS ─────────────────────────────────────────
   async function loadTransactions(accountId) {
+    const txns = await supa('transactions',
+      `?account_id=eq.${accountId}&select=*&order=txn_date.desc&limit=50`
+    );
     const wrap = document.getElementById('txn-wrap');
     if (!wrap) return;
 
-    // Fetch all three sources in parallel
-    const [bills, payments, txns] = await Promise.all([
-      supa('bills', `?account_id=eq.${accountId}&select=bill_id,statement_date,period_total,total_amount,base_rate,late_fee,state_tax,source_id&order=statement_date.desc&limit=36`),
-      supa('payments', `?account_id=eq.${accountId}&select=payment_id,payment_date,amount,payment_method,reference_number,returned&order=payment_date.desc&limit=36`),
-      supa('transactions', `?account_id=eq.${accountId}&select=txn_id,txn_date,txn_type,amount,description&order=txn_date.desc&limit=36`)
-    ]);
-
-    // Build unified ledger entries
-    const entries = [];
-
-    (bills||[]).forEach(b => entries.push({
-      date: b.statement_date,
-      type: 'BILL',
-      label: 'CHARGE',
-      desc: `Monthly bill — Base $${Number(b.base_rate||0).toFixed(2)}${b.late_fee > 0 ? ' + Late Fee' : ''}`,
-      amount: Number(b.period_total||0),
-      color: 'var(--orange)',
-      debit: true
-    }));
-
-    (payments||[]).forEach(p => entries.push({
-      date: p.payment_date,
-      type: p.returned ? 'RETURNED' : 'PAYMENT',
-      label: p.returned ? 'RETURN' : 'PAYMENT',
-      desc: [p.payment_method, p.reference_number].filter(Boolean).join(' — ') || 'Payment received',
-      amount: Number(p.amount||0),
-      color: p.returned ? 'var(--red)' : 'var(--green)',
-      debit: p.returned
-    }));
-
-    (txns||[]).forEach(t => {
-      const amt = Number(t.amount||0);
-      entries.push({
-        date: t.txn_date,
-        type: t.txn_type,
-        label: (t.txn_type||'').replace(/_/g,' ').substring(0,10),
-        desc: t.description || t.txn_type,
-        amount: Math.abs(amt),
-        color: amt <= 0 ? 'var(--green)' : 'var(--orange)',
-        debit: amt > 0
-      });
-    });
-
-    // Sort by date descending
-    entries.sort((a,b) => new Date(b.date||0) - new Date(a.date||0));
-
     // Update section title
     const stitle = document.querySelector('#dp-body .dp-section:last-child .dp-section-title');
-    if (stitle) stitle.innerHTML = `TRANSACTION REGISTER <span style="color:var(--text-dim);font-size:7px;margin-left:8px">${entries.length} RECORDS</span>`;
+    if (stitle) stitle.innerHTML = `TRANSACTION REGISTER <span style="color:var(--text-dim);font-size:7px;margin-left:8px">${txns?.length||0} RECORDS</span>`;
 
-    if (!entries.length) {
-      wrap.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-dim);font-size:9px">NO HISTORY FOUND</div>';
+    if (!txns || !txns.length) {
+      wrap.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-dim);font-size:9px">NO TRANSACTIONS FOUND</div>';
       return;
     }
 
-    wrap.innerHTML = entries.map(e => `
-      <div class="txn-row">
-        <span class="txn-date">${fmtDate(e.date)}</span>
-        <span class="txn-type" style="color:${e.color};border-color:${e.color}">${e.label}</span>
-        <span class="txn-desc">${e.desc}</span>
-        <span class="txn-amt" style="color:${e.color}">${e.debit ? '' : '−'}${fmtBal(e.amount)}</span>
-      </div>`).join('');
+    const typeColors = {
+      'BILL':'var(--orange)','PAYMENT':'var(--green)','LATE_FEE':'var(--red)',
+      'ADJUSTMENT':'var(--cyan)','CREDIT':'var(--blue)','DEPOSIT':'var(--purple)'
+    };
+
+    wrap.innerHTML = txns.map(t => {
+      const col = typeColors[t.txn_type] || 'var(--text-dim)';
+      const amt = Number(t.amount||0);
+      const amtColor = t.txn_type==='PAYMENT'||t.txn_type==='CREDIT' ? 'var(--green)' : amt<0 ? 'var(--green)' : 'var(--orange)';
+      return `<div class="txn-row">
+        <span class="txn-date">${fmtDate(t.txn_date)}</span>
+        <span class="txn-type" style="color:${col};border-color:${col}">${t.txn_type.replace('_',' ')}</span>
+        <span class="txn-desc">${t.description||t.payment_method||'—'}</span>
+        <span class="txn-amt" style="color:${amtColor}">${fmtBal(amt)}</span>
+      </div>`;
+    }).join('');
   }
 
   function closeDetail() {
@@ -797,17 +756,15 @@
     if (!amount || amount <= 0) { alert('Enter a valid payment amount'); return; }
     if (!date) { alert('Enter a payment date'); return; }
 
-    const txn = await supa('payments', '', 'POST', {
-      account_id:       selectedAcct.account_id,
-      system_id:        activeSystemId,
-      payment_date:     date,
-      amount:           Math.abs(amount),
-      payment_method:   method,
-      reference_number: ref || null,
-      deposited:        false,
-      returned:         false,
-      posted_by:        'OPERATOR',
-      notes:            notes || null
+    const txn = await supa('transactions', '', 'POST', {
+      account_id:     selectedAcct.account_id,
+      txn_date:       date,
+      txn_type:       'PAYMENT',
+      amount:         -Math.abs(amount),
+      description:    notes || `Payment received — ${method}`,
+      payment_method: method,
+      reference:      ref,
+      posted_by:      'OPERATOR'
     });
 
     if (!txn) { alert('ERROR: Payment could not be posted'); return; }
@@ -836,14 +793,12 @@
     const count     = parseInt(document.getElementById('arr-count').value||0);
     const notes     = document.getElementById('arr-notes').value.trim();
     if (!monthly || !start) { alert('Monthly payment amount and start date are required'); return; }
-    // Log arrangement to communication log
-    await supa('communication_log', '', 'POST', {
+    // Log arrangement as a call log entry for now
+    await supa('call_log', '', 'POST', {
       system_id:       activeSystemId,
       account_id:      selectedAcct.account_id,
-      log_date:        new Date().toISOString().split('T')[0],
+      call_date:       new Date().toISOString().split('T')[0],
       category:        'Payment Arrangement',
-      contact_type:    'Phone',
-      direction:       'INBOUND',
       customer_name:   selectedAcct.name,
       service_address: selectedAcct.address,
       description:     `ARRANGEMENT: Down $${down} on ${downDate||'N/A'}. Monthly $${monthly} x${count} starting ${start}. ${notes}`,
@@ -868,14 +823,12 @@
   function updateNoticeTemplate() {
     if (!selectedAcct) return;
     const type = document.getElementById('notice-type').value;
-    const sysName = activeSystemName || 'Water System';
-    const phone   = activeSystem?.phone ? `\nPhone: ${activeSystem.phone}` : '';
     const templates = {
-      PAST_DUE:           `Dear ${selectedAcct.name},\n\nThis is a notice that your water utility account (${selectedAcct.account_number||''}) has a past due balance of ${fmtBal(selectedAcct.bal)}.\n\nPlease contact our office immediately to arrange payment and avoid service interruption.${phone}\n\nThank you,\n${sysName}`,
-      DISCONNECT_WARNING: `Dear ${selectedAcct.name},\n\nThis is a final notice before disconnection of service for account ${selectedAcct.account_number||''}.\n\nYour balance of ${fmtBal(selectedAcct.bal)} must be paid immediately to avoid disconnection.\n\nPlease contact our office today.${phone}\n\n${sysName}`,
-      BOIL_WATER:         `BOIL WATER NOTICE\n\nDear Customer,\n\nDue to a system issue, you are advised to boil all drinking water before use until further notice. We will notify you when it is safe to resume normal use.${phone}\n\n${sysName}`,
-      GENERAL:            `Dear ${selectedAcct.name},\n\n`,
-      PAYMENT_RECEIVED:   `Dear ${selectedAcct.name},\n\nWe have received your payment on account ${selectedAcct.account_number|''}. Thank you.\n\n${sysName}`
+      PAST_DUE: `Dear ${selectedAcct.name},\n\nThis is a notice that your water utility account (${selectedAcct.account_number||''}) has a past due balance of ${fmtBal(selectedAcct.bal)}.\n\nPlease contact our office immediately to arrange payment and avoid service interruption.\n\nThank you,\nDerby New Water System`,
+      DISCONNECT_WARNING: `Dear ${selectedAcct.name},\n\nThis is a final notice before disconnection of service for account ${selectedAcct.account_number||''}.\n\nYour balance of ${fmtBal(selectedAcct.bal)} must be paid immediately to avoid disconnection.\n\nPlease contact our office today.\n\nDerby New Water System`,
+      BOIL_WATER: `BOIL WATER NOTICE\n\nDear Customer,\n\nDue to a system issue, you are advised to boil all drinking water before use until further notice. We will notify you when it is safe to resume normal use.\n\nDerby New Water System`,
+      GENERAL: `Dear ${selectedAcct.name},\n\n`,
+      PAYMENT_RECEIVED: `Dear ${selectedAcct.name},\n\nWe have received your payment on account ${selectedAcct.account_number||''}. Thank you.\n\nDerby New Water System`
     };
     document.getElementById('notice-msg').value = templates[type] || '';
   }
@@ -885,17 +838,15 @@
     const delivery = document.getElementById('notice-delivery').value;
     const msg      = document.getElementById('notice-msg').value.trim();
     if (!msg) { alert('Message cannot be empty'); return; }
-    // Log to communication log
-    await supa('communication_log', '', 'POST', {
+    // Log to call log
+    await supa('call_log', '', 'POST', {
       system_id:       activeSystemId,
       account_id:      selectedAcct.account_id,
-      log_date:        new Date().toISOString().split('T')[0],
+      call_date:       new Date().toISOString().split('T')[0],
       category:        'Notice Sent',
-      contact_type:    delivery === 'EMAIL' || delivery === 'BOTH' ? 'Email' : 'SMS',
-      direction:       'OUTBOUND',
       customer_name:   selectedAcct.name,
       service_address: selectedAcct.address,
-      description:     `${type} sent via ${delivery}: ${msg.substring(0,200)}`,
+      description:     `${type} sent via ${delivery}: ${msg.substring(0,100)}...`,
       status:          'Resolved',
       assigned_to:     'System'
     });
@@ -925,14 +876,12 @@
       notes: `DISCONNECTED ${date}: ${reason}. ${notes}`
     });
     if (!res && res !== true) { alert('ERROR: Could not update account status'); return; }
-    // Log to communication log
-    await supa('communication_log', '', 'POST', {
+    // Log to call log
+    await supa('call_log', '', 'POST', {
       system_id:       activeSystemId,
       account_id:      selectedAcct.account_id,
-      log_date:        date,
+      call_date:       date,
       category:        'Disconnection',
-      contact_type:    'Phone',
-      direction:       'OUTBOUND',
       customer_name:   selectedAcct.name,
       service_address: selectedAcct.address,
       description:     `SERVICE DISCONNECTED. Reason: ${reason}. Final read: ${read||'N/A'}. ${notes}`,
@@ -946,7 +895,7 @@
   }
 
   function editAccount()  { alert('EDIT ACCOUNT — coming in next build'); }
-  function viewCallLog()  { window.location.href = 'comms.html'; }
+  function viewCallLog()  { window.location.href = 'calllog.html'; }
 
   // ── NEW ACCOUNT ───────────────────────────────────────────────
   function openNewAcct()  { document.getElementById('newAcctModal').classList.add('show'); }
@@ -972,14 +921,8 @@
       return;
     }
 
-    // Generate account number from highest existing number in this system
-    const existing = await supa('accounts', `?system_id=eq.${activeSystemId}&select=account_number&order=account_number.desc`);
-    let nextNum = 1;
-    if (existing && existing.length) {
-      const nums = existing.map(a => parseInt(a.account_number.replace(activeSystemCode,'')) || 0).filter(n => !isNaN(n));
-      if (nums.length) nextNum = Math.max(...nums) + 1;
-    }
-    const acctNum = `${activeSystemCode}${String(nextNum).padStart(2,'0')}`;
+    // Generate account number
+    const acctNum = `${activeSystemCode}${String(allAccounts.length+1).padStart(2,'0')}`;
 
     // Insert customer
     const cust = await supa('customers', '', 'POST', {
