@@ -14,7 +14,7 @@
     --text:#c8eaf0;--text-dim:#3d6a78;--text-mid:#6a9aaa;
   }
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;overflow:hidden;height:100vh;width:100vw;}
+  body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-weight:400;overflow:hidden;height:100vh;width:100vw;}
   body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.07) 2px,rgba(0,0,0,.07) 4px);pointer-events:none;z-index:1000;}
   .corner{position:fixed;width:36px;height:36px;border-color:var(--cyan);border-style:solid;opacity:.5;z-index:999;}
   .tl{top:6px;left:6px;border-width:2px 0 0 2px}.tr{top:6px;right:6px;border-width:2px 2px 0 0}
@@ -36,7 +36,7 @@
   .stat-pill{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 20px;border-right:1px solid var(--border);height:100%;}
   .stat-pill:last-of-type{border-right:none;}
   .sp-label{font-size:7px;color:var(--text-dim);letter-spacing:2px;margin-bottom:2px;}
-  .sp-val{font-family:'Share Tech Mono',monospace;font-size:16px;font-weight:400;}
+  .sp-val{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;}
   .sp-cyan{color:var(--cyan)}.sp-green{color:var(--green)}.sp-red{color:var(--red)}.sp-orange{color:var(--orange)}.sp-blue{color:var(--blue)}.sp-yellow{color:var(--yellow)}
 
   /* SEARCH + FILTERS */
@@ -70,11 +70,11 @@
   .atable td{padding:7px 12px;border-bottom:1px solid rgba(0,245,255,.04);cursor:pointer;vertical-align:middle;}
   .atable tr:hover td{background:rgba(0,245,255,.04);}
   .atable tr.selected td{background:rgba(0,245,255,.08);border-left:2px solid var(--cyan);}
-  .td-acct{color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:9px;letter-spacing:.5px;white-space:nowrap;}
-  .td-name{color:var(--text);font-size:10px;white-space:nowrap;}
-  .td-addr{color:#8ab8c8;font-size:9px;}
-  .td-bal{font-family:'Share Tech Mono',monospace;font-size:10px;text-align:right;white-space:nowrap;}
-  .td-date{color:var(--text-dim);font-size:9px;white-space:nowrap;}
+  .td-acct{color:var(--cyan);font-family:'Orbitron',monospace;font-size:9px;letter-spacing:.5px;white-space:nowrap;}
+  .td-name{color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;white-space:nowrap;}
+  .td-addr{color:#8ab8c8;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:500;}
+  .td-bal{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;text-align:right;white-space:nowrap;}
+  .td-date{color:var(--text-dim);font-family:'Rajdhani',sans-serif;font-size:12px;white-space:nowrap;}
   .pill{display:inline-block;padding:2px 6px;border:1px solid;font-size:7px;letter-spacing:.5px;font-family:'Orbitron',monospace;white-space:nowrap;}
   .plan-pill{display:inline-block;padding:1px 5px;border:1px solid var(--blue);color:var(--blue);font-size:7px;letter-spacing:.5px;font-family:'Orbitron',monospace;white-space:nowrap;}
 
@@ -249,14 +249,15 @@
           <th onclick="sortBy('account_number')">ACCT #</th>
           <th onclick="sortBy('name')">CUSTOMER NAME</th>
           <th onclick="sortBy('address')">SERVICE ADDRESS</th>
-          <th>STATUS</th>
+          <th style="text-align:center;width:40px">●</th>
+          <th>BALANCE STATUS</th>
           <th>PLAN</th>
           <th onclick="sortBy('last_payment_date')">LAST PAYMENT</th>
           <th onclick="sortBy('balance')" style="text-align:right">BALANCE</th>
         </tr>
       </thead>
       <tbody id="acctTable">
-        <tr class="loading-row"><td colspan="7">LOADING ACCOUNTS...</td></tr>
+        <tr class="loading-row"><td colspan="8">LOADING ACCOUNTS...</td></tr>
       </tbody>
     </table>
   </div>
@@ -473,7 +474,7 @@
   // ── LOAD ACCOUNTS ─────────────────────────────────────────────
   async function loadAccounts() {
     document.getElementById('acctTable').innerHTML =
-      '<tr class="loading-row"><td colspan="7">LOADING ACCOUNTS...</td></tr>';
+      '<tr class="loading-row"><td colspan="8">LOADING ACCOUNTS...</td></tr>';
 
     const [accounts, balances] = await Promise.all([
       supa('accounts', `?system_id=eq.${activeSystemId}&select=account_id,account_number,account_type,status,meter_id,notes,service_start,customers(full_name,phone_primary,email,billing_address,billing_city,billing_state),service_addresses(street,city,state,zip),meters(meter_number)`),
@@ -482,7 +483,7 @@
 
     if (!accounts) {
       document.getElementById('acctTable').innerHTML =
-        '<tr class="loading-row"><td colspan="7">ERROR LOADING — CHECK CONNECTION</td></tr>';
+        '<tr class="loading-row"><td colspan="8">ERROR LOADING — CHECK CONNECTION</td></tr>';
       return;
     }
 
@@ -570,7 +571,7 @@
 
     const tbody = document.getElementById('acctTable');
     if (!rows.length) {
-      tbody.innerHTML = `<tr class="loading-row"><td colspan="7" style="color:var(--text-dim)">NO ACCOUNTS MATCH FILTER</td></tr>`;
+      tbody.innerHTML = `<tr class="loading-row"><td colspan="8" style="color:var(--text-dim)">NO ACCOUNTS MATCH FILTER</td></tr>`;
       return;
     }
 
@@ -585,9 +586,11 @@
         <td class="td-acct">${a.account_number}</td>
         <td class="td-name">${a.name}</td>
         <td class="td-addr">${a.address}${a.city ? ', '+a.city : ''}</td>
-        <td><span class="pill" style="color:${statusColor};border-color:${statusColor}">${a.status}</span>
-            ${a.bal>0&&a.status==='ACTIVE' ? `<br><span class="pill" style="color:${a.cls.color};border-color:${a.cls.color};margin-top:2px">${a.cls.label}</span>` : ''}</td>
-        <td>${hasPlan ? '<span class="plan-pill">ARRANGEMENT</span>' : '<span style="color:var(--text-dim);font-size:8px">—</span>'}</td>
+        <td style="text-align:center">
+          <span title="${a.status}" style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${statusColor};box-shadow:0 0 6px ${statusColor};"></span>
+        </td>
+        <td><span class="pill" style="color:${a.cls.color};border-color:${a.cls.color}">${a.cls.label}</span></td>
+        <td>${hasPlan ? '<span class="plan-pill">PLAN</span>' : '<span style="color:var(--text-dim);font-size:11px">—</span>'}</td>
         <td class="td-date">${fmtDate(a.lastPmt)}${a.lastPmtAmt ? '<br><span style="color:var(--green);font-size:8px">'+fmtBal(a.lastPmtAmt)+'</span>' : ''}</td>
         <td class="td-bal" style="color:${a.cls.color}">${fmtBal(a.bal)}</td>`;
       tbody.appendChild(tr);
