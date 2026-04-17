@@ -57,7 +57,7 @@
   .atable th{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:1.5px;color:var(--text-dim);padding:6px 8px;border-bottom:1px solid var(--border);text-align:left;font-weight:400;}
   .atable td{padding:4px 8px;border-bottom:1px solid rgba(0,245,255,.03);cursor:pointer;}
   .atable tr:hover td{background:rgba(0,245,255,.04)}
-  .atable .acct{color:var(--cyan);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:12px;letter-spacing:.3px;}
+  .atable .acct{color:var(--cyan);font-family:'Rajdhani',sans-serif;font-weight:400;font-size:12px;letter-spacing:.3px;}
   .atable .nm{color:var(--text);font-size:9px;}
   .atable .bal{font-family:'Share Tech Mono',monospace;font-size:10px;text-align:right;letter-spacing:.5px;}
   .pill{display:inline-block;padding:1px 4px;border:1px solid;font-size:7px;letter-spacing:.5px;}
@@ -529,7 +529,7 @@
 
     // Get accounts + balances
     const accounts = await supa('accounts',
-      `?system_id=eq.${sys.system_id}&select=account_id,account_number,account_type,status,customers(full_name),service_addresses(street)`
+      `?system_id=eq.${sys.system_id}&status=neq.INACTIVE&select=account_id,account_number,account_type,status,customers(full_name),service_addresses(street)`
     );
     const balances = await supa('account_balances', `?system_id=eq.${sys.system_id}&select=*`);
     if (!accounts || !balances) return;
@@ -594,7 +594,7 @@
     const tbody = document.getElementById('acctTable');
     if (tbody) {
       tbody.innerHTML = '';
-      [...accounts].sort((a,b) =>
+      [...accounts].filter(a => a.status !== 'INACTIVE').sort((a,b) =>
         Number(balMap[b.account_id]?.current_balance??0) - Number(balMap[a.account_id]?.current_balance??0)
       ).forEach(a => {
         const bal  = Number(balMap[a.account_id]?.current_balance ?? 0);
