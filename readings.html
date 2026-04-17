@@ -79,7 +79,7 @@
   .rtable tr.read td .td-acct{color:rgba(0,245,255,.4);}
 
   /* TABLE CELL TYPES */
-  .td-acct{color:var(--cyan);font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;letter-spacing:.5px;white-space:nowrap;}
+  .td-acct{color:var(--cyan);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:700;letter-spacing:.3px;white-space:nowrap;}
   .td-name{color:var(--text);font-size:13px;font-weight:600;white-space:nowrap;}
   .td-addr{color:var(--text-mid);font-size:12px;}
   .td-num{font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;color:var(--text);text-align:right;}
@@ -272,6 +272,7 @@
   let activeSystemId   = null;
   let activeSystemCode = null;
   let activeSystemName = null;
+  let activeSystem     = null;
   let allAccounts      = [];
   let existingReads    = {};   // account_id → read record
   let pendingReads     = {};   // account_id → {current_read, notes, image_url, estimated}
@@ -280,10 +281,17 @@
   let activeCycle      = { year: null, month: null };
   let imgTargetAccount = null;
 
-  // Base rate for bill preview calc
-  const BASE_RATE       = 40.00;
-  const ENERGY_SURCHARGE = 6.00;
-  const USAGE_RATE      = 0.004; // per gallon
+  // Rate variables — updated from live system data when system loads
+  let BASE_RATE        = 40.00;
+  let ENERGY_SURCHARGE = 6.00;
+  let USAGE_RATE       = 0.004;
+
+  function updateSystemRates(sys) {
+    activeSystem     = sys;
+    BASE_RATE        = Number(sys.base_rate        || 40);
+    ENERGY_SURCHARGE = Number(sys.energy_surcharge || 0);
+    USAGE_RATE       = Number(sys.usage_rate       || 0.004);
+  }
 
   // ── CLOCK ────────────────────────────────────────────────────
   function tick(){document.getElementById('clock').textContent=new Date().toTimeString().slice(0,8);}
@@ -362,26 +370,34 @@
 
   // ── LOAD SYSTEMS ─────────────────────────────────────────────
   async function loadSystems() {
-    const systems = await supa('water_systems', `?org_id=eq.${ORG_ID}&select=system_id,system_code,system_name&order=system_name`);
+    const systems = await supa('water_systems',
+      `?org_id=eq.${ORG_ID}&select=system_id,system_code,system_name,base_rate,energy_surcharge,usage_rate,late_fee_amount&order=system_name`
+    );
     if (!systems || !systems.length) return;
     const sel = document.getElementById('sysSelect');
     sel.innerHTML = systems.map(s =>
       `<option value="${s.system_id}|${s.system_code}|${s.system_name}">⬡ ${s.system_name.toUpperCase()}</option>`
     ).join('');
+    sel._systemsData = systems;
     const first = systems[0];
     activeSystemId   = first.system_id;
     activeSystemCode = first.system_code;
     activeSystemName = first.system_name;
+    updateSystemRates(first);
     loadReadings();
   }
 
   function switchSystem(val) {
-    const [id, code, name] = val.split('|');
-    activeSystemId   = id;
-    activeSystemCode = code;
-    activeSystemName = name;
+    const parts = val.split('|');
+    activeSystemId   = parts[0];
+    activeSystemCode = parts[1];
+    activeSystemName = parts[2];
     pendingReads     = {};
     pendingImages    = {};
+    // Update rates from stored systems data
+    const sel = document.getElementById('sysSelect');
+    const sys = sel._systemsData?.find(s => s.system_id === activeSystemId);
+    if (sys) updateSystemRates(sys);
     loadReadings();
   }
 
@@ -390,22 +406,35 @@
     document.getElementById('readTable').innerHTML =
       '<tr class="loading-row"><td colspan="12">LOADING...</td></tr>';
 
-    // Get active accounts
     const accounts = await supa('accounts',
       `?system_id=eq.${activeSystemId}&status=eq.ACTIVE&select=account_id,account_number,customers(full_name),service_addresses(street,city)`
     );
     if (!accounts) return;
     allAccounts = accounts;
 
-    // Get existing reads for this cycle
-    const reads = await supa('meter_reads',
-      `?account_id=in.(${accounts.map(a=>a.account_id).join(',')})&select=*&order=read_date.desc`
-    );
+    // Bug 8 fix: guard against empty accounts
+    if (!accounts.length) {
+      document.getElementById('readTable').innerHTML =
+        '<tr class="loading-row"><td colspan="12" style="color:var(--text-dim)">NO ACTIVE ACCOUNTS</td></tr>';
+      updateProgress();
+      return;
+    }
+
+    // Bug 5 fix: filter reads to the active billing period by date range
+    const periodStart = document.getElementById('period-start').value;
+    const periodEnd   = document.getElementById('period-end').value;
+    const accountIds  = accounts.map(a => a.account_id).join(',');
+
+    let readsQuery = `?account_id=in.(${accountIds})&select=*&order=read_date.desc`;
+    if (periodStart && periodEnd) {
+      readsQuery += `&read_date=gte.${periodStart}&read_date=lte.${periodEnd}`;
+    }
+
+    const reads = await supa('meter_reads', readsQuery);
 
     existingReads = {};
     if (reads) {
       reads.forEach(r => {
-        // Only keep reads for current cycle if we can match
         if (!existingReads[r.account_id]) existingReads[r.account_id] = r;
       });
     }
@@ -500,12 +529,22 @@
             style="background:rgba(0,255,136,.04);border:1px solid rgba(0,255,136,.1);color:var(--text-mid);font-family:'Rajdhani',sans-serif;font-size:11px;padding:3px 6px;outline:none;width:120px;">
         </td>
         <td>
-          <input class="notes-input"
-            type="text"
-            id="notes-${a.account_id}"
-            value="${notes}"
-            placeholder="Notes..."
-            onchange="onNotesChange('${a.account_id}', this)">
+          <div style="display:flex;align-items:center;gap:6px">
+            <input class="notes-input"
+              type="text"
+              id="notes-${a.account_id}"
+              value="${notes}"
+              placeholder="Notes..."
+              style="flex:1"
+              onchange="onNotesChange('${a.account_id}', this)">
+            <label title="Mark as estimated" style="display:flex;align-items:center;gap:3px;cursor:pointer;color:var(--text-dim);font-size:9px;white-space:nowrap;font-family:'Share Tech Mono',monospace;letter-spacing:.5px">
+              <input type="checkbox" id="est-${a.account_id}"
+                ${isEst ? 'checked' : ''}
+                style="accent-color:var(--blue);width:12px;height:12px;cursor:pointer"
+                onchange="onEstimatedChange('${a.account_id}', this)">
+              EST
+            </label>
+          </div>
         </td>
         <td>
           <div class="img-cell">
@@ -571,6 +610,16 @@
     pendingReads[accountId].notes = input.value;
   }
 
+  function onEstimatedChange(accountId, input) {
+    if (!pendingReads[accountId]) pendingReads[accountId] = {};
+    pendingReads[accountId].estimated = input.checked;
+    // Update the status dot immediately without full re-render
+    const dot = document.querySelector(`#savebtn-${accountId}`)?.closest('tr')?.querySelector('.read-dot');
+    if (dot && pendingReads[accountId].current_read) {
+      dot.className = `read-dot ${input.checked ? 'estimated' : 'done'}`;
+    }
+  }
+
   // ── IMAGE HANDLING ────────────────────────────────────────────
   function openImagePicker(accountId) {
     imgTargetAccount = accountId;
@@ -600,6 +649,26 @@
     document.getElementById('imgModal').classList.remove('show');
   }
 
+  // ── IMAGE UPLOAD TO SUPABASE STORAGE ─────────────────────────
+  async function uploadMeterImage(accountId, file) {
+    const ext  = file.name.split('.').pop() || 'jpg';
+    const path = `${activeSystemCode}/${activeCycle.year}-${String(activeCycle.month).padStart(2,'0')}/${accountId}-${Date.now()}.${ext}`;
+    try {
+      const res = await fetch(`${SUPA_URL}/storage/v1/object/meter-images/${path}`, {
+        method: 'POST',
+        headers: {
+          'apikey': SUPA_KEY,
+          'Authorization': `Bearer ${SUPA_KEY}`,
+          'Content-Type': file.type || 'image/jpeg',
+          'x-upsert': 'true'
+        },
+        body: file
+      });
+      if (!res.ok) { console.warn('Image upload failed', res.status); return null; }
+      return `${SUPA_URL}/storage/v1/object/public/meter-images/${path}`;
+    } catch(e) { console.warn('Image upload error', e); return null; }
+  }
+
   // ── SAVE ONE READ ─────────────────────────────────────────────
   async function saveOneRead(accountId) {
     const pending = pendingReads[accountId];
@@ -613,13 +682,26 @@
     const readDate  = document.getElementById(`date-${accountId}`)?.value
       || new Date().toISOString().split('T')[0];
 
+    // Bug 7 fix: upload image to Storage if pending
+    let imageUrl = pending.image_url || null;
+    if (pendingImages[accountId]) {
+      toast('📷 UPLOADING IMAGE...');
+      const uploaded = await uploadMeterImage(accountId, pendingImages[accountId]);
+      if (uploaded) { imageUrl = uploaded; delete pendingImages[accountId]; }
+      else toast('⚠ IMAGE UPLOAD FAILED — READ SAVED WITHOUT IMAGE');
+    }
+
+    // Bug 6 fix: include cycle_year and cycle_month
     const readRecord = {
       account_id:    accountId,
+      cycle_year:    activeCycle.year,
+      cycle_month:   activeCycle.month,
       previous_read: prevRead,
       current_read:  pending.current_read,
       read_date:     readDate,
       estimated:     pending.estimated || false,
       notes:         pending.notes || null,
+      image_url:     imageUrl,
       read_by:       'OPERATOR'
     };
 
@@ -648,13 +730,24 @@
       const readDate = document.getElementById(`date-${accountId}`)?.value
         || new Date().toISOString().split('T')[0];
 
+      // Bug 7 fix: upload image if pending
+      let imageUrl = pending.image_url || null;
+      if (pendingImages[accountId]) {
+        const uploaded = await uploadMeterImage(accountId, pendingImages[accountId]);
+        if (uploaded) { imageUrl = uploaded; delete pendingImages[accountId]; }
+      }
+
+      // Bug 6 fix: include cycle_year and cycle_month
       const res = await supa('meter_reads', '', 'POST', {
         account_id:    accountId,
+        cycle_year:    activeCycle.year,
+        cycle_month:   activeCycle.month,
         previous_read: prevRead,
         current_read:  pending.current_read,
         read_date:     readDate,
         estimated:     pending.estimated || false,
         notes:         pending.notes || null,
+        image_url:     imageUrl,
         read_by:       'OPERATOR'
       });
       if (res && res[0]) {
