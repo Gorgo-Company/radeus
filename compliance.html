@@ -57,11 +57,12 @@
 
   .main{position:fixed;top:130px;bottom:78px;left:0;right:0;display:flex;overflow:hidden;}
 
-  .left-panel{width:300px;flex-shrink:0;border-right:1px solid var(--border);background:rgba(255,119,0,.02);display:flex;flex-direction:column;overflow-y:auto;overflow-x:hidden;}
-  .lp-section{padding:10px 14px;border-bottom:1px solid rgba(255,119,0,.08);}
-  .lp-title{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(255,150,60,.75);margin-bottom:12px;}
+  .left-panel{width:300px;flex-shrink:0;border-right:1px solid var(--border);background:rgba(255,119,0,.02);display:flex;flex-direction:column;overflow:hidden;}
+  .lp-section{padding:8px 12px;border-bottom:1px solid rgba(255,119,0,.08);flex-shrink:0;}
+  .lp-section-grow{padding:8px 12px;border-bottom:1px solid rgba(255,119,0,.08);flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;}
+  .lp-title{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(255,150,60,.75);margin-bottom:8px;}
 
-  .gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:6px;}
+  .gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;}
   .gauge-svg{overflow:visible;}
   .gauge-tick{stroke:rgba(255,119,0,.2);stroke-width:1;}
   .gauge-tick-major{stroke:rgba(255,119,0,.4);stroke-width:1.5;}
@@ -74,8 +75,8 @@
   .gauge-center-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;fill:rgba(255,150,60,.65);text-anchor:middle;letter-spacing:2px;}
   .gauge-note{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(255,150,60,.65);letter-spacing:1px;text-align:center;}
 
-  .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .mini-gauge{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;border:1px solid var(--border);background:rgba(255,119,0,.02);position:relative;transition:border-color .2s;}
+  .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
+  .mini-gauge{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;border:1px solid var(--border);background:rgba(255,119,0,.02);position:relative;transition:border-color .2s;}
   .mini-gauge:hover{border-color:var(--border-hi);}
   .mini-gauge.alert{border-color:rgba(255,34,68,.4);animation:miniAlert 2s ease-in-out infinite;}
   @keyframes miniAlert{0%,100%{background:rgba(255,34,68,.04)}50%{background:rgba(255,34,68,.1)}}
@@ -216,6 +217,22 @@
   ::-webkit-scrollbar-track{background:transparent;}
   ::-webkit-scrollbar-thumb{background:rgba(255,119,0,.2);}
 
+  /* RESPONSIVE HEIGHT — keeps all 3 left sections visible */
+  .gauge-svg{overflow:visible;width:148px;height:148px;}
+  @media (max-height:820px){
+    .gauge-svg{width:128px;height:128px;}
+    .gauge-wrap{gap:2px;}
+    .lp-section{padding:6px 12px;}
+    .lp-section-grow{padding:6px 12px;}
+    .lp-title{margin-bottom:5px;}
+    .mini-gauge{padding:4px;}
+    .mini-grid{gap:4px;}
+  }
+  @media (max-height:680px){
+    .gauge-svg{width:108px;height:108px;}
+    .mini-svg{width:58px;height:42px;}
+  }
+
   /* BOTTOM NAV */
   .botnav{position:fixed;bottom:0;left:0;right:0;height:78px;background:linear-gradient(90deg,#160d00,#0f0800,#160d00);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:5px;padding:0 14px;z-index:100;}
   .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:58px;height:68px;background:rgba(255,119,0,.04);border:1px solid rgba(255,119,0,.25);color:rgba(255,119,0,.58);cursor:pointer;transition:all .2s;font-size:8px;letter-spacing:.8px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;flex-shrink:0;}
@@ -275,7 +292,7 @@
     <div class="lp-section">
       <div class="lp-title">⬡ SYSTEM COMPLIANCE HEALTH</div>
       <div class="gauge-wrap">
-        <svg class="gauge-svg" width="168" height="168" viewBox="0 0 200 200" id="radarSvg">
+        <svg class="gauge-svg" viewBox="0 0 200 200" id="radarSvg">
           <defs>
             <linearGradient id="arcGradRed" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff2244"/><stop offset="65%" stop-color="#ff5566"/><stop offset="100%" stop-color="#ffbbcc"/></linearGradient>
             <linearGradient id="arcGradOrange" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff7700"/><stop offset="65%" stop-color="#ff9944"/><stop offset="100%" stop-color="#ffe8cc"/></linearGradient>
@@ -319,9 +336,9 @@
       </div>
     </div>
 
-    <div class="lp-section" style="flex:1">
+    <div class="lp-section-grow">
       <div class="lp-title">⬡ NETWORK STATUS</div>
-      <div class="node-grid" id="nodeGrid"><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim)">LOADING...</div></div>
+      <div class="node-grid" id="nodeGrid" style="overflow-y:auto;flex:1"><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim)">LOADING...</div></div>
     </div>
   </div>
 
