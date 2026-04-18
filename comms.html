@@ -41,7 +41,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .statsbar{position:fixed;top:72px;left:0;right:0;height:64px;background:rgba(8,5,8,.97);border-bottom:1px solid var(--border);display:flex;align-items:stretch;z-index:98;}
 .stat-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 16px;border-right:1px solid var(--border);flex:1;gap:2px;}
 .stat-cell:last-child{border-right:none;}
-.stat-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-mid);letter-spacing:1.5px;white-space:nowrap;}
+.stat-label{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--text-mid);letter-spacing:1.5px;white-space:nowrap;}
 .stat-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:28px;}
 .sv-cm{color:var(--cm);}.sv-g{color:var(--green);}.sv-c{color:var(--cyan);}
 .sv-b{color:var(--blue);}.sv-y{color:var(--yellow);}.sv-r{color:var(--red);}
@@ -50,11 +50,11 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .main{position:fixed;top:136px;bottom:80px;left:0;right:0;display:flex;overflow:hidden;}
 
 /* LEFT PANEL — ticket queue */
-.left-panel{width:340px;flex-shrink:0;border-right:1px solid var(--border);background:rgba(244,160,181,.02);display:flex;flex-direction:column;overflow:hidden;}
+.left-panel{width:400px;flex-shrink:0;border-right:1px solid var(--border);background:rgba(244,160,181,.02);display:flex;flex-direction:column;overflow:hidden;}
 
 /* FILTER BAR */
 .filterbar{height:38px;flex-shrink:0;background:rgba(8,5,8,.98);border-bottom:1px solid rgba(244,160,181,.07);display:flex;align-items:center;padding:0 10px;gap:4px;}
-.fbtn{font-size:7px;padding:3px 8px;border:1px solid rgba(244,160,181,.2);color:var(--text-mid);background:transparent;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px;transition:all .15s;white-space:nowrap;}
+.fbtn{font-size:9px;padding:4px 10px;border:1px solid rgba(244,160,181,.2);color:var(--text-mid);background:transparent;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px;transition:all .15s;white-space:nowrap;}
 .fbtn:hover,.fbtn.active{border-color:var(--cm);color:var(--cm);background:rgba(244,160,181,.07);}
 .f-add{margin-left:auto;font-family:'Orbitron',monospace;font-size:7px;padding:4px 10px;border:1px solid var(--cm);color:var(--cm);background:rgba(244,160,181,.06);cursor:pointer;letter-spacing:1px;}
 .f-add:hover{background:rgba(244,160,181,.14);}
@@ -73,7 +73,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .ticket-card.resolved{opacity:.52;}
 .tc-inner{padding:8px 10px 8px 13px;display:flex;flex-direction:column;gap:3px;}
 .tc-top{display:flex;align-items:center;justify-content:space-between;}
-.tc-name{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:180px;}
+.tc-name{font-size:13px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:220px;}
 .tc-meta{display:flex;align-items:center;gap:6px;}
 .tc-ch{font-family:'Share Tech Mono',monospace;font-size:8px;}
 .tc-ch-phone{color:var(--cyan);}
@@ -82,10 +82,10 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .tc-ch-walk{color:var(--yellow);}
 .tc-ch-out{color:var(--text-mid);}
 .tc-cat{font-family:'Orbitron',monospace;font-size:6px;padding:1px 4px;border:1px solid rgba(244,160,181,.3);color:rgba(244,160,181,.7);}
-.tc-sys{font-family:'Orbitron',monospace;font-size:6px;color:var(--text-mid);}
+.tc-sys{font-family:'Rajdhani',sans-serif;font-size:10px;font-weight:600;color:rgba(248,242,245,.65);}
 .tc-desc{font-size:10px;color:var(--text-mid);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
 .tc-bottom{display:flex;align-items:center;justify-content:space-between;}
-.tc-date{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-mid);}
+.tc-date{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--cm);}
 .pill{font-family:'Orbitron',monospace;font-size:6px;padding:2px 5px;border:1px solid;letter-spacing:.8px;white-space:nowrap;}
 .pill-open{border-color:var(--cm);color:var(--cm);}
 .pill-prog{border-color:var(--orange);color:var(--orange);}
@@ -107,13 +107,13 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 .dv-ch-label{font-family:'Share Tech Mono',monospace;font-size:9px;}
 .dv-body{flex:1;overflow-y:auto;padding:0;}
 .dv-sec{border-bottom:1px solid rgba(244,160,181,.07);}
-.dv-sec-title{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:2px;color:var(--text-dim);padding:6px 20px;background:rgba(244,160,181,.025);border-bottom:1px solid rgba(244,160,181,.05);}
+.dv-sec-title{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:2px;color:rgba(244,160,181,.65);padding:6px 20px;background:rgba(244,160,181,.025);border-bottom:1px solid rgba(244,160,181,.05);}
 .dv-row{display:flex;justify-content:space-between;padding:6px 20px;border-bottom:1px solid rgba(244,160,181,.03);}
 .dv-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-mid);letter-spacing:1px;}
-.dv-val{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text);text-align:right;max-width:280px;}
-.dv-desc{padding:12px 20px;font-size:13px;color:var(--text-mid);line-height:1.6;border-bottom:1px solid rgba(244,160,181,.07);}
-.dv-res-label{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:2px;color:var(--text-dim);padding:6px 20px 4px;background:rgba(244,160,181,.025);border-bottom:1px solid rgba(244,160,181,.05);}
-.dv-res-text{padding:8px 20px;font-size:13px;color:var(--text-mid);line-height:1.5;border-bottom:1px solid rgba(244,160,181,.07);}
+.dv-val{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(248,242,245,.88);text-align:right;max-width:280px;}
+.dv-desc{padding:12px 20px;font-size:13px;color:rgba(248,242,245,.82);line-height:1.6;border-bottom:1px solid rgba(244,160,181,.07);}
+.dv-res-label{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:2px;color:rgba(244,160,181,.65);padding:6px 20px 4px;background:rgba(244,160,181,.025);border-bottom:1px solid rgba(244,160,181,.05);}
+.dv-res-text{padding:8px 20px;font-size:13px;color:rgba(248,242,245,.82);line-height:1.5;border-bottom:1px solid rgba(244,160,181,.07);}
 .res-input{width:100%;background:rgba(244,160,181,.05);border:1px solid rgba(244,160,181,.2);color:var(--cm);font-family:'Rajdhani',sans-serif;font-size:13px;padding:10px 20px;outline:none;resize:none;height:70px;}
 .res-input::placeholder{color:var(--text-dim);}
 .res-input:focus{border-color:var(--border-hi);}
@@ -186,7 +186,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   <a class="logo" href="index.html">RADEUS</a>
   <div style="display:flex;align-items:center;gap:14px">
     <div class="sdot"></div>
-    <span style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text-mid);letter-spacing:3px">COMMS</span>
+    <span style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text-mid);letter-spacing:2px">COMMUNICATIONS</span>
     <select class="sys-select" id="sysSelect" onchange="switchSystem(this.value)">
       <option value="">⬡ ALL SYSTEMS</option>
     </select>
@@ -199,7 +199,7 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 
 <!-- TICKER -->
 <div class="ticker-wrap">
-  <div class="ticker-tag">⬡ COMMS FEED</div>
+  <div class="ticker-tag">⬡ COMMUNICATIONS FEED</div>
   <div style="overflow:hidden;flex:1">
     <div class="ticker-track" id="tickerTrack">
       <span class="ti" style="color:var(--cm)">⬡ COMMS CENTER ACTIVE — LOADING FEED...</span>
@@ -454,12 +454,12 @@ function renderTickets(){
       <div class="tc-meta">
         ${chLabel(t)}
         ${t.category?`<span class="tc-cat">${t.category}</span>`:''}
-        ${sys?`<span class="tc-sys">· ${sys.system_code}</span>`:''}
+        ${sys?`<span class="tc-sys">${sys.system_name.replace(/\s+new\s+water\s+system/i,' NWS').trim().toUpperCase()}</span>`:''}
       </div>
       <div class="tc-desc">${t.description||'—'}</div>
       <div class="tc-bottom">
         <span class="tc-date">${t.call_ref||'—'} · ${t.log_date||'—'}</span>
-        ${t.assigned_to?`<span style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-mid)">${t.assigned_to}</span>`:''}
+        ${t.assigned_to?`<span style="font-family:'Orbitron',monospace;font-size:7px;letter-spacing:.5px;color:var(--cyan)">${t.assigned_to.toUpperCase()}</span>`:''}
       </div>
     </div>`;
     wrap.appendChild(div);
