@@ -52,7 +52,7 @@
   /* LEFT PANEL */
   .left-panel{width:294px;flex-shrink:0;border-right:1px solid var(--border);background:rgba(138,184,94,.02);display:flex;flex-direction:column;overflow:hidden;}
   .lp-sec{padding:8px 12px;border-bottom:1px solid rgba(138,184,94,.07);flex-shrink:0;}
-  .lp-title{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:2.5px;color:var(--text-dim);margin-bottom:6px;}
+  .lp-title{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:2.5px;color:rgba(138,184,94,.65);margin-bottom:6px;}
 
   /* CALENDAR */
   .cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
@@ -74,7 +74,7 @@
   /* MINI ARC GAUGES */
   .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
   .mini-card{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;border:1px solid var(--border);background:rgba(138,184,94,.02);}
-  .mini-label{font-family:'Orbitron',monospace;font-size:6px;color:var(--text-dim);letter-spacing:1px;text-align:center;}
+  .mini-label{font-family:'Orbitron',monospace;font-size:6px;color:rgba(200,236,170,.7);letter-spacing:1px;text-align:center;}
   .mini-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;text-align:center;}
   .mini-sub{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim);text-align:center;}
 
@@ -116,7 +116,7 @@
   .wo-card.status-completed{opacity:.55;}
   .card-inner{display:flex;align-items:center;gap:12px;padding:4px 14px 4px 16px;}
   .card-id{flex-shrink:0;width:148px;display:flex;flex-direction:column;gap:4px;}
-  .wo-num{font-family:'Orbitron',monospace;font-size:8px;color:var(--text-dim);letter-spacing:1px;}
+  .wo-num{font-family:'Orbitron',monospace;font-size:8px;color:rgba(138,184,94,.75);letter-spacing:1px;}
   .cat-badge{font-family:'Orbitron',monospace;font-size:7px;padding:3px 7px;border:1px solid;letter-spacing:.8px;display:inline-block;}
   .cat-fr{border-color:var(--red);color:var(--red);}
   .cat-mt{border-color:var(--orange);color:var(--orange);}
@@ -152,7 +152,7 @@
   .pill-sched{border-color:var(--yellow);color:var(--yellow);}
   .pill-comp{border-color:var(--green);color:var(--green);}
   .pill-hold{border-color:var(--text-dim);color:var(--text-dim);}
-  .pill-crit{border-color:var(--red);color:var(--red);animation:critPulse 1.5s ease-in-out infinite;}
+  .pill-crit{border-color:var(--red);color:#fff;background:rgba(255,34,68,.25);animation:critPulse 1.5s ease-in-out infinite;}
   @keyframes critPulse{0%,100%{box-shadow:0 0 4px rgba(255,34,68,.3)}50%{box-shadow:0 0 14px rgba(255,34,68,.7)}}
   .pill-canc{border-color:var(--text-dim);color:var(--text-dim);opacity:.5;}
 
@@ -324,9 +324,9 @@
     </div>
 
     <!-- TECH ROSTER -->
-    <div class="lp-sec" style="flex:1">
+    <div class="lp-sec" style="flex:1;overflow:hidden;display:flex;flex-direction:column;">
       <div class="lp-title">⬡ TECH ASSIGNMENT</div>
-      <div id="techRoster">
+      <div id="techRoster" style="flex:1;overflow-y:auto;">
         <div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim)">LOADING...</div>
       </div>
     </div>
