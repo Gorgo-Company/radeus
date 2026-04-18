@@ -514,10 +514,6 @@
     const sys = systems[0];
     currentSystem = sys;
 
-    // Fly map to this system
-    if (radMap && SYS_HQ[systemCode]) {
-      radMap.flyTo({center:SYS_HQ[systemCode], zoom:12, duration:1400});
-    }
     const mapTitle = document.getElementById('mapTitle');
     if (mapTitle) mapTitle.textContent = `SYSTEM MAP — ${sys.system_name.toUpperCase()} // LIVE`;
 
@@ -609,9 +605,22 @@
       }
     }
 
-    // Mapbox dots — plot geocoded, then geocode the rest in background
+    // Mapbox dots — plot first, then fit map to actual data bounds
     updateMapboxDots(accounts, balMap);
     geocodeAccounts(accounts, balMap);
+
+    // Fit map to actual geocoded data points for this system
+    const mapped = accounts.filter(a => a.service_addresses?.latitude && a.service_addresses?.longitude);
+    if (mapped.length > 0 && radMap) {
+      const bounds = new mapboxgl.LngLatBounds();
+      mapped.forEach(a => bounds.extend([
+        parseFloat(a.service_addresses.longitude),
+        parseFloat(a.service_addresses.latitude)
+      ]));
+      radMap.fitBounds(bounds, {padding:60, maxZoom:13, duration:1400});
+    } else if (radMap && SYS_HQ[systemCode]) {
+      radMap.flyTo({center:SYS_HQ[systemCode], zoom:11, duration:1400});
+    }
 
     // Ticker
     updateTicker(sys, criticals);
@@ -725,16 +734,104 @@
   }
 
   function switchSystem(v){
-    if(v==='ALL'){
-      if(radMap) radMap.flyTo({center:[-99.5,31.0],zoom:5.8,duration:1400});
-      const mt=document.getElementById('mapTitle');
-      if(mt) mt.textContent='RADEUS NETWORK — ALL 9 SYSTEMS — TEXAS';
-      if(radMap&&radMap.getSource('acct-src'))
-        radMap.getSource('acct-src').setData({type:'FeatureCollection',features:[]});
-      return;
-    }
+    if(v==='ALL'){ loadNetworkView(); return; }
     loadLiveData(v);
   }
+
+  // ── ALL SYSTEMS NETWORK VIEW ──────────────────────────────────
+  async function loadNetworkView() {
+    const mt=document.getElementById('mapTitle');
+    if(mt) mt.textContent='RADEUS NETWORK — ALL 9 SYSTEMS — TEXAS';
+    if(radMap) radMap.flyTo({center:[-99.5,31.0],zoom:5.8,duration:1400});
+
+    // Update header
+    const sTitle=document.getElementById('statusTitle');
+    if(sTitle) sTitle.childNodes[0].textContent='ALL SYSTEMS — NETWORK STATUS ';
+    const rTitle=document.getElementById('regTitle');
+    if(rTitle) rTitle.childNodes[0].textContent='SYSTEM DIRECTORY — RADEUS NETWORK ';
+    const rBadge=document.getElementById('regBadge');
+    if(rBadge) rBadge.textContent='9 SYSTEMS';
+
+    // Ticker
+    const track=document.getElementById('tickerTrack');
+    if(track) track.innerHTML=['<span class="ti">RADEUS NETWORK — <span class="g">ALL 9 SYSTEMS ONLINE</span> — TOTAL ACCOUNTS: 486 — TEXAS</span>',
+      '<span class="ti">BOIL WATER NOTICE <span class="r">ACTIVE</span> — OAK HILL NWS — VERIFICATION SAMPLES PENDING</span>',
+      '<span class="ti">WATER LOSS AUDIT <span class="r">OVERDUE</span> — DERBY NWS — DUE 03/31/2026 — SUBMIT TO TCEQ</span>'].map(i=>i+i).join('');
+
+    // Fetch ALL balances across all systems
+    const [bals, accounts] = await Promise.all([
+      supa('account_balances','?select=account_id,current_balance&limit=1000'),
+      supa('accounts','?status=neq.INACTIVE&select=account_id,account_number,account_type,system_id,customers(full_name),service_addresses(latitude,longitude)&limit=1000')
+    ]);
+
+    if (bals && bals.length) {
+      let total=bals.length, current=0, credits=0, pastDue=0, critical=0, outstanding=0;
+      const balMap={};
+      bals.forEach(b=>{
+        balMap[b.account_id]=Number(b.current_balance??0);
+        const bal=Number(b.current_balance??0);
+        if(bal<-0.01) credits++;
+        else if(Math.abs(bal)<0.01) current++;
+        else if(bal>500){critical++;}
+        else pastDue++;
+        if(bal>0) outstanding+=bal;
+      });
+      const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+      s('stat-total',total); s('stat-current',current); s('stat-credit',credits);
+      s('stat-pastdue',pastDue); s('stat-critical',critical);
+      s('stat-billdate','NETWORK'); s('stat-duedate','MULTI');
+      const collLbl=document.getElementById('collRateLbl');
+      const collBar=document.getElementById('collBar');
+      const pct=total>0?Math.round((current/total)*100):0;
+      if(collLbl) collLbl.textContent=`~${pct}%`;
+      if(collBar) collBar.style.width=pct+'%';
+      const compOut=document.getElementById('compOutstanding');
+      if(compOut) compOut.textContent=`$${outstanding.toFixed(2)}`;
+
+      // Plot ALL dots on map
+      if(accounts&&radMap) {
+        const features=accounts
+          .filter(a=>a.service_addresses?.latitude&&a.service_addresses?.longitude)
+          .map(a=>{
+            const bal=balMap[a.account_id]??0;
+            const dot=bal<-0.01?'#0088ff':Math.abs(bal)<0.01?'#00ff88':bal>500?'#ff2244':a.account_type==='RELIGIOUS'?'#444':'#ff8800';
+            const name=a.customers?.full_name||'—';
+            return{type:'Feature',
+              geometry:{type:'Point',coordinates:[parseFloat(a.service_addresses.longitude),parseFloat(a.service_addresses.latitude)]},
+              properties:{acct:a.account_number,name,addr:'—',status:bal>500?'CRITICAL':Math.abs(bal)<0.01?'CURRENT':'PAST DUE',bal:fmtBal(bal),type:a.account_type,lastPmt:'—',dot}};
+          });
+        const src=radMap.getSource('acct-src');
+        if(src) src.setData({type:'FeatureCollection',features});
+      }
+
+      // System directory in account table
+      const tbody=document.getElementById('acctTable');
+      if(tbody){
+        const systems=await supa('water_systems',`?org_id=eq.${ORG_ID}&select=system_id,system_code,system_name&order=system_name`);
+        tbody.innerHTML='';
+        (systems||[]).forEach(sys=>{
+          const sysBals=bals.filter(b=>(accounts||[]).find(a=>a.account_id===b.account_id&&a.system_id===sys.system_id));
+          const sysAccts=(accounts||[]).filter(a=>a.system_id===sys.system_id);
+          const tr=document.createElement('tr');
+          tr.onclick=()=>{document.getElementById('sysSelect').value=sys.system_code;loadLiveData(sys.system_code);};
+          tr.innerHTML=`<td class="acct" style="cursor:pointer">${sys.system_code}</td>
+            <td class="nm">${sys.system_name.replace(/\s*new\s*water\s*system/i,'').trim()}</td>
+            <td style="color:#8ab8c8;font-family:'Rajdhani',sans-serif;font-size:11px">${sysAccts.length} ACCOUNTS</td>
+            <td><span class="pill" style="color:var(--green);border-color:var(--green)">ONLINE</span></td>
+            <td class="bal" style="text-align:right;color:var(--cyan)">→ VIEW</td>`;
+          tbody.appendChild(tr);
+        });
+      }
+    }
+
+    // Clear critical feed
+    const feed=document.getElementById('critFeed');
+    if(feed) feed.innerHTML='<div style="padding:12px;font-size:9px;color:var(--text-dim);letter-spacing:1px;text-align:center">SELECT A SYSTEM FOR DETAIL</div>';
+    const critBadge=document.getElementById('critBadge');
+    if(critBadge) critBadge.textContent='NETWORK';
+  }
+
+  const ORG_ID='00000000-0000-0000-0000-000000000001';
 
   function filterMap(type,el){
     document.querySelectorAll('[onclick^="filterMap"]').forEach(b=>{b.style.borderColor='var(--border)';b.style.color='var(--text-dim)';b.style.background='transparent';});
@@ -792,9 +889,9 @@
     radMap.on('mouseenter','clusters',()=>radMap.getCanvas().style.cursor='pointer');
     radMap.on('mouseleave','clusters',()=>radMap.getCanvas().style.cursor='');
 
-    // Boot — load Derby NWS by default, update selector
-    document.getElementById('sysSelect').value='DNWSTX';
-    loadLiveData('DNWSTX');
+    // Boot — open to All Systems network view (all 480 dots visible on Texas map)
+    document.getElementById('sysSelect').value='ALL';
+    loadNetworkView();
   });
 </script>
 </body>
