@@ -51,8 +51,8 @@
 
   /* LEFT PANEL */
   .left-panel{width:294px;flex-shrink:0;border-right:1px solid var(--border);background:rgba(138,184,94,.02);display:flex;flex-direction:column;overflow:hidden;}
-  .lp-sec{padding:12px 14px;border-bottom:1px solid rgba(138,184,94,.07);flex-shrink:0;}
-  .lp-title{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:2.5px;color:var(--text-dim);margin-bottom:10px;}
+  .lp-sec{padding:8px 12px;border-bottom:1px solid rgba(138,184,94,.07);flex-shrink:0;}
+  .lp-title{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:2.5px;color:var(--text-dim);margin-bottom:6px;}
 
   /* CALENDAR */
   .cal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px;}
@@ -61,7 +61,7 @@
   .cal-nav:hover{border-color:var(--wo);color:var(--wo);}
   .cal-grid{display:grid;grid-template-columns:repeat(7,1fr);gap:1px;}
   .cal-dow{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim);text-align:center;padding:2px 0;letter-spacing:0.5px;}
-  .cal-day{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;text-align:center;padding:3px 2px;cursor:pointer;border-radius:2px;position:relative;color:var(--text-dim);transition:all .15s;}
+  .cal-day{font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:600;text-align:center;padding:2px 2px;cursor:pointer;border-radius:2px;position:relative;color:var(--text-dim);transition:all .15s;}
   .cal-day:hover{background:rgba(138,184,94,.1);color:var(--wo);}
   .cal-day.today{color:var(--wo);background:rgba(138,184,94,.12);border:1px solid rgba(138,184,94,.4);}
   .cal-day.has-wo{font-weight:700;color:rgba(200,236,170,.85);}
@@ -72,8 +72,8 @@
   .cal-day.other-month{opacity:.25;}
 
   /* MINI ARC GAUGES */
-  .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;}
-  .mini-card{display:flex;flex-direction:column;align-items:center;gap:4px;padding:8px;border:1px solid var(--border);background:rgba(138,184,94,.02);}
+  .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:4px;}
+  .mini-card{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;border:1px solid var(--border);background:rgba(138,184,94,.02);}
   .mini-label{font-family:'Orbitron',monospace;font-size:6px;color:var(--text-dim);letter-spacing:1px;text-align:center;}
   .mini-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;text-align:center;}
   .mini-sub{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim);text-align:center;}
@@ -117,7 +117,7 @@
   .card-inner{display:flex;align-items:center;gap:12px;padding:8px 14px 8px 16px;}
   .card-id{flex-shrink:0;width:148px;display:flex;flex-direction:column;gap:4px;}
   .wo-num{font-family:'Orbitron',monospace;font-size:8px;color:var(--text-dim);letter-spacing:1px;}
-  .cat-badge{font-family:'Orbitron',monospace;font-size:6px;padding:2px 5px;border:1px solid;letter-spacing:.8px;}
+  .cat-badge{font-family:'Orbitron',monospace;font-size:7px;padding:3px 7px;border:1px solid;letter-spacing:.8px;display:inline-block;}
   .cat-fr{border-color:var(--red);color:var(--red);}
   .cat-mt{border-color:var(--orange);color:var(--orange);}
   .cat-cr{border-color:var(--cyan);color:var(--cyan);}
@@ -125,21 +125,22 @@
   .cat-ot{border-color:var(--red);color:rgba(255,68,0,.9);}
   .cat-of{border-color:var(--border);color:var(--text-dim);}
   .card-content{flex:1;min-width:0;}
-  .card-title{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:4px;}
-  .card-detail{display:flex;align-items:center;gap:6px;overflow:hidden;}
+  .card-title{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:5px;}
+  .card-detail{display:flex;align-items:center;justify-content:space-between;width:100%;padding-right:10px;}
   .cd-sys{font-family:'Orbitron',monospace;font-size:7px;color:var(--wo);letter-spacing:.5px;white-space:nowrap;}
-  .cd-tech{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(200,236,170,.95);white-space:nowrap;font-weight:600;}
-  .cd-date{font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:700;color:var(--yellow);white-space:nowrap;}
-  .cd-hrs{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-dim);}
-  .cd-sep{color:var(--text-dim);font-size:8px;flex-shrink:0;}
-  .card-sub{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:3px;}
-  .card-status{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:4px;min-width:110px;}
+  .cd-tech{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(200,236,170,.95);white-space:nowrap;}
+  .cd-date{font-family:'Rajdhani',sans-serif;font-size:13px;color:var(--yellow);white-space:nowrap;}
+  .cd-hrs{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);}
+  .cd-sep{display:none;}
+  .card-sub{font-family:'Share Tech Mono',monospace;font-size:10px;color:rgba(200,236,170,.65);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:4px;}
+  .card-status{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:5px;min-width:112px;}
   .countdown{display:flex;flex-direction:column;align-items:flex-end;}
-  .cd-num{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;}
-  .cd-lbl{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim);letter-spacing:1px;}
+  .cd-num{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:22px;line-height:1;}
+  .cd-lbl{display:none;}
   .cd-red{color:var(--red);text-shadow:0 0 8px rgba(255,34,68,.4);}
   .cd-or{color:var(--orange);}
   .cd-wo{color:var(--wo);}
+  .cd-dim{color:var(--text-mid);}
   .cd-dim{color:var(--text-mid);}
 
   /* STATUS PILLS */
@@ -287,34 +288,34 @@
       <div class="lp-title">◎ CATEGORY BREAKDOWN</div>
       <div class="mini-grid">
         <div class="mini-card">
-          <svg width="70" height="52" viewBox="0 0 70 52">
-            <path d="M 7,44 A 28,28 0 0,1 63,44" fill="none" stroke="rgba(255,34,68,.12)" stroke-width="8" stroke-linecap="round"/>
-            <path id="arc-fr" d="M 7,44 A 28,28 0 0,1 63,44" fill="none" stroke="var(--red)" stroke-width="7" stroke-linecap="round" stroke-dasharray="0 88"/>
-            <text id="val-fr" x="35" y="38" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="16" fill="var(--red)">0</text>
+          <svg width="70" height="44" viewBox="0 0 70 44">
+            <path d="M 7,38 A 28,28 0 0,1 63,38" fill="none" stroke="rgba(255,34,68,.12)" stroke-width="8" stroke-linecap="round"/>
+            <path id="arc-fr" d="M 7,38 A 28,28 0 0,1 63,38" fill="none" stroke="var(--red)" stroke-width="7" stroke-linecap="round" stroke-dasharray="0 88"/>
+            <text id="val-fr" x="35" y="33" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="16" fill="var(--red)">0</text>
           </svg>
           <div class="mini-label">FIELD REPAIR</div>
         </div>
         <div class="mini-card">
-          <svg width="70" height="52" viewBox="0 0 70 52">
-            <path d="M 7,44 A 28,28 0 0,1 63,44" fill="none" stroke="rgba(255,136,0,.12)" stroke-width="8" stroke-linecap="round"/>
-            <path id="arc-mt" d="M 7,44 A 28,28 0 0,1 63,44" fill="none" stroke="var(--orange)" stroke-width="7" stroke-linecap="round" stroke-dasharray="0 88"/>
-            <text id="val-mt" x="35" y="38" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="16" fill="var(--orange)">0</text>
+          <svg width="70" height="44" viewBox="0 0 70 44">
+            <path d="M 7,38 A 28,28 0 0,1 63,38" fill="none" stroke="rgba(255,136,0,.12)" stroke-width="8" stroke-linecap="round"/>
+            <path id="arc-mt" d="M 7,38 A 28,28 0 0,1 63,38" fill="none" stroke="var(--orange)" stroke-width="7" stroke-linecap="round" stroke-dasharray="0 88"/>
+            <text id="val-mt" x="35" y="33" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="16" fill="var(--orange)">0</text>
           </svg>
           <div class="mini-label">MAINTENANCE</div>
         </div>
         <div class="mini-card">
-          <svg width="70" height="52" viewBox="0 0 70 52">
-            <path d="M 7,44 A 28,28 0 0,1 63,44" fill="none" stroke="rgba(0,245,255,.12)" stroke-width="8" stroke-linecap="round"/>
-            <path id="arc-cr" d="M 7,44 A 28,28 0 0,1 63,44" fill="none" stroke="var(--cyan)" stroke-width="7" stroke-linecap="round" stroke-dasharray="0 88"/>
-            <text id="val-cr" x="35" y="38" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="16" fill="var(--cyan)">0</text>
+          <svg width="70" height="44" viewBox="0 0 70 44">
+            <path d="M 7,38 A 28,28 0 0,1 63,38" fill="none" stroke="rgba(0,245,255,.12)" stroke-width="8" stroke-linecap="round"/>
+            <path id="arc-cr" d="M 7,38 A 28,28 0 0,1 63,38" fill="none" stroke="var(--cyan)" stroke-width="7" stroke-linecap="round" stroke-dasharray="0 88"/>
+            <text id="val-cr" x="35" y="33" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="16" fill="var(--cyan)">0</text>
           </svg>
           <div class="mini-label">CUST REQUEST</div>
         </div>
         <div class="mini-card">
-          <svg width="70" height="52" viewBox="0 0 70 52">
-            <path d="M 7,44 A 28,28 0 0,1 63,44" fill="none" stroke="rgba(255,230,0,.12)" stroke-width="8" stroke-linecap="round"/>
-            <path id="arc-pl" d="M 7,44 A 28,28 0 0,1 63,44" fill="none" stroke="var(--yellow)" stroke-width="7" stroke-linecap="round" stroke-dasharray="0 88"/>
-            <text id="val-pl" x="35" y="38" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="16" fill="var(--yellow)">0</text>
+          <svg width="70" height="44" viewBox="0 0 70 44">
+            <path d="M 7,38 A 28,28 0 0,1 63,38" fill="none" stroke="rgba(255,230,0,.12)" stroke-width="8" stroke-linecap="round"/>
+            <path id="arc-pl" d="M 7,38 A 28,28 0 0,1 63,38" fill="none" stroke="var(--yellow)" stroke-width="7" stroke-linecap="round" stroke-dasharray="0 88"/>
+            <text id="val-pl" x="35" y="33" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="16" fill="var(--yellow)">0</text>
           </svg>
           <div class="mini-label">PLANNED</div>
         </div>
@@ -340,10 +341,7 @@
       <button class="fbtn" onclick="setFilter('SCHEDULED',this)">SCHEDULED</button>
       <button class="fbtn" onclick="setFilter('CRITICAL',this)">CRITICAL</button>
       <button class="fbtn" onclick="setFilter('COMPLETED',this)">COMPLETED</button>
-      <select class="sys-filter" id="sysFilter" onchange="applyFilter()">
-        <option value="">ALL SYSTEMS</option>
-      </select>
-      <input class="wo-search" id="woSearch" type="text" placeholder="🔍 SEARCH WO's..." oninput="applyFilter()">
+      <input class="wo-search" id="woSearch" type="text" placeholder="🔍 SEARCH WO's..." oninput="applyFilter()" style="margin-left:18px;">
       <div class="f-right">
         <span class="row-count" id="rowCount">— ITEMS</span>
         <button class="add-btn" onclick="openAddModal()">+ NEW WO</button>
@@ -478,10 +476,8 @@ async function loadSystems(){
   if(!systems?.length)return;
   allSystems=systems;
   const sel=document.getElementById('sysSelect');
-  const sf=document.getElementById('sysFilter');
   systems.forEach(s=>{
     const o=document.createElement('option');o.value=s.system_id;o.textContent=`⬡ ${s.system_name.toUpperCase()}`;sel.appendChild(o);
-    const o2=document.createElement('option');o2.value=s.system_id;o2.textContent=s.system_code;sf.appendChild(o2);
   });
   loadWOs();
 }
@@ -496,14 +492,21 @@ function updateTicker(){
     track.innerHTML='<span class="ti" style="color:var(--wo)">⬡ WORK ORDERS FEED — NO ACTIVE WORK ORDERS</span>';
     return;
   }
-  const urgent=allWOs.filter(w=>['CRITICAL','HIGH'].includes(w.priority)&&!['COMPLETED','CANCELLED'].includes(w.status));
-  const items=urgent.length?urgent:allWOs.filter(w=>!['COMPLETED','CANCELLED'].includes(w.status));
-  const html=items.slice(0,6).map(w=>{
+  const statusColor={
+    'IN_PROGRESS':'var(--orange)','CRITICAL_STATUS':'var(--red)',
+    'OPEN':'var(--wo)','SCHEDULED':'var(--yellow)','COMPLETED':'var(--green)',
+    'ON_HOLD':'var(--text-mid)','CANCELLED':'var(--text-dim)'
+  };
+  const priorityColor={'CRITICAL':'var(--red)','HIGH':'var(--orange)'};
+  const urgent=allWOs.filter(w=>!['COMPLETED','CANCELLED'].includes(w.status));
+  const list=urgent.length?urgent:allWOs;
+  const html=list.slice(0,7).map(w=>{
     const sys=allSystems.find(s=>s.system_id===w.system_id);
-    const col=w.priority==='CRITICAL'?'r':w.priority==='HIGH'?'o':'v';
-    return `<span class="ti">${w.wo_number} <span class="${col}">${w.priority}</span> — ${w.title} — <span class="v">${w.status.replace('_',' ')}</span>${sys?' — '+sys.system_code:''}</span>`;
+    // Color by priority first, then status
+    const col=w.priority==='CRITICAL'?'var(--red)':w.priority==='HIGH'?'var(--orange)':statusColor[w.status]||'var(--wo)';
+    return `<span class="ti" style="color:${col}">${w.wo_number} ${w.priority} — ${w.title} — ${w.status.replace('_',' ')}${sys?' — '+sys.system_code:''}</span>`;
   }).join('');
-  track.innerHTML=html+html; // doubled for seamless loop
+  track.innerHTML=html+html;
 }
 
 // ── LOAD WORK ORDERS ───────────────────────────────────────────
@@ -630,14 +633,12 @@ function setFilter(f,btn){
 }
 function applyFilter(){
   const search=(document.getElementById('woSearch')?.value||'').trim().toLowerCase();
-  const sysId=(document.getElementById('sysFilter')?.value||'');
   filtered=allWOs.filter(w=>{
     if(currentFilter==='CRITICAL'&&w.priority!=='CRITICAL') return false;
     if(currentFilter==='IN_PROGRESS'&&w.status!=='IN_PROGRESS') return false;
     if(currentFilter==='OPEN'&&w.status!=='OPEN') return false;
     if(currentFilter==='SCHEDULED'&&w.status!=='SCHEDULED') return false;
     if(currentFilter==='COMPLETED'&&w.status!=='COMPLETED') return false;
-    if(sysId&&w.system_id!==sysId) return false;
     if(search){
       const hay=[w.wo_number,w.title,w.description,w.assigned_to,w.location_desc,w.notes,w.category,w.priority].filter(Boolean).join(' ').toLowerCase();
       if(!hay.includes(search)) return false;
@@ -662,14 +663,14 @@ function statusPill(s,p){
   return `<span class="pill ${cls}">${lbl||s}</span>`;
 }
 function countdownHtml(wo){
-  if(wo.status==='COMPLETED') return `<div class="countdown"><div class="cd-num cd-dim" style="font-size:13px">DONE</div></div>`;
+  if(wo.status==='COMPLETED') return `<div class="countdown"><div class="cd-num cd-dim" style="font-size:14px">DONE</div></div>`;
   if(!wo.scheduled_date) return `<div class="countdown"><div class="cd-num cd-dim">—</div></div>`;
   const d=daysUntil(wo.scheduled_date);
-  if(d<0) return `<div class="countdown"><div class="cd-num cd-red">${Math.abs(d)}d</div><div class="cd-lbl">OVERDUE</div></div>`;
-  if(d===0) return `<div class="countdown"><div class="cd-num cd-red">TODAY</div></div>`;
-  if(d<=3) return `<div class="countdown"><div class="cd-num cd-red">${d}d</div><div class="cd-lbl">DAYS</div></div>`;
-  if(d<=7) return `<div class="countdown"><div class="cd-num cd-or">${d}d</div><div class="cd-lbl">DAYS</div></div>`;
-  return `<div class="countdown"><div class="cd-num cd-wo">${d}d</div><div class="cd-lbl">DAYS</div></div>`;
+  if(d<0) return `<div class="countdown"><div class="cd-num cd-red">${Math.abs(d)}d</div><div style="font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--red);letter-spacing:1px">OVERDUE</div></div>`;
+  if(d===0) return `<div class="countdown"><div class="cd-num cd-red" style="font-size:14px">TODAY</div></div>`;
+  if(d<=3) return `<div class="countdown"><div class="cd-num cd-red">${d}d</div></div>`;
+  if(d<=7) return `<div class="countdown"><div class="cd-num cd-or">${d}d</div></div>`;
+  return `<div class="countdown"><div class="cd-num cd-wo">${d}d</div></div>`;
 }
 
 function renderCards(){
@@ -684,7 +685,7 @@ function renderCards(){
     div.className=`wo-card ${prioCls(wo.priority)} ${wo.status==='COMPLETED'?'status-completed':''} ${selectedWO?.wo_id===wo.wo_id?'selected':''}`;
     div.onclick=()=>openDetail(wo);
     const sys=allSystems.find(s=>s.system_id===wo.system_id);
-    const sysShort=sys?sys.system_name.replace(/\s*new\s*water\s*system/i,'NWS').replace(/\s+/g,' ').trim().toUpperCase():'—';
+    const sysShort=sys?sys.system_name.replace(/\s+new\s+water\s+system/i,' NWS').trim().toUpperCase():'—';
     const techName=(wo.assigned_to&&wo.assigned_to!=='—')?wo.assigned_to.toUpperCase():'UNASSIGNED';
     div.innerHTML=`<div class="card-inner">
       <div class="card-id">
@@ -695,11 +696,9 @@ function renderCards(){
         <div class="card-title">${wo.title}</div>
         <div class="card-detail">
           <span class="cd-sys">⬡ ${sysShort}</span>
-          <span class="cd-sep">·</span>
           <span class="cd-tech">👤 ${techName}</span>
-          <span class="cd-sep">·</span>
           <span class="cd-date">${fmtDate(wo.scheduled_date)}</span>
-          ${wo.estimated_hours?`<span class="cd-sep">·</span><span class="cd-hrs">⏱ ${wo.estimated_hours}h</span>`:''}
+          ${wo.estimated_hours?`<span class="cd-hrs">⏱ ${wo.estimated_hours}h</span>`:'<span></span>'}
         </div>
         ${wo.location_desc?`<div class="card-sub">📍 ${wo.location_desc}</div>`:''}
       </div>
