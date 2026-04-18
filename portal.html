@@ -479,15 +479,19 @@ async function loadPortal(){
   statusEl.style.color=st==='ACTIVE'?'var(--green)':st==='DISCONNECTED'?'var(--red)':'var(--orange)';
   document.getElementById('s-system').textContent=acct.water_systems?.system_name||'—';
 
-  // Balance
-  const bals=await pFetch('account_balances',`?account_id=eq.${acct.account_id}&select=current_balance,last_payment_date,last_payment_amount&limit=1`);
-  const bal=parseFloat(bals?.[0]?.current_balance||0);
+  // Balance — account_balances is a view (no RLS), use anon key
+  const balRes=await fetch(`${SUPA_URL}/rest/v1/account_balances?account_id=eq.${acct.account_id}&select=current_balance&limit=1`,
+    {headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`}});
+  const balData=balRes.ok?await balRes.json():null;
+  const bal=parseFloat(balData?.[0]?.current_balance||0);
   const balEl=document.getElementById('s-bal');
   balEl.textContent=fmtMoney(bal);
   balEl.style.color=bal>0?'var(--orange)':bal<0?'var(--green)':'var(--text-mid)';
-  if(bals?.[0]?.last_payment_date){
-    document.getElementById('s-lastpay').textContent=fmtMoney(bals[0].last_payment_amount||0);
-    document.getElementById('s-lastdate').textContent=fmtDate(bals[0].last_payment_date);
+  // Last payment — from payments table (has auth RLS policy)
+  const lastPayData=await pFetch('payments',`?account_id=eq.${acct.account_id}&returned=eq.false&select=amount,payment_date&order=payment_date.desc&limit=1`);
+  if(lastPayData?.[0]){
+    document.getElementById('s-lastpay').textContent=fmtMoney(lastPayData[0].amount||0);
+    document.getElementById('s-lastdate').textContent=fmtDate(lastPayData[0].payment_date);
   }
 
   // Load all three in parallel
