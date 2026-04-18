@@ -449,6 +449,9 @@ function showPortal(){
 }
 
 async function loadPortal(){
+  try{await _loadPortal();}catch(e){console.error('Portal load error:',e);showToast('ERROR LOADING ACCOUNT DATA','err');}}
+
+async function _loadPortal(){
   const cust=currentCustomer||getStoredCustomer();
   if(!cust){portalLogout();return;}
   currentCustomer=cust;
@@ -460,7 +463,7 @@ async function loadPortal(){
   document.getElementById('emailToggle').checked=!!cust.email_opt_in;
 
   // Load account
-  const accts=await pFetch('accounts',`?customer_id=eq.${cust.customer_id}&select=account_id,account_number,status,account_type,meter_number,service_addresses(street,city,state),water_systems(system_name)&limit=1`);
+  const accts=await pFetch('accounts',`?customer_id=eq.${cust.customer_id}&select=account_id,account_number,status,account_type,meter_number,system_id,service_addresses(street,city,state),water_systems(system_name)&limit=1`);
   if(!accts?.length){showToast('NO ACCOUNT FOUND','err');return;}
   currentAccount=accts[0];
   const acct=accts[0];
@@ -500,16 +503,15 @@ async function loadPortal(){
 
 // ── INVOICES ───────────────────────────────────────────────
 async function loadInvoices(acct){
+  const tbody=document.getElementById('invoiceTable');
+  try{
   const bills=await pFetch('bills',`?account_id=eq.${acct.account_id}&select=bill_id,cycle_year,cycle_month,statement_date,due_date,total_amount,bill_pdf_url,in_closed_cycle&order=statement_date.desc&limit=36`);
   const yr=new Date().getFullYear();
   const ytd=(bills||[]).filter(b=>b.cycle_year===yr);
-  document.getElementById('s-invoices').textContent=ytd.length||'—';
+  document.getElementById('s-invoices').textContent=ytd.length||'0';
   const ytdAmt=ytd.reduce((s,b)=>s+parseFloat(b.total_amount||0),0);
   document.getElementById('s-billed').textContent=ytd.length?fmtMoney(ytdAmt)+' BILLED':'NO BILLS THIS YEAR';
-
-  const tbody=document.getElementById('invoiceTable');
   if(!bills?.length){tbody.innerHTML='<tr><td colspan="6" class="empty">NO INVOICES ON FILE</td></tr>';return;}
-
   tbody.innerHTML=bills.map(b=>{
     const today=new Date();
     const due=b.due_date?new Date(b.due_date+'T00:00:00'):null;
@@ -527,12 +529,14 @@ async function loadInvoices(acct){
       <td class="pdf-icon">${b.bill_pdf_url?'📄':'—'}</td>
     </tr>`;
   }).join('');
+  }catch(e){tbody.innerHTML='<tr><td colspan="6" class="empty">COULD NOT LOAD INVOICES</td></tr>';console.error('loadInvoices:',e);}
 }
 
 // ── PAYMENTS ───────────────────────────────────────────────
 async function loadPayments(acct){
-  const pays=await pFetch('payments',`?account_id=eq.${acct.account_id}&select=payment_date,amount,payment_method,deposited,returned&order=payment_date.desc&limit=36`);
   const tbody=document.getElementById('payTable');
+  try{
+  const pays=await pFetch('payments',`?account_id=eq.${acct.account_id}&select=payment_date,amount,payment_method,deposited,returned&order=payment_date.desc&limit=36`);
   if(!pays?.length){tbody.innerHTML='<tr><td colspan="4" class="empty">NO PAYMENTS ON FILE</td></tr>';return;}
   tbody.innerHTML=pays.map(p=>{
     let sc,st;
@@ -546,6 +550,7 @@ async function loadPayments(acct){
       <td><span class="spill ${sc}">${st}</span></td>
     </tr>`;
   }).join('');
+  }catch(e){tbody.innerHTML='<tr><td colspan="4" class="empty">COULD NOT LOAD PAYMENTS</td></tr>';console.error('loadPayments:',e);}
 }
 
 // ── SERVICE REQUESTS ───────────────────────────────────────
