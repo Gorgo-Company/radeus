@@ -43,7 +43,7 @@
   .stat-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 16px;border-right:1px solid var(--border);flex:1;}
   .stat-cell:last-child{border-right:none;}
   .stat-label{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim);letter-spacing:2px;white-space:nowrap;}
-  .stat-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:22px;}
+  .stat-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:28px;}
   .sv-wo{color:var(--wo);}.sv-red{color:var(--red);}.sv-or{color:var(--orange);}.sv-g{color:var(--green);}.sv-y{color:var(--yellow);}
 
   /* MAIN LAYOUT */
@@ -223,7 +223,7 @@
   <a class="logo" href="index.html">RADEUS</a>
   <div style="display:flex;align-items:center;gap:14px">
     <div class="sdot"></div>
-    <span style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text-mid);letter-spacing:3px">WO's</span>
+    <span style="font-family:'Share Tech Mono',monospace;font-size:12px;color:var(--text-mid);letter-spacing:3px">WORK ORDERS</span>
     <select class="sys-select" id="sysSelect" onchange="switchSystem(this.value)">
       <option value="ALL">⬡ ALL SYSTEMS</option>
     </select>
@@ -236,17 +236,10 @@
 
 <!-- TICKER -->
 <div class="ticker-wrap">
-  <div class="ticker-tag">⬡ WO FEED</div>
+  <div class="ticker-tag">⬡ WORK ORDERS FEED</div>
   <div style="overflow:hidden;flex:1">
     <div class="ticker-track" id="tickerTrack">
-      <span class="ti">WO-2026-001 <span class="r">CRITICAL</span> — Active Leak CR 4401 — Mike Solis IN PROGRESS — DERBY NWS</span>
-      <span class="ti">WO-2026-009 <span class="r">CRITICAL</span> — BWN Verification Sampling — Maria Reyes IN PROGRESS — OAK HILL NWS</span>
-      <span class="ti">WO-2026-007 <span class="o">HIGH</span> — Service Disconnect DNWSTX45 — OPEN — Assign tech</span>
-      <span class="ti">WO-2026-002 <span class="o">HIGH</span> — Meter Change DNWSTX21 — OPEN — Scheduled 04/19</span>
-      <span class="ti">WO-2026-005 — Chlorine Sample Run April — Due 04/30 — Maria Reyes assigned</span>
-      <span class="ti">WO-2026-001 <span class="r">CRITICAL</span> — Active Leak CR 4401 — Mike Solis IN PROGRESS — DERBY NWS</span>
-      <span class="ti">WO-2026-009 <span class="r">CRITICAL</span> — BWN Verification Sampling — Maria Reyes IN PROGRESS — OAK HILL NWS</span>
-      <span class="ti">WO-2026-007 <span class="o">HIGH</span> — Service Disconnect DNWSTX45 — OPEN — Assign tech</span>
+      <span class="ti" style="color:var(--wo)">⬡ WORK ORDERS FEED — LOADING LIVE DATA...</span>
     </div>
   </div>
 </div>
@@ -476,18 +469,38 @@ async function loadSystems(){
 
 function switchSystem(v){loadWOs(v==='ALL'?null:v);}
 
+// ── LIVE TICKER ────────────────────────────────────────────────
+function updateTicker(){
+  const track=document.getElementById('tickerTrack');
+  if(!track) return;
+  if(!allWOs.length){
+    track.innerHTML='<span class="ti" style="color:var(--wo)">⬡ WORK ORDERS FEED — NO ACTIVE WORK ORDERS</span>';
+    return;
+  }
+  const urgent=allWOs.filter(w=>['CRITICAL','HIGH'].includes(w.priority)&&!['COMPLETED','CANCELLED'].includes(w.status));
+  const items=urgent.length?urgent:allWOs.filter(w=>!['COMPLETED','CANCELLED'].includes(w.status));
+  const html=items.slice(0,6).map(w=>{
+    const sys=allSystems.find(s=>s.system_id===w.system_id);
+    const col=w.priority==='CRITICAL'?'r':w.priority==='HIGH'?'o':'v';
+    return `<span class="ti">${w.wo_number} <span class="${col}">${w.priority}</span> — ${w.title} — <span class="v">${w.status.replace('_',' ')}</span>${sys?' — '+sys.system_code:''}</span>`;
+  }).join('');
+  track.innerHTML=html+html; // doubled for seamless loop
+}
+
 // ── LOAD WORK ORDERS ───────────────────────────────────────────
 async function loadWOs(systemId=null){
   document.getElementById('woCards').innerHTML='<div style="text-align:center;padding:40px;font-family:\'Share Tech Mono\',monospace;font-size:9px;color:var(--text-dim);letter-spacing:2px">LOADING...</div>';
+  // For ALL systems: fetch all WOs (RLS open for anon). For specific system: filter by system_id.
   const param = systemId
-    ? `?system_id=eq.${systemId}&order=scheduled_date.asc,priority.asc`
-    : `?org_id=eq.${ORG_ID}&order=scheduled_date.asc,priority.asc`;
-  const wos = await supa('work_orders', param+'&select=*');
+    ? `?system_id=eq.${systemId}&select=*&order=scheduled_date.asc,priority.asc`
+    : `?select=*&order=scheduled_date.asc,priority.asc`;
+  const wos = await supa('work_orders', param);
   allWOs = wos||[];
   updateStats();
   updateCategoryRings();
   updateTechRoster();
   renderCalendar();
+  updateTicker();
   applyFilter();
 }
 
