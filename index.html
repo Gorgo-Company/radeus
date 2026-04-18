@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RADEUS — Command Center</title>
+<title>RADEUS &mdash; Command Center</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
 <style>
@@ -63,7 +63,6 @@
   .atable .nm{color:var(--text);font-size:12px;font-family:'Rajdhani',sans-serif;font-weight:600;}
   .atable .bal{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;text-align:right;}
   .pill{display:inline-block;padding:1px 4px;border:1px solid;font-size:7px;letter-spacing:.5px;}
-  /* MAP PANEL — Mapbox replaces static nodes */
   .map-panel{flex:1;position:relative;overflow:hidden;min-height:260px;}
   #mapGl{position:absolute;inset:0;z-index:0;}
   .mapboxgl-ctrl-bottom-left,.mapboxgl-ctrl-bottom-right,.mapboxgl-ctrl-top-right{display:none;}
@@ -111,7 +110,6 @@
   .acclose:hover{color:var(--red)}
   .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;align-items:center;justify-content:center;}
   .modal.show{display:flex}
-  /* 10-button nav — 4:5 gamer cards */
   .botnav{position:fixed;bottom:0;left:0;right:0;height:78px;background:linear-gradient(90deg,var(--bg2),#020e1c,var(--bg2));border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:5px;padding:0 14px;z-index:100;}
   .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:58px;height:68px;background:rgba(0,245,255,.04);border:1px solid rgba(0,245,255,.25);color:rgba(0,245,255,.58);cursor:pointer;transition:all .2s;font-size:8px;letter-spacing:.8px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;flex-shrink:0;}
   .navbtn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--cyan);transform:scaleX(0);transition:transform .2s;}
@@ -123,87 +121,75 @@
 </style>
 </head>
 <body>
-
 <div class="corner tl"></div><div class="corner tr"></div>
 <div class="corner bl"></div><div class="corner br"></div>
-
-<!-- TOP BAR -->
 <div class="topbar">
   <div class="logo">RADEUS</div>
   <div style="display:flex;align-items:center;gap:16px">
     <div class="sdot"></div>
     <span style="font-size:9px;color:var(--text-dim);letter-spacing:2px">SYSTEM ONLINE</span>
     <select class="sys-select" id="sysSelect" onchange="switchSystem(this.value)">
-      <option value="ALL">⬡ ALL SYSTEMS — RADEUS NETWORK</option>
-      <option value="DNWSTX">⬡ DERBY NEW WATER SYSTEM — TX</option>
-      <option value="PPNWSTX">⬡ PLEASURE POINT NWS — TX</option>
-      <option value="SENWSTX">⬡ SELLERS ESTATES NWS — TX</option>
-      <option value="SUNWSTX">⬡ SUDDUTH NWS — TX</option>
-      <option value="OHNWSTX">⬡ OAK HILL NWS — TX</option>
-      <option value="FBNWSTX">⬡ FALL BRANCH NWS — TX</option>
-      <option value="SMNWSTX">⬡ SOUTH MIDLAND NWS — TX</option>
-      <option value="WNWSTX">⬡ WARREN NWS — TX</option>
-      <option value="SVNWSTX">⬡ SOLAR VILLAGE NWS — TX</option>
+      <option value="ALL">&#x2b21; ALL SYSTEMS &mdash; RADEUS NETWORK</option>
+      <option value="DNWSTX">&#x2b21; DERBY NEW WATER SYSTEM &mdash; TX</option>
+      <option value="PPNWSTX">&#x2b21; PLEASURE POINT NWS &mdash; TX</option>
+      <option value="SENWSTX">&#x2b21; SELLERS ESTATES NWS &mdash; TX</option>
+      <option value="SUNWSTX">&#x2b21; SUDDUTH NWS &mdash; TX</option>
+      <option value="OHNWSTX">&#x2b21; OAK HILL NWS &mdash; TX</option>
+      <option value="FBNWSTX">&#x2b21; FALL BRANCH NWS &mdash; TX</option>
+      <option value="SMNWSTX">&#x2b21; SOUTH MIDLAND NWS &mdash; TX</option>
+      <option value="WNWSTX">&#x2b21; WARREN NWS &mdash; TX</option>
+      <option value="SVNWSTX">&#x2b21; SOLAR VILLAGE NWS &mdash; TX</option>
     </select>
   </div>
   <div style="display:flex;align-items:center;gap:14px">
-    <span style="font-size:9px;color:var(--text-dim)">OPERATOR: <span style="color:var(--cyan)">ADMIN</span></span>
+    <span style="font-size:9px;color:var(--text-dim);font-family:'Share Tech Mono',monospace">OPERATOR: <span id="operatorName" style="color:var(--cyan)">&#x2014;</span></span><button id="logoutBtn" style="font-family:'Orbitron',monospace;font-size:7px;padding:4px 9px;border:1px solid rgba(0,245,255,.25);color:rgba(0,245,255,.45);background:transparent;cursor:pointer;letter-spacing:1px;margin-left:10px;transition:all .15s;" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color='rgba(0,245,255,.45)';this.style.borderColor='rgba(0,245,255,.25)'">SIGN OUT</button>
     <span id="clock">--:--:--</span>
   </div>
 </div>
-
-<!-- TICKER -->
 <div class="ticker-wrap">
-  <div class="ticker-tag">⬡ LIVE FEED</div>
+  <div class="ticker-tag">&#x2b21; LIVE FEED</div>
   <div style="overflow:hidden;flex:1">
     <div class="ticker-track" id="tickerTrack">
-      <span class="ti">RADEUS COMMAND — ALL SYSTEMS ONLINE — <span class="g">9 WATER SYSTEMS ACTIVE</span> — SELECT A SYSTEM TO VIEW OPERATIONAL DATA</span>
-      <span class="ti">BOIL WATER NOTICE <span class="r">ACTIVE</span> — OAK HILL NWS — CL27 — VERIFICATION SAMPLES PENDING</span>
-      <span class="ti">WATER LOSS AUDIT <span class="r">OVERDUE</span> — DERBY NWS — DUE 03/31/2026 — SUBMIT TO TCEQ</span>
-      <span class="ti">CCR REPORT DUE ALL SYSTEMS — <span class="o">75 DAYS REMAINING — JULY 1, 2026</span></span>
-      <span class="ti">RADEUS COMMAND — ALL SYSTEMS ONLINE — <span class="g">9 WATER SYSTEMS ACTIVE</span> — SELECT A SYSTEM TO VIEW OPERATIONAL DATA</span>
-      <span class="ti">BOIL WATER NOTICE <span class="r">ACTIVE</span> — OAK HILL NWS — CL27 — VERIFICATION SAMPLES PENDING</span>
-      <span class="ti">WATER LOSS AUDIT <span class="r">OVERDUE</span> — DERBY NWS — DUE 03/31/2026 — SUBMIT TO TCEQ</span>
-      <span class="ti">CCR REPORT DUE ALL SYSTEMS — <span class="o">75 DAYS REMAINING — JULY 1, 2026</span></span>
+      <span class="ti">RADEUS COMMAND &mdash; ALL SYSTEMS ONLINE &mdash; <span class="g">9 WATER SYSTEMS ACTIVE</span> &mdash; SELECT A SYSTEM TO VIEW OPERATIONAL DATA</span>
+      <span class="ti">BOIL WATER NOTICE <span class="r">ACTIVE</span> &mdash; OAK HILL NWS &mdash; CL27 &mdash; VERIFICATION SAMPLES PENDING</span>
+      <span class="ti">WATER LOSS AUDIT <span class="r">OVERDUE</span> &mdash; DERBY NWS &mdash; DUE 03/31/2026 &mdash; SUBMIT TO TCEQ</span>
+      <span class="ti">CCR REPORT DUE ALL SYSTEMS &mdash; <span class="o">75 DAYS REMAINING &mdash; JULY 1, 2026</span></span>
+      <span class="ti">RADEUS COMMAND &mdash; ALL SYSTEMS ONLINE &mdash; <span class="g">9 WATER SYSTEMS ACTIVE</span> &mdash; SELECT A SYSTEM TO VIEW OPERATIONAL DATA</span>
+      <span class="ti">BOIL WATER NOTICE <span class="r">ACTIVE</span> &mdash; OAK HILL NWS &mdash; CL27 &mdash; VERIFICATION SAMPLES PENDING</span>
+      <span class="ti">WATER LOSS AUDIT <span class="r">OVERDUE</span> &mdash; DERBY NWS &mdash; DUE 03/31/2026 &mdash; SUBMIT TO TCEQ</span>
+      <span class="ti">CCR REPORT DUE ALL SYSTEMS &mdash; <span class="o">75 DAYS REMAINING &mdash; JULY 1, 2026</span></span>
     </div>
   </div>
 </div>
-
-<!-- MAIN -->
 <div class="main">
-
-  <!-- LEFT -->
   <div class="col">
     <div class="panel">
-      <div class="ptitle" id="statusTitle">DERBY NWS — APR 2026 STATUS <span class="badge bg2">BILLING OPEN</span></div>
-      <div class="srow"><span class="slabel">TOTAL ACCOUNTS</span><span class="sval cv" id="stat-total">—</span></div>
-      <div class="srow"><span class="slabel">CURRENT / PAID</span><span class="sval gv" id="stat-current">—</span></div>
-      <div class="srow"><span class="slabel">CREDIT BALANCE</span><span class="sval bv" id="stat-credit">—</span></div>
-      <div class="srow"><span class="slabel">PAST DUE</span><span class="sval ov" id="stat-pastdue">—</span></div>
-      <div class="srow"><span class="slabel">CRITICAL (&gt;$500)</span><span class="sval rv" id="stat-critical">—</span></div>
-      <div class="srow"><span class="slabel">BILL DATE</span><span class="sval" id="stat-billdate" style="color:var(--cyan);font-weight:700">—</span></div>
-      <div class="srow"><span class="slabel">DUE DATE</span><span class="sval yv" id="stat-duedate" style="font-weight:700">—</span></div>
+      <div class="ptitle" id="statusTitle">DERBY NWS &mdash; APR 2026 STATUS <span class="badge bg2">BILLING OPEN</span></div>
+      <div class="srow"><span class="slabel">TOTAL ACCOUNTS</span><span class="sval cv" id="stat-total">&mdash;</span></div>
+      <div class="srow"><span class="slabel">CURRENT / PAID</span><span class="sval gv" id="stat-current">&mdash;</span></div>
+      <div class="srow"><span class="slabel">CREDIT BALANCE</span><span class="sval bv" id="stat-credit">&mdash;</span></div>
+      <div class="srow"><span class="slabel">PAST DUE</span><span class="sval ov" id="stat-pastdue">&mdash;</span></div>
+      <div class="srow"><span class="slabel">CRITICAL (&gt;$500)</span><span class="sval rv" id="stat-critical">&mdash;</span></div>
+      <div class="srow"><span class="slabel">BILL DATE</span><span class="sval" id="stat-billdate" style="color:var(--cyan);font-weight:700">&mdash;</span></div>
+      <div class="srow"><span class="slabel">DUE DATE</span><span class="sval yv" id="stat-duedate" style="font-weight:700">&mdash;</span></div>
       <div class="mbar-wrap" style="margin-top:4px">
-        <div class="mbar-label"><span>COLLECTION RATE (EST)</span><span id="collRateLbl" style="color:var(--green)">—</span></div>
+        <div class="mbar-label"><span>COLLECTION RATE (EST)</span><span id="collRateLbl" style="color:var(--green)">&mdash;</span></div>
         <div class="mbar"><div class="mbar-fill" id="collBar" style="width:0%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
         <div class="mbar-label"><span>ACCOUNTS BILLED</span><span style="color:var(--cyan)">100%</span></div>
         <div class="mbar"><div class="mbar-fill" id="billedBar" style="width:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan))"></div></div>
       </div>
     </div>
-
     <div class="panel" style="flex:1;display:flex;flex-direction:column">
-      <div class="ptitle" id="critTitle">CRITICAL ACCOUNTS <span class="badge br2" id="critBadge">— URGENT</span></div>
+      <div class="ptitle" id="critTitle">CRITICAL ACCOUNTS <span class="badge br2" id="critBadge">&mdash; URGENT</span></div>
       <div class="afeed" id="critFeed">
         <div style="padding:24px 12px;text-align:center;color:var(--text-dim);font-size:9px;letter-spacing:2px">SELECT A SYSTEM</div>
       </div>
     </div>
   </div>
-
-  <!-- CENTER -->
   <div class="col">
     <div class="panel map-panel">
       <div class="ptitle" style="flex-wrap:wrap;gap:4px">
-        <span id="mapTitle">RADEUS NETWORK — ALL 9 SYSTEMS — TEXAS</span>
+        <span id="mapTitle">RADEUS NETWORK &mdash; ALL 9 SYSTEMS &mdash; TEXAS</span>
         <div style="display:flex;gap:4px">
           <button onclick="filterMap('all',this)" style="font-size:7px;padding:2px 6px;border:1px solid var(--cyan);color:var(--cyan);background:rgba(0,245,255,.08);cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px">ALL</button>
           <button onclick="filterMap('red',this)" style="font-size:7px;padding:2px 6px;border:1px solid var(--border);color:var(--text-dim);background:transparent;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px">CRITICAL</button>
@@ -222,10 +208,8 @@
         </div>
       </div>
     </div>
-
-    <!-- ACCOUNTS TABLE -->
     <div class="panel" style="height:190px;overflow:hidden;display:flex;flex-direction:column">
-      <div class="ptitle" id="regTitle">ACCOUNT REGISTER — DERBY NWS // APRIL 2026 <span class="badge bc2" id="regBadge">— ACCTS</span></div>
+      <div class="ptitle" id="regTitle">ACCOUNT REGISTER &mdash; DERBY NWS // APRIL 2026 <span class="badge bc2" id="regBadge">&mdash; ACCTS</span></div>
       <div style="overflow-y:auto;flex:1">
         <table class="atable">
           <thead><tr><th>ACCT #</th><th>CUSTOMER NAME</th><th>ADDRESS</th><th>STATUS</th><th style="text-align:right">BALANCE</th></tr></thead>
@@ -236,11 +220,7 @@
       </div>
     </div>
   </div>
-
-  <!-- RIGHT -->
   <div class="col">
-
-    <!-- HUD DIAL -->
     <div class="panel">
       <div class="ptitle">COMMAND DIAL</div>
       <div class="dial-wrap">
@@ -266,89 +246,77 @@
             </g>
           </svg>
           <div class="dial-center">
-            <div class="dval" id="dval">—</div>
+            <div class="dval" id="dval">&mdash;</div>
             <div class="dlabel" id="dlabel">COLLECTION</div>
           </div>
-          <div class="dbtn active" style="left:50%;top:6%" onclick="setDial('dval-collection','COLLECTION',this)"><div class="dicon">💧</div>BILL</div>
-          <div class="dbtn" style="left:90%;top:26%" onclick="setDial('dval-accounts','ACCOUNTS',this)"><div class="dicon">👤</div>ACCTS</div>
-          <div class="dbtn" style="left:90%;top:72%" onclick="setDial('dval-calls','CALL LOG',this)"><div class="dicon">📞</div>CALLS</div>
-          <div class="dbtn" style="left:50%;top:87%" onclick="setDial('dval-comply','COMPLY',this)"><div class="dicon">📋</div>COMP</div>
-          <div class="dbtn" style="left:10%;top:72%" onclick="setDial('dval-critical','CRITICAL',this)"><div class="dicon">⚠</div>ALERTS</div>
-          <div class="dbtn" style="left:10%;top:26%" onclick="setDial('dval-systems','SYSTEMS',this)"><div class="dicon">⬡</div>SYS</div>
+          <div class="dbtn active" style="left:50%;top:6%" onclick="setDial('dval-collection','COLLECTION',this)"><div class="dicon">&#x1f4a7;</div>BILL</div>
+          <div class="dbtn" style="left:90%;top:26%" onclick="setDial('dval-accounts','ACCOUNTS',this)"><div class="dicon">&#x1f464;</div>ACCTS</div>
+          <div class="dbtn" style="left:90%;top:72%" onclick="setDial('78','CALL LOG',this)"><div class="dicon">&#x1f4de;</div>CALLS</div>
+          <div class="dbtn" style="left:50%;top:87%" onclick="setDial('dval-comply','COMPLY',this)"><div class="dicon">&#x1f4cb;</div>COMP</div>
+          <div class="dbtn" style="left:10%;top:72%" onclick="setDial('dval-critical','CRITICAL',this)"><div class="dicon">&#x26a0;</div>ALERTS</div>
+          <div class="dbtn" style="left:10%;top:26%" onclick="setDial('dval-systems','SYSTEMS',this)"><div class="dicon">&#x2b21;</div>SYS</div>
         </div>
       </div>
     </div>
-
-    <!-- CALL LOG -->
     <div class="panel" style="flex:1;display:flex;flex-direction:column">
       <div class="ptitle">RECENT CALL LOG <span class="badge bc2">LIVE</span></div>
       <div class="clog" id="clogPanel">
-        <div class="citem"><span class="ccat" style="color:var(--red);border-color:var(--red)">REPAIR</span><div class="cinfo"><div class="cname">CL75 — Charles Chattom // PPNWSTX16</div><div class="csub">Broken pipe — brittle pipes on system side — TECH NEEDED</div></div></div>
-        <div class="citem"><span class="ccat" style="color:var(--orange);border-color:var(--orange)">BWN</span><div class="cinfo"><div class="cname">CL27 — Paul Rivera // OHNWSTX22</div><div class="csub">Water undrinkable — BWN issued, customer directed to site</div></div></div>
-        <div class="citem"><span class="ccat" style="color:var(--cyan);border-color:var(--cyan)">BILL Q</span><div class="cinfo"><div class="cname">CL68 — Alma Selvera // DNWSTX39</div><div class="csub">Balance requested — Resolved</div></div></div>
-        <div class="citem"><span class="ccat" style="color:var(--green);border-color:var(--green)">NEW SVC</span><div class="cinfo"><div class="cname">CL69 — Joe Marroquin // DNWSTX34</div><div class="csub">New service — prior balance $784.78 outstanding</div></div></div>
+        <div class="citem"><span class="ccat" style="color:var(--red);border-color:var(--red)">REPAIR</span><div class="cinfo"><div class="cname">CL75 &mdash; Charles Chattom // PPNWSTX16</div><div class="csub">Broken pipe &mdash; brittle pipes on system side &mdash; TECH NEEDED</div></div></div>
+        <div class="citem"><span class="ccat" style="color:var(--orange);border-color:var(--orange)">BWN</span><div class="cinfo"><div class="cname">CL27 &mdash; Paul Rivera // OHNWSTX22</div><div class="csub">Water undrinkable &mdash; BWN issued, customer directed to site</div></div></div>
+        <div class="citem"><span class="ccat" style="color:var(--cyan);border-color:var(--cyan)">BILL Q</span><div class="cinfo"><div class="cname">CL68 &mdash; Alma Selvera // DNWSTX39</div><div class="csub">Balance requested &mdash; Resolved</div></div></div>
+        <div class="citem"><span class="ccat" style="color:var(--green);border-color:var(--green)">NEW SVC</span><div class="cinfo"><div class="cname">CL69 &mdash; Joe Marroquin // DNWSTX34</div><div class="csub">New service &mdash; prior balance $784.78 outstanding</div></div></div>
       </div>
     </div>
-
-    <!-- COMPLIANCE -->
     <div class="panel">
-      <div class="ptitle">COMPLIANCE & BILLING <span class="badge bo2">ACTION NEEDED</span></div>
+      <div class="ptitle">COMPLIANCE &amp; BILLING <span class="badge bo2">ACTION NEEDED</span></div>
       <div class="compitem" onclick="showBWN()">
-        <div class="compicon" style="background:rgba(255,34,68,.08);color:var(--red)">🚨</div>
-        <div class="compinfo"><div class="compname">BOIL WATER NOTICE</div><div class="compdue">OAK HILL NWS — EVENT ACTIVE (CL27)</div></div>
+        <div class="compicon" style="background:rgba(255,34,68,.08);color:var(--red)">&#x1f6a8;</div>
+        <div class="compinfo"><div class="compname">BOIL WATER NOTICE</div><div class="compdue">OAK HILL NWS &mdash; EVENT ACTIVE (CL27)</div></div>
         <div class="compst" style="color:var(--red);border-color:var(--red);cursor:pointer">ACTIVE</div>
       </div>
       <div class="compitem">
-        <div class="compicon" style="background:rgba(255,136,0,.08);color:var(--orange)">📋</div>
-        <div class="compinfo"><div class="compname">BACTERIOLOGICAL SAMPLE</div><div class="compdue">TCEQ — DERBY NWS — DUE SOON</div></div>
+        <div class="compicon" style="background:rgba(255,136,0,.08);color:var(--orange)">&#x1f4cb;</div>
+        <div class="compinfo"><div class="compname">BACTERIOLOGICAL SAMPLE</div><div class="compdue">TCEQ &mdash; DERBY NWS &mdash; DUE SOON</div></div>
         <div class="compst" style="color:var(--orange);border-color:var(--orange)">DUE</div>
       </div>
       <div class="compitem">
-        <div class="compicon" style="background:rgba(0,255,136,.06);color:var(--green)">✓</div>
-        <div class="compinfo"><div class="compname">APRIL BILLING RUN</div><div class="compdue" id="compBillDue">43 BILLS ISSUED — 04/15/2026</div></div>
+        <div class="compicon" style="background:rgba(0,255,136,.06);color:var(--green)">&#x2713;</div>
+        <div class="compinfo"><div class="compname">APRIL BILLING RUN</div><div class="compdue" id="compBillDue">43 BILLS ISSUED &mdash; 04/15/2026</div></div>
         <div class="compst" style="color:var(--green);border-color:var(--green)">DONE</div>
       </div>
-      <div class="brow"><span class="blabel">APRIL BILLING TOTAL</span><span class="bval cv" id="compBillTotal">—</span></div>
-      <div class="brow"><span class="blabel">TOTAL OUTSTANDING</span><span class="bval rv" id="compOutstanding">—</span></div>
-      <div class="brow"><span class="blabel">DUE DATE</span><span class="bval yv" id="compDueDate">—</span></div>
+      <div class="brow"><span class="blabel">APRIL BILLING TOTAL</span><span class="bval cv" id="compBillTotal">&mdash;</span></div>
+      <div class="brow"><span class="blabel">TOTAL OUTSTANDING</span><span class="bval rv" id="compOutstanding">&mdash;</span></div>
+      <div class="brow"><span class="blabel">DUE DATE</span><span class="bval yv" id="compDueDate">&mdash;</span></div>
     </div>
-
   </div>
 </div>
-
-<!-- BOTTOM NAV — 10 GAMER CARDS -->
 <div class="botnav">
-  <a class="navbtn active" href="index.html"><span class="navicon">⬡</span>COMMAND</a>
-  <a class="navbtn" href="accounts.html"><span class="navicon">👤</span>ACCOUNTS<span class="navalert" id="nav-acct-alert" style="display:none"></span></a>
-  <a class="navbtn" href="readings.html"><span class="navicon">⏱️</span>READINGS</a>
-  <a class="navbtn" href="billing.html"><span class="navicon">🧾</span>BILLING</a>
-  <a class="navbtn" href="compliance.html"><span class="navicon">📋</span>COMPLY<span class="navalert" id="nav-comply-alert" style="display:none"></span></a>
-  <a class="navbtn" href="payments.html"><span class="navicon">💵</span>PAYMENTS</a>
-  <a class="navbtn" href="workorders.html"><span class="navicon">🔧</span>WO's</a>
-  <a class="navbtn" href="reports.html"><span class="navicon">📊</span>REPORTS</a>
-  <a class="navbtn" href="comms.html"><span class="navicon" style="font-size:11px;letter-spacing:-2px">📞✉</span>COMMS<span class="navalert" id="nav-comms-alert" style="display:none"></span></a>
-  <a class="navbtn" href="system.html"><span class="navicon">⚙</span>SYSTEM</a>
+  <a class="navbtn active" href="index.html"><span class="navicon">&#x2b21;</span>COMMAND</a>
+  <a class="navbtn" href="accounts.html"><span class="navicon">&#x1f464;</span>ACCOUNTS<span class="navalert" id="nav-acct-alert" style="display:none"></span></a>
+  <a class="navbtn" href="readings.html"><span class="navicon">&#x23f1;&#xfe0f;</span>READINGS</a>
+  <a class="navbtn" href="billing.html"><span class="navicon">&#x1f9fe;</span>BILLING</a>
+  <a class="navbtn" href="compliance.html"><span class="navicon">&#x1f4cb;</span>COMPLY<span class="navalert" id="nav-comply-alert" style="display:none"></span></a>
+  <a class="navbtn" href="payments.html"><span class="navicon">&#x1f4b5;</span>PAYMENTS</a>
+  <a class="navbtn" href="workorders.html"><span class="navicon">&#x1f527;</span>WO's</a>
+  <a class="navbtn" href="reports.html"><span class="navicon">&#x1f4ca;</span>REPORTS</a>
+  <a class="navbtn" href="comms.html"><span class="navicon">&#x1f4e1;</span>COMMS<span class="navalert" id="nav-comms-alert" style="display:none"></span></a>
+  <a class="navbtn" href="system.html"><span class="navicon">&#x2699;</span>SYSTEM</a>
 </div>
-
-<!-- ACCOUNT CARD -->
 <div class="acard" id="accard">
-  <button class="acclose" onclick="closeCard()">✕</button>
+  <button class="acclose" onclick="closeCard()">&#x2715;</button>
   <div class="achead">
-    <div>
-      <div class="acnum" id="ac-num">—</div>
-      <div class="acname" id="ac-name">—</div>
-    </div>
-    <div class="acstat" id="ac-stat" style="color:var(--green);border-color:var(--green)">—</div>
+    <div><div class="acnum" id="ac-num">&mdash;</div><div class="acname" id="ac-name">&mdash;</div></div>
+    <div class="acstat" id="ac-stat" style="color:var(--green);border-color:var(--green)">&mdash;</div>
   </div>
   <div class="acbody">
-    <div class="acrow"><span class="acrl">SERVICE ADDRESS</span><span class="acrv" id="ac-addr">—</span></div>
-    <div class="acrow"><span class="acrl">ACCOUNT TYPE</span><span class="acrv" id="ac-type">—</span></div>
-    <div class="acrow"><span class="acrl">CURRENT BALANCE</span><span class="acrv" id="ac-bal">—</span></div>
-    <div class="acrow"><span class="acrl">LAST PAYMENT</span><span class="acrv" id="ac-pmt">—</span></div>
-    <div class="acrow"><span class="acrl">BASE RATE</span><span class="acrv" id="ac-baserate">—</span></div>
-    <div class="acrow"><span class="acrl">ENERGY SURCHARGE</span><span class="acrv" id="ac-surcharge">—</span></div>
-    <div class="acrow"><span class="acrl">LATE FEE (IF LATE)</span><span class="acrv" id="ac-latefee">—</span></div>
-    <div class="acrow"><span class="acrl">SYSTEM</span><span class="acrv" id="ac-sysname">—</span></div>
+    <div class="acrow"><span class="acrl">SERVICE ADDRESS</span><span class="acrv" id="ac-addr">&mdash;</span></div>
+    <div class="acrow"><span class="acrl">ACCOUNT TYPE</span><span class="acrv" id="ac-type">&mdash;</span></div>
+    <div class="acrow"><span class="acrl">CURRENT BALANCE</span><span class="acrv" id="ac-bal">&mdash;</span></div>
+    <div class="acrow"><span class="acrl">LAST PAYMENT</span><span class="acrv" id="ac-pmt">&mdash;</span></div>
+    <div class="acrow"><span class="acrl">BASE RATE</span><span class="acrv" id="ac-baserate">&mdash;</span></div>
+    <div class="acrow"><span class="acrl">ENERGY SURCHARGE</span><span class="acrv" id="ac-surcharge">&mdash;</span></div>
+    <div class="acrow"><span class="acrl">LATE FEE (IF LATE)</span><span class="acrv" id="ac-latefee">&mdash;</span></div>
+    <div class="acrow"><span class="acrl">SYSTEM</span><span class="acrv" id="ac-sysname">&mdash;</span></div>
   </div>
   <div class="acbtns">
     <button class="acbtn pri" onclick="window.location='accounts.html'">FULL ACCOUNT</button>
@@ -357,19 +325,17 @@
     <button class="acbtn" onclick="closeCard()">CLOSE</button>
   </div>
 </div>
-
-<!-- BWN MODAL -->
 <div class="modal" id="bwnModal">
   <div style="background:var(--bg2);border:1px solid var(--red);width:420px;box-shadow:0 0 50px rgba(255,34,68,.25)">
-    <div style="background:rgba(255,34,68,.1);padding:14px 18px;border-bottom:1px solid rgba(255,34,68,.25);font-family:'Orbitron',monospace;font-size:11px;color:var(--red);letter-spacing:3px">🚨 BOIL WATER NOTICE — ACTIVE EVENT</div>
+    <div style="background:rgba(255,34,68,.1);padding:14px 18px;border-bottom:1px solid rgba(255,34,68,.25);font-family:'Orbitron',monospace;font-size:11px;color:var(--red);letter-spacing:3px">&#x1f6a8; BOIL WATER NOTICE &mdash; ACTIVE EVENT</div>
     <div style="padding:18px;font-size:10px;color:var(--text-dim);line-height:2.2">
       <div style="color:var(--text);font-size:11px;margin-bottom:10px;letter-spacing:1px">SYSTEM: OAK HILL NWS // CALL LOG CL27</div>
       <div style="color:var(--text-dim);font-size:9px;margin-bottom:12px">CUSTOMER REPORT: Water undrinkable. BWN issued. Customer directed to website.</div>
-      <div>⏱ 24-HR TCEQ NOTIFICATION CLOCK — <span style="color:var(--red)">RUNNING</span></div>
-      <div>📄 BWN ISSUANCE DOCUMENT — <span style="color:var(--green)">GENERATED ✓</span></div>
-      <div>📋 COMMUNITY POSTING CHECKLIST — <span style="color:var(--yellow)">PENDING CONFIRMATION</span></div>
-      <div>📬 RESCISSION PACKET — <span style="color:var(--text-dim)">QUEUED</span></div>
-      <div>📜 CERT OF DELIVERY TO TCEQ — <span style="color:var(--text-dim)">PENDING SUBMISSION</span></div>
+      <div>&#x23f1; 24-HR TCEQ NOTIFICATION CLOCK &mdash; <span style="color:var(--red)">RUNNING</span></div>
+      <div>&#x1f4c4; BWN ISSUANCE DOCUMENT &mdash; <span style="color:var(--green)">GENERATED &#x2713;</span></div>
+      <div>&#x1f4cb; COMMUNITY POSTING CHECKLIST &mdash; <span style="color:var(--yellow)">PENDING CONFIRMATION</span></div>
+      <div>&#x1f4ec; RESCISSION PACKET &mdash; <span style="color:var(--text-dim)">QUEUED</span></div>
+      <div>&#x1f4dc; CERT OF DELIVERY TO TCEQ &mdash; <span style="color:var(--text-dim)">PENDING SUBMISSION</span></div>
     </div>
     <div style="padding:12px 18px;display:flex;gap:8px;border-top:1px solid rgba(255,34,68,.2)">
       <button onclick="closeBWN()" style="flex:1;padding:9px;background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'Share Tech Mono',monospace;cursor:pointer;font-size:10px;letter-spacing:1px">CLOSE</button>
@@ -378,521 +344,47 @@
     </div>
   </div>
 </div>
-
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <script>
-  // ── CONFIG ───────────────────────────────────────────────────
-  const SUPA_URL = 'https://bvpesxpptgdwkhsewhke.supabase.co';
-  const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
-  const MAPBOX_TOKEN = 'pk.eyJ1IjoicmFkZXVzIiwiYSI6ImNtbzNtYXNqMzE2ZW8ycXBuYW04cmo4amoifQ.Q98K-t05aYn4bvViWOkw1Q';
-
-  const SYS_HQ = {
-    DNWSTX: [-99.1683,28.9672], PPNWSTX:[-94.4118,31.1557],
-    SENWSTX:[-95.3698,29.7604], SUNWSTX:[-97.1033,31.2882],
-    OHNWSTX:[-98.7320,29.7947], FBNWSTX:[-99.2398,30.0801],
-    SMNWSTX:[-102.077,31.9973], WNWSTX: [-102.050,32.0300],
-    SVNWSTX:[-99.1403,30.0474]
-  };
-
-  // ── GLOBAL STATE ─────────────────────────────────────────────
-  let currentSystem = null;
-  let radMap = null;
-  let dialValues = {};
-
-  // ── CLOCK ────────────────────────────────────────────────────
+  const SUPA_URL='https://bvpesxpptgdwkhsewhke.supabase.co';
+  const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
+  const MAPBOX_TOKEN='pk.eyJ1IjoicmFkZXVzIiwiYSI6ImNtbzNtYXNqMzE2ZW8ycXBuYW04cmo4amoifQ.Q98K-t05aYn4bvViWOkw1Q';
+  const SYS_HQ={DNWSTX:[-99.1683,28.9672],PPNWSTX:[-94.4118,31.1557],SENWSTX:[-95.3698,29.7604],SUNWSTX:[-97.1033,31.2882],OHNWSTX:[-98.7320,29.7947],FBNWSTX:[-99.2398,30.0801],SMNWSTX:[-102.077,31.9973],WNWSTX:[-102.050,32.0300],SVNWSTX:[-99.1403,30.0474]};
+  const ORG_ID='00000000-0000-0000-0000-000000000001';
+  let currentSystem=null,radMap=null,dialValues={};
   function tick(){const n=new Date();document.getElementById('clock').textContent=n.toTimeString().slice(0,8);}
   setInterval(tick,1000);tick();
-
-  // ── SUPABASE FETCH ───────────────────────────────────────────
-  async function supa(table, params='') {
-    try {
-      const r = await fetch(`${SUPA_URL}/rest/v1/${table}${params}`, {
-        headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`}
-      });
-      if (!r.ok) { console.warn('Supabase',r.status,table); return null; }
-      return await r.json();
-    } catch(e) { console.warn('Supabase offline:',e.message); return null; }
-  }
-
-  // ── HELPERS ──────────────────────────────────────────────────
-  function fmtBal(n) {
-    n = Number(n);
-    if (n < 0) return `($${Math.abs(n).toFixed(2)})`;
-    return `$${n.toFixed(2)}`;
-  }
-
-  function classify(bal, type) {
-    if (type==='RELIGIOUS') return {label:'RELIGIOUS', color:'var(--text-dim)'};
-    if (bal < -0.01)         return {label:'CREDIT',   color:'var(--blue)'};
-    if (Math.abs(bal) < 0.01) return {label:'CURRENT',  color:'var(--green)'};
-    if (bal > 500)            return {label:'CRITICAL', color:'var(--red)'};
-    return                         {label:'PAST DUE',  color:'var(--orange)'};
-  }
-
-  // ── MAPBOX — PLOT REAL ACCOUNT DOTS ─────────────────────────
-  function updateMapboxDots(accounts, balMap) {
-    if (!radMap) return;
-    const src = radMap.getSource('acct-src');
-    if (!src) return;
-    const features = accounts
-      .filter(a => a.service_addresses?.latitude && a.service_addresses?.longitude)
-      .map(a => {
-        const bal  = Number(balMap[a.account_id]?.current_balance ?? 0);
-        const cls  = classify(bal, a.account_type);
-        const dot  = bal < -0.01 ? '#0088ff' : Math.abs(bal) < 0.01 ? '#00ff88' : bal > 500 ? '#ff2244' : a.account_type==='RELIGIOUS' ? '#444444' : '#ff8800';
-        const name = a.customers?.full_name || '—';
-        const addr = a.service_addresses?.street || '—';
-        const lastPmt = balMap[a.account_id]?.last_payment_date
-          ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None';
-        return {
-          type:'Feature',
-          geometry:{type:'Point',coordinates:[parseFloat(a.service_addresses.longitude),parseFloat(a.service_addresses.latitude)]},
-          properties:{acct:a.account_number,name,addr,status:cls.label,bal:fmtBal(bal),type:a.account_type,lastPmt,dot}
-        };
-      });
-    src.setData({type:'FeatureCollection',features});
-  }
-
-  // ── GEOCODING PIPELINE — runs once, saves permanently ────────
-  async function geocodeAccounts(accounts, balMap) {
-    const needsGeo = accounts.filter(a =>
-      a.service_addresses?.street && !a.service_addresses?.latitude
-    );
-    if (!needsGeo.length) return;
-
-    console.log(`Geocoding ${needsGeo.length} addresses...`);
-    const BATCH = 15;
-    for (let i = 0; i < needsGeo.length; i += BATCH) {
-      const batch = needsGeo.slice(i, i+BATCH);
-      await Promise.all(batch.map(async a => {
-        const addr = a.service_addresses;
-        const q = encodeURIComponent(`${addr.street}, ${addr.city||''}, ${addr.state||'TX'} ${addr.zip||''}`);
-        try {
-          const r = await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${q}.json?access_token=${MAPBOX_TOKEN}&country=US&limit=1&types=address`);
-          if (!r.ok) return;
-          const data = await r.json();
-          if (data.features?.length) {
-            const [lng, lat] = data.features[0].center;
-            // Save permanently to Supabase
-            await fetch(`${SUPA_URL}/rest/v1/service_addresses?address_id=eq.${addr.address_id}`, {
-              method:'PATCH',
-              headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},
-              body: JSON.stringify({latitude:lat, longitude:lng})
-            });
-            a.service_addresses.latitude  = lat;
-            a.service_addresses.longitude = lng;
-          }
-        } catch(e){}
-      }));
-      // Update map with each batch as it completes
-      updateMapboxDots(accounts, balMap);
-    }
-    console.log('Geocoding complete.');
-  }
-
-  // ── UPDATE TICKER ────────────────────────────────────────────
-  function updateTicker(sys, criticals) {
-    const track = document.getElementById('tickerTrack');
-    if (!track) return;
-    const items = [];
-    criticals.slice(0,5).forEach(({a, bal}) => {
-      const name = (a.customers?.full_name || '—').toUpperCase();
-      const cls = classify(bal, a.account_type);
-      const colorTag = bal > 500 ? 'r' : 'o';
-      items.push(`<span class="ti">ACCT <span class="v">${a.account_number}</span> — ${name} — BAL <span class="${colorTag}">${fmtBal(bal)}</span> — ${cls.label}</span>`);
-    });
-    items.push(`<span class="ti">BILLING CYCLE: <span class="o">${sys.system_name.toUpperCase()} — APRIL 2026 — DUE 05/01/2026</span></span>`);
-    items.push(`<span class="ti">SYSTEM ONLINE: <span class="v">${sys.system_code}</span> — <span class="g">RADEUS ACTIVE</span></span>`);
-    const full = [...items, ...items].join('\n');
-    track.innerHTML = full;
-  }
-
-  // ── LOAD LIVE DATA FROM SUPABASE ─────────────────────────────
-  async function loadLiveData(systemCode) {
-    const systems = await supa('water_systems', `?system_code=eq.${systemCode}&select=*`);
-    if (!systems || !systems.length) { console.warn('No system found for', systemCode); return; }
-    const sys = systems[0];
-    currentSystem = sys;
-
-    const mapTitle = document.getElementById('mapTitle');
-    if (mapTitle) mapTitle.textContent = `SYSTEM MAP — ${sys.system_name.toUpperCase()} // LIVE`;
-
-    const accounts = await supa('accounts',
-      `?system_id=eq.${sys.system_id}&status=neq.INACTIVE&select=account_id,account_number,account_type,status,customers(full_name),service_addresses(address_id,street,city,state,zip,latitude,longitude)`
-    );
-    const balances = await supa('account_balances', `?system_id=eq.${sys.system_id}&select=*`);
-    if (!accounts || !balances) return;
-
-    const balMap = {};
-    balances.forEach(b => { balMap[b.account_id] = b; });
-
-    let total=0, current=0, credits=0, pastDue=0, critical=0;
-    const criticals = [];
-    accounts.forEach(a => {
-      total++;
-      const bal = Number(balMap[a.account_id]?.current_balance ?? 0);
-      if (a.account_type==='RELIGIOUS') return;
-      if (bal < -0.01)           credits++;
-      else if (Math.abs(bal) < 0.01) current++;
-      else if (bal > 500)        { critical++; criticals.push({a,bal}); }
-      else                       pastDue++;
-    });
-    criticals.sort((x,y) => y.bal - x.bal);
-
-    // Update panel titles
-    const sTitle = document.getElementById('statusTitle');
-    if (sTitle) sTitle.childNodes[0].textContent = `${sys.system_code} — APR 2026 STATUS `;
-    const rTitle = document.getElementById('regTitle');
-    if (rTitle) rTitle.childNodes[0].textContent = `ACCOUNT REGISTER — ${sys.system_code} // APRIL 2026 `;
-    const rBadge = document.getElementById('regBadge');
-    if (rBadge) rBadge.textContent = `${accounts.length} ACCTS`;
-
-    // Update stats
-    const s = (id, v) => { const el=document.getElementById(id); if(el) el.textContent=v; };
-    s('stat-total', total);
-    s('stat-current', current);
-    s('stat-credit', credits);
-    s('stat-pastdue', pastDue);
-    s('stat-critical', critical);
-
-    // Store dial values
-    const pct = total > 0 ? Math.round((current/total)*100) : 0;
-    dialValues = {
-      'dval-collection': pct+'%',
-      'dval-accounts': total,
-      'dval-calls': '—',
-      'dval-comply': '2',
-      'dval-critical': critical,
-      'dval-systems': '9'
-    };
-    s('dval', pct+'%');
-
-    // Progress bars
-    const collBar = document.getElementById('collBar');
-    const collLbl = document.getElementById('collRateLbl');
-    if (collBar) collBar.style.width = pct+'%';
-    if (collLbl) collLbl.textContent = `~${pct}%`;
-
-    // Nav badge
-    const navAlert = document.getElementById('nav-acct-alert');
-    if (navAlert) { navAlert.textContent = critical > 0 ? critical : ''; navAlert.style.display = critical > 0 ? 'flex' : 'none'; }
-
-    // Critical feed
-    const critBadge = document.getElementById('critBadge');
-    if (critBadge) critBadge.textContent = `${critical} URGENT`;
-    const feed = document.getElementById('critFeed');
-    if (feed) {
-      feed.innerHTML = '';
-      if (criticals.length === 0) {
-        feed.innerHTML = '<div style="padding:24px 12px;text-align:center;color:var(--text-dim);font-size:9px;letter-spacing:2px">NO CRITICAL ACCOUNTS</div>';
-      } else {
-        criticals.forEach(({a, bal}) => {
-          const name = a.customers?.full_name || '—';
-          const addr = a.service_addresses?.street || '—';
-          const cls  = classify(bal, a.account_type);
-          const lastPmt = balMap[a.account_id]?.last_payment_date
-            ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None on file';
-          const parts = name.split(' ');
-          const short = parts.length > 1 ? `${parts[0][0]}. ${parts.slice(1).join(' ')}` : name;
-          const div = document.createElement('div');
-          div.className = 'aitem';
-          div.onclick = () => showCard(a.account_number, name, addr, cls.label, fmtBal(bal), a.account_type, lastPmt);
-          div.innerHTML = `<div class="adot" style="background:${cls.color};box-shadow:0 0 7px ${cls.color}"></div>
-            <div><div class="aname" style="color:${cls.color}">${a.account_number} — ${short.toUpperCase()}</div>
-            <div class="asub">${addr} · <span style="color:${cls.color}">${fmtBal(bal)}</span></div></div>`;
-          feed.appendChild(div);
-        });
-      }
-    }
-
-    // Mapbox dots — plot first, then fit map to actual data bounds
-    updateMapboxDots(accounts, balMap);
-    geocodeAccounts(accounts, balMap);
-
-    // Fit map to actual geocoded data points for this system
-    const mapped = accounts.filter(a => a.service_addresses?.latitude && a.service_addresses?.longitude);
-    if (mapped.length > 0 && radMap) {
-      const bounds = new mapboxgl.LngLatBounds();
-      mapped.forEach(a => bounds.extend([
-        parseFloat(a.service_addresses.longitude),
-        parseFloat(a.service_addresses.latitude)
-      ]));
-      radMap.fitBounds(bounds, {padding:60, maxZoom:13, duration:1400});
-    } else if (radMap && SYS_HQ[systemCode]) {
-      radMap.flyTo({center:SYS_HQ[systemCode], zoom:11, duration:1400});
-    }
-
-    // Ticker
-    updateTicker(sys, criticals);
-
-    // Billing cycle
-    const cycles = await supa('billing_cycles', `?system_id=eq.${sys.system_id}&order=cycle_year.desc,cycle_month.desc&limit=1`);
-    if (cycles && cycles.length) {
-      const c = cycles[0];
-      if (c.statement_date) {
-        const bd = new Date(c.statement_date);
-        s('stat-billdate', bd.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}));
-      }
-      if (c.due_date) {
-        const dd = new Date(c.due_date);
-        const ddStr = dd.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});
-        s('stat-duedate', ddStr);
-        s('compDueDate', ddStr);
-      }
-    }
-
-    // Outstanding
-    const totalOutstanding = balances.reduce((sum,b) => {
-      const bal = Number(b.current_balance ?? 0);
-      return sum + (bal > 0 ? bal : 0);
-    }, 0);
-    const compOut = document.getElementById('compOutstanding');
-    if (compOut && totalOutstanding > 0) compOut.textContent = `$${totalOutstanding.toFixed(2)}`;
-
-    // Account table
-    const tbody = document.getElementById('acctTable');
-    if (tbody) {
-      tbody.innerHTML = '';
-      [...accounts].filter(a => a.status !== 'INACTIVE')
-        .sort((a,b) => Number(balMap[b.account_id]?.current_balance??0) - Number(balMap[a.account_id]?.current_balance??0))
-        .forEach(a => {
-          const bal  = Number(balMap[a.account_id]?.current_balance ?? 0);
-          const lastPmt = balMap[a.account_id]?.last_payment_date
-            ? new Date(balMap[a.account_id].last_payment_date).toLocaleDateString() : 'None';
-          const cls  = classify(bal, a.account_type);
-          const name = a.customers?.full_name || '—';
-          const addr = a.service_addresses?.street || '—';
-          const tr   = document.createElement('tr');
-          tr.onclick = () => showCard(a.account_number, name, addr, cls.label, fmtBal(bal), a.account_type, lastPmt);
-          tr.innerHTML = `
-            <td class="acct">${a.account_number}</td>
-            <td class="nm">${name}</td>
-            <td style="color:#8ab8c8;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:500">${addr}</td>
-            <td><span class="pill" style="color:${cls.color};border-color:${cls.color}">${cls.label}</span></td>
-            <td class="bal" style="text-align:right;color:${cls.color}">${fmtBal(bal)}</td>`;
-          tbody.appendChild(tr);
-        });
-    }
-
-    // Call log
-    const calls = await supa('communication_log', `?system_id=eq.${sys.system_id}&select=*&order=created_at.desc&limit=9`);
-    if (calls && calls.length) {
-      const clog = document.getElementById('clogPanel');
-      if (clog) {
-        const catColors = {'Leak or Outage':'var(--red)','Bill Question':'var(--cyan)','New Service':'var(--green)','Disconnection':'var(--yellow)','Maintenance':'var(--orange)','Water Quality Question':'var(--orange)','State Agency':'var(--purple)'};
-        const catLabels = {'Leak or Outage':'REPAIR','Bill Question':'BILL Q','New Service':'NEW SVC','Disconnection':'DISCON','Maintenance':'MAINT','Water Quality Question':'QUALITY','State Agency':'TCEQ'};
-        clog.innerHTML = '';
-        calls.forEach(c => {
-          const col = catColors[c.category]||'var(--cyan)';
-          const lbl = catLabels[c.category]||'NOTE';
-          const d = document.createElement('div');
-          d.className = 'citem';
-          d.innerHTML = `<span class="ccat" style="color:${col};border-color:${col}">${lbl}</span>
-            <div class="cinfo">
-              <div class="cname">${c.call_ref||''} — ${c.caller_name||''} // ${c.customer_name||''}</div>
-              <div class="csub">${(c.description||'').substring(0,80)}</div>
-            </div>`;
-          clog.appendChild(d);
-        });
-      }
-    }
-
-    console.log(`✓ ${accounts.length} accounts loaded for ${sys.system_name}`);
-  }
-
-  // ── ACCOUNT CARD ─────────────────────────────────────────────
-  function showCard(num,name,addr,status,bal,type,pmt){
-    document.getElementById('ac-num').textContent=num;
-    document.getElementById('ac-name').textContent=name;
-    document.getElementById('ac-addr').textContent=addr;
-    document.getElementById('ac-bal').textContent=bal;
-    document.getElementById('ac-type').textContent=type;
-    document.getElementById('ac-pmt').textContent=pmt;
-    const s=document.getElementById('ac-stat');
-    s.textContent=status;
-    const cols={'CURRENT':'var(--green)','CREDIT':'var(--blue)','CREDIT BALANCE':'var(--blue)','PAST DUE':'var(--orange)','CRITICAL':'var(--red)','DISCONNECT ELIGIBLE':'var(--red)','ACTIVE — RELIGIOUS':'var(--text-dim)','RELIGIOUS':'var(--text-dim)'};
-    const c=cols[status]||'var(--yellow)';
-    s.style.color=c;s.style.borderColor=c;
-    if (currentSystem) {
-      const base=Number(currentSystem.base_rate||0);
-      const surcharge=Number(currentSystem.energy_surcharge||0);
-      const lateFee=Number(currentSystem.late_fee_amount||0);
-      document.getElementById('ac-baserate').textContent=`$${base.toFixed(2)} / MONTH`;
-      document.getElementById('ac-surcharge').textContent=surcharge>0?`$${surcharge.toFixed(2)} FLAT`:'N/A';
-      document.getElementById('ac-latefee').textContent=lateFee>0?`$${lateFee.toFixed(2)} after due date`:'N/A';
-      document.getElementById('ac-sysname').textContent=currentSystem.system_name;
-    }
-    document.getElementById('accard').classList.add('show');
-  }
+  async function supa(table,params=''){try{const r=await fetch(`${SUPA_URL}/rest/v1/${table}${params}`,{headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`}});if(!r.ok){console.warn('Supabase',r.status,table);return null;}return await r.json();}catch(e){console.warn('Supabase offline:',e.message);return null;}}
+  function fmtBal(n){n=Number(n);if(n<0)return`($${Math.abs(n).toFixed(2)})`;return`$${n.toFixed(2)}`;}
+  function classify(bal,type){if(type==='RELIGIOUS')return{label:'RELIGIOUS',color:'var(--text-dim)'};if(bal<-0.01)return{label:'CREDIT',color:'var(--blue)'};if(Math.abs(bal)<0.01)return{label:'CURRENT',color:'var(--green)'};if(bal>500)return{label:'CRITICAL',color:'var(--red)'};return{label:'PAST DUE',color:'var(--orange)'};}
+  function updateMapboxDots(accounts,balMap){if(!radMap)return;const src=radMap.getSource('acct-src');if(!src)return;const features=accounts.filter(a=>a.service_addresses?.latitude&&a.service_addresses?.longitude).map(a=>{const bal=Number(balMap[a.account_id]?.current_balance??0);const cls=classify(bal,a.account_type);const dot=bal<-0.01?'#0088ff':Math.abs(bal)<0.01?'#00ff88':bal>500?'#ff2244':a.account_type==='RELIGIOUS'?'#444444':'#ff8800';const name=a.customers?.full_name||'--';const addr=a.service_addresses?.street||'--';const lastPmt=balMap[a.account_id]?.last_payment_date?new Date(balMap[a.account_id].last_payment_date).toLocaleDateString():'None';return{type:'Feature',geometry:{type:'Point',coordinates:[parseFloat(a.service_addresses.longitude),parseFloat(a.service_addresses.latitude)]},properties:{acct:a.account_number,name,addr,status:cls.label,bal:fmtBal(bal),type:a.account_type,lastPmt,dot}};});src.setData({type:'FeatureCollection',features});}
+  async function geocodeAccounts(accounts,balMap){const needsGeo=accounts.filter(a=>a.service_addresses?.street&&!a.service_addresses?.latitude);if(!needsGeo.length)return;console.log(`Geocoding ${needsGeo.length} addresses...`);const BATCH=15;for(let i=0;i<needsGeo.length;i+=BATCH){const batch=needsGeo.slice(i,i+BATCH);await Promise.all(batch.map(async a=>{const addr=a.service_addresses;const q=encodeURIComponent(`${addr.street}, ${addr.city||''}, ${addr.state||'TX'} ${addr.zip||''}`);try{const r=await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${q}.json?access_token=${MAPBOX_TOKEN}&country=US&limit=1&types=address`);if(!r.ok)return;const data=await r.json();if(data.features?.length){const[lng,lat]=data.features[0].center;await fetch(`${SUPA_URL}/rest/v1/service_addresses?address_id=eq.${addr.address_id}`,{method:'PATCH',headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({latitude:lat,longitude:lng})});a.service_addresses.latitude=lat;a.service_addresses.longitude=lng;}}catch(e){}}));updateMapboxDots(accounts,balMap);}console.log('Geocoding complete.');}
+  function updateTicker(sys,criticals){const track=document.getElementById('tickerTrack');if(!track)return;const items=[];criticals.slice(0,5).forEach(({a,bal})=>{const name=(a.customers?.full_name||'--').toUpperCase();const cls=classify(bal,a.account_type);const colorTag=bal>500?'r':'o';items.push(`<span class="ti">ACCT <span class="v">${a.account_number}</span> -- ${name} -- BAL <span class="${colorTag}">${fmtBal(bal)}</span> -- ${cls.label}</span>`);});items.push(`<span class="ti">BILLING CYCLE: <span class="o">${sys.system_name.toUpperCase()} -- APRIL 2026 -- DUE 05/01/2026</span></span>`);items.push(`<span class="ti">SYSTEM ONLINE: <span class="v">${sys.system_code}</span> -- <span class="g">RADEUS ACTIVE</span></span>`);const full=[...items,...items].join('\n');track.innerHTML=full;}
+  async function loadLiveData(systemCode){const systems=await supa('water_systems',`?system_code=eq.${systemCode}&select=*`);if(!systems||!systems.length){console.warn('No system found for',systemCode);return;}const sys=systems[0];currentSystem=sys;const mapTitle=document.getElementById('mapTitle');if(mapTitle)mapTitle.textContent=`SYSTEM MAP -- ${sys.system_name.toUpperCase()} // LIVE`;const accounts=await supa('accounts',`?system_id=eq.${sys.system_id}&status=neq.INACTIVE&select=account_id,account_number,account_type,status,customers(full_name),service_addresses(address_id,street,city,state,zip,latitude,longitude)`);const balances=await supa('account_balances',`?system_id=eq.${sys.system_id}&select=*`);if(!accounts||!balances)return;const balMap={};balances.forEach(b=>{balMap[b.account_id]=b;});let total=0,current=0,credits=0,pastDue=0,critical=0;const criticals=[];accounts.forEach(a=>{total++;const bal=Number(balMap[a.account_id]?.current_balance??0);if(a.account_type==='RELIGIOUS')return;if(bal<-0.01)credits++;else if(Math.abs(bal)<0.01)current++;else if(bal>500){critical++;criticals.push({a,bal});}else pastDue++;});criticals.sort((x,y)=>y.bal-x.bal);const sTitle=document.getElementById('statusTitle');if(sTitle)sTitle.childNodes[0].textContent=`${sys.system_code} -- APR 2026 STATUS `;const rTitle=document.getElementById('regTitle');if(rTitle)rTitle.childNodes[0].textContent=`ACCOUNT REGISTER -- ${sys.system_code} // APRIL 2026 `;const rBadge=document.getElementById('regBadge');if(rBadge)rBadge.textContent=`${accounts.length} ACCTS`;const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};s('stat-total',total);s('stat-current',current);s('stat-credit',credits);s('stat-pastdue',pastDue);s('stat-critical',critical);const pct=total>0?Math.round((current/total)*100):0;dialValues={'dval-collection':pct+'%','dval-accounts':total,'dval-calls':'--','dval-comply':'2','dval-critical':critical,'dval-systems':'9'};s('dval',pct+'%');const collBar=document.getElementById('collBar');const collLbl=document.getElementById('collRateLbl');if(collBar)collBar.style.width=pct+'%';if(collLbl)collLbl.textContent=`~${pct}%`;const navAlert=document.getElementById('nav-acct-alert');if(navAlert){navAlert.textContent=critical>0?critical:'';navAlert.style.display=critical>0?'flex':'none';}const critBadge=document.getElementById('critBadge');if(critBadge)critBadge.textContent=`${critical} URGENT`;const feed=document.getElementById('critFeed');if(feed){feed.innerHTML='';if(criticals.length===0){feed.innerHTML='<div style="padding:24px 12px;text-align:center;color:var(--text-dim);font-size:9px;letter-spacing:2px">NO CRITICAL ACCOUNTS</div>';}else{criticals.forEach(({a,bal})=>{const name=a.customers?.full_name||'--';const addr=a.service_addresses?.street||'--';const cls=classify(bal,a.account_type);const lastPmt=balMap[a.account_id]?.last_payment_date?new Date(balMap[a.account_id].last_payment_date).toLocaleDateString():'None on file';const parts=name.split(' ');const short=parts.length>1?`${parts[0][0]}. ${parts.slice(1).join(' ')}`:name;const div=document.createElement('div');div.className='aitem';div.onclick=()=>showCard(a.account_number,name,addr,cls.label,fmtBal(bal),a.account_type,lastPmt);div.innerHTML=`<div class="adot" style="background:${cls.color};box-shadow:0 0 7px ${cls.color}"></div><div><div class="aname" style="color:${cls.color}">${a.account_number} -- ${short.toUpperCase()}</div><div class="asub">${addr} <span style="color:${cls.color}">${fmtBal(bal)}</span></div></div>`;feed.appendChild(div);});}}updateMapboxDots(accounts,balMap);geocodeAccounts(accounts,balMap);const mapped=accounts.filter(a=>a.service_addresses?.latitude&&a.service_addresses?.longitude);if(mapped.length>0&&radMap){const bounds=new mapboxgl.LngLatBounds();mapped.forEach(a=>bounds.extend([parseFloat(a.service_addresses.longitude),parseFloat(a.service_addresses.latitude)]));radMap.fitBounds(bounds,{padding:60,maxZoom:13,duration:1400});}else if(radMap&&SYS_HQ[systemCode]){radMap.flyTo({center:SYS_HQ[systemCode],zoom:11,duration:1400});}updateTicker(sys,criticals);const cycles=await supa('billing_cycles',`?system_id=eq.${sys.system_id}&order=cycle_year.desc,cycle_month.desc&limit=1`);if(cycles&&cycles.length){const c=cycles[0];if(c.statement_date){const bd=new Date(c.statement_date);s('stat-billdate',bd.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}));}if(c.due_date){const dd=new Date(c.due_date);const ddStr=dd.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});s('stat-duedate',ddStr);s('compDueDate',ddStr);}}const totalOutstanding=balances.reduce((sum,b)=>{const bal=Number(b.current_balance??0);return sum+(bal>0?bal:0);},0);const compOut=document.getElementById('compOutstanding');if(compOut&&totalOutstanding>0)compOut.textContent=`$${totalOutstanding.toFixed(2)}`;const tbody=document.getElementById('acctTable');if(tbody){tbody.innerHTML='';[...accounts].filter(a=>a.status!=='INACTIVE').sort((a,b)=>Number(balMap[b.account_id]?.current_balance??0)-Number(balMap[a.account_id]?.current_balance??0)).forEach(a=>{const bal=Number(balMap[a.account_id]?.current_balance??0);const lastPmt=balMap[a.account_id]?.last_payment_date?new Date(balMap[a.account_id].last_payment_date).toLocaleDateString():'None';const cls=classify(bal,a.account_type);const name=a.customers?.full_name||'--';const addr=a.service_addresses?.street||'--';const tr=document.createElement('tr');tr.onclick=()=>showCard(a.account_number,name,addr,cls.label,fmtBal(bal),a.account_type,lastPmt);tr.innerHTML=`<td class="acct">${a.account_number}</td><td class="nm">${name}</td><td style="color:#8ab8c8;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:500">${addr}</td><td><span class="pill" style="color:${cls.color};border-color:${cls.color}">${cls.label}</span></td><td class="bal" style="text-align:right;color:${cls.color}">${fmtBal(bal)}</td>`;tbody.appendChild(tr);});}const calls=await supa('communication_log',`?system_id=eq.${sys.system_id}&select=*&order=created_at.desc&limit=9`);if(calls&&calls.length){const clog=document.getElementById('clogPanel');if(clog){const catColors={'Leak or Outage':'var(--red)','Bill Question':'var(--cyan)','New Service':'var(--green)','Disconnection':'var(--yellow)','Maintenance':'var(--orange)','Water Quality Question':'var(--orange)','State Agency':'var(--purple)'};const catLabels={'Leak or Outage':'REPAIR','Bill Question':'BILL Q','New Service':'NEW SVC','Disconnection':'DISCON','Maintenance':'MAINT','Water Quality Question':'QUALITY','State Agency':'TCEQ'};clog.innerHTML='';calls.forEach(c=>{const col=catColors[c.category]||'var(--cyan)';const lbl=catLabels[c.category]||'NOTE';const d=document.createElement('div');d.className='citem';d.innerHTML=`<span class="ccat" style="color:${col};border-color:${col}">${lbl}</span><div class="cinfo"><div class="cname">${c.call_ref||''} -- ${c.caller_name||''} // ${c.customer_name||''}</div><div class="csub">${(c.description||'').substring(0,80)}</div></div>`;clog.appendChild(d);});}}console.log(`${accounts.length} accounts loaded for ${sys.system_name}`);}
+  function showCard(num,name,addr,status,bal,type,pmt){document.getElementById('ac-num').textContent=num;document.getElementById('ac-name').textContent=name;document.getElementById('ac-addr').textContent=addr;document.getElementById('ac-bal').textContent=bal;document.getElementById('ac-type').textContent=type;document.getElementById('ac-pmt').textContent=pmt;const s=document.getElementById('ac-stat');s.textContent=status;const cols={'CURRENT':'var(--green)','CREDIT':'var(--blue)','CREDIT BALANCE':'var(--blue)','PAST DUE':'var(--orange)','CRITICAL':'var(--red)','DISCONNECT ELIGIBLE':'var(--red)','ACTIVE -- RELIGIOUS':'var(--text-dim)','RELIGIOUS':'var(--text-dim)'};const c=cols[status]||'var(--yellow)';s.style.color=c;s.style.borderColor=c;if(currentSystem){const base=Number(currentSystem.base_rate||0);const surcharge=Number(currentSystem.energy_surcharge||0);const lateFee=Number(currentSystem.late_fee_amount||0);document.getElementById('ac-baserate').textContent=`$${base.toFixed(2)} / MONTH`;document.getElementById('ac-surcharge').textContent=surcharge>0?`$${surcharge.toFixed(2)} FLAT`:'N/A';document.getElementById('ac-latefee').textContent=lateFee>0?`$${lateFee.toFixed(2)} after due date`:'N/A';document.getElementById('ac-sysname').textContent=currentSystem.system_name;}document.getElementById('accard').classList.add('show');}
   function closeCard(){document.getElementById('accard').classList.remove('show');}
-
-  function setDial(key,label,el){
-    document.getElementById('dval').textContent=dialValues[key]||'—';
-    document.getElementById('dlabel').textContent=label;
-    document.querySelectorAll('.dbtn').forEach(b=>b.classList.remove('active'));
-    el.classList.add('active');
-  }
-
-  function switchSystem(v){
-    if(v==='ALL'){ loadNetworkView(); return; }
-    loadLiveData(v);
-  }
-
-  // ── ALL SYSTEMS NETWORK VIEW ──────────────────────────────────
-  async function loadNetworkView() {
-    const mt=document.getElementById('mapTitle');
-    if(mt) mt.textContent='RADEUS NETWORK — ALL 9 SYSTEMS — TEXAS';
-    if(radMap) radMap.flyTo({center:[-99.5,31.0],zoom:5.8,duration:1400});
-
-    // Update header
-    const sTitle=document.getElementById('statusTitle');
-    if(sTitle) sTitle.childNodes[0].textContent='ALL SYSTEMS — NETWORK STATUS ';
-    const rTitle=document.getElementById('regTitle');
-    if(rTitle) rTitle.childNodes[0].textContent='SYSTEM DIRECTORY — RADEUS NETWORK ';
-    const rBadge=document.getElementById('regBadge');
-    if(rBadge) rBadge.textContent='9 SYSTEMS';
-
-    // Ticker
-    const track=document.getElementById('tickerTrack');
-    if(track) track.innerHTML=['<span class="ti">RADEUS NETWORK — <span class="g">ALL 9 SYSTEMS ONLINE</span> — TOTAL ACCOUNTS: 486 — TEXAS</span>',
-      '<span class="ti">BOIL WATER NOTICE <span class="r">ACTIVE</span> — OAK HILL NWS — VERIFICATION SAMPLES PENDING</span>',
-      '<span class="ti">WATER LOSS AUDIT <span class="r">OVERDUE</span> — DERBY NWS — DUE 03/31/2026 — SUBMIT TO TCEQ</span>'].map(i=>i+i).join('');
-
-    // Fetch ALL balances across all systems
-    const [bals, accounts] = await Promise.all([
-      supa('account_balances','?select=account_id,current_balance&limit=1000'),
-      supa('accounts','?status=neq.INACTIVE&select=account_id,account_number,account_type,system_id,customers(full_name),service_addresses(latitude,longitude)&limit=1000')
-    ]);
-
-    if (bals && bals.length) {
-      let total=bals.length, current=0, credits=0, pastDue=0, critical=0, outstanding=0;
-      const balMap={};
-      bals.forEach(b=>{
-        balMap[b.account_id]=Number(b.current_balance??0);
-        const bal=Number(b.current_balance??0);
-        if(bal<-0.01) credits++;
-        else if(Math.abs(bal)<0.01) current++;
-        else if(bal>500){critical++;}
-        else pastDue++;
-        if(bal>0) outstanding+=bal;
-      });
-      const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
-      s('stat-total',total); s('stat-current',current); s('stat-credit',credits);
-      s('stat-pastdue',pastDue); s('stat-critical',critical);
-      s('stat-billdate','NETWORK'); s('stat-duedate','MULTI');
-      const collLbl=document.getElementById('collRateLbl');
-      const collBar=document.getElementById('collBar');
-      const pct=total>0?Math.round((current/total)*100):0;
-      if(collLbl) collLbl.textContent=`~${pct}%`;
-      if(collBar) collBar.style.width=pct+'%';
-      const compOut=document.getElementById('compOutstanding');
-      if(compOut) compOut.textContent=`$${outstanding.toFixed(2)}`;
-
-      // Plot ALL dots on map
-      if(accounts&&radMap) {
-        const features=accounts
-          .filter(a=>a.service_addresses?.latitude&&a.service_addresses?.longitude)
-          .map(a=>{
-            const bal=balMap[a.account_id]??0;
-            const dot=bal<-0.01?'#0088ff':Math.abs(bal)<0.01?'#00ff88':bal>500?'#ff2244':a.account_type==='RELIGIOUS'?'#444':'#ff8800';
-            const name=a.customers?.full_name||'—';
-            return{type:'Feature',
-              geometry:{type:'Point',coordinates:[parseFloat(a.service_addresses.longitude),parseFloat(a.service_addresses.latitude)]},
-              properties:{acct:a.account_number,name,addr:'—',status:bal>500?'CRITICAL':Math.abs(bal)<0.01?'CURRENT':'PAST DUE',bal:fmtBal(bal),type:a.account_type,lastPmt:'—',dot}};
-          });
-        const src=radMap.getSource('acct-src');
-        if(src) src.setData({type:'FeatureCollection',features});
-      }
-
-      // System directory in account table
-      const tbody=document.getElementById('acctTable');
-      if(tbody){
-        const systems=await supa('water_systems',`?org_id=eq.${ORG_ID}&select=system_id,system_code,system_name&order=system_name`);
-        tbody.innerHTML='';
-        (systems||[]).forEach(sys=>{
-          const sysBals=bals.filter(b=>(accounts||[]).find(a=>a.account_id===b.account_id&&a.system_id===sys.system_id));
-          const sysAccts=(accounts||[]).filter(a=>a.system_id===sys.system_id);
-          const tr=document.createElement('tr');
-          tr.onclick=()=>{document.getElementById('sysSelect').value=sys.system_code;loadLiveData(sys.system_code);};
-          tr.innerHTML=`<td class="acct" style="cursor:pointer">${sys.system_code}</td>
-            <td class="nm">${sys.system_name.replace(/\s*new\s*water\s*system/i,'').trim()}</td>
-            <td style="color:#8ab8c8;font-family:'Rajdhani',sans-serif;font-size:11px">${sysAccts.length} ACCOUNTS</td>
-            <td><span class="pill" style="color:var(--green);border-color:var(--green)">ONLINE</span></td>
-            <td class="bal" style="text-align:right;color:var(--cyan)">→ VIEW</td>`;
-          tbody.appendChild(tr);
-        });
-      }
-    }
-
-    // Clear critical feed
-    const feed=document.getElementById('critFeed');
-    if(feed) feed.innerHTML='<div style="padding:12px;font-size:9px;color:var(--text-dim);letter-spacing:1px;text-align:center">SELECT A SYSTEM FOR DETAIL</div>';
-    const critBadge=document.getElementById('critBadge');
-    if(critBadge) critBadge.textContent='NETWORK';
-  }
-
-  const ORG_ID='00000000-0000-0000-0000-000000000001';
-
-  function filterMap(type,el){
-    document.querySelectorAll('[onclick^="filterMap"]').forEach(b=>{b.style.borderColor='var(--border)';b.style.color='var(--text-dim)';b.style.background='transparent';});
-    el.style.borderColor='var(--cyan)';el.style.color='var(--cyan)';el.style.background='rgba(0,245,255,.08)';
-    if(!radMap||!radMap.getLayer('acct-dots')) return;
-    const base=['!',['has','point_count']];
-    if(type==='red')  radMap.setFilter('acct-dots',['all',base,['==',['get','dot'],'#ff2244']]);
-    else if(type==='ok') radMap.setFilter('acct-dots',['all',base,['==',['get','dot'],'#00ff88']]);
-    else radMap.setFilter('acct-dots', base);
-  }
-
+  function setDial(key,label,el){document.getElementById('dval').textContent=dialValues[key]||'--';document.getElementById('dlabel').textContent=label;document.querySelectorAll('.dbtn').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
+  function switchSystem(v){if(v==='ALL'){loadNetworkView();return;}loadLiveData(v);}
+  async function loadNetworkView(){const mt=document.getElementById('mapTitle');if(mt)mt.textContent='RADEUS NETWORK -- ALL 9 SYSTEMS -- TEXAS';if(radMap)radMap.flyTo({center:[-99.5,31.0],zoom:5.8,duration:1400});const sTitle=document.getElementById('statusTitle');if(sTitle)sTitle.childNodes[0].textContent='ALL SYSTEMS -- NETWORK STATUS ';const rTitle=document.getElementById('regTitle');if(rTitle)rTitle.childNodes[0].textContent='SYSTEM DIRECTORY -- RADEUS NETWORK ';const rBadge=document.getElementById('regBadge');if(rBadge)rBadge.textContent='9 SYSTEMS';const track=document.getElementById('tickerTrack');if(track)track.innerHTML=['<span class="ti">RADEUS NETWORK -- <span class="g">ALL 9 SYSTEMS ONLINE</span> -- TOTAL ACCOUNTS: 486 -- TEXAS</span>','<span class="ti">BOIL WATER NOTICE <span class="r">ACTIVE</span> -- OAK HILL NWS -- VERIFICATION SAMPLES PENDING</span>','<span class="ti">WATER LOSS AUDIT <span class="r">OVERDUE</span> -- DERBY NWS -- DUE 03/31/2026 -- SUBMIT TO TCEQ</span>'].map(i=>i+i).join('');const[bals,accounts]=await Promise.all([supa('account_balances','?select=account_id,current_balance&limit=1000'),supa('accounts','?status=neq.INACTIVE&select=account_id,account_number,account_type,system_id,customers(full_name),service_addresses(latitude,longitude)&limit=1000')]);if(bals&&bals.length){let total=bals.length,current=0,credits=0,pastDue=0,critical=0,outstanding=0;const balMap={};bals.forEach(b=>{balMap[b.account_id]=Number(b.current_balance??0);const bal=Number(b.current_balance??0);if(bal<-0.01)credits++;else if(Math.abs(bal)<0.01)current++;else if(bal>500){critical++;}else pastDue++;if(bal>0)outstanding+=bal;});const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};s('stat-total',total);s('stat-current',current);s('stat-credit',credits);s('stat-pastdue',pastDue);s('stat-critical',critical);s('stat-billdate','NETWORK');s('stat-duedate','MULTI');const collLbl=document.getElementById('collRateLbl');const collBar=document.getElementById('collBar');const pct=total>0?Math.round((current/total)*100):0;if(collLbl)collLbl.textContent=`~${pct}%`;if(collBar)collBar.style.width=pct+'%';const compOut=document.getElementById('compOutstanding');if(compOut)compOut.textContent=`$${outstanding.toFixed(2)}`;if(accounts&&radMap){const features=accounts.filter(a=>a.service_addresses?.latitude&&a.service_addresses?.longitude).map(a=>{const bal=balMap[a.account_id]??0;const dot=bal<-0.01?'#0088ff':Math.abs(bal)<0.01?'#00ff88':bal>500?'#ff2244':a.account_type==='RELIGIOUS'?'#444':'#ff8800';const name=a.customers?.full_name||'--';return{type:'Feature',geometry:{type:'Point',coordinates:[parseFloat(a.service_addresses.longitude),parseFloat(a.service_addresses.latitude)]},properties:{acct:a.account_number,name,addr:'--',status:bal>500?'CRITICAL':Math.abs(bal)<0.01?'CURRENT':'PAST DUE',bal:fmtBal(bal),type:a.account_type,lastPmt:'--',dot}};});const src=radMap.getSource('acct-src');if(src)src.setData({type:'FeatureCollection',features});}const tbody=document.getElementById('acctTable');if(tbody){const systems=await supa('water_systems',`?org_id=eq.${ORG_ID}&select=system_id,system_code,system_name&order=system_name`);tbody.innerHTML='';(systems||[]).forEach(sys=>{const sysAccts=(accounts||[]).filter(a=>a.system_id===sys.system_id);const tr=document.createElement('tr');tr.onclick=()=>{document.getElementById('sysSelect').value=sys.system_code;loadLiveData(sys.system_code);};tr.innerHTML=`<td class="acct" style="cursor:pointer">${sys.system_code}</td><td class="nm">${sys.system_name}</td><td style="color:#8ab8c8;font-family:'Rajdhani',sans-serif;font-size:11px">${sysAccts.length} ACCOUNTS</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">ONLINE</span></td><td class="bal" style="text-align:right;color:var(--cyan)">VIEW</td>`;tbody.appendChild(tr);});}}const feed=document.getElementById('critFeed');if(feed)feed.innerHTML='<div style="padding:12px;font-size:9px;color:var(--text-dim);letter-spacing:1px;text-align:center">SELECT A SYSTEM FOR DETAIL</div>';const critBadge=document.getElementById('critBadge');if(critBadge)critBadge.textContent='NETWORK';}
+  function filterMap(type,el){document.querySelectorAll('[onclick^="filterMap"]').forEach(b=>{b.style.borderColor='var(--border)';b.style.color='var(--text-dim)';b.style.background='transparent';});el.style.borderColor='var(--cyan)';el.style.color='var(--cyan)';el.style.background='rgba(0,245,255,.08)';if(!radMap||!radMap.getLayer('acct-dots'))return;const base=['!',['has','point_count']];if(type==='red')radMap.setFilter('acct-dots',['all',base,['==',['get','dot'],'#ff2244']]);else if(type==='ok')radMap.setFilter('acct-dots',['all',base,['==',['get','dot'],'#00ff88']]);else radMap.setFilter('acct-dots',base);}
   function showBWN(){document.getElementById('bwnModal').classList.add('show');}
   function closeBWN(){document.getElementById('bwnModal').classList.remove('show');}
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCard();closeBWN();}});
-
-  // ── MAPBOX INIT ───────────────────────────────────────────────
-  mapboxgl.accessToken = MAPBOX_TOKEN;
-  radMap = new mapboxgl.Map({
-    container:'mapGl',
-    style:'mapbox://styles/mapbox/dark-v11',
-    center:[-99.5,31.0],
-    zoom:5.8,
-    minZoom:4, maxZoom:18
-  });
-
-  radMap.on('load', () => {
-    radMap.addSource('acct-src',{
-      type:'geojson', data:{type:'FeatureCollection',features:[]},
-      cluster:true, clusterMaxZoom:13, clusterRadius:30
-    });
-    radMap.addLayer({id:'clusters',type:'circle',source:'acct-src',filter:['has','point_count'],
-      paint:{'circle-color':['step',['get','point_count'],'#00aa66',5,'#ff8800',15,'#ff2244'],
-             'circle-radius':['step',['get','point_count'],14,5,20,15,28],
-             'circle-stroke-width':1,'circle-stroke-color':'rgba(0,0,0,.4)','circle-opacity':.85}});
-    radMap.addLayer({id:'cluster-count',type:'symbol',source:'acct-src',filter:['has','point_count'],
-      layout:{'text-field':['get','point_count_abbreviated'],
-              'text-font':['DIN Offc Pro Bold','Arial Unicode MS Bold'],'text-size':10},
-      paint:{'text-color':'#fff'}});
-    radMap.addLayer({id:'acct-dots',type:'circle',source:'acct-src',
-      filter:['!',['has','point_count']],
-      paint:{'circle-color':['get','dot'],'circle-radius':7,
-             'circle-stroke-width':1.5,'circle-stroke-color':'rgba(2,12,20,.7)','circle-opacity':.9}});
-    radMap.on('click','acct-dots',e=>{
-      const p=e.features[0].properties;
-      showCard(p.acct,p.name,p.addr,p.status,p.bal,p.type,p.lastPmt);
-    });
-    radMap.on('click','clusters',e=>{
-      const f=radMap.queryRenderedFeatures(e.point,{layers:['clusters']});
-      radMap.getSource('acct-src').getClusterExpansionZoom(f[0].properties.cluster_id,(err,zoom)=>{
-        if(!err) radMap.easeTo({center:f[0].geometry.coordinates,zoom});
-      });
-    });
-    radMap.on('mouseenter','acct-dots',()=>radMap.getCanvas().style.cursor='pointer');
-    radMap.on('mouseleave','acct-dots',()=>radMap.getCanvas().style.cursor='');
-    radMap.on('mouseenter','clusters',()=>radMap.getCanvas().style.cursor='pointer');
-    radMap.on('mouseleave','clusters',()=>radMap.getCanvas().style.cursor='');
-
-    // Boot — open to All Systems network view (all 480 dots visible on Texas map)
-    document.getElementById('sysSelect').value='ALL';
-    loadNetworkView();
-  });
+  mapboxgl.accessToken=MAPBOX_TOKEN;
+  radMap=new mapboxgl.Map({container:'mapGl',style:'mapbox://styles/mapbox/dark-v11',center:[-99.5,31.0],zoom:5.8,minZoom:4,maxZoom:18});
+  radMap.on('load',()=>{radMap.addSource('acct-src',{type:'geojson',data:{type:'FeatureCollection',features:[]},cluster:true,clusterMaxZoom:13,clusterRadius:30});radMap.addLayer({id:'clusters',type:'circle',source:'acct-src',filter:['has','point_count'],paint:{'circle-color':['step',['get','point_count'],'#00aa66',5,'#ff8800',15,'#ff2244'],'circle-radius':['step',['get','point_count'],14,5,20,15,28],'circle-stroke-width':1,'circle-stroke-color':'rgba(0,0,0,.4)','circle-opacity':.85}});radMap.addLayer({id:'cluster-count',type:'symbol',source:'acct-src',filter:['has','point_count'],layout:{'text-field':['get','point_count_abbreviated'],'text-font':['DIN Offc Pro Bold','Arial Unicode MS Bold'],'text-size':10},paint:{'text-color':'#fff'}});radMap.addLayer({id:'acct-dots',type:'circle',source:'acct-src',filter:['!',['has','point_count']],paint:{'circle-color':['get','dot'],'circle-radius':7,'circle-stroke-width':1.5,'circle-stroke-color':'rgba(2,12,20,.7)','circle-opacity':.9}});radMap.on('click','acct-dots',e=>{const p=e.features[0].properties;showCard(p.acct,p.name,p.addr,p.status,p.bal,p.type,p.lastPmt);});radMap.on('click','clusters',e=>{const f=radMap.queryRenderedFeatures(e.point,{layers:['clusters']});radMap.getSource('acct-src').getClusterExpansionZoom(f[0].properties.cluster_id,(err,zoom)=>{if(!err)radMap.easeTo({center:f[0].geometry.coordinates,zoom});});});radMap.on('mouseenter','acct-dots',()=>radMap.getCanvas().style.cursor='pointer');radMap.on('mouseleave','acct-dots',()=>radMap.getCanvas().style.cursor='');radMap.on('mouseenter','clusters',()=>radMap.getCanvas().style.cursor='pointer');radMap.on('mouseleave','clusters',()=>radMap.getCanvas().style.cursor='');document.getElementById('sysSelect').value='ALL';loadNetworkView();});
+</script>
+<script src="auth.js"></script>
+<script>
+(async()=>{
+  const s=getSession();
+  if(!s||s.expires_at<Date.now()/1000){window.location.href='login.html';return;}
+  const staff=getStoredStaff();
+  if(!staff){window.location.href='login.html';return;}
+  injectOperatorName(staff.name,staff.role);
+  const lb=document.getElementById('logoutBtn');
+  if(lb)lb.addEventListener('click',signOut);
+})();
 </script>
 </body>
 </html>
