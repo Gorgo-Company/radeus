@@ -374,14 +374,21 @@
   radMap=new mapboxgl.Map({container:'mapGl',style:'mapbox://styles/mapbox/dark-v11',center:[-99.5,31.0],zoom:5.8,minZoom:4,maxZoom:18});
   radMap.on('load',()=>{radMap.addSource('acct-src',{type:'geojson',data:{type:'FeatureCollection',features:[]},cluster:true,clusterMaxZoom:13,clusterRadius:30});radMap.addLayer({id:'clusters',type:'circle',source:'acct-src',filter:['has','point_count'],paint:{'circle-color':['step',['get','point_count'],'#00aa66',5,'#ff8800',15,'#ff2244'],'circle-radius':['step',['get','point_count'],14,5,20,15,28],'circle-stroke-width':1,'circle-stroke-color':'rgba(0,0,0,.4)','circle-opacity':.85}});radMap.addLayer({id:'cluster-count',type:'symbol',source:'acct-src',filter:['has','point_count'],layout:{'text-field':['get','point_count_abbreviated'],'text-font':['DIN Offc Pro Bold','Arial Unicode MS Bold'],'text-size':10},paint:{'text-color':'#fff'}});radMap.addLayer({id:'acct-dots',type:'circle',source:'acct-src',filter:['!',['has','point_count']],paint:{'circle-color':['get','dot'],'circle-radius':7,'circle-stroke-width':1.5,'circle-stroke-color':'rgba(2,12,20,.7)','circle-opacity':.9}});radMap.on('click','acct-dots',e=>{const p=e.features[0].properties;showCard(p.acct,p.name,p.addr,p.status,p.bal,p.type,p.lastPmt);});radMap.on('click','clusters',e=>{const f=radMap.queryRenderedFeatures(e.point,{layers:['clusters']});radMap.getSource('acct-src').getClusterExpansionZoom(f[0].properties.cluster_id,(err,zoom)=>{if(!err)radMap.easeTo({center:f[0].geometry.coordinates,zoom});});});radMap.on('mouseenter','acct-dots',()=>radMap.getCanvas().style.cursor='pointer');radMap.on('mouseleave','acct-dots',()=>radMap.getCanvas().style.cursor='');radMap.on('mouseenter','clusters',()=>radMap.getCanvas().style.cursor='pointer');radMap.on('mouseleave','clusters',()=>radMap.getCanvas().style.cursor='');document.getElementById('sysSelect').value='ALL';loadNetworkView();});
 </script>
-<script src="auth.js"></script>
 <script>
-(async()=>{
+// ── RADEUS Auth (inlined) ─────────────────────────────────
+const _SUPA_URL='https://bvpesxpptgdwkhsewhke.supabase.co';
+const _SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
+const SESSION_KEY='radeus_session';
+function getSession(){try{const s=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');if(!s)return null;if(s.expires_at&&Date.now()/1000>s.expires_at){localStorage.removeItem(SESSION_KEY);return null;}return s;}catch{return null;}}
+function getStoredStaff(){try{const r=localStorage.getItem('radeus_staff');return r?JSON.parse(r):null;}catch{return null;}}
+function signOut(){const s=getSession();if(s?.access_token){fetch(`${_SUPA_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':_SUPA_KEY,'Authorization':`Bearer ${s.access_token}`}}).catch(()=>{});}localStorage.removeItem(SESSION_KEY);localStorage.removeItem('radeus_staff');window.location.href='login.html';}
+(function initAuth(){
   const s=getSession();
   if(!s||s.expires_at<Date.now()/1000){window.location.href='login.html';return;}
   const staff=getStoredStaff();
   if(!staff){window.location.href='login.html';return;}
-  injectOperatorName(staff.name,staff.role);
+  const el=document.getElementById('operatorName');
+  if(el)el.textContent=staff.name||'OPERATOR';
   const lb=document.getElementById('logoutBtn');
   if(lb)lb.addEventListener('click',signOut);
 })();
