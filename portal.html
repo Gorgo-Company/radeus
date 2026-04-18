@@ -40,7 +40,7 @@
   .stat-sub{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim);margin-top:2px;}
 
   /* MAIN GRID */
-  .main{position:fixed;top:120px;bottom:0;left:0;right:0;display:grid;grid-template-columns:280px 1fr 1fr;gap:10px;padding:10px;overflow:hidden;}
+  .main{position:fixed;top:120px;bottom:0;left:0;right:0;display:grid;grid-template-columns:280px 1fr;gap:10px;padding:10px;overflow:hidden;}
   .col{display:flex;flex-direction:column;gap:10px;overflow:hidden;}
 
   /* PANELS */
@@ -307,31 +307,18 @@
 
     </div>
 
-    <!-- CENTER: Invoices -->
-    <div class="col" style="overflow:hidden;display:flex;flex-direction:column;">
+    <!-- REGISTRY: Unified invoices + payments -->
+    <div class="col" style="overflow:hidden;display:flex;flex-direction:column;grid-column:span 2;">
       <div class="panel" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
-        <div class="panel-title">⬡ INVOICE HISTORY <span style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-dim);letter-spacing:0">Click row to view PDF</span></div>
-        <div class="tbl-wrap">
-          <table class="ptable">
-            <thead><tr>
-              <th>DATE</th><th>PERIOD</th><th>AMOUNT</th><th>DUE</th><th>STATUS</th><th></th>
-            </tr></thead>
-            <tbody id="invoiceTable"><tr><td colspan="6" class="empty">LOADING...</td></tr></tbody>
-          </table>
+        <div class="panel-title">⬡ ACCOUNT TRANSACTION HISTORY
+          <span style="font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-dim);letter-spacing:0">Invoices: click row to view PDF</span>
         </div>
-      </div>
-    </div>
-
-    <!-- RIGHT: Payments -->
-    <div class="col" style="overflow:hidden;display:flex;flex-direction:column;">
-      <div class="panel" style="flex:1;display:flex;flex-direction:column;overflow:hidden;">
-        <div class="panel-title">⬡ PAYMENT HISTORY</div>
         <div class="tbl-wrap">
           <table class="ptable">
             <thead><tr>
-              <th>DATE</th><th>AMOUNT</th><th>METHOD</th><th>STATUS</th>
+              <th>DATE</th><th>TYPE</th><th>DESCRIPTION</th><th style="text-align:right">AMOUNT</th><th>STATUS</th><th></th>
             </tr></thead>
-            <tbody id="payTable"><tr><td colspan="4" class="empty">LOADING...</td></tr></tbody>
+            <tbody id="registryTable"><tr><td colspan="6" class="empty">LOADING...</td></tr></tbody>
           </table>
         </div>
       </div>
@@ -498,59 +485,84 @@ async function _loadPortal(){
   }
 
   // Load all three in parallel
-  await Promise.all([loadInvoices(acct),loadPayments(acct),loadServiceRequests(acct)]);
+  await Promise.all([loadRegistry(acct),loadServiceRequests(acct)]);
 }
 
 // ── INVOICES ───────────────────────────────────────────────
-async function loadInvoices(acct){
-  const tbody=document.getElementById('invoiceTable');
+// ── UNIFIED REGISTRY ───────────────────────────────────────
+async function loadRegistry(acct){
+  const tbody=document.getElementById('registryTable');
   try{
-  const bills=await pFetch('bills',`?account_id=eq.${acct.account_id}&select=bill_id,cycle_year,cycle_month,statement_date,due_date,total_amount,bill_pdf_url,in_closed_cycle&order=statement_date.desc&limit=36`);
-  const yr=new Date().getFullYear();
-  const ytd=(bills||[]).filter(b=>b.cycle_year===yr);
-  document.getElementById('s-invoices').textContent=ytd.length||'0';
-  const ytdAmt=ytd.reduce((s,b)=>s+parseFloat(b.total_amount||0),0);
-  document.getElementById('s-billed').textContent=ytd.length?fmtMoney(ytdAmt)+' BILLED':'NO BILLS THIS YEAR';
-  if(!bills?.length){tbody.innerHTML='<tr><td colspan="6" class="empty">NO INVOICES ON FILE</td></tr>';return;}
-  tbody.innerHTML=bills.map(b=>{
-    const today=new Date();
-    const due=b.due_date?new Date(b.due_date+'T00:00:00'):null;
-    let statusCls,statusTxt;
-    if(b.in_closed_cycle){statusCls='s-paid';statusTxt='PAID';}
-    else if(due&&due<today){statusCls='s-over';statusTxt='OVERDUE';}
-    else{statusCls='s-due';statusTxt='DUE';}
-    const pdfClick=b.bill_pdf_url?`onclick="window.open('${b.bill_pdf_url}','_blank')"` :`onclick="showToast('PDF not available yet','err')"`;
-    return`<tr class="inv-row" ${pdfClick}>
-      <td class="td-date">${fmtDate(b.statement_date)}</td>
-      <td class="td-ref">${fmtPeriod(b.cycle_year,b.cycle_month)}</td>
-      <td class="td-amt" style="color:var(--cyan)">${fmtMoney(b.total_amount)}</td>
-      <td class="td-date">${fmtDate(b.due_date)}</td>
-      <td><span class="spill ${statusCls}">${statusTxt}</span></td>
-      <td class="pdf-icon">${b.bill_pdf_url?'📄':'—'}</td>
-    </tr>`;
-  }).join('');
-  }catch(e){tbody.innerHTML='<tr><td colspan="6" class="empty">COULD NOT LOAD INVOICES</td></tr>';console.error('loadInvoices:',e);}
-}
+    const [bills, pays] = await Promise.all([
+      pFetch('bills',`?account_id=eq.${acct.account_id}&select=bill_id,cycle_year,cycle_month,statement_date,due_date,total_amount,bill_pdf_url,in_closed_cycle&order=statement_date.desc&limit=36`),
+      pFetch('payments',`?account_id=eq.${acct.account_id}&select=payment_date,amount,payment_method,deposited,returned&order=payment_date.desc&limit=36`)
+    ]);
 
-// ── PAYMENTS ───────────────────────────────────────────────
-async function loadPayments(acct){
-  const tbody=document.getElementById('payTable');
-  try{
-  const pays=await pFetch('payments',`?account_id=eq.${acct.account_id}&select=payment_date,amount,payment_method,deposited,returned&order=payment_date.desc&limit=36`);
-  if(!pays?.length){tbody.innerHTML='<tr><td colspan="4" class="empty">NO PAYMENTS ON FILE</td></tr>';return;}
-  tbody.innerHTML=pays.map(p=>{
-    let sc,st;
-    if(p.returned){sc='s-over';st='RETURNED';}
-    else if(p.deposited){sc='s-paid';st='DEPOSITED';}
-    else{sc='s-due';st='PENDING';}
-    return`<tr>
-      <td class="td-date">${fmtDate(p.payment_date)}</td>
-      <td class="td-amt" style="${p.returned?'color:var(--red)':''}">${fmtMoney(p.amount)}</td>
-      <td class="td-ref">${(p.payment_method||'—').replace('_',' ')}</td>
-      <td><span class="spill ${sc}">${st}</span></td>
-    </tr>`;
-  }).join('');
-  }catch(e){tbody.innerHTML='<tr><td colspan="4" class="empty">COULD NOT LOAD PAYMENTS</td></tr>';console.error('loadPayments:',e);}
+    // YTD invoice stats
+    const yr=new Date().getFullYear();
+    const ytd=(bills||[]).filter(b=>b.cycle_year===yr);
+    document.getElementById('s-invoices').textContent=ytd.length||'0';
+    const ytdAmt=ytd.reduce((s,b)=>s+parseFloat(b.total_amount||0),0);
+    document.getElementById('s-billed').textContent=ytd.length?fmtMoney(ytdAmt)+' BILLED':'NO BILLS THIS YEAR';
+
+    // Last payment stat
+    const lastPay=(pays||[]).find(p=>!p.returned);
+    if(lastPay){
+      document.getElementById('s-lastpay').textContent=fmtMoney(lastPay.amount||0);
+      document.getElementById('s-lastdate').textContent=fmtDate(lastPay.payment_date);
+    }
+
+    // Build unified row list — tag each entry with type and sort by date desc
+    const rows=[];
+    (bills||[]).forEach(b=>{
+      rows.push({date:b.statement_date, type:'INVOICE', data:b});
+    });
+    (pays||[]).forEach(p=>{
+      rows.push({date:p.payment_date, type:'PAYMENT', data:p});
+    });
+    rows.sort((a,b)=>new Date(b.date)-new Date(a.date));
+
+    if(!rows.length){tbody.innerHTML='<tr><td colspan="6" class="empty">NO TRANSACTIONS ON FILE</td></tr>';return;}
+
+    const today=new Date();
+    tbody.innerHTML=rows.map(r=>{
+      if(r.type==='INVOICE'){
+        const b=r.data;
+        const due=b.due_date?new Date(b.due_date+'T00:00:00'):null;
+        let sc,st;
+        if(b.in_closed_cycle){sc='s-paid';st='PAID';}
+        else if(due&&due<today){sc='s-over';st='OVERDUE';}
+        else{sc='s-due';st='DUE '+fmtDate(b.due_date);}
+        const click=b.bill_pdf_url?`onclick="window.open('${b.bill_pdf_url}','_blank')"`:
+          `onclick="showToast('PDF not available yet','err')"`;
+        return`<tr class="inv-row" ${click}>
+          <td class="td-date">${fmtDate(b.statement_date)}</td>
+          <td><span class="spill" style="border-color:rgba(0,245,255,.4);color:var(--cyan)">INVOICE</span></td>
+          <td class="td-ref">${fmtPeriod(b.cycle_year,b.cycle_month)} STATEMENT</td>
+          <td class="td-amt" style="text-align:right;color:var(--cyan)">${fmtMoney(b.total_amount)}</td>
+          <td><span class="spill ${sc}">${st}</span></td>
+          <td class="pdf-icon">${b.bill_pdf_url?'📄':'—'}</td>
+        </tr>`;
+      } else {
+        const p=r.data;
+        let sc,st;
+        if(p.returned){sc='s-over';st='RETURNED';}
+        else if(p.deposited){sc='s-paid';st='DEPOSITED';}
+        else{sc='s-due';st='PENDING';}
+        return`<tr>
+          <td class="td-date">${fmtDate(p.payment_date)}</td>
+          <td><span class="spill" style="border-color:rgba(0,255,136,.4);color:var(--green)">PAYMENT</span></td>
+          <td class="td-ref">${(p.payment_method||'—').replace(/_/g,' ')}</td>
+          <td class="td-amt" style="text-align:right;${p.returned?'color:var(--red)':''}">${p.returned?'<span style="font-size:8px;margin-right:4px">RTN</span>':''}${fmtMoney(p.amount)}</td>
+          <td><span class="spill ${sc}">${st}</span></td>
+          <td></td>
+        </tr>`;
+      }
+    }).join('');
+  }catch(e){
+    tbody.innerHTML='<tr><td colspan="6" class="empty">COULD NOT LOAD TRANSACTIONS</td></tr>';
+    console.error('loadRegistry:',e);
+  }
 }
 
 // ── SERVICE REQUESTS ───────────────────────────────────────
