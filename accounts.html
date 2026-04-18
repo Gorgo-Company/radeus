@@ -57,7 +57,7 @@
   .new-acct-btn:hover{background:rgba(0,255,136,.15);}
 
   /* MAIN LAYOUT */
-  .main{position:fixed;top:132px;bottom:64px;left:0;right:0;display:flex;overflow:hidden;}
+  .main{position:fixed;top:132px;bottom:78px;left:0;right:0;display:flex;overflow:hidden;}
 
   /* ACCOUNTS TABLE */
   .acct-list{flex:1;overflow-y:auto;min-width:0;}
@@ -162,13 +162,12 @@
   .empty-state .big{font-family:'Orbitron',monospace;font-size:12px;letter-spacing:3px;color:rgba(0,245,255,.2);}
 
   /* BOTTOM NAV */
-  .botnav{position:fixed;bottom:0;left:0;right:0;height:64px;background:linear-gradient(90deg,var(--bg2),#020e1c,var(--bg2));border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:6px;padding:0 16px;z-index:100;}
-  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;width:68px;height:50px;background:rgba(0,245,255,.04);border:1px solid rgba(0,245,255,.25);color:rgba(0,245,255,.58);cursor:pointer;transition:all .2s;font-size:7px;letter-spacing:1px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;}
+  .botnav{position:fixed;bottom:0;left:0;right:0;height:78px;background:linear-gradient(90deg,var(--bg2),#020e1c,var(--bg2));border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:6px;padding:0 16px;z-index:100;}
+  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:58px;height:68px;background:var(--panel);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;transition:all .2s;font-size:8px;letter-spacing:1px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;}
   .navbtn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--cyan);transform:scaleX(0);transition:transform .2s;}
   .navbtn:hover::after,.navbtn.active::after{transform:scaleX(1);}
-  .navbtn:hover{color:rgba(0,245,255,.88);border-color:rgba(0,245,255,.5);background:rgba(0,245,255,.08);}
-  .navbtn.active{color:var(--cyan);border-color:var(--cyan);background:rgba(0,245,255,.11);box-shadow:0 0 16px rgba(0,245,255,.28),inset 0 0 14px rgba(0,245,255,.07);}
-  .navicon{font-size:15px;}
+  .navbtn:hover,.navbtn.active{color:var(--cyan);border-color:var(--border-hi);background:rgba(0,245,255,.05);}
+  .navicon{font-size:20px;}
   .navalert{position:absolute;top:5px;right:6px;width:13px;height:13px;background:var(--red);border-radius:50%;font-size:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Orbitron',monospace;}
 
   /* SCROLLBAR */
@@ -197,7 +196,7 @@
   <div class="logo"><a href="index.html">RADEUS</a></div>
   <div style="display:flex;align-items:center;gap:16px">
     <div class="sdot"></div>
-    <span style="font-size:12px;color:var(--text-mid);letter-spacing:3px;font-family:'Share Tech Mono',monospace">ACCOUNTS</span>
+    <span style="font-size:9px;color:var(--text-dim);letter-spacing:2px">ACCOUNTS MODULE</span>
     <select class="sys-select" id="sysSelect" onchange="switchSystem(this.value)">
       <option value="">⬡ LOADING SYSTEMS...</option>
     </select>
@@ -230,12 +229,11 @@
     <button class="fbtn active" onclick="setFilter('ALL',this)">ALL</button>
     <button class="fbtn" onclick="setFilter('ACTIVE',this)">ACTIVE</button>
     <button class="fbtn" onclick="setFilter('INACTIVE',this)">INACTIVE</button>
-    <button class="fbtn" onclick="setFilter('DISCONNECTED',this)">DISCONNECTED</button>
     <button class="fbtn" onclick="setFilter('CURRENT',this)" style="--fc:var(--green)">CURRENT</button>
     <button class="fbtn" onclick="setFilter('PAST DUE',this)">PAST DUE</button>
     <button class="fbtn" onclick="setFilter('CRITICAL',this)">CRITICAL</button>
     <button class="fbtn" onclick="setFilter('CREDIT',this)">CREDIT BAL</button>
-    <button class="fbtn" onclick="setFilter('PMT PLAN',this)">PMT PLAN</button>
+    <button class="fbtn" onclick="setFilter('ARRANGEMENTS',this)">ARRANGEMENTS</button>
   </div>
   <button class="new-acct-btn" onclick="openNewAcct()">+ NEW ACCOUNT</button>
 </div>
@@ -296,10 +294,11 @@
   <a class="navbtn active" href="accounts.html"><span class="navicon">👤</span>ACCOUNTS</a>
   <a class="navbtn" href="readings.html"><span class="navicon">⏱️</span>READINGS</a>
   <a class="navbtn" href="billing.html"><span class="navicon">🧾</span>BILLING</a>
-  <a class="navbtn" href="comms.html"><span class="navicon" style="font-size:11px;letter-spacing:-2px">📞✉</span>COMMS</a>
   <a class="navbtn" href="compliance.html"><span class="navicon">📋</span>COMPLY</a>
   <a class="navbtn" href="payments.html"><span class="navicon">💵</span>PAYMENTS</a>
+  <a class="navbtn" href="workorders.html"><span class="navicon">🔧</span>WO's</a>
   <a class="navbtn" href="reports.html"><span class="navicon">📊</span>REPORTS</a>
+  <a class="navbtn" href="comms.html"><span class="navicon">📡</span>COMMS</a>
   <a class="navbtn" href="system.html"><span class="navicon">⚙</span>SYSTEM</a>
 </div>
 
@@ -543,14 +542,12 @@
 
     let rows = allAccounts.filter(a => {
       // Filter
-      if (currentFilter === 'ACTIVE')       return a.status === 'ACTIVE';
-      if (currentFilter === 'INACTIVE')     return a.status === 'INACTIVE';
-      if (currentFilter === 'DISCONNECTED') return a.status === 'DISCONNECTED';
-      if (currentFilter === 'CURRENT')      return a.status==='ACTIVE' && a.bal === 0;
-      if (currentFilter === 'PAST DUE')     return a.status==='ACTIVE' && a.bal > 0 && a.bal <= 500;
-      if (currentFilter === 'CRITICAL')     return a.status==='ACTIVE' && a.bal > 500;
-      if (currentFilter === 'CREDIT')       return a.status==='ACTIVE' && a.bal < 0;
-      if (currentFilter === 'PMT PLAN')     return a.hasPlan === true;
+      if (currentFilter === 'ACTIVE')     return a.status === 'ACTIVE';
+      if (currentFilter === 'INACTIVE')   return a.status === 'INACTIVE';
+      if (currentFilter === 'CURRENT')    return a.status==='ACTIVE' && a.bal === 0;
+      if (currentFilter === 'PAST DUE')   return a.status==='ACTIVE' && a.bal > 0 && a.bal <= 500;
+      if (currentFilter === 'CRITICAL')   return a.status==='ACTIVE' && a.bal > 500;
+      if (currentFilter === 'CREDIT')     return a.status==='ACTIVE' && a.bal < 0;
       return true;
     }).filter(a => {
       if (!search) return true;
@@ -595,7 +592,7 @@
         </td>
         <td><span class="pill" style="color:${a.cls.color};border-color:${a.cls.color}">${a.cls.label}</span></td>
         <td>${hasPlan ? '<span class="plan-pill">PLAN</span>' : '<span style="color:var(--text-dim);font-size:11px">—</span>'}</td>
-        <td class="td-date">${fmtDate(a.lastPmt)}${a.lastPmtAmt ? '<br><span style="color:var(--green);font-size:11px;font-family:\'Rajdhani\',sans-serif;font-weight:600">'+fmtBal(a.lastPmtAmt)+'</span>' : ''}</td>
+        <td class="td-date">${fmtDate(a.lastPmt)}${a.lastPmtAmt ? '<br><span style="color:var(--green);font-size:8px">'+fmtBal(a.lastPmtAmt)+'</span>' : ''}</td>
         <td class="td-bal" style="color:${a.cls.color}">${fmtBal(a.bal)}</td>`;
       tbody.appendChild(tr);
     });
