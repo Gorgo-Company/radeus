@@ -34,7 +34,7 @@
   .ticker-wrap{position:fixed;top:46px;left:0;right:0;height:26px;background:rgba(7,13,4,.95);border-bottom:1px solid rgba(138,184,94,.08);overflow:hidden;z-index:99;display:flex;align-items:center;}
   .ticker-tag{background:var(--wo);color:#070d04;font-family:'Orbitron',monospace;font-size:8px;font-weight:700;padding:0 10px;height:100%;display:flex;align-items:center;letter-spacing:2px;white-space:nowrap;flex-shrink:0;}
   .ticker-track{display:flex;animation:tick 50s linear infinite;white-space:nowrap;}
-  .ti{padding:0 28px;font-size:10px;color:var(--text-dim);letter-spacing:.5px;}
+  .ti{padding:0 28px;font-size:10px;color:rgba(200,236,170,.82);letter-spacing:.5px;}
   .ti .v{color:var(--wo)}.ti .r{color:var(--red)}.ti .g{color:var(--green)}.ti .o{color:var(--orange)}
   @keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
@@ -42,7 +42,7 @@
   .statsbar{position:fixed;top:72px;left:0;right:0;height:52px;background:rgba(7,13,4,.96);border-bottom:1px solid var(--border);display:flex;align-items:stretch;z-index:98;}
   .stat-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 16px;border-right:1px solid var(--border);flex:1;}
   .stat-cell:last-child{border-right:none;}
-  .stat-label{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim);letter-spacing:2px;white-space:nowrap;}
+  .stat-label{font-family:'Share Tech Mono',monospace;font-size:9px;font-weight:600;color:rgba(200,236,170,.78);letter-spacing:1.5px;white-space:nowrap;}
   .stat-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:28px;}
   .sv-wo{color:var(--wo);}.sv-red{color:var(--red);}.sv-or{color:var(--orange);}.sv-g{color:var(--green);}.sv-y{color:var(--yellow);}
 
@@ -85,6 +85,13 @@
   /* RIGHT PANEL */
   .right-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;}
 
+  .sys-filter{background:rgba(138,184,94,.05);border:1px solid rgba(138,184,94,.2);color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:8px;padding:3px 8px;outline:none;cursor:pointer;letter-spacing:.5px;}
+  .sys-filter option{background:#0c1408;color:var(--wo);}
+  .sys-filter:focus,.sys-filter:hover{border-color:var(--border-hi);color:var(--wo);}
+  .wo-search{background:rgba(138,184,94,.05);border:1px solid rgba(138,184,94,.2);color:var(--wo);font-family:'Share Tech Mono',monospace;font-size:9px;padding:3px 10px;outline:none;width:175px;letter-spacing:.8px;}
+  .wo-search::placeholder{color:var(--text-dim);}
+  .wo-search:focus{border-color:var(--border-hi);background:rgba(138,184,94,.08);}
+
   /* FILTER BAR */
   .filterbar{height:38px;flex-shrink:0;background:rgba(7,13,4,.98);border-bottom:1px solid rgba(138,184,94,.07);display:flex;align-items:center;padding:0 14px;gap:5px;}
   .fbtn{font-size:8px;padding:4px 10px;border:1px solid rgba(138,184,94,.2);color:var(--text-dim);background:transparent;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px;transition:all .15s;white-space:nowrap;}
@@ -94,8 +101,8 @@
   .add-btn:hover{background:rgba(138,184,94,.14);}
   .row-count{font-family:'Orbitron',monospace;font-size:9px;color:var(--text-dim);letter-spacing:1px;}
 
-  /* WO CARDS */
-  .cards-wrap{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:8px;}
+  /* WO CARDS — horizontal 3-col layout */
+  .cards-wrap{flex:1;overflow-y:auto;padding:10px 12px;display:flex;flex-direction:column;gap:6px;}
   .wo-card{background:var(--panel);border:1px solid var(--border);position:relative;cursor:pointer;transition:all .15s;overflow:hidden;}
   .wo-card::before{content:'';position:absolute;left:0;top:0;bottom:0;width:4px;}
   .wo-card.p-critical::before{background:var(--red);box-shadow:2px 0 8px rgba(255,34,68,.4);}
@@ -105,9 +112,15 @@
   .wo-card:hover{border-color:var(--border-hi);background:rgba(138,184,94,.05);}
   .wo-card.selected{border-color:var(--wo);background:rgba(138,184,94,.08);}
   .wo-card.status-completed{opacity:.55;}
-  .card-body{padding:10px 12px 10px 16px;display:flex;flex-direction:column;gap:4px;}
-  .card-top{display:flex;align-items:center;gap:8px;justify-content:space-between;}
-  .card-top-left{display:flex;align-items:center;gap:7px;}
+  /* 3-column horizontal card */
+  .card-inner{display:flex;align-items:center;gap:12px;padding:9px 14px 9px 16px;}
+  .card-id{flex-shrink:0;width:160px;display:flex;flex-direction:column;gap:5px;}
+  .card-id-top{display:flex;align-items:center;gap:6px;flex-wrap:wrap;}
+  .card-center{flex:1;min-width:0;}
+  .card-title{font-size:14px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-bottom:3px;}
+  .card-sub{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-dim);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .card-right-col{flex-shrink:0;display:flex;flex-direction:column;align-items:flex-end;gap:5px;min-width:192px;}
+  .card-meta-right{display:flex;flex-direction:column;gap:2px;align-items:flex-end;}
   .wo-num{font-family:'Orbitron',monospace;font-size:8px;color:var(--text-dim);letter-spacing:1px;}
   .cat-badge{font-family:'Orbitron',monospace;font-size:6px;padding:2px 5px;border:1px solid;letter-spacing:.8px;}
   .cat-fr{border-color:var(--red);color:var(--red);}
@@ -116,13 +129,9 @@
   .cat-pl{border-color:var(--yellow);color:var(--yellow);}
   .cat-ot{border-color:var(--red);color:rgba(255,68,0,.9);}
   .cat-of{border-color:var(--border);color:var(--text-dim);}
-  .card-title{font-size:14px;font-weight:700;color:var(--text);}
-  .card-meta{display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
-  .card-meta-item{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);display:flex;align-items:center;gap:4px;}
-  .card-meta-item .v{color:var(--text);}
-  .card-bottom{display:flex;align-items:center;justify-content:space-between;}
-  .card-location{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);max-width:340px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .card-right{display:flex;align-items:center;gap:10px;}
+  .card-meta-item{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-dim);display:flex;align-items:center;gap:4px;}
+  .card-meta-item .v{color:rgba(200,236,170,.88);}
+  .card-actions{display:flex;align-items:center;gap:8px;}
   .countdown{display:flex;flex-direction:column;align-items:flex-end;}
   .cd-num{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:16px;}
   .cd-lbl{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim);letter-spacing:1px;}
@@ -329,6 +338,10 @@
       <button class="fbtn" onclick="setFilter('SCHEDULED',this)">SCHEDULED</button>
       <button class="fbtn" onclick="setFilter('CRITICAL',this)">CRITICAL</button>
       <button class="fbtn" onclick="setFilter('COMPLETED',this)">COMPLETED</button>
+      <select class="sys-filter" id="sysFilter" onchange="applyFilter()">
+        <option value="">ALL SYSTEMS</option>
+      </select>
+      <input class="wo-search" id="woSearch" type="text" placeholder="🔍 SEARCH WO's..." oninput="applyFilter()">
       <div class="f-right">
         <span class="row-count" id="rowCount">— ITEMS</span>
         <button class="add-btn" onclick="openAddModal()">+ NEW WO</button>
@@ -463,7 +476,11 @@ async function loadSystems(){
   if(!systems?.length)return;
   allSystems=systems;
   const sel=document.getElementById('sysSelect');
-  systems.forEach(s=>{const o=document.createElement('option');o.value=s.system_id;o.textContent=`⬡ ${s.system_name.toUpperCase()}`;sel.appendChild(o);});
+  const sf=document.getElementById('sysFilter');
+  systems.forEach(s=>{
+    const o=document.createElement('option');o.value=s.system_id;o.textContent=`⬡ ${s.system_name.toUpperCase()}`;sel.appendChild(o);
+    const o2=document.createElement('option');o2.value=s.system_id;o2.textContent=s.system_code;sf.appendChild(o2);
+  });
   loadWOs();
 }
 
@@ -498,7 +515,7 @@ async function loadWOs(systemId=null){
   allWOs = wos||[];
   updateStats();
   updateCategoryRings();
-  updateTechRoster();
+  await updateTechRoster();
   renderCalendar();
   updateTicker();
   applyFilter();
@@ -531,21 +548,36 @@ function updateCategoryRings(){
   setArc('arc-pl','val-pl',allWOs.filter(w=>['PLANNED','OUTAGE'].includes(w.category)).length,total);
 }
 
-// ── TECH ROSTER ────────────────────────────────────────────────
-function updateTechRoster(){
+// ── TECH ROSTER — from staff table ────────────────────────────
+async function updateTechRoster(){
   const el=document.getElementById('techRoster');
   if(!el)return;
+  const staff=await supa('staff',`?org_id=eq.${ORG_ID}&active=eq.true&select=staff_id,name,role&order=name`);
   const active=allWOs.filter(w=>!['COMPLETED','CANCELLED'].includes(w.status));
-  const techMap={};
-  active.forEach(w=>{const t=w.assigned_to||'UNASSIGNED';if(!techMap[t])techMap[t]=0;techMap[t]++;});
   const colors=['var(--wo)','var(--cyan)','var(--orange)','var(--yellow)'];
+  let rows='';
   let i=0;
-  el.innerHTML=Object.entries(techMap).sort((a,b)=>b[1]-a[1]).map(([name,cnt])=>`
-    <div class="tech-row">
-      <div class="tech-dot" style="background:${colors[i++%colors.length]};box-shadow:0 0 5px ${colors[(i-1)%colors.length]}"></div>
-      <span class="tech-name">${name==='—'?'UNASSIGNED':name.toUpperCase()}</span>
+  (staff||[]).forEach(s=>{
+    const cnt=active.filter(w=>w.assigned_to===s.name).length;
+    const col=colors[i++%colors.length];
+    rows+=`<div class="tech-row">
+      <div class="tech-dot" style="background:${col};box-shadow:0 0 5px ${col}"></div>
+      <span class="tech-name">${s.name.toUpperCase()}</span>
       <span class="tech-count">${cnt} WO</span>
-    </div>`).join('');
+    </div>`;
+  });
+  const unassigned=active.filter(w=>!w.assigned_to||w.assigned_to==='—').length;
+  if(unassigned>0) rows+=`<div class="tech-row">
+    <div class="tech-dot" style="background:var(--text-dim)"></div>
+    <span class="tech-name" style="color:var(--text-dim)">UNASSIGNED</span>
+    <span class="tech-count">${unassigned} WO</span>
+  </div>`;
+  el.innerHTML=rows||'<div style="font-size:9px;color:var(--text-dim);font-family:\'Share Tech Mono\',monospace">NO STAFF FOUND</div>';
+  // Also populate assign dropdown in modal
+  const assignEl=document.getElementById('m-assign');
+  if(assignEl&&staff?.length){
+    assignEl.innerHTML='<option value="">— UNASSIGNED —</option>'+staff.map(s=>`<option value="${s.name}">${s.name}</option>`).join('');
+  }
 }
 
 // ── CALENDAR ───────────────────────────────────────────────────
@@ -595,11 +627,20 @@ function setFilter(f,btn){
   applyFilter();
 }
 function applyFilter(){
+  const search=(document.getElementById('woSearch')?.value||'').trim().toLowerCase();
+  const sysId=(document.getElementById('sysFilter')?.value||'');
   filtered=allWOs.filter(w=>{
-    if(currentFilter==='ALL')        return true;
-    if(currentFilter==='CRITICAL')   return w.priority==='CRITICAL';
-    if(currentFilter==='IN_PROGRESS')return w.status==='IN_PROGRESS';
-    return w.status===currentFilter;
+    if(currentFilter==='CRITICAL'&&w.priority!=='CRITICAL') return false;
+    if(currentFilter==='IN_PROGRESS'&&w.status!=='IN_PROGRESS') return false;
+    if(currentFilter==='OPEN'&&w.status!=='OPEN') return false;
+    if(currentFilter==='SCHEDULED'&&w.status!=='SCHEDULED') return false;
+    if(currentFilter==='COMPLETED'&&w.status!=='COMPLETED') return false;
+    if(sysId&&w.system_id!==sysId) return false;
+    if(search){
+      const hay=[w.wo_number,w.title,w.description,w.assigned_to,w.location_desc,w.notes,w.category,w.priority].filter(Boolean).join(' ').toLowerCase();
+      if(!hay.includes(search)) return false;
+    }
+    return true;
   });
   document.getElementById('rowCount').textContent=filtered.length+' ITEMS';
   renderCards();
@@ -641,25 +682,29 @@ function renderCards(){
     div.className=`wo-card ${prioCls(wo.priority)} ${wo.status==='COMPLETED'?'status-completed':''} ${selectedWO?.wo_id===wo.wo_id?'selected':''}`;
     div.onclick=()=>openDetail(wo);
     const sys=allSystems.find(s=>s.system_id===wo.system_id);
-    div.innerHTML=`<div class="card-body">
-      <div class="card-top">
-        <div class="card-top-left">
+    div.innerHTML=`<div class="card-inner">
+      <div class="card-id">
+        <div class="card-id-top">
           <span class="wo-num">${wo.wo_number}</span>
-          ${catBadge(wo.category)}
         </div>
-        <div style="display:flex;align-items:center;gap:8px">
+        ${catBadge(wo.category)}
+      </div>
+      <div class="card-center">
+        <div class="card-title">${wo.title}</div>
+        ${wo.location_desc?`<div class="card-sub">📍 ${wo.location_desc}</div>`:''}
+      </div>
+      <div class="card-right-col">
+        <div class="card-meta-right">
+          <span class="card-meta-item">⬡ <span class="v">${sys?.system_code||'—'}</span></span>
+          <span class="card-meta-item">👤 <span class="v">${wo.assigned_to||'UNASSIGNED'}</span></span>
+          <span class="card-meta-item">📅 <span class="v">${fmtDate(wo.scheduled_date)}</span></span>
+          ${wo.estimated_hours?`<span class="card-meta-item">⏱ <span class="v">${wo.estimated_hours}h</span></span>`:''}
+        </div>
+        <div class="card-actions">
           ${countdownHtml(wo)}
           ${statusPill(wo.status,wo.priority)}
         </div>
       </div>
-      <div class="card-title">${wo.title}</div>
-      <div class="card-meta">
-        <span class="card-meta-item">⬡ <span class="v">${sys?.system_code||'—'}</span></span>
-        <span class="card-meta-item">👤 <span class="v">${wo.assigned_to||'UNASSIGNED'}</span></span>
-        <span class="card-meta-item">📅 <span class="v">${fmtDate(wo.scheduled_date)}</span></span>
-        ${wo.estimated_hours?`<span class="card-meta-item">⏱ <span class="v">${wo.estimated_hours}h EST</span></span>`:''}
-      </div>
-      ${wo.location_desc?`<div class="card-bottom"><div class="card-location">📍 ${wo.location_desc}</div></div>`:''}
     </div>`;
     wrap.appendChild(div);
   });
