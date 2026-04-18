@@ -463,7 +463,7 @@ async function _loadPortal(){
   document.getElementById('emailToggle').checked=!!cust.email_opt_in;
 
   // Load account
-  const accts=await pFetch('accounts',`?customer_id=eq.${cust.customer_id}&select=account_id,account_number,status,account_type,meter_number,system_id,service_addresses(street,city,state),water_systems(system_name)&limit=1`);
+  const accts=await pFetch('accounts',`?customer_id=eq.${cust.customer_id}&select=account_id,account_number,status,account_type,meter_id,system_id,service_addresses(street,city,state),water_systems(system_name)&limit=1`);
   if(!accts?.length){showToast('NO ACCOUNT FOUND','err');return;}
   currentAccount=accts[0];
   const acct=accts[0];
@@ -471,7 +471,7 @@ async function _loadPortal(){
   document.getElementById('p-acctbadge').textContent=acct.account_number||'—';
   document.getElementById('d-acct').textContent=acct.account_number||'—';
   document.getElementById('d-type').textContent=acct.account_type||'—';
-  document.getElementById('d-meter').textContent=acct.meter_number||'—';
+  document.getElementById('d-meter').textContent=acct.meter_id||'—';
   document.getElementById('d-system').textContent=acct.water_systems?.system_name||'—';
   const addr=acct.service_addresses;
   document.getElementById('d-addr').textContent=addr?`${addr.street}, ${addr.city||''}`:'—';
