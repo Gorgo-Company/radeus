@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RADEUS — My Account</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cyan:#00f5ff;--green:#00ff88;--red:#ff2244;--orange:#ff8800;--yellow:#e8b400;
+    --bg:#020810;--bg2:#030c16;
+    --border:rgba(0,245,255,.15);--border-hi:rgba(0,245,255,.42);
+    --text:#c0e8f8;--text-dim:#1a4a6a;--text-mid:#3a7a9a;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;overflow:hidden;height:100vh;width:100vw;}
+  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.06) 2px,rgba(0,0,0,.06) 4px);pointer-events:none;z-index:1000;}
+  .corner{position:fixed;width:36px;height:36px;border-color:var(--cyan);border-style:solid;opacity:.3;z-index:999;}
+  .tl{top:6px;left:6px;border-width:2px 0 0 2px}.tr{top:6px;right:6px;border-width:2px 2px 0 0}
+  .bl{bottom:6px;left:6px;border-width:0 0 2px 2px}.br{bottom:6px;right:6px;border-width:0 2px 2px 0}
+
+  .topbar{position:fixed;top:0;left:0;right:0;height:52px;background:linear-gradient(90deg,#030c16,#020810,#030c16);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 22px;z-index:100;}
+  .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:20px;color:var(--cyan);letter-spacing:8px;text-shadow:0 0 20px rgba(0,245,255,.4);text-decoration:none;}
+  .portal-label{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-mid);letter-spacing:3px;}
+  .user-info{display:flex;align-items:center;gap:14px;}
+  .user-name{font-family:'Share Tech Mono',monospace;font-size:11px;color:var(--cyan);letter-spacing:1px;}
+  .logout-btn{font-family:'Orbitron',monospace;font-size:7px;padding:5px 10px;border:1px solid rgba(0,245,255,.3);color:var(--text-mid);background:transparent;cursor:pointer;letter-spacing:1px;transition:all .15s;}
+  .logout-btn:hover{border-color:var(--cyan);color:var(--cyan);}
+  #clock{color:var(--text-mid);font-size:12px;letter-spacing:2px;font-family:'Share Tech Mono',monospace;}
+
+  .main{position:fixed;top:52px;bottom:0;left:0;right:0;overflow-y:auto;padding:20px;}
+
+  /* SUMMARY CARDS */
+  .summary-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin-bottom:20px;}
+  .sum-card{background:rgba(0,245,255,.03);border:1px solid var(--border);padding:16px 18px;position:relative;}
+  .sum-card::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,245,255,.3),transparent);}
+  .sum-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-mid);letter-spacing:2px;margin-bottom:6px;}
+  .sum-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:26px;}
+  .sv-c{color:var(--cyan);}.sv-g{color:var(--green);}.sv-r{color:var(--red);}.sv-o{color:var(--orange);}
+  .sum-sub{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-dim);margin-top:3px;letter-spacing:1px;}
+
+  /* ACCOUNT INFO */
+  .info-grid{display:grid;grid-template-columns:300px 1fr;gap:14px;margin-bottom:20px;}
+  .panel{background:rgba(0,245,255,.02);border:1px solid var(--border);padding:14px 18px;position:relative;}
+  .panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,rgba(0,245,255,.25),transparent);}
+  .panel-title{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:2.5px;color:var(--text-mid);margin-bottom:12px;}
+  .info-row{display:flex;justify-content:space-between;padding:6px 0;border-bottom:1px solid rgba(0,245,255,.04);}
+  .info-row:last-child{border-bottom:none;}
+  .info-label{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-mid);letter-spacing:1px;}
+  .info-val{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text);}
+
+  /* PAYMENT HISTORY TABLE */
+  .ptable{width:100%;border-collapse:collapse;}
+  .ptable thead{position:sticky;top:0;z-index:5;}
+  .ptable th{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:1.5px;color:var(--text-mid);padding:8px 12px;border-bottom:2px solid var(--border);text-align:left;font-weight:400;background:var(--bg);}
+  .ptable td{padding:8px 12px;border-bottom:1px solid rgba(0,245,255,.04);font-size:13px;vertical-align:middle;}
+  .ptable tr:hover td{background:rgba(0,245,255,.02);}
+  .td-date{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text-mid);}
+  .td-amt{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:15px;color:var(--green);}
+  .td-method{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-mid);}
+  .td-ref{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);}
+  .pill{font-family:'Orbitron',monospace;font-size:6px;padding:2px 7px;border:1px solid;letter-spacing:1px;}
+  .pill-dep{border-color:rgba(0,255,136,.4);color:var(--green);}
+  .pill-undep{border-color:rgba(232,180,0,.4);color:var(--yellow);}
+
+  .empty{text-align:center;padding:40px;font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim);letter-spacing:2px;}
+
+  /* LOGIN GATE */
+  .login-gate{position:fixed;inset:0;background:var(--bg);display:flex;align-items:center;justify-content:center;z-index:2000;}
+  .gate-card{background:rgba(3,12,22,.97);border:1px solid var(--border-hi);width:400px;max-width:94vw;box-shadow:0 0 80px rgba(0,245,255,.07);}
+  .gate-top{padding:32px 32px 24px;border-bottom:1px solid var(--border);text-align:center;background:linear-gradient(135deg,rgba(0,245,255,.05),transparent);}
+  .gate-logo{font-family:'Orbitron',monospace;font-weight:900;font-size:28px;color:var(--cyan);letter-spacing:10px;text-shadow:0 0 25px rgba(0,245,255,.5);display:block;margin-bottom:8px;}
+  .gate-sub{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-dim);letter-spacing:3px;}
+  .gate-body{padding:28px 32px;}
+  .g-field{display:flex;flex-direction:column;gap:5px;margin-bottom:16px;}
+  .g-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-mid);letter-spacing:2px;}
+  .g-input{background:rgba(0,245,255,.04);border:1px solid rgba(0,245,255,.2);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:11px;padding:10px 12px;outline:none;width:100%;transition:all .15s;}
+  .g-input:focus{border-color:var(--border-hi);}
+  .g-input::placeholder{color:var(--text-dim);}
+  .g-btn{width:100%;padding:12px;font-family:'Orbitron',monospace;font-size:9px;letter-spacing:2.5px;border:1px solid var(--cyan);color:var(--cyan);background:rgba(0,245,255,.05);cursor:pointer;transition:all .2s;margin-top:4px;}
+  .g-btn:hover:not(:disabled){background:rgba(0,245,255,.12);}
+  .g-btn:disabled{opacity:.5;cursor:not-allowed;}
+  .g-error{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--red);margin-top:10px;display:none;letter-spacing:1px;}
+  .g-error.show{display:block;}
+  .gate-footer{padding:14px 32px;border-top:1px solid var(--border);text-align:center;}
+  .op-link{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-dim);letter-spacing:1px;text-decoration:none;}
+  .op-link:hover{color:var(--cyan);}
+
+  ::-webkit-scrollbar{width:3px;height:3px;}
+  ::-webkit-scrollbar-track{background:transparent;}
+  ::-webkit-scrollbar-thumb{background:rgba(0,245,255,.2);}
+</style>
+</head>
+<body>
+<div class="corner tl"></div><div class="corner tr"></div>
+<div class="corner bl"></div><div class="corner br"></div>
+
+<!-- LOGIN GATE (shown until authenticated) -->
+<div class="login-gate" id="loginGate">
+  <div class="gate-card">
+    <div class="gate-top">
+      <span class="gate-logo">RADEUS</span>
+      <div class="gate-sub">CUSTOMER ACCOUNT PORTAL</div>
+    </div>
+    <div class="gate-body">
+      <div class="g-field">
+        <label class="g-label">EMAIL ADDRESS</label>
+        <input class="g-input" id="gEmail" type="email" placeholder="your@email.com" autocomplete="email">
+      </div>
+      <div class="g-field">
+        <label class="g-label">PASSWORD</label>
+        <input class="g-input" id="gPassword" type="password" placeholder="••••••••" autocomplete="current-password">
+      </div>
+      <button class="g-btn" id="gBtn" onclick="portalLogin()">ACCESS MY ACCOUNT</button>
+      <div class="g-error" id="gError"></div>
+    </div>
+    <div class="gate-footer">
+      <a class="op-link" href="login.html">← OPERATOR LOGIN</a>
+    </div>
+  </div>
+</div>
+
+<!-- PORTAL CONTENT (shown after auth) -->
+<div class="topbar" id="portalTopbar" style="display:none">
+  <a class="logo" href="portal.html">RADEUS</a>
+  <div class="portal-label">CUSTOMER PORTAL</div>
+  <div class="user-info">
+    <span class="user-name" id="portalUserName">—</span>
+    <span id="clock">--:--:--</span>
+    <button class="logout-btn" onclick="portalLogout()">SIGN OUT</button>
+  </div>
+</div>
+
+<div class="main" id="portalMain" style="display:none">
+
+  <!-- SUMMARY STRIP -->
+  <div class="summary-grid">
+    <div class="sum-card">
+      <div class="sum-label">CURRENT BALANCE</div>
+      <div class="sum-val sv-o" id="p-balance">—</div>
+      <div class="sum-sub">AS OF TODAY</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">LAST PAYMENT</div>
+      <div class="sum-val sv-g" id="p-lastpay">—</div>
+      <div class="sum-sub" id="p-lastdate">—</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">TOTAL PAID (YTD)</div>
+      <div class="sum-val sv-c" id="p-ytd">—</div>
+      <div class="sum-sub" id="p-ytdlabel">THIS YEAR</div>
+    </div>
+    <div class="sum-card">
+      <div class="sum-label">ACCOUNT STATUS</div>
+      <div class="sum-val" id="p-status" style="font-size:18px;margin-top:4px">—</div>
+      <div class="sum-sub" id="p-acctnum">—</div>
+    </div>
+  </div>
+
+  <!-- ACCOUNT INFO + PAYMENT HISTORY -->
+  <div class="info-grid">
+
+    <div class="panel">
+      <div class="panel-title">⬡ ACCOUNT INFORMATION</div>
+      <div class="info-row"><span class="info-label">ACCOUNT #</span><span class="info-val" id="d-acct">—</span></div>
+      <div class="info-row"><span class="info-label">SERVICE ADDRESS</span><span class="info-val" id="d-addr">—</span></div>
+      <div class="info-row"><span class="info-label">ACCOUNT TYPE</span><span class="info-val" id="d-type">—</span></div>
+      <div class="info-row"><span class="info-label">STATUS</span><span class="info-val" id="d-status">—</span></div>
+      <div class="info-row"><span class="info-label">WATER SYSTEM</span><span class="info-val" id="d-system">—</span></div>
+      <div class="info-row"><span class="info-label">METER #</span><span class="info-val" id="d-meter">—</span></div>
+    </div>
+
+    <div class="panel">
+      <div class="panel-title">⬡ PAYMENT HISTORY</div>
+      <div id="payHistory"><div class="empty">LOADING...</div></div>
+    </div>
+
+  </div>
+</div>
+
+<script>
+const SUPA_URL='https://bvpesxpptgdwkhsewhke.supabase.co';
+const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
+const PORTAL_KEY='radeus_portal_session';
+const CUST_KEY='radeus_customer';
+
+function tick(){document.getElementById('clock').textContent=new Date().toTimeString().slice(0,8);}
+setInterval(tick,1000);tick();
+
+function fmtMoney(n){return'$'+parseFloat(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});}
+function fmtDate(s){if(!s)return'—';const d=new Date(s+'T00:00:00');return`${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}/${d.getFullYear()}`;}
+
+async function pGet(table,params=''){
+  const s=getPortalSession();
+  const r=await fetch(`${SUPA_URL}/rest/v1/${table}${params}`,{
+    headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${s?.access_token||SUPA_KEY}`}
+  });
+  if(!r.ok)return null;const txt=await r.text();return txt?JSON.parse(txt):null;
+}
+
+function getPortalSession(){
+  try{return JSON.parse(localStorage.getItem(PORTAL_KEY)||'null');}catch{return null;}
+}
+function getCustomer(){
+  try{return JSON.parse(localStorage.getItem(CUST_KEY)||'null');}catch{return null;}
+}
+
+function showGate(){document.getElementById('loginGate').style.display='flex';document.getElementById('portalTopbar').style.display='none';document.getElementById('portalMain').style.display='none';}
+function showPortal(){document.getElementById('loginGate').style.display='none';document.getElementById('portalTopbar').style.display='flex';document.getElementById('portalMain').style.display='block';}
+
+async function init(){
+  const session=getPortalSession();
+  const cust=getCustomer();
+  if(!session||!cust||session.expires_at<Date.now()/1000){showGate();return;}
+  showPortal();
+  document.getElementById('portalUserName').textContent=cust.full_name||cust.email||'—';
+  await loadPortalData(cust);
+}
+
+async function loadPortalData(cust){
+  // Load account linked to this customer
+  const accounts=await pGet('accounts',`?customer_id=eq.${cust.customer_id}&select=account_id,account_number,status,account_type,service_address,meter_number,system_id,water_systems(system_name)&limit=1`);
+  if(!accounts?.length){document.getElementById('payHistory').innerHTML='<div class="empty">NO ACCOUNT FOUND</div>';return;}
+  const acct=accounts[0];
+
+  // Account info panel
+  document.getElementById('d-acct').textContent=acct.account_number||'—';
+  document.getElementById('d-addr').textContent=acct.service_address||'—';
+  document.getElementById('d-type').textContent=acct.account_type||'—';
+  document.getElementById('d-status').textContent=acct.status||'—';
+  document.getElementById('d-system').textContent=acct.water_systems?.system_name||'—';
+  document.getElementById('d-meter').textContent=acct.meter_number||'—';
+  document.getElementById('p-acctnum').textContent=acct.account_number||'—';
+
+  // Status badge
+  const statusEl=document.getElementById('p-status');
+  const s=acct.status||'';
+  statusEl.textContent=s;
+  statusEl.style.color=s==='ACTIVE'?'var(--green)':s==='DISCONNECTED'?'var(--red)':'var(--orange)';
+
+  // Account balance
+  const balData=await pGet('account_balances',`?account_id=eq.${acct.account_id}&select=current_balance&limit=1`);
+  const bal=parseFloat(balData?.[0]?.current_balance||0);
+  document.getElementById('p-balance').textContent=fmtMoney(bal);
+  document.getElementById('p-balance').style.color=bal>0?'var(--orange)':bal<0?'var(--green)':'var(--text-mid)';
+
+  // Payment history
+  const pays=await pGet('payments',`?account_id=eq.${acct.account_id}&select=payment_date,amount,payment_method,reference_number,deposited,returned&order=payment_date.desc&limit=50`);
+  if(!pays?.length){document.getElementById('payHistory').innerHTML='<div class="empty">NO PAYMENT HISTORY</div>';return;}
+
+  // YTD total
+  const yr=new Date().getFullYear();
+  const ytd=pays.filter(p=>p.payment_date?.startsWith(yr)&&!p.returned).reduce((s,p)=>s+parseFloat(p.amount||0),0);
+  document.getElementById('p-ytd').textContent=fmtMoney(ytd);
+
+  // Last payment
+  const last=pays.find(p=>!p.returned);
+  if(last){document.getElementById('p-lastpay').textContent=fmtMoney(last.amount);document.getElementById('p-lastdate').textContent=fmtDate(last.payment_date);}
+
+  document.getElementById('payHistory').innerHTML=`<table class="ptable"><thead><tr><th>DATE</th><th>AMOUNT</th><th>METHOD</th><th>REFERENCE</th><th>STATUS</th></tr></thead><tbody>${
+    pays.map(p=>`<tr><td class="td-date">${fmtDate(p.payment_date)}</td><td class="td-amt" style="${p.returned?'color:var(--red)':''}">${p.returned?'<span style="font-size:9px;color:var(--red);margin-right:3px">RTN</span>':''}${fmtMoney(p.amount)}</td><td class="td-method">${p.payment_method||'—'}</td><td class="td-ref">${(p.reference_number||'—').slice(0,20)}</td><td><span class="pill ${p.returned?'':'pill-'+(p.deposited?'dep':'undep')}" style="${p.returned?'border-color:rgba(255,34,68,.4);color:var(--red)':''}">${p.returned?'RETURNED':p.deposited?'DEPOSITED':'PENDING'}</span></td></tr>`
+  ).join('')}</tbody></table>`;
+}
+
+function portalLogout(){localStorage.removeItem(PORTAL_KEY);localStorage.removeItem(CUST_KEY);showGate();}
+
+// Gate login
+document.getElementById('gPassword').addEventListener('keydown',e=>{if(e.key==='Enter')portalLogin();});
+document.getElementById('gEmail').addEventListener('keydown',e=>{if(e.key==='Enter')document.getElementById('gPassword').focus();});
+
+async function portalLogin(){
+  const email=document.getElementById('gEmail').value.trim();
+  const pw=document.getElementById('gPassword').value;
+  const err=document.getElementById('gError');
+  err.classList.remove('show');
+  if(!email||!pw){err.textContent='EMAIL AND PASSWORD REQUIRED';err.classList.add('show');return;}
+  const btn=document.getElementById('gBtn');btn.disabled=true;btn.textContent='SIGNING IN...';
+  try{
+    const r=await fetch(`${SUPA_URL}/auth/v1/token?grant_type=password`,{
+      method:'POST',headers:{'apikey':SUPA_KEY,'Content-Type':'application/json'},
+      body:JSON.stringify({email,password:pw})
+    });
+    const d=await r.json();
+    if(!r.ok)throw new Error(d.error_description||'SIGN IN FAILED');
+    // Check customer table
+    const cr=await fetch(`${SUPA_URL}/rest/v1/customers?auth_user_id=eq.${d.user.id}&select=customer_id,full_name,email&limit=1`,
+      {headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${d.access_token}`}});
+    const cd=await cr.json();
+    if(!cd?.length){throw new Error('NO CUSTOMER ACCOUNT FOUND FOR THIS EMAIL');}
+    localStorage.setItem(PORTAL_KEY,JSON.stringify({access_token:d.access_token,expires_at:d.expires_at||Math.floor(Date.now()/1000)+3600,user:d.user}));
+    localStorage.setItem(CUST_KEY,JSON.stringify({...cd[0],_user_id:d.user.id}));
+    showPortal();
+    document.getElementById('portalUserName').textContent=cd[0].full_name||cd[0].email;
+    await loadPortalData(cd[0]);
+  }catch(e){err.textContent=e.message||'SIGN IN FAILED';err.classList.add('show');}
+  finally{btn.disabled=false;btn.textContent='ACCESS MY ACCOUNT';}
+}
+
+window.addEventListener('DOMContentLoaded',init);
+</script>
+</body>
+</html>
