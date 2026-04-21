@@ -229,23 +229,23 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
   <div style="overflow:hidden;flex:1">
     <div class="ticker-track" id="tickerTrack">
       <!-- SET 1 -->
-      <span class="ti"><span class="c-sys">⬡ RADEUS</span> — DATA INTELLIGENCE LAYER <span class="c-ok">ACTIVE</span></span>
-      <span class="ti"><span class="c-pay">TOTAL COLLECTED</span> — $354,657 — 4,374 TRANSACTIONS — DERBY NWS</span>
-      <span class="ti"><span class="c-comply">COMPLIANCE</span> — <span class="c-comply">1 OVERDUE</span> <span class="sep">·</span> 11 OPEN EVENTS ACROSS 9 SYSTEMS</span>
-      <span class="ti"><span class="c-acct">ACCOUNTS</span> — <span class="c-ok">362 ACTIVE</span> <span class="sep">·</span> <span class="c-warn">124 INACTIVE</span> <span class="sep">·</span> 486 TOTAL</span>
-      <span class="ti"><span class="c-wo">WORK ORDERS</span> — 8 OPEN <span class="sep">·</span> 1 COMPLETED — FIELD OPS STATUS NOMINAL</span>
-      <span class="ti"><span class="c-pay">AVG MONTHLY COLLECTION</span> — $13K ACROSS 6 MONTHS ON RECORD</span>
-      <span class="ti"><span class="c-comply">BOIL WATER NOTICE</span> — <span class="c-warn">ACTIVE</span> ON OHNWSTX — RESOLVE BEFORE NEXT INSPECTION</span>
-      <span class="ti"><span class="c-pay">PAYMENT METHODS</span> — SQUARE <span class="c-ok">$65K</span> <span class="sep">·</span> CHECK <span class="c-ok">$8K</span> <span class="sep">·</span> MONEY ORDER <span class="c-ok">$4K</span></span>
+      
+      
+      
+      
+      
+      
+      
+      
       <!-- SET 2 (duplicate for seamless loop) -->
-      <span class="ti"><span class="c-sys">⬡ RADEUS</span> — DATA INTELLIGENCE LAYER <span class="c-ok">ACTIVE</span></span>
-      <span class="ti"><span class="c-pay">TOTAL COLLECTED</span> — $354,657 — 4,374 TRANSACTIONS — DERBY NWS</span>
-      <span class="ti"><span class="c-comply">COMPLIANCE</span> — <span class="c-comply">1 OVERDUE</span> <span class="sep">·</span> 11 OPEN EVENTS ACROSS 9 SYSTEMS</span>
-      <span class="ti"><span class="c-acct">ACCOUNTS</span> — <span class="c-ok">362 ACTIVE</span> <span class="sep">·</span> <span class="c-warn">124 INACTIVE</span> <span class="sep">·</span> 486 TOTAL</span>
-      <span class="ti"><span class="c-wo">WORK ORDERS</span> — 8 OPEN <span class="sep">·</span> 1 COMPLETED — FIELD OPS STATUS NOMINAL</span>
-      <span class="ti"><span class="c-pay">AVG MONTHLY COLLECTION</span> — $13K ACROSS 6 MONTHS ON RECORD</span>
-      <span class="ti"><span class="c-comply">BOIL WATER NOTICE</span> — <span class="c-warn">ACTIVE</span> ON OHNWSTX — RESOLVE BEFORE NEXT INSPECTION</span>
-      <span class="ti"><span class="c-pay">PAYMENT METHODS</span> — SQUARE <span class="c-ok">$65K</span> <span class="sep">·</span> CHECK <span class="c-ok">$8K</span> <span class="sep">·</span> MONEY ORDER <span class="c-ok">$4K</span></span>
+      
+      
+      
+      
+      
+      
+      
+      
     </div>
   </div>
 </div>
@@ -471,7 +471,28 @@ body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradi
 <script>
 const SUPA_URL='https://bvpesxpptgdwkhsewhke.supabase.co';
 const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
-const ORG_ID='00000000-0000-0000-0000-000000000001';
+let ORG_ID = null; // Set dynamically from auth
+
+  // ── AUTH BOOTSTRAP ─────────────────────────────────────────
+  (function(){
+    const SESSION_KEY='radeus_session';
+    const s=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');
+    if(!s||!s.expires_at||s.expires_at<Date.now()/1000){window.location.href='login.html';return;}
+    const staff=JSON.parse(localStorage.getItem('radeus_staff')||'null');
+    if(!staff||!staff.org_id){window.location.href='login.html';return;}
+    ORG_ID=staff.org_id;
+    // Inject operator name if element exists
+    const opEl=document.getElementById('operatorName');
+    if(opEl)opEl.textContent=staff.name||'OPERATOR';
+    const roleEl=document.getElementById('operatorRole');
+    if(roleEl)roleEl.textContent=staff.role||'';
+    // Wire logout if button exists
+    const lb=document.getElementById('logoutBtn');
+    if(lb)lb.addEventListener('click',()=>{
+      if(s.access_token){fetch('https://bvpesxpptgdwkhsewhke.supabase.co/auth/v1/logout',{method:'POST',headers:{'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8','Authorization':`Bearer ${s.access_token}`}}).catch(()=>{});}
+      localStorage.removeItem(SESSION_KEY);localStorage.removeItem('radeus_staff');window.location.href='login.html';
+    });
+  })();
 
 let allData={systems:[],accounts:[],payments:[],workorders:[],compliance:[],comms:[],monthlyPayments:[]};
 
@@ -561,6 +582,27 @@ function computeMetrics(){
   allData.avgPayment=allData.payCount>0?(allData.totalCollected/allData.payCount):0;
 }
 
+
+function updateReportsTicker(){
+  const track=document.getElementById('tickerTrack');
+  if(!track)return;
+  const tc=fmt$(allData.totalCollected);
+  const pc=allData.payCount;
+  const ac=allData.accounts.filter(a=>a.status==='ACTIVE').length;
+  const ic=allData.accounts.filter(a=>a.status==='INACTIVE').length;
+  const tot=allData.accounts.length;
+  const ow=allData.workorders.filter(w=>!['COMPLETED','CANCELLED'].includes(w.status)).length;
+  const od=allData.compliance.filter(c=>c.status==='OVERDUE').length;
+  const items=[
+    `<span class="ti"><span class="c-sys">⬡ RADEUS</span> — DATA INTELLIGENCE LAYER <span class="c-ok">ACTIVE</span></span>`,
+    `<span class="ti"><span class="c-pay">TOTAL COLLECTED</span> — ${tc} — ${pc.toLocaleString()} TRANSACTIONS</span>`,
+    `<span class="ti"><span class="c-acct">ACCOUNTS</span> — <span class="c-ok">${ac} ACTIVE</span> <span class="sep">·</span> <span class="c-warn">${ic} INACTIVE</span> <span class="sep">·</span> ${tot} TOTAL</span>`,
+    `<span class="ti"><span class="c-wo">WORK ORDERS</span> — ${ow} OPEN — FIELD OPS STATUS NOMINAL</span>`,
+    `<span class="ti"><span class="c-comply">COMPLIANCE</span> — <span class="c-comply">${od} OVERDUE</span></span>`,
+    `<span class="ti"><span class="c-pay">AVG MONTHLY</span> — ${fmt$(allData.avgMonthly)}</span>`,
+  ];
+  track.innerHTML=items.join('')+items.join('');
+}
 function renderAll(){
   document.getElementById('st-coll').textContent=fmt$(allData.totalCollected);
   counter('st-pay',allData.payCount);
@@ -569,6 +611,7 @@ function renderAll(){
   counter('st-comply',allData.compliance.filter(c=>c.status==='OVERDUE').length);
   document.getElementById('st-avg').textContent=fmt$(allData.avgMonthly);
   renderKPIs();
+  updateReportsTicker();
   renderBarChart();
   renderWOCharts();
   renderAccountStackBars();
