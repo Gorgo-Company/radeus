@@ -450,7 +450,7 @@ async function _loadPortal(){
   document.getElementById('emailToggle').checked=!!cust.email_opt_in;
 
   // Load account
-  const accts=await pFetch('accounts',`?customer_id=eq.${cust.customer_id}&select=account_id,account_number,status,account_type,meter_id,system_id,service_addresses(street,city,state),water_systems(system_name)&limit=1`);
+  const accts=await pFetch('accounts',`?customer_id=eq.${cust.customer_id}&select=account_id,account_number,status,account_type,meter_id,system_id,org_id,service_addresses(street,city,state),water_systems(system_name)&limit=1`);
   if(!accts?.length){showToast('NO ACCOUNT FOUND','err');return;}
   currentAccount=accts[0];
   const acct=accts[0];
@@ -657,7 +657,7 @@ async function submitTicket(){
     headers:{'Prefer':'return=minimal'},
     body:JSON.stringify({
       wo_id: crypto.randomUUID(),
-      org_id: '00000000-0000-0000-0000-000000000001',
+      org_id: currentAccount?.org_id || null,
       system_id: currentAccount.system_id||null,
       account_id: currentAccount.account_id,
       wo_number: woNum,
