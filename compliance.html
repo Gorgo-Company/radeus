@@ -260,7 +260,7 @@
     </select>
   </div>
   <div style="display:flex;align-items:center;gap:14px">
-    <span style="font-size:9px;color:var(--text-dim);font-family:'Share Tech Mono',monospace">OPERATOR: <span style="color:var(--orange)">ADMIN</span></span>
+    <span style="font-size:9px;color:var(--text-dim);font-family:'Share Tech Mono',monospace">OPERATOR: <span id="operatorName" style="color:var(--orange)">—</span></span>
     <span id="clock">--:--:--</span>
   </div>
 </div>
@@ -551,8 +551,8 @@ async function loadSystems() {
   if (!systems?.length){ toast('NO SYSTEMS FOUND','err'); return; }
   allSystems = systems;
   const sel = document.getElementById('sysSelect');
-  sel.innerHTML = systems.map(s=>`<option value="${s.system_id}">⬡ ${s.system_name.toUpperCase()}</option>`).join('');
-  activeSystemId = systems[0].system_id;
+  sel.innerHTML = '<option value="ALL">⬡ ALL SYSTEMS</option>' + systems.map(s=>`<option value="${s.system_id}">⬡ ${s.system_name.toUpperCase()}</option>`).join('');
+  activeSystemId = 'ALL';
   renderNodeGrid();
   loadEvents();
 }
@@ -561,7 +561,10 @@ function switchSystem(id) { activeSystemId = id; loadEvents(); }
 
 async function loadEvents() {
   document.getElementById('complyTable').innerHTML='<tr class="loading-row"><td colspan="9">LOADING COMPLIANCE DATA...</td></tr>';
-  const data = await supa('compliance_events',`?system_id=eq.${activeSystemId}&order=priority.asc,due_date.asc&select=*`);
+  const sysFilter = activeSystemId === 'ALL'
+    ? `system_id=in.(${allSystems.map(s=>s.system_id).join(',')})`
+    : `system_id=eq.${activeSystemId}`;
+  const data = await supa('compliance_events',`?${sysFilter}&order=priority.asc,due_date.asc&select=*`);
   allEvents = (data||[]).map(ev => ({...ev, _status: computeStatus(ev)}));
   updateStats(); updateAlertBar(); updateGauge(); updateMiniGauges(); applyFilter();
 }
