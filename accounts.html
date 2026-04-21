@@ -26,7 +26,7 @@
   @keyframes lp{0%,100%{text-shadow:0 0 20px var(--cyan),0 0 40px rgba(0,245,255,.2)}50%{text-shadow:0 0 30px var(--cyan),0 0 70px rgba(0,245,255,.4)}}
   .logo a{color:inherit;text-decoration:none;}
   .sys-select{background:rgba(0,245,255,.05);border:1px solid var(--border-hi);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 12px;letter-spacing:1px;cursor:pointer;outline:none;}
-  .sys-select option{background:#fff;color:#0d1b2a;font-family:Arial,sans-serif;letter-spacing:0;}
+  .sys-select option{background:#041220;color:#00f5ff;font-family:'Share Tech Mono',monospace;letter-spacing:1px;}
   .sdot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s infinite;}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
   #clock{color:var(--cyan);font-size:13px;letter-spacing:2px}
@@ -395,7 +395,28 @@
   // ── CONFIG ───────────────────────────────────────────────────
   const SUPA_URL = 'https://bvpesxpptgdwkhsewhke.supabase.co';
   const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
-  const ORG_ID  = '00000000-0000-0000-0000-000000000001';
+  let ORG_ID = null; // Set dynamically from auth
+
+  // ── AUTH BOOTSTRAP ─────────────────────────────────────────
+  (function(){
+    const SESSION_KEY='radeus_session';
+    const s=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');
+    if(!s||!s.expires_at||s.expires_at<Date.now()/1000){window.location.href='login.html';return;}
+    const staff=JSON.parse(localStorage.getItem('radeus_staff')||'null');
+    if(!staff||!staff.org_id){window.location.href='login.html';return;}
+    ORG_ID=staff.org_id;
+    // Inject operator name if element exists
+    const opEl=document.getElementById('operatorName');
+    if(opEl)opEl.textContent=staff.name||'OPERATOR';
+    const roleEl=document.getElementById('operatorRole');
+    if(roleEl)roleEl.textContent=staff.role||'';
+    // Wire logout if button exists
+    const lb=document.getElementById('logoutBtn');
+    if(lb)lb.addEventListener('click',()=>{
+      if(s.access_token){fetch('https://bvpesxpptgdwkhsewhke.supabase.co/auth/v1/logout',{method:'POST',headers:{'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8','Authorization':`Bearer ${s.access_token}`}}).catch(()=>{});}
+      localStorage.removeItem(SESSION_KEY);localStorage.removeItem('radeus_staff');window.location.href='login.html';
+    });
+  })();
 
   // ── STATE ────────────────────────────────────────────────────
   let allAccounts   = [];
@@ -406,6 +427,8 @@
   let activeSystemId = null;
   let activeSystemCode = null;
   let activeSystemName = null;
+  let activeSystemConfig = {};
+  let allSystemsCache = [];
 
   // ── CLOCK ────────────────────────────────────────────────────
   function tick(){document.getElementById('clock').textContent=new Date().toTimeString().slice(0,8);}
@@ -448,8 +471,9 @@
 
   // ── LOAD SYSTEMS ─────────────────────────────────────────────
   async function loadSystems() {
-    const systems = await supa('water_systems', `?org_id=eq.${ORG_ID}&select=system_id,system_code,system_name&order=system_name`);
+    const systems = await supa('water_systems', `?org_id=eq.${ORG_ID}&select=system_id,system_code,system_name,base_rate,energy_surcharge,late_fee_amount&order=system_name`);
     if (!systems || !systems.length) return;
+    allSystemsCache = systems;
     const sel = document.getElementById('sysSelect');
     sel.innerHTML = systems.map(s =>
       `<option value="${s.system_id}|${s.system_code}|${s.system_name}">⬡ ${s.system_name.toUpperCase()}</option>`
@@ -459,6 +483,7 @@
     activeSystemId   = first.system_id;
     activeSystemCode = first.system_code;
     activeSystemName = first.system_name;
+    activeSystemConfig = first;
     loadAccounts();
   }
 
@@ -468,6 +493,7 @@
     activeSystemId   = id;
     activeSystemCode = code;
     activeSystemName = name;
+    activeSystemConfig = allSystemsCache.find(s => s.system_id === id) || {};
     closeDetail();
     loadAccounts();
   }
@@ -658,8 +684,8 @@
         <div class="dp-row"><span class="dp-label">CURRENT BALANCE</span><span class="dp-val" style="color:${a.cls.color};font-size:14px">${fmtBal(a.bal)}</span></div>
         <div class="dp-row"><span class="dp-label">LAST PAYMENT DATE</span><span class="dp-val">${fmtDate(a.lastPmt)}</span></div>
         <div class="dp-row"><span class="dp-label">LAST PAYMENT AMOUNT</span><span class="dp-val" style="color:var(--green)">${a.lastPmtAmt ? fmtBal(a.lastPmtAmt) : '—'}</span></div>
-        <div class="dp-row"><span class="dp-label">BASE RATE</span><span class="dp-val">$40.00 / MONTH</span></div>
-        <div class="dp-row"><span class="dp-label">LATE FEE</span><span class="dp-val">$10.00 after due date</span></div>
+        <div class="dp-row"><span class="dp-label">BASE RATE</span><span class="dp-val">$${(activeSystemConfig.base_rate||40).toFixed(2)} / MONTH</span></div>
+        <div class="dp-row"><span class="dp-label">LATE FEE</span><span class="dp-val">$${(activeSystemConfig.late_fee_amount||10).toFixed(2)} after due date</span></div>
       </div>
       <div class="dp-section">
         <div class="dp-section-title">TRANSACTION REGISTER <span style="color:var(--text-dim);font-size:7px;margin-left:8px">LOADING...</span></div>
@@ -821,12 +847,13 @@
   function updateNoticeTemplate() {
     if (!selectedAcct) return;
     const type = document.getElementById('notice-type').value;
+    const sysName = activeSystemName || 'Your Water System';
     const templates = {
-      PAST_DUE: `Dear ${selectedAcct.name},\n\nThis is a notice that your water utility account (${selectedAcct.account_number||''}) has a past due balance of ${fmtBal(selectedAcct.bal)}.\n\nPlease contact our office immediately to arrange payment and avoid service interruption.\n\nThank you,\nDerby New Water System`,
-      DISCONNECT_WARNING: `Dear ${selectedAcct.name},\n\nThis is a final notice before disconnection of service for account ${selectedAcct.account_number||''}.\n\nYour balance of ${fmtBal(selectedAcct.bal)} must be paid immediately to avoid disconnection.\n\nPlease contact our office today.\n\nDerby New Water System`,
-      BOIL_WATER: `BOIL WATER NOTICE\n\nDear Customer,\n\nDue to a system issue, you are advised to boil all drinking water before use until further notice. We will notify you when it is safe to resume normal use.\n\nDerby New Water System`,
+      PAST_DUE: `Dear ${selectedAcct.name},\n\nThis is a notice that your water utility account (${selectedAcct.account_number||''}) has a past due balance of ${fmtBal(selectedAcct.bal)}.\n\nPlease contact our office immediately to arrange payment and avoid service interruption.\n\nThank you,\n${sysName}`,
+      DISCONNECT_WARNING: `Dear ${selectedAcct.name},\n\nThis is a final notice before disconnection of service for account ${selectedAcct.account_number||''}.\n\nYour balance of ${fmtBal(selectedAcct.bal)} must be paid immediately to avoid disconnection.\n\nPlease contact our office today.\n\n${sysName}`,
+      BOIL_WATER: `BOIL WATER NOTICE\n\nDear Customer,\n\nDue to a system issue, you are advised to boil all drinking water before use until further notice. We will notify you when it is safe to resume normal use.\n\n${sysName}`,
       GENERAL: `Dear ${selectedAcct.name},\n\n`,
-      PAYMENT_RECEIVED: `Dear ${selectedAcct.name},\n\nWe have received your payment on account ${selectedAcct.account_number||''}. Thank you.\n\nDerby New Water System`
+      PAYMENT_RECEIVED: `Dear ${selectedAcct.name},\n\nWe have received your payment on account ${selectedAcct.account_number||''}. Thank you.\n\n${sysName}`
     };
     document.getElementById('notice-msg').value = templates[type] || '';
   }
