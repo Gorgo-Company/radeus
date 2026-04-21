@@ -202,7 +202,7 @@
     </select>
   </div>
   <div style="display:flex;align-items:center;gap:14px">
-    <span style="font-size:9px;color:var(--text-dim)">OPERATOR: <span style="color:var(--cyan)">ADMIN</span></span>
+    <span style="font-size:9px;color:var(--text-dim)">OPERATOR: <span id="operatorName" style="color:var(--cyan)">—</span></span>
     <span id="clock">--:--:--</span>
   </div>
 </div>
@@ -475,25 +475,40 @@
     if (!systems || !systems.length) return;
     allSystemsCache = systems;
     const sel = document.getElementById('sysSelect');
-    sel.innerHTML = systems.map(s =>
+    sel.innerHTML = '<option value="ALL">⬡ ALL SYSTEMS</option>' + systems.map(s =>
       `<option value="${s.system_id}|${s.system_code}|${s.system_name}">⬡ ${s.system_name.toUpperCase()}</option>`
     ).join('');
-    // Load first system
-    const first = systems[0];
-    activeSystemId   = first.system_id;
-    activeSystemCode = first.system_code;
-    activeSystemName = first.system_name;
-    activeSystemConfig = first;
+    if (systems.length === 1) {
+      // Single system — select it directly
+      const first = systems[0];
+      activeSystemId   = first.system_id;
+      activeSystemCode = first.system_code;
+      activeSystemName = first.system_name;
+      activeSystemConfig = first;
+      sel.value = `${first.system_id}|${first.system_code}|${first.system_name}`;
+    } else {
+      // Multi-system — default to ALL
+      activeSystemId = 'ALL';
+      activeSystemCode = null;
+      activeSystemName = 'ALL SYSTEMS';
+      activeSystemConfig = systems[0];
+    }
     loadAccounts();
   }
 
   // ── SWITCH SYSTEM ─────────────────────────────────────────────
   function switchSystem(val) {
-    const [id, code, name] = val.split('|');
-    activeSystemId   = id;
-    activeSystemCode = code;
-    activeSystemName = name;
-    activeSystemConfig = allSystemsCache.find(s => s.system_id === id) || {};
+    if (val === 'ALL') {
+      activeSystemId = 'ALL';
+      activeSystemCode = null;
+      activeSystemName = 'ALL SYSTEMS';
+    } else {
+      const [id, code, name] = val.split('|');
+      activeSystemId   = id;
+      activeSystemCode = code;
+      activeSystemName = name;
+      activeSystemConfig = allSystemsCache.find(s => s.system_id === id) || {};
+    }
     closeDetail();
     loadAccounts();
   }
@@ -503,9 +518,13 @@
     document.getElementById('acctTable').innerHTML =
       '<tr class="loading-row"><td colspan="8">LOADING ACCOUNTS...</td></tr>';
 
+    const sysFilter = activeSystemId === 'ALL'
+      ? `system_id=in.(${allSystemsCache.map(s=>s.system_id).join(',')})`
+      : `system_id=eq.${activeSystemId}`;
+
     const [accounts, balances] = await Promise.all([
-      supa('accounts', `?system_id=eq.${activeSystemId}&select=account_id,account_number,account_type,status,meter_id,notes,service_start,customers(full_name,phone_primary,email,billing_address,billing_city,billing_state),service_addresses(street,city,state,zip),meters(meter_number)`),
-      supa('account_balances', `?system_id=eq.${activeSystemId}&select=*`)
+      supa('accounts', `?${sysFilter}&select=account_id,account_number,account_type,status,meter_id,notes,service_start,customers(full_name,phone_primary,email,billing_address,billing_city,billing_state),service_addresses(street,city,state,zip),meters(meter_number)`),
+      supa('account_balances', `?${sysFilter}&select=*`)
     ]);
 
     if (!accounts) {
