@@ -27,7 +27,7 @@
   .topbar{position:fixed;top:0;left:0;right:0;height:46px;background:linear-gradient(90deg,#021a0e,#020c14,#021a0e);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 18px;z-index:100;}
   .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:20px;color:var(--green);letter-spacing:8px;text-shadow:0 0 20px var(--green),0 0 50px rgba(0,255,136,.2);text-decoration:none;}
   .sys-select{background:rgba(0,255,136,.05);border:1px solid var(--border-hi);color:var(--green);font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 12px;letter-spacing:1px;cursor:pointer;outline:none;}
-  .sys-select option{background:#fff;color:#0d2a1a;font-family:Arial,sans-serif;}
+  .sys-select option{background:#021a0e;color:#00ff88;font-family:'Share Tech Mono',monospace;letter-spacing:1px;}
   .sdot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s infinite;}
   @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
   #clock{color:var(--green);font-size:13px;letter-spacing:2px;font-family:'Share Tech Mono',monospace;}
@@ -267,7 +267,28 @@
   // ── CONFIG ───────────────────────────────────────────────────
   const SUPA_URL = 'https://bvpesxpptgdwkhsewhke.supabase.co';
   const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
-  const ORG_ID  = '00000000-0000-0000-0000-000000000001';
+  let ORG_ID = null; // Set dynamically from auth
+
+  // ── AUTH BOOTSTRAP ─────────────────────────────────────────
+  (function(){
+    const SESSION_KEY='radeus_session';
+    const s=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');
+    if(!s||!s.expires_at||s.expires_at<Date.now()/1000){window.location.href='login.html';return;}
+    const staff=JSON.parse(localStorage.getItem('radeus_staff')||'null');
+    if(!staff||!staff.org_id){window.location.href='login.html';return;}
+    ORG_ID=staff.org_id;
+    // Inject operator name if element exists
+    const opEl=document.getElementById('operatorName');
+    if(opEl)opEl.textContent=staff.name||'OPERATOR';
+    const roleEl=document.getElementById('operatorRole');
+    if(roleEl)roleEl.textContent=staff.role||'';
+    // Wire logout if button exists
+    const lb=document.getElementById('logoutBtn');
+    if(lb)lb.addEventListener('click',()=>{
+      if(s.access_token){fetch('https://bvpesxpptgdwkhsewhke.supabase.co/auth/v1/logout',{method:'POST',headers:{'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8','Authorization':`Bearer ${s.access_token}`}}).catch(()=>{});}
+      localStorage.removeItem(SESSION_KEY);localStorage.removeItem('radeus_staff');window.location.href='login.html';
+    });
+  })();
 
   // ── STATE ────────────────────────────────────────────────────
   let activeSystemId   = null;
@@ -281,10 +302,10 @@
   let activeCycle      = { year: null, month: null };
   let imgTargetAccount = null;
 
-  // Base rate for bill preview calc
-  const BASE_RATE       = 40.00;
-  const ENERGY_SURCHARGE = 6.00;
-  const USAGE_RATE      = 0.004; // per gallon
+  // Base rate for bill preview calc — updated from system config on load
+  let BASE_RATE       = 40.00;
+  let ENERGY_SURCHARGE = 6.00;
+  let USAGE_RATE      = 0.004; // per gallon
 
   // ── CLOCK ────────────────────────────────────────────────────
   function tick(){document.getElementById('clock').textContent=new Date().toTimeString().slice(0,8);}
@@ -362,9 +383,12 @@
   }
 
   // ── LOAD SYSTEMS ─────────────────────────────────────────────
+  let allSystemsCache = [];
+
   async function loadSystems() {
-    const systems = await supa('water_systems', `?org_id=eq.${ORG_ID}&select=system_id,system_code,system_name&order=system_name`);
+    const systems = await supa('water_systems', `?org_id=eq.${ORG_ID}&select=system_id,system_code,system_name,base_rate,energy_surcharge,usage_rate&order=system_name`);
     if (!systems || !systems.length) return;
+    allSystemsCache = systems;
     const sel = document.getElementById('sysSelect');
     sel.innerHTML = systems.map(s =>
       `<option value="${s.system_id}|${s.system_code}|${s.system_name}">⬡ ${s.system_name.toUpperCase()}</option>`
@@ -373,6 +397,7 @@
     activeSystemId   = first.system_id;
     activeSystemCode = first.system_code;
     activeSystemName = first.system_name;
+    applySystemRates(first);
     loadReadings();
   }
 
@@ -381,9 +406,17 @@
     activeSystemId   = id;
     activeSystemCode = code;
     activeSystemName = name;
+    const sys = allSystemsCache.find(s => s.system_id === id);
+    if (sys) applySystemRates(sys);
     pendingReads     = {};
     pendingImages    = {};
     loadReadings();
+  }
+
+  function applySystemRates(sys) {
+    BASE_RATE        = parseFloat(sys.base_rate) || 40.00;
+    ENERGY_SURCHARGE = parseFloat(sys.energy_surcharge) || 6.00;
+    USAGE_RATE       = parseFloat(sys.usage_rate) || 0.004;
   }
 
   // ── LOAD ACCOUNTS + EXISTING READS ───────────────────────────
