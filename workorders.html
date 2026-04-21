@@ -439,7 +439,28 @@
 // ── CONFIG ─────────────────────────────────────────────────────
 const SUPA_URL = 'https://bvpesxpptgdwkhsewhke.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
-const ORG_ID   = '00000000-0000-0000-0000-000000000001';
+let ORG_ID = null; // Set dynamically from auth
+
+  // ── AUTH BOOTSTRAP ─────────────────────────────────────────
+  (function(){
+    const SESSION_KEY='radeus_session';
+    const s=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');
+    if(!s||!s.expires_at||s.expires_at<Date.now()/1000){window.location.href='login.html';return;}
+    const staff=JSON.parse(localStorage.getItem('radeus_staff')||'null');
+    if(!staff||!staff.org_id){window.location.href='login.html';return;}
+    ORG_ID=staff.org_id;
+    // Inject operator name if element exists
+    const opEl=document.getElementById('operatorName');
+    if(opEl)opEl.textContent=staff.name||'OPERATOR';
+    const roleEl=document.getElementById('operatorRole');
+    if(roleEl)roleEl.textContent=staff.role||'';
+    // Wire logout if button exists
+    const lb=document.getElementById('logoutBtn');
+    if(lb)lb.addEventListener('click',()=>{
+      if(s.access_token){fetch('https://bvpesxpptgdwkhsewhke.supabase.co/auth/v1/logout',{method:'POST',headers:{'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8','Authorization':`Bearer ${s.access_token}`}}).catch(()=>{});}
+      localStorage.removeItem(SESSION_KEY);localStorage.removeItem('radeus_staff');window.location.href='login.html';
+    });
+  })();
 
 // ── STATE ──────────────────────────────────────────────────────
 let allWOs = [], filtered = [], allSystems = [];
