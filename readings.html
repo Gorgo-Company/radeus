@@ -158,7 +158,7 @@
     </select>
   </div>
   <div style="display:flex;align-items:center;gap:14px">
-    <span style="font-size:9px;color:var(--text-dim);font-family:'Share Tech Mono',monospace">OPERATOR: <span style="color:var(--green)">ADMIN</span></span>
+    <span style="font-size:9px;color:var(--text-dim);font-family:'Share Tech Mono',monospace">OPERATOR: <span id="operatorName" style="color:var(--green)">—</span></span>
     <span id="clock">--:--:--</span>
   </div>
 </div>
@@ -390,24 +390,39 @@
     if (!systems || !systems.length) return;
     allSystemsCache = systems;
     const sel = document.getElementById('sysSelect');
-    sel.innerHTML = systems.map(s =>
+    sel.innerHTML = '<option value="ALL">⬡ ALL SYSTEMS</option>' + systems.map(s =>
       `<option value="${s.system_id}|${s.system_code}|${s.system_name}">⬡ ${s.system_name.toUpperCase()}</option>`
     ).join('');
-    const first = systems[0];
-    activeSystemId   = first.system_id;
-    activeSystemCode = first.system_code;
-    activeSystemName = first.system_name;
-    applySystemRates(first);
+    if (systems.length === 1) {
+      const first = systems[0];
+      activeSystemId   = first.system_id;
+      activeSystemCode = first.system_code;
+      activeSystemName = first.system_name;
+      sel.value = `${first.system_id}|${first.system_code}|${first.system_name}`;
+      applySystemRates(first);
+    } else {
+      activeSystemId   = 'ALL';
+      activeSystemCode = null;
+      activeSystemName = 'ALL SYSTEMS';
+      applySystemRates(systems[0]);
+    }
     loadReadings();
   }
 
   function switchSystem(val) {
-    const [id, code, name] = val.split('|');
-    activeSystemId   = id;
-    activeSystemCode = code;
-    activeSystemName = name;
-    const sys = allSystemsCache.find(s => s.system_id === id);
-    if (sys) applySystemRates(sys);
+    if (val === 'ALL') {
+      activeSystemId   = 'ALL';
+      activeSystemCode = null;
+      activeSystemName = 'ALL SYSTEMS';
+      applySystemRates(allSystemsCache[0] || {});
+    } else {
+      const [id, code, name] = val.split('|');
+      activeSystemId   = id;
+      activeSystemCode = code;
+      activeSystemName = name;
+      const sys = allSystemsCache.find(s => s.system_id === id);
+      if (sys) applySystemRates(sys);
+    }
     pendingReads     = {};
     pendingImages    = {};
     loadReadings();
@@ -424,24 +439,29 @@
     document.getElementById('readTable').innerHTML =
       '<tr class="loading-row"><td colspan="12">LOADING...</td></tr>';
 
+    // Build system filter
+    const sysFilter = activeSystemId === 'ALL'
+      ? `system_id=in.(${allSystemsCache.map(s=>s.system_id).join(',')})`
+      : `system_id=eq.${activeSystemId}`;
+
     // Get active accounts
     const accounts = await supa('accounts',
-      `?system_id=eq.${activeSystemId}&status=eq.ACTIVE&select=account_id,account_number,customers(full_name),service_addresses(street,city)`
+      `?${sysFilter}&status=eq.ACTIVE&select=account_id,account_number,customers(full_name),service_addresses(street,city)`
     );
     if (!accounts) return;
     allAccounts = accounts;
 
-    // Get existing reads for this cycle
-    const reads = await supa('meter_reads',
-      `?account_id=in.(${accounts.map(a=>a.account_id).join(',')})&select=*&order=read_date.desc`
-    );
-
+    // Get existing reads for this cycle (skip if no accounts)
     existingReads = {};
-    if (reads) {
-      reads.forEach(r => {
-        // Only keep reads for current cycle if we can match
-        if (!existingReads[r.account_id]) existingReads[r.account_id] = r;
-      });
+    if (accounts.length > 0) {
+      const reads = await supa('meter_reads',
+        `?account_id=in.(${accounts.map(a=>a.account_id).join(',')})&select=*&order=read_date.desc`
+      );
+      if (reads) {
+        reads.forEach(r => {
+          if (!existingReads[r.account_id]) existingReads[r.account_id] = r;
+        });
+      }
     }
 
     updateProgress();
