@@ -5,188 +5,9 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RADEUS — Accounts</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --cyan:#00f5ff;--cyan-dim:#00a8b5;--green:#00ff88;--red:#ff2244;
-    --orange:#ff8800;--yellow:#ffe600;--blue:#0088ff;--purple:#aa00ff;
-    --bg:#020c14;--bg2:#041220;--panel:rgba(0,245,255,.03);
-    --border:rgba(0,245,255,.12);--border-hi:rgba(0,245,255,.4);
-    --text:#c8eaf0;--text-dim:#3d6a78;--text-mid:#6a9aaa;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-weight:400;overflow:hidden;height:100vh;width:100vw;}
-  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.07) 2px,rgba(0,0,0,.07) 4px);pointer-events:none;z-index:1000;}
-  .corner{position:fixed;width:36px;height:36px;border-color:var(--cyan);border-style:solid;opacity:.5;z-index:999;}
-  .tl{top:6px;left:6px;border-width:2px 0 0 2px}.tr{top:6px;right:6px;border-width:2px 2px 0 0}
-  .bl{bottom:6px;left:6px;border-width:0 0 2px 2px}.br{bottom:6px;right:6px;border-width:0 2px 2px 0}
-
-  /* TOP BAR */
-  .topbar{position:fixed;top:0;left:0;right:0;height:46px;background:linear-gradient(90deg,var(--bg2),#021018,var(--bg2));border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 18px;z-index:100;}
-  .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:20px;color:var(--cyan);letter-spacing:8px;text-shadow:0 0 20px var(--cyan),0 0 50px rgba(0,245,255,.25);animation:lp 4s ease-in-out infinite;}
-  @keyframes lp{0%,100%{text-shadow:0 0 20px var(--cyan),0 0 40px rgba(0,245,255,.2)}50%{text-shadow:0 0 30px var(--cyan),0 0 70px rgba(0,245,255,.4)}}
-  .logo a{color:inherit;text-decoration:none;}
-  .sys-select{background:rgba(0,245,255,.05);border:1px solid var(--border-hi);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 12px;letter-spacing:1px;cursor:pointer;outline:none;}
-  .sys-select option{background:#041220;color:#00f5ff;font-family:'Share Tech Mono',monospace;letter-spacing:1px;}
-  .sdot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s infinite;}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-  #clock{color:var(--cyan);font-size:13px;letter-spacing:2px}
-
-  /* STATS BAR */
-  .statsbar{position:fixed;top:46px;left:0;right:0;height:44px;background:rgba(0,15,25,.98);border-bottom:1px solid var(--border);display:flex;align-items:center;padding:0 16px;gap:0;z-index:99;}
-  .stat-pill{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 20px;border-right:1px solid var(--border);height:100%;}
-  .stat-pill:last-of-type{border-right:none;}
-  .sp-label{font-size:7px;color:var(--text-dim);letter-spacing:2px;margin-bottom:2px;}
-  .sp-val{font-family:'Rajdhani',sans-serif;font-size:18px;font-weight:700;}
-  .sp-cyan{color:var(--cyan)}.sp-green{color:var(--green)}.sp-red{color:var(--red)}.sp-orange{color:var(--orange)}.sp-blue{color:var(--blue)}.sp-yellow{color:var(--yellow)}
-
-  /* SEARCH + FILTERS */
-  .toolbar{position:fixed;top:90px;left:0;right:0;height:42px;background:rgba(2,12,20,.98);border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;padding:0 16px;z-index:98;}
-  .search-wrap{position:relative;flex:1;max-width:380px;}
-  .search-wrap::before{content:'⌕';position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--cyan-dim);font-size:16px;pointer-events:none;}
-  .search-input{width:100%;background:rgba(0,245,255,.04);border:1px solid var(--border);color:var(--text);font-family:'Share Tech Mono',monospace;font-size:11px;padding:6px 10px 6px 32px;outline:none;letter-spacing:.5px;}
-  .search-input::placeholder{color:var(--text-dim);}
-  .search-input:focus{border-color:var(--border-hi);}
-  .filter-btns{display:flex;gap:4px;flex:1;}
-  .fbtn{font-size:8px;padding:4px 10px;border:1px solid var(--border);color:var(--text-dim);background:transparent;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px;transition:all .15s;white-space:nowrap;}
-  .fbtn:hover,.fbtn.active{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.06);}
-  .fbtn.active-red{border-color:var(--red);color:var(--red);background:rgba(255,34,68,.06);}
-  .fbtn.active-orange{border-color:var(--orange);color:var(--orange);background:rgba(255,136,0,.06);}
-  .fbtn.active-green{border-color:var(--green);color:var(--green);background:rgba(0,255,136,.06);}
-  .fbtn.active-blue{border-color:var(--blue);color:var(--blue);background:rgba(0,136,255,.06);}
-  .new-acct-btn{font-size:9px;padding:6px 14px;border:1px solid var(--green);color:var(--green);background:rgba(0,255,136,.06);cursor:pointer;font-family:'Orbitron',monospace;letter-spacing:1px;white-space:nowrap;transition:all .15s;}
-  .new-acct-btn:hover{background:rgba(0,255,136,.15);}
-
-  /* MAIN LAYOUT */
-  .main{position:fixed;top:132px;bottom:78px;left:0;right:0;display:flex;overflow:hidden;}
-
-  /* ACCOUNTS TABLE */
-  .acct-list{flex:1;overflow-y:auto;min-width:0;}
-  .atable{width:100%;border-collapse:collapse;}
-  .atable thead{position:sticky;top:0;z-index:10;}
-  .atable th{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:1.5px;color:var(--text-dim);padding:8px 12px;border-bottom:2px solid var(--border);text-align:left;font-weight:400;background:#020c14;cursor:pointer;white-space:nowrap;}
-  .atable th:hover{color:var(--cyan);}
-  .atable th.sort-asc::after{content:' ▲';color:var(--cyan);}
-  .atable th.sort-desc::after{content:' ▼';color:var(--cyan);}
-  .atable td{padding:7px 12px;border-bottom:1px solid rgba(0,245,255,.04);cursor:pointer;vertical-align:middle;}
-  .atable tr:hover td{background:rgba(0,245,255,.04);}
-  .atable tr.selected td{background:rgba(0,245,255,.08);border-left:2px solid var(--cyan);}
-  .td-acct{color:var(--cyan);font-family:'Orbitron',monospace;font-size:9px;letter-spacing:.5px;white-space:nowrap;}
-  .td-name{color:var(--text);font-family:'Rajdhani',sans-serif;font-size:13px;font-weight:600;white-space:nowrap;}
-  .td-addr{color:#8ab8c8;font-family:'Rajdhani',sans-serif;font-size:12px;font-weight:500;}
-  .td-bal{font-family:'Rajdhani',sans-serif;font-size:14px;font-weight:700;text-align:right;white-space:nowrap;}
-  .td-date{color:var(--text-dim);font-family:'Rajdhani',sans-serif;font-size:12px;white-space:nowrap;}
-  .pill{display:inline-block;padding:2px 6px;border:1px solid;font-size:7px;letter-spacing:.5px;font-family:'Orbitron',monospace;white-space:nowrap;}
-  .plan-pill{display:inline-block;padding:1px 5px;border:1px solid var(--blue);color:var(--blue);font-size:7px;letter-spacing:.5px;font-family:'Orbitron',monospace;white-space:nowrap;}
-
-  /* DETAIL PANEL — wider */
-  .detail-panel{width:0;min-width:0;overflow:hidden;transition:width .25s ease;border-left:1px solid var(--border);background:var(--bg2);display:flex;flex-direction:column;}
-  .detail-panel.open{width:580px;min-width:580px;}
-  .dp-header{padding:14px 20px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(0,245,255,.06),transparent);position:relative;}
-  .dp-acct{font-family:'Orbitron',monospace;font-size:10px;color:var(--cyan);letter-spacing:2px;margin-bottom:4px;}
-  .dp-name{font-family:'Rajdhani',sans-serif;font-size:22px;font-weight:700;color:var(--text);}
-  .dp-status{display:inline-block;padding:3px 10px;border:1px solid;font-size:8px;letter-spacing:1.5px;font-family:'Orbitron',monospace;margin-top:6px;}
-  .dp-close{position:absolute;top:14px;right:16px;background:none;border:none;color:var(--text-dim);font-size:20px;cursor:pointer;z-index:10;}
-  .dp-close:hover{color:var(--red);}
-  .dp-body{flex:1;overflow-y:auto;padding:0;}
-
-  /* DETAIL SECTIONS */
-  .dp-section{border-bottom:1px solid rgba(0,245,255,.06);}
-  .dp-section-title{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:2px;color:var(--cyan-dim);padding:8px 20px;background:rgba(0,245,255,.02);border-bottom:1px solid rgba(0,245,255,.05);}
-  .dp-row{display:flex;justify-content:space-between;padding:6px 20px;border-bottom:1px solid rgba(0,245,255,.03);}
-  .dp-label{font-size:9px;color:var(--text-mid);}
-  .dp-val{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text);text-align:right;}
-
-  /* ACTION INPUT PANELS */
-  .action-panel{display:none;position:fixed;top:0;right:0;bottom:0;width:480px;background:rgba(2,10,20,.98);border-left:1px solid var(--border-hi);z-index:400;flex-direction:column;box-shadow:-20px 0 60px rgba(0,0,0,.6);}
-  .action-panel.show{display:flex;}
-  .ap-header{padding:16px 20px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(0,245,255,.08),transparent);display:flex;justify-content:space-between;align-items:center;}
-  .ap-title{font-family:'Orbitron',monospace;font-size:12px;color:var(--cyan);letter-spacing:3px;}
-  .ap-sub{font-size:9px;color:var(--text-dim);margin-top:3px;letter-spacing:1px;}
-  .ap-close{background:none;border:none;color:var(--text-dim);font-size:20px;cursor:pointer;}
-  .ap-close:hover{color:var(--red);}
-  .ap-body{flex:1;overflow-y:auto;padding:20px;}
-  .ap-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:8px;}
-  .ap-btn{flex:1;padding:10px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;border:1px solid;transition:all .15s;}
-  .ap-btn.cancel{background:transparent;border-color:var(--border);color:var(--text-dim);}
-  .ap-btn.cancel:hover{border-color:var(--red);color:var(--red);}
-  .ap-btn.submit{background:rgba(0,245,255,.08);border-color:var(--cyan);color:var(--cyan);}
-  .ap-btn.submit:hover{background:rgba(0,245,255,.18);}
-  .ap-btn.danger{background:rgba(255,34,68,.08);border-color:var(--red);color:var(--red);}
-  .ap-btn.danger:hover{background:rgba(255,34,68,.2);}
-  .ap-btn.success{background:rgba(0,255,136,.06);border-color:var(--green);color:var(--green);}
-  .ap-btn.success:hover{background:rgba(0,255,136,.15);}
-
-  /* TRANSACTION REGISTER */
-  .txn-wrap{padding:0;}
-  .txn-row{display:flex;align-items:center;gap:8px;padding:6px 16px;border-bottom:1px solid rgba(0,245,255,.03);font-size:9px;}
-  .txn-row:hover{background:rgba(0,245,255,.03);}
-  .txn-date{color:var(--text-dim);white-space:nowrap;width:80px;flex-shrink:0;}
-  .txn-type{font-family:'Orbitron',monospace;font-size:7px;padding:1px 5px;border:1px solid;white-space:nowrap;flex-shrink:0;}
-  .txn-desc{color:var(--text-mid);flex:1;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-  .txn-amt{font-family:'Share Tech Mono',monospace;text-align:right;white-space:nowrap;flex-shrink:0;font-size:10px;}
-
-  /* ACTION BUTTONS */
-  .dp-actions{padding:12px 16px;display:grid;grid-template-columns:1fr 1fr;gap:6px;border-top:1px solid var(--border);background:var(--bg2);}
-  .dp-btn{padding:8px;border:1px solid var(--border);color:var(--text-dim);background:transparent;font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;cursor:pointer;transition:all .15s;text-align:center;}
-  .dp-btn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.05);}
-  .dp-btn.primary{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.07);}
-  .dp-btn.danger{border-color:var(--red);color:var(--red);}
-  .dp-btn.danger:hover{background:rgba(255,34,68,.08);}
-  .dp-btn.success{border-color:var(--green);color:var(--green);}
-  .dp-btn.success:hover{background:rgba(0,255,136,.08);}
-
-  /* NEW ACCOUNT MODAL */
-  .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;align-items:center;justify-content:center;}
-  .modal.show{display:flex;}
-  .modal-box{background:var(--bg2);border:1px solid var(--border-hi);width:520px;max-height:85vh;overflow-y:auto;box-shadow:0 0 50px rgba(0,245,255,.15);}
-  .modal-header{background:linear-gradient(135deg,rgba(0,245,255,.08),transparent);border-bottom:1px solid var(--border);padding:14px 18px;font-family:'Orbitron',monospace;font-size:11px;color:var(--cyan);letter-spacing:3px;display:flex;justify-content:space-between;align-items:center;}
-  .modal-close{background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;}
-  .modal-close:hover{color:var(--red);}
-  .modal-body{padding:20px 18px;}
-  .form-row{margin-bottom:14px;}
-  .form-row-2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;}
-  .form-label{font-size:8px;color:var(--text-mid);letter-spacing:1.5px;margin-bottom:5px;display:block;font-family:'Orbitron',monospace;}
-  .form-input,.form-select{width:100%;background:rgba(0,245,255,.04);border:1px solid var(--border);color:var(--text);font-family:'Share Tech Mono',monospace;font-size:11px;padding:8px 10px;outline:none;transition:border-color .15s;}
-  .form-input:focus,.form-select:focus{border-color:var(--border-hi);}
-  .form-select option{background:#fff;color:#0d1b2a;}
-  .form-section{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:2px;color:var(--cyan-dim);padding:8px 0;margin:16px 0 10px;border-bottom:1px solid var(--border);}
-  .modal-footer{padding:14px 18px;border-top:1px solid var(--border);display:flex;gap:8px;}
-  .modal-btn{flex:1;padding:10px;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:1px;cursor:pointer;transition:all .15s;border:1px solid;}
-  .modal-btn.cancel{background:transparent;border-color:var(--border);color:var(--text-dim);}
-  .modal-btn.cancel:hover{border-color:var(--red);color:var(--red);}
-  .modal-btn.submit{background:rgba(0,245,255,.08);border-color:var(--cyan);color:var(--cyan);}
-  .modal-btn.submit:hover{background:rgba(0,245,255,.18);}
-
-  /* EMPTY STATE */
-  .empty-state{display:flex;flex-direction:column;align-items:center;justify-content:center;height:200px;color:var(--text-dim);gap:8px;}
-  .empty-state .big{font-family:'Orbitron',monospace;font-size:12px;letter-spacing:3px;color:rgba(0,245,255,.2);}
-
-  /* BOTTOM NAV */
-  .botnav{position:fixed;bottom:0;left:0;right:0;height:78px;background:linear-gradient(90deg,var(--bg2),#020e1c,var(--bg2));border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:6px;padding:0 16px;z-index:100;}
-  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:58px;height:68px;background:var(--panel);border:1px solid var(--border);color:var(--text-dim);cursor:pointer;transition:all .2s;font-size:8px;letter-spacing:1px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;}
-  .navbtn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--cyan);transform:scaleX(0);transition:transform .2s;}
-  .navbtn:hover::after,.navbtn.active::after{transform:scaleX(1);}
-  .navbtn:hover,.navbtn.active{color:var(--cyan);border-color:var(--border-hi);background:rgba(0,245,255,.05);}
-  .navicon{font-size:20px;}
-  .navalert{position:absolute;top:5px;right:6px;width:13px;height:13px;background:var(--red);border-radius:50%;font-size:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Orbitron',monospace;}
-
-  /* SCROLLBAR */
-  ::-webkit-scrollbar{width:3px;height:3px;}
-  ::-webkit-scrollbar-track{background:transparent;}
-  ::-webkit-scrollbar-thumb{background:var(--border);}
-
-  /* LOADING */
-  .loading-row td{color:var(--text-dim);font-size:9px;letter-spacing:1px;text-align:center;padding:40px;}
-
-  /* BALANCE COLORS */
-  .bal-green{color:var(--green);}
-  .bal-blue{color:var(--blue);}
-  .bal-orange{color:var(--orange);}
-  .bal-red{color:var(--red);}
-  .bal-gray{color:var(--text-dim);}
-</style>
+<link rel="stylesheet" href="./styles/main.css">
 </head>
-<body>
+<body data-page="accounts">
 
 <div class="corner tl"></div><div class="corner tr"></div>
 <div class="corner bl"></div><div class="corner br"></div>
@@ -194,15 +15,15 @@
 <!-- TOP BAR -->
 <div class="topbar">
   <div class="logo"><a href="index.html">RADEUS</a></div>
-  <div style="display:flex;align-items:center;gap:16px">
+  <div class="tb-group">
     <div class="sdot"></div>
-    <span style="font-size:9px;color:var(--text-dim);letter-spacing:2px">ACCOUNTS MODULE</span>
+    <span class="tb-tag">ACCOUNTS MODULE</span>
     <select class="sys-select" id="sysSelect" onchange="switchSystem(this.value)">
       <option value="">⬡ LOADING SYSTEMS...</option>
     </select>
   </div>
-  <div style="display:flex;align-items:center;gap:14px">
-    <span style="font-size:9px;color:var(--text-dim)">OPERATOR: <span id="operatorName" style="color:var(--cyan)">—</span></span>
+  <div class="tb-group">
+    <span class="tb-op-label">OPERATOR:</span> <span id="operatorName" class="op-name">—</span>
     <span id="clock">--:--:--</span>
   </div>
 </div>
@@ -523,7 +344,7 @@
       : `system_id=eq.${activeSystemId}`;
 
     const [accounts, balances] = await Promise.all([
-      supa('accounts', `?${sysFilter}&select=account_id,account_number,account_type,status,meter_id,notes,service_start,customers(full_name,phone_primary,email,billing_address,billing_city,billing_state),service_addresses(street,city,state,zip),meters(meter_number)`),
+      supa('accounts', `?${sysFilter}&select=account_id,account_number,account_type,status,system_id,meter_id,notes,service_start,customers(full_name,phone_primary,email,billing_address,billing_city,billing_state),service_addresses(street,city,state,zip),meters(meter_number)`),
       supa('account_balances', `?${sysFilter}&select=*`)
     ]);
 
@@ -538,9 +359,13 @@
 
     allAccounts = accounts.map(a => {
       const bal = Number(balMap[a.account_id]?.current_balance ?? 0);
+      const sysRec = allSystemsCache.find(s => s.system_id === a.system_id);
       return {
         ...a,
         bal,
+        sysName: sysRec ? sysRec.system_name : '—',
+        sysCode: sysRec ? sysRec.system_code : '',
+        sysConfig: sysRec || {},
         name: a.customers?.full_name || '—',
         address: a.service_addresses?.street || '—',
         city: a.service_addresses?.city || '',
@@ -637,7 +462,7 @@
         </td>
         <td><span class="pill" style="color:${a.cls.color};border-color:${a.cls.color}">${a.cls.label}</span></td>
         <td>${hasPlan ? '<span class="plan-pill">PLAN</span>' : '<span style="color:var(--text-dim);font-size:11px">—</span>'}</td>
-        <td class="td-date">${fmtDate(a.lastPmt)}${a.lastPmtAmt ? '<br><span style="color:var(--green);font-size:8px">'+fmtBal(a.lastPmtAmt)+'</span>' : ''}</td>
+        <td class="td-date">${fmtDate(a.lastPmt)}${a.lastPmtAmt ? '<br><span>'+fmtBal(a.lastPmtAmt)+'</span>' : ''}</td>
         <td class="td-bal" style="color:${a.cls.color}">${fmtBal(a.bal)}</td>`;
       tbody.appendChild(tr);
     });
@@ -677,39 +502,61 @@
     // Build detail body
     const body = document.getElementById('dp-body');
     body.innerHTML = `
-      <div class="dp-section">
-        <div class="dp-section-title">ACCOUNT INFORMATION</div>
-        <div class="dp-row"><span class="dp-label">ACCOUNT NUMBER</span><span class="dp-val">${a.account_number}</span></div>
-        <div class="dp-row"><span class="dp-label">SYSTEM</span><span class="dp-val">${activeSystemName||activeSystemCode}</span></div>
-        <div class="dp-row"><span class="dp-label">ACCOUNT TYPE</span><span class="dp-val">${a.account_type}</span></div>
-        <div class="dp-row"><span class="dp-label">STATUS</span><span class="dp-val" style="color:${a.cls.color}">${a.status}</span></div>
-        <div class="dp-row"><span class="dp-label">SERVICE START</span><span class="dp-val">${fmtDate(a.service_start)}</span></div>
-        <div class="dp-row"><span class="dp-label">METER NUMBER</span><span class="dp-val">${a.meter}</span></div>
+      <div class="dp-info-grid">
+        <div class="dp-info-cell">
+          <div class="dp-info-label">TYPE</div>
+          <div class="dp-info-val">${a.account_type||'—'}</div>
+        </div>
+        <div class="dp-info-cell">
+          <div class="dp-info-label">SYSTEM</div>
+          <div class="dp-info-val">${a.sysName||'—'}</div>
+        </div>
+        <div class="dp-info-cell">
+          <div class="dp-info-label">SERVICE START</div>
+          <div class="dp-info-val">${fmtDate(a.service_start)}</div>
+        </div>
+        <div class="dp-info-cell">
+          <div class="dp-info-label">METER #</div>
+          <div class="dp-info-val">${a.meter}</div>
+        </div>
+        <div class="dp-info-cell">
+          <div class="dp-info-label">PHONE</div>
+          <div class="dp-info-val">${a.phone||'—'}</div>
+        </div>
+        <div class="dp-info-cell">
+          <div class="dp-info-label">EMAIL</div>
+          <div class="dp-info-val dp-info-truncate">${a.email||'—'}</div>
+        </div>
+        <div class="dp-info-cell dp-info-wide">
+          <div class="dp-info-label">SERVICE ADDRESS</div>
+          <div class="dp-info-val">${a.address}${a.city ? ', '+a.city : ''} ${a.zip||''}</div>
+        </div>
+        <div class="dp-info-cell">
+          <div class="dp-info-label">LAST PMT</div>
+          <div class="dp-info-val"><span class="dp-info-pmt-date">${fmtDate(a.lastPmt)}</span> <span class="dp-info-pmt-amt">${a.lastPmtAmt ? fmtBal(a.lastPmtAmt) : '—'}</span></div>
+        </div>
+        <div class="dp-info-cell">
+          <div class="dp-info-label">CURRENT BAL</div>
+          <div class="dp-info-val dp-info-bal" style="color:${a.cls.color}">${fmtBal(a.bal)}</div>
+        </div>
+        <div class="dp-info-cell">
+          <div class="dp-info-label">BASE RATE</div>
+          <div class="dp-info-val">$${(a.sysConfig.base_rate||40).toFixed(2)}/MO</div>
+        </div>
+        <div class="dp-info-cell">
+          <div class="dp-info-label">LATE FEE</div>
+          <div class="dp-info-val">$${(a.sysConfig.late_fee_amount||10).toFixed(2)}</div>
+        </div>
+        <div class="dp-info-cell dp-info-wide">
+          <div class="dp-info-label">BILLING ADDRESS</div>
+          <div class="dp-info-val">${a.billAddr||'—'}</div>
+        </div>
       </div>
-      <div class="dp-section">
-        <div class="dp-section-title">SERVICE ADDRESS</div>
-        <div class="dp-row"><span class="dp-label">STREET</span><span class="dp-val">${a.address}</span></div>
-        <div class="dp-row"><span class="dp-label">CITY / STATE / ZIP</span><span class="dp-val">${a.city} ${a.zip}</span></div>
-      </div>
-      <div class="dp-section">
-        <div class="dp-section-title">CUSTOMER CONTACT</div>
-        <div class="dp-row"><span class="dp-label">NAME</span><span class="dp-val">${a.name}</span></div>
-        <div class="dp-row"><span class="dp-label">PHONE</span><span class="dp-val">${a.phone}</span></div>
-        <div class="dp-row"><span class="dp-label">EMAIL</span><span class="dp-val">${a.email}</span></div>
-        <div class="dp-row"><span class="dp-label">BILLING ADDRESS</span><span class="dp-val">${a.billAddr}</span></div>
-      </div>
-      <div class="dp-section">
-        <div class="dp-section-title">BALANCE SUMMARY</div>
-        <div class="dp-row"><span class="dp-label">CURRENT BALANCE</span><span class="dp-val" style="color:${a.cls.color};font-size:14px">${fmtBal(a.bal)}</span></div>
-        <div class="dp-row"><span class="dp-label">LAST PAYMENT DATE</span><span class="dp-val">${fmtDate(a.lastPmt)}</span></div>
-        <div class="dp-row"><span class="dp-label">LAST PAYMENT AMOUNT</span><span class="dp-val" style="color:var(--green)">${a.lastPmtAmt ? fmtBal(a.lastPmtAmt) : '—'}</span></div>
-        <div class="dp-row"><span class="dp-label">BASE RATE</span><span class="dp-val">$${(activeSystemConfig.base_rate||40).toFixed(2)} / MONTH</span></div>
-        <div class="dp-row"><span class="dp-label">LATE FEE</span><span class="dp-val">$${(activeSystemConfig.late_fee_amount||10).toFixed(2)} after due date</span></div>
-      </div>
-      <div class="dp-section">
-        <div class="dp-section-title">TRANSACTION REGISTER <span style="color:var(--text-dim);font-size:7px;margin-left:8px">LOADING...</span></div>
+
+      <div class="dp-txn-section">
+        <div class="dp-section-title">TRANSACTION REGISTER <span class="dp-txn-count">LOADING...</span></div>
         <div class="txn-wrap" id="txn-wrap">
-          <div style="padding:20px;text-align:center;color:var(--text-dim);font-size:9px;letter-spacing:1px">LOADING TRANSACTIONS...</div>
+          <div class="dp-txn-loading">LOADING TRANSACTIONS...</div>
         </div>
       </div>`;
 
@@ -728,11 +575,11 @@
     if (!wrap) return;
 
     // Update section title
-    const stitle = document.querySelector('#dp-body .dp-section:last-child .dp-section-title');
-    if (stitle) stitle.innerHTML = `TRANSACTION REGISTER <span style="color:var(--text-dim);font-size:7px;margin-left:8px">${txns?.length||0} RECORDS</span>`;
+    const stitle = document.querySelector('#dp-body .dp-txn-section .dp-section-title');
+    if (stitle) stitle.innerHTML = `TRANSACTION REGISTER <span class="dp-txn-count">${txns?.length||0} RECORDS</span>`;
 
     if (!txns || !txns.length) {
-      wrap.innerHTML = '<div style="padding:20px;text-align:center;color:var(--text-dim);font-size:9px">NO TRANSACTIONS FOUND</div>';
+      wrap.innerHTML = '<div class="dp-txn-loading">NO TRANSACTIONS FOUND</div>';
       return;
     }
 
@@ -745,13 +592,24 @@
       const col = typeColors[t.txn_type] || 'var(--text-dim)';
       const amt = Number(t.amount||0);
       const amtColor = t.txn_type==='PAYMENT'||t.txn_type==='CREDIT' ? 'var(--green)' : amt<0 ? 'var(--green)' : 'var(--orange)';
+      const isBill = t.txn_type === 'BILL';
+      const billId = t.bill_id || '';
+      const clickAttr = isBill && billId ? `onclick="event.stopPropagation();openBillInvoice('${billId}')" style="cursor:pointer"` : '';
+      const typeClickable = isBill ? 'txn-type-clickable' : '';
       return `<div class="txn-row">
         <span class="txn-date">${fmtDate(t.txn_date)}</span>
-        <span class="txn-type" style="color:${col};border-color:${col}">${t.txn_type.replace('_',' ')}</span>
+        <span class="txn-type ${typeClickable}" ${clickAttr} style="color:${col};border-color:${col}">${t.txn_type.replace('_',' ')}</span>
         <span class="txn-desc">${t.description||t.payment_method||'—'}</span>
         <span class="txn-amt" style="color:${amtColor}">${fmtBal(amt)}</span>
       </div>`;
     }).join('');
+  }
+
+  // ── BILL INVOICE — opens billing page deep-linked to this bill ───
+  function openBillInvoice(billId) {
+    if (!billId) return;
+    // Open billing.html in new tab; billing.html will read ?bill_id and auto-open invoice
+    window.open(`billing.html?bill_id=${encodeURIComponent(billId)}`, '_blank');
   }
 
   function closeDetail() {
@@ -829,6 +687,7 @@
   }
 
   async function submitArrangement() {
+    if (!selectedAcct) { alert('No account selected'); return; }
     const down      = parseFloat(document.getElementById('arr-down').value||0);
     const downDate  = document.getElementById('arr-down-date').value;
     const monthly   = parseFloat(document.getElementById('arr-monthly').value||0);
@@ -836,21 +695,44 @@
     const count     = parseInt(document.getElementById('arr-count').value||0);
     const notes     = document.getElementById('arr-notes').value.trim();
     if (!monthly || !start) { alert('Monthly payment amount and start date are required'); return; }
-    // Log arrangement as a call log entry for now
-    await supa('call_log', '', 'POST', {
+
+    // 1) Activate payment plan on the account itself (real Supabase write)
+    const acctRes = await supa('accounts', `?account_id=eq.${selectedAcct.account_id}`, 'PATCH', {
+      payment_plan_active:              true,
+      payment_plan_voided:              false,
+      payment_plan_start_date:          start,
+      payment_plan_original_balance:    selectedAcct.bal,
+      payment_plan_down_payment:        down,
+      payment_plan_down_payment_date:   downDate || null,
+      payment_plan_monthly_amount:      monthly,
+      payment_plan_first_payment_date:  start,
+      payment_plan_total_payments:      count || 0,
+      payment_plan_remaining_balance:   Math.max(0, selectedAcct.bal - down),
+      payment_plan_notes:               notes || null
+    });
+    if (!acctRes && acctRes !== true) { alert('ERROR: Could not activate payment plan'); return; }
+
+    // 2) Log to communication_log (correct table + columns)
+    await supa('communication_log', '', 'POST', {
       system_id:       activeSystemId,
       account_id:      selectedAcct.account_id,
-      call_date:       new Date().toISOString().split('T')[0],
+      log_date:        new Date().toISOString().split('T')[0],
+      contact_type:    'INTERNAL',
       category:        'Payment Arrangement',
+      direction:       'OUTBOUND',
       customer_name:   selectedAcct.name,
       service_address: selectedAcct.address,
-      description:     `ARRANGEMENT: Down $${down} on ${downDate||'N/A'}. Monthly $${monthly} x${count} starting ${start}. ${notes}`,
+      description:     `ARRANGEMENT CREATED: Down $${down.toFixed(2)} on ${downDate||'N/A'}. Monthly $${monthly.toFixed(2)} x${count} starting ${start}. ${notes}`,
       status:          'Open',
       assigned_to:     'Manager'
     });
+
     closeActionPanel('panel-arrangement');
-    alert(`✓ ARRANGEMENT LOGGED\n${selectedAcct.name}\n$${monthly}/mo x${count} payments`);
-    loadAccounts();
+    alert(`✓ ARRANGEMENT ACTIVE\n${selectedAcct.name}\n$${monthly}/mo x${count} payments`);
+    await loadAccounts();
+    // Re-open detail panel with refreshed data
+    const refreshed = allAccounts.find(a => a.account_id === selectedAcct.account_id);
+    if (refreshed) openDetail(refreshed);
   }
 
   function sendNotice() {
@@ -878,24 +760,29 @@
   }
 
   async function submitNotice() {
+    if (!selectedAcct) { alert('No account selected'); return; }
     const type     = document.getElementById('notice-type').value;
     const delivery = document.getElementById('notice-delivery').value;
     const msg      = document.getElementById('notice-msg').value.trim();
     if (!msg) { alert('Message cannot be empty'); return; }
-    // Log to call log
-    await supa('call_log', '', 'POST', {
+    // Log to communication_log (correct table + columns)
+    const res = await supa('communication_log', '', 'POST', {
       system_id:       activeSystemId,
       account_id:      selectedAcct.account_id,
-      call_date:       new Date().toISOString().split('T')[0],
+      log_date:        new Date().toISOString().split('T')[0],
+      contact_type:    delivery.toUpperCase(),
       category:        'Notice Sent',
+      direction:       'OUTBOUND',
       customer_name:   selectedAcct.name,
       service_address: selectedAcct.address,
-      description:     `${type} sent via ${delivery}: ${msg.substring(0,100)}...`,
+      phone_number:    selectedAcct.phone || null,
+      description:     `${type.replace(/_/g,' ')} via ${delivery}: ${msg}`,
       status:          'Resolved',
       assigned_to:     'System'
     });
+    if (!res) { alert('ERROR: Could not log notice'); return; }
     closeActionPanel('panel-notice');
-    alert(`✓ NOTICE LOGGED\n${type} — ${delivery}\n${selectedAcct.name}`);
+    alert(`✓ NOTICE LOGGED\n${type.replace(/_/g,' ')} — ${delivery}\n${selectedAcct.name}`);
   }
 
   function disconnectAccount() {
@@ -920,12 +807,14 @@
       notes: `DISCONNECTED ${date}: ${reason}. ${notes}`
     });
     if (!res && res !== true) { alert('ERROR: Could not update account status'); return; }
-    // Log to call log
-    await supa('call_log', '', 'POST', {
+    // Log to communication_log (correct table + columns)
+    await supa('communication_log', '', 'POST', {
       system_id:       activeSystemId,
       account_id:      selectedAcct.account_id,
-      call_date:       date,
+      log_date:        date,
+      contact_type:    'INTERNAL',
       category:        'Disconnection',
+      direction:       'OUTBOUND',
       customer_name:   selectedAcct.name,
       service_address: selectedAcct.address,
       description:     `SERVICE DISCONNECTED. Reason: ${reason}. Final read: ${read||'N/A'}. ${notes}`,
@@ -938,8 +827,133 @@
     loadAccounts();
   }
 
-  function editAccount()  { alert('EDIT ACCOUNT — coming in next build'); }
-  function viewCallLog()  { window.location.href = 'calllog.html'; }
+  // ── EDIT ACCOUNT — opens action panel, saves to Supabase ────────
+  function editAccount() {
+    if (!selectedAcct) return;
+    closeAllPanels();
+    document.getElementById('edit-acct-sub').textContent =
+      `${selectedAcct.account_number} — ${selectedAcct.name}`;
+    // Pre-fill form with current values
+    document.getElementById('edit-name').value      = selectedAcct.name === '—' ? '' : selectedAcct.name;
+    document.getElementById('edit-phone').value     = selectedAcct.phone === '—' ? '' : (selectedAcct.phone || '');
+    document.getElementById('edit-email').value     = selectedAcct.email === '—' ? '' : (selectedAcct.email || '');
+    document.getElementById('edit-bill-addr').value = selectedAcct.billAddr === '—' ? '' : (selectedAcct.billAddr || '');
+    document.getElementById('edit-svc-addr').value  = selectedAcct.address === '—' ? '' : (selectedAcct.address || '');
+    document.getElementById('edit-svc-city').value  = selectedAcct.city || '';
+    document.getElementById('edit-svc-zip').value   = selectedAcct.zip || '';
+    document.getElementById('edit-acct-type').value = selectedAcct.account_type || 'RESIDENTIAL';
+    document.getElementById('edit-status').value    = selectedAcct.status || 'ACTIVE';
+    document.getElementById('panel-edit').classList.add('show');
+  }
+
+  async function submitEditAccount() {
+    if (!selectedAcct) return;
+    const name      = document.getElementById('edit-name').value.trim();
+    const phone     = document.getElementById('edit-phone').value.trim();
+    const email     = document.getElementById('edit-email').value.trim();
+    const billAddr  = document.getElementById('edit-bill-addr').value.trim();
+    const svcAddr   = document.getElementById('edit-svc-addr').value.trim();
+    const svcCity   = document.getElementById('edit-svc-city').value.trim();
+    const svcZip    = document.getElementById('edit-svc-zip').value.trim();
+    const acctType  = document.getElementById('edit-acct-type').value;
+    const status    = document.getElementById('edit-status').value;
+    if (!name) { alert('Customer name is required'); return; }
+
+    // 1) Update customer (full_name, phone, email, billing address)
+    if (selectedAcct.customer_id || (selectedAcct.customers && selectedAcct.customers.customer_id) || true) {
+      // Need customer_id - fetch from accounts row
+      const acctRow = await supa('accounts', `?account_id=eq.${selectedAcct.account_id}&select=customer_id,address_id`);
+      if (acctRow && acctRow.length) {
+        const customerId = acctRow[0].customer_id;
+        const addressId  = acctRow[0].address_id;
+        if (customerId) {
+          await supa('customers', `?customer_id=eq.${customerId}`, 'PATCH', {
+            full_name:        name,
+            phone_primary:    phone || null,
+            email:            email || null,
+            billing_address:  billAddr || null
+          });
+        }
+        // 2) Update service address
+        if (addressId && (svcAddr || svcCity || svcZip)) {
+          await supa('service_addresses', `?address_id=eq.${addressId}`, 'PATCH', {
+            street: svcAddr || null,
+            city:   svcCity || null,
+            zip:    svcZip || null
+          });
+        }
+      }
+    }
+
+    // 3) Update account row (type, status)
+    const acctRes = await supa('accounts', `?account_id=eq.${selectedAcct.account_id}`, 'PATCH', {
+      account_type: acctType,
+      status:       status
+    });
+    if (!acctRes && acctRes !== true) { alert('ERROR: Could not update account'); return; }
+
+    // Log change to communication_log
+    await supa('communication_log', '', 'POST', {
+      system_id:       activeSystemId,
+      account_id:      selectedAcct.account_id,
+      log_date:        new Date().toISOString().split('T')[0],
+      contact_type:    'INTERNAL',
+      category:        'Account Edit',
+      direction:       'OUTBOUND',
+      customer_name:   name,
+      service_address: svcAddr,
+      description:     `Account updated by operator. Type=${acctType}, Status=${status}`,
+      status:          'Resolved',
+      assigned_to:     'Operator'
+    });
+
+    closeActionPanel('panel-edit');
+    alert(`✓ ACCOUNT UPDATED\n${selectedAcct.account_number} — ${name}`);
+    await loadAccounts();
+    const refreshed = allAccounts.find(a => a.account_id === selectedAcct.account_id);
+    if (refreshed) openDetail(refreshed);
+  }
+
+  // ── COMM LOG — opens slide-out panel with comm history for this account ─
+  async function viewCallLog() {
+    if (!selectedAcct) return;
+    closeAllPanels();
+    document.getElementById('comm-acct-sub').textContent =
+      `${selectedAcct.account_number} — ${selectedAcct.name}`;
+    const wrap = document.getElementById('comm-list');
+    wrap.innerHTML = '<div class="comm-empty">LOADING...</div>';
+    document.getElementById('panel-comm').classList.add('show');
+
+    const logs = await supa('communication_log',
+      `?account_id=eq.${selectedAcct.account_id}&select=*&order=log_date.desc,created_at.desc&limit=200`
+    );
+    if (!logs || !logs.length) {
+      wrap.innerHTML = '<div class="comm-empty">NO COMMUNICATIONS LOGGED FOR THIS ACCOUNT</div>';
+      return;
+    }
+    const catColors = {
+      'Payment Arrangement': 'var(--orange)',
+      'Notice Sent':         'var(--cyan)',
+      'Disconnection':       'var(--red)',
+      'Account Edit':        'var(--text-mid)',
+      'Inquiry':             'var(--green)',
+      'Complaint':           'var(--red)'
+    };
+    wrap.innerHTML = logs.map(l => {
+      const col = catColors[l.category] || 'var(--text-mid)';
+      const dirIcon = l.direction === 'INBOUND' ? '⬇' : '⬆';
+      return `<div class="comm-row">
+        <div class="comm-row-top">
+          <span class="comm-date">${fmtDate(l.log_date)}</span>
+          <span class="comm-cat" style="color:${col};border-color:${col}">${(l.category||'OTHER').toUpperCase()}</span>
+          <span class="comm-dir">${dirIcon} ${l.direction||'—'}</span>
+          <span class="comm-status">${l.status||'—'}</span>
+        </div>
+        <div class="comm-desc">${l.description||'—'}</div>
+        ${l.assigned_to?`<div class="comm-meta">BY: ${l.assigned_to}${l.contact_type?` · ${l.contact_type}`:''}</div>`:''}
+      </div>`;
+    }).join('');
+  }
 
   // ── NEW ACCOUNT ───────────────────────────────────────────────
   function openNewAcct()  { document.getElementById('newAcctModal').classList.add('show'); }
@@ -1209,6 +1223,100 @@
   <div class="ap-footer">
     <button class="ap-btn cancel" onclick="closeActionPanel('panel-disconnect')">CANCEL</button>
     <button class="ap-btn danger" onclick="submitDisconnect()">CONFIRM DISCONNECT</button>
+  </div>
+</div>
+
+<!-- ── EDIT ACCOUNT PANEL ─────────────────────────────────────── -->
+<div class="action-panel" id="panel-edit">
+  <div class="ap-header">
+    <div>
+      <div class="ap-title">EDIT ACCOUNT</div>
+      <div class="ap-sub" id="edit-acct-sub">—</div>
+    </div>
+    <button class="ap-close" onclick="closeActionPanel('panel-edit')">✕</button>
+  </div>
+  <div class="ap-body">
+    <div class="form-section">
+      <div class="form-section-title">CUSTOMER</div>
+      <div class="form-row">
+        <label class="form-label">FULL NAME</label>
+        <input class="form-input" id="edit-name" type="text" placeholder="Customer name">
+      </div>
+      <div class="form-row-2">
+        <div>
+          <label class="form-label">PHONE</label>
+          <input class="form-input" id="edit-phone" type="tel" placeholder="Phone">
+        </div>
+        <div>
+          <label class="form-label">EMAIL</label>
+          <input class="form-input" id="edit-email" type="email" placeholder="Email">
+        </div>
+      </div>
+      <div class="form-row">
+        <label class="form-label">BILLING ADDRESS</label>
+        <input class="form-input" id="edit-bill-addr" type="text" placeholder="Billing address">
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">SERVICE ADDRESS</div>
+      <div class="form-row">
+        <label class="form-label">STREET</label>
+        <input class="form-input" id="edit-svc-addr" type="text" placeholder="Service street address">
+      </div>
+      <div class="form-row-2">
+        <div>
+          <label class="form-label">CITY</label>
+          <input class="form-input" id="edit-svc-city" type="text" placeholder="City">
+        </div>
+        <div>
+          <label class="form-label">ZIP</label>
+          <input class="form-input" id="edit-svc-zip" type="text" placeholder="Zip">
+        </div>
+      </div>
+    </div>
+    <div class="form-section">
+      <div class="form-section-title">ACCOUNT</div>
+      <div class="form-row-2">
+        <div>
+          <label class="form-label">TYPE</label>
+          <select class="form-select" id="edit-acct-type">
+            <option value="RESIDENTIAL">RESIDENTIAL</option>
+            <option value="COMMERCIAL">COMMERCIAL</option>
+            <option value="INDUSTRIAL">INDUSTRIAL</option>
+            <option value="MUNICIPAL">MUNICIPAL</option>
+            <option value="RELIGIOUS">RELIGIOUS</option>
+          </select>
+        </div>
+        <div>
+          <label class="form-label">STATUS</label>
+          <select class="form-select" id="edit-status">
+            <option value="ACTIVE">ACTIVE</option>
+            <option value="INACTIVE">INACTIVE</option>
+            <option value="DISCONNECTED">DISCONNECTED</option>
+          </select>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="ap-footer">
+    <button class="ap-btn cancel" onclick="closeActionPanel('panel-edit')">CANCEL</button>
+    <button class="ap-btn submit" onclick="submitEditAccount()">SAVE CHANGES</button>
+  </div>
+</div>
+
+<!-- ── COMM LOG PANEL — communication history for this account ── -->
+<div class="action-panel" id="panel-comm">
+  <div class="ap-header">
+    <div>
+      <div class="ap-title">COMMUNICATION LOG</div>
+      <div class="ap-sub" id="comm-acct-sub">—</div>
+    </div>
+    <button class="ap-close" onclick="closeActionPanel('panel-comm')">✕</button>
+  </div>
+  <div class="ap-body" id="comm-list-wrap">
+    <div id="comm-list">
+      <div class="comm-empty">LOADING...</div>
+    </div>
   </div>
 </div>
 
