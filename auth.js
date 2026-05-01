@@ -1,142 +1,81 @@
-// ============================================================
-// RADEUS — auth.js
-// Include on every operator page BEFORE the page's own script.
-// Handles: session check, staff lookup, name injection,
-//          single-system static display, role storage.
-// ============================================================
+/* RADEUS — Operator auth. Reads RAD_* globals from supabase-config.js. */
+(function() {
+  const SK = window.RAD_SESSION_KEY;
+  const TK = window.RAD_STAFF_KEY;
+  const URL = window.RAD_SUPA_URL;
+  const KEY = window.RAD_SUPA_KEY;
 
-const SUPA_URL = 'https://bvpesxpptgdwkhsewhke.supabase.co';
-const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
-
-// ── Supabase REST helper ─────────────────────────────────────
-async function authGet(table, params = '') {
-  const session = getSession();
-  const headers = {
-    'apikey': SUPA_KEY,
-    'Authorization': `Bearer ${session?.access_token || SUPA_KEY}`,
-    'Content-Type': 'application/json'
-  };
-  try {
-    const r = await fetch(`${SUPA_URL}/rest/v1/${table}${params}`, { headers });
-    if (!r.ok) return null;
-    const txt = await r.text();
-    return txt ? JSON.parse(txt) : null;
-  } catch { return null; }
-}
-
-// ── Session storage (Supabase-compatible) ───────────────────
-const SESSION_KEY = 'radeus_session';
-
-function getSession() {
-  try {
-    const raw = localStorage.getItem(SESSION_KEY);
-    if (!raw) return null;
-    const s = JSON.parse(raw);
-    // Check expiry
-    if (s.expires_at && Date.now() / 1000 > s.expires_at) {
-      localStorage.removeItem(SESSION_KEY);
-      return null;
-    }
-    return s;
-  } catch { return null; }
-}
-
-function setSession(session) {
-  if (!session) { localStorage.removeItem(SESSION_KEY); return; }
-  localStorage.setItem(SESSION_KEY, JSON.stringify(session));
-}
-
-function clearSession() {
-  localStorage.removeItem(SESSION_KEY);
-  localStorage.removeItem('radeus_staff');
-}
-
-// ── Staff record ─────────────────────────────────────────────
-function getStoredStaff() {
-  try {
-    const raw = localStorage.getItem('radeus_staff');
-    return raw ? JSON.parse(raw) : null;
-  } catch { return null; }
-}
-
-function storeStaff(staff) {
-  localStorage.setItem('radeus_staff', JSON.stringify(staff));
-}
-
-// ── Sign in ─────────────────────────────────────────────────
-async function signIn(email, password) {
-  const r = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=password`, {
-    method: 'POST',
-    headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ email, password })
-  });
-  const data = await r.json();
-  if (!r.ok) throw new Error(data.error_description || data.msg || 'Login failed');
-  return data; // { access_token, refresh_token, expires_at, user }
-}
-
-// ── Sign out ─────────────────────────────────────────────────
-async function signOut() {
-  const session = getSession();
-  if (session?.access_token) {
-    await fetch(`${SUPA_URL}/auth/v1/logout`, {
-      method: 'POST',
-      headers: { 'apikey': SUPA_KEY, 'Authorization': `Bearer ${session.access_token}` }
-    }).catch(() => {});
+  function getSession() {
+    try {
+      const s = JSON.parse(localStorage.getItem(SK) || 'null');
+      if (!s) return null;
+      if (s.expires_at && Date.now()/1000 > s.expires_at) {
+        localStorage.removeItem(SK); return null;
+      }
+      return s;
+    } catch { return null; }
   }
-  clearSession();
-  window.location.href = 'login.html';
-}
-
-// ── Require auth — call at top of every operator page ────────
-// Returns staff record or redirects to login.
-async function requireAuth() {
-  const session = getSession();
-  if (!session) { window.location.href = 'login.html'; return null; }
-
-  // Use cached staff if available
-  let staff = getStoredStaff();
-  if (!staff || staff._user_id !== session.user?.id) {
-    const rows = await authGet('staff',
-      `?auth_user_id=eq.${session.user.id}&select=staff_id,name,role,email,active,org_id&limit=1`);
-    if (!rows?.length || !rows[0].active) {
-      clearSession();
-      window.location.href = 'login.html';
-      return null;
+  function getStoredStaff() {
+    try { const r = localStorage.getItem(TK); return r ? JSON.parse(r) : null; }
+    catch { return null; }
+  }
+  function signOut() {
+    const s = getSession();
+    if (s?.access_token) {
+      fetch(`${URL}/auth/v1/logout`, {
+        method:'POST',
+        headers:{'apikey':KEY,'Authorization':`Bearer ${s.access_token}`}
+      }).catch(()=>{});
     }
-    staff = { ...rows[0], _user_id: session.user.id };
-    storeStaff(staff);
+    localStorage.removeItem(SK);
+    localStorage.removeItem(TK);
+    window.location.href = 'login.html';
   }
 
-  // Inject name into topbar
-  injectOperatorName(staff.name, staff.role);
-  // Wire logout button if present
-  const logoutBtn = document.getElementById('logoutBtn');
-  if (logoutBtn) logoutBtn.addEventListener('click', signOut);
+  window.radGetSession = getSession;
+  window.radGetStoredStaff = getStoredStaff;
+  window.radSignOut = signOut;
 
-  return staff;
-}
+  const s = getSession();
+  if (!s) { window.location.href = 'login.html'; return; }
+  const staff = getStoredStaff();
+  if (!staff) { window.location.href = 'login.html'; return; }
 
-// ── Inject operator name into topbar ────────────────────────
-function injectOperatorName(name, role) {
-  const el = document.getElementById('operatorName');
-  if (el) el.textContent = name || 'OPERATOR';
-  const roleEl = document.getElementById('operatorRole');
-  if (roleEl) roleEl.textContent = role || '';
-}
+  const orgId = staff.org_id || '00000000-0000-0000-0000-000000000001';
 
-// ── Single-system static display ────────────────────────────
-// Call after loading systems. If only 1 system, converts
-// the sys-select dropdown into a static styled label.
-function applySingleSystemDisplay(systems) {
-  if (!systems || systems.length !== 1) return;
-  const sel = document.getElementById('sysSelect');
-  if (!sel) return;
-  const name = systems[0].system_name.toUpperCase();
-  const span = document.createElement('span');
-  span.id = 'sysSelect';
-  span.className = 'sys-select sys-static';
-  span.textContent = `⬡ ${name}`;
-  span.title = name;
-  sel.parentNode.replaceChild(span, sel);
-}
+  /*
+   * CRITICAL: each operator page declares `let ORG_ID = null;` at the top of
+   * its inline page-logic script and reads `ORG_ID` (NOT `window.ORG_ID`) inside
+   * loadCycles/loadDashboard/etc. Because auth.js and inline page scripts share
+   * the document's script-level lexical environment, a bare assignment hits that
+   * `let` binding directly. Pages that use `const ORG_ID = '...'` (command/index/
+   * comms/payments/readings/reports/system) will throw on the bare assignment —
+   * the try/catch silently absorbs it because their hardcoded const is already
+   * the right value.
+   */
+  window.ORG_ID = orgId;
+  window.STAFF  = staff;
+  try { ORG_ID = orgId; } catch (e) { /* page used const ORG_ID — already set */ }
+
+  function wireUi() {
+    const el = document.getElementById('operatorName');
+    if (el) el.textContent = staff.name || 'OPERATOR';
+    const lb = document.getElementById('logoutBtn');
+    if (lb && !lb._radWired) { lb.addEventListener('click', signOut); lb._radWired = true; }
+  }
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', wireUi);
+  } else {
+    wireUi();
+  }
+})();
+
+/* Live clock */
+(function() {
+  function tick() {
+    const el = document.getElementById('clock');
+    if (el) el.textContent = new Date().toTimeString().slice(0, 8);
+  }
+  setInterval(tick, 1000);
+  tick();
+})();
