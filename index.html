@@ -6,134 +6,20 @@
 <title>RADEUS &mdash; Command Center</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;600;700&display=swap" rel="stylesheet">
 <link href="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.css" rel="stylesheet">
-<style>
-  :root {
-    --cyan:#00f5ff;--cyan-dim:#00a8b5;--green:#00ff88;--red:#ff2244;
-    --orange:#ff8800;--yellow:#ffe600;--blue:#0088ff;--purple:#aa00ff;
-    --bg:#020c14;--bg2:#041220;--panel:rgba(0,245,255,.03);
-    --border:rgba(0,245,255,.12);--border-hi:rgba(0,245,255,.4);
-    --text:#c8eaf0;--text-dim:#3d6a78;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:var(--bg);color:var(--text);font-family:'Share Tech Mono',monospace;overflow:hidden;height:100vh;width:100vw;cursor:crosshair;}
-  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.07) 2px,rgba(0,0,0,.07) 4px);pointer-events:none;z-index:1000;}
-  .corner{position:fixed;width:36px;height:36px;border-color:var(--cyan);border-style:solid;opacity:.5;z-index:999;}
-  .tl{top:6px;left:6px;border-width:2px 0 0 2px}.tr{top:6px;right:6px;border-width:2px 2px 0 0}
-  .bl{bottom:6px;left:6px;border-width:0 0 2px 2px}.br{bottom:6px;right:6px;border-width:0 2px 2px 0}
-  .topbar{position:fixed;top:0;left:0;right:0;height:46px;background:linear-gradient(90deg,var(--bg2),#021018,var(--bg2));border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 18px;z-index:100;}
-  .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:20px;color:var(--cyan);letter-spacing:8px;text-shadow:0 0 20px var(--cyan),0 0 50px rgba(0,245,255,.25);animation:lp 4s ease-in-out infinite;}
-  @keyframes lp{0%,100%{text-shadow:0 0 20px var(--cyan),0 0 40px rgba(0,245,255,.2)}50%{text-shadow:0 0 30px var(--cyan),0 0 70px rgba(0,245,255,.4)}}
-  .sys-select{background:rgba(0,245,255,.05);border:1px solid var(--border-hi);color:var(--cyan);font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 12px;letter-spacing:1px;cursor:pointer;outline:none;}
-  .sys-select option{background:#041220;color:#00f5ff;font-family:'Share Tech Mono',monospace;letter-spacing:1px;}
-  .sdot{width:7px;height:7px;border-radius:50%;background:var(--green);box-shadow:0 0 8px var(--green);animation:blink 2s infinite;}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-  #clock{color:var(--cyan);font-size:13px;letter-spacing:2px}
-  .ticker-wrap{position:fixed;top:46px;left:0;right:0;height:26px;background:rgba(0,15,25,.95);border-bottom:1px solid rgba(0,245,255,.08);overflow:hidden;z-index:99;display:flex;align-items:center;}
-  .ticker-tag{background:var(--cyan);color:var(--bg);font-family:'Orbitron',monospace;font-size:8px;font-weight:700;padding:0 10px;height:100%;display:flex;align-items:center;letter-spacing:2px;white-space:nowrap;flex-shrink:0;}
-  .ticker-track{display:flex;animation:tick 55s linear infinite;white-space:nowrap;}
-  .ti{padding:0 28px;font-size:10px;color:var(--text-dim);letter-spacing:.5px;}
-  .ti .v{color:var(--cyan)}.ti .r{color:var(--red)}.ti .g{color:var(--green)}.ti .o{color:var(--orange)}
-  @keyframes tick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-  .main{position:fixed;top:72px;bottom:80px;left:0;right:0;display:grid;grid-template-columns:268px 1fr 268px;gap:10px;padding:10px;}
-  .col{display:flex;flex-direction:column;gap:10px;overflow:hidden;}
-  .panel{background:var(--panel);border:1px solid var(--border);position:relative;overflow:hidden;flex-shrink:0;}
-  .panel::before{content:'';position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--cyan-dim),transparent);}
-  .ptitle{font-family:'Orbitron',monospace;font-size:8px;font-weight:600;letter-spacing:2.5px;color:var(--cyan-dim);padding:8px 12px 6px;border-bottom:1px solid var(--border);display:flex;justify-content:space-between;align-items:center;}
-  .badge{font-size:7px;padding:2px 5px;border:1px solid;letter-spacing:1px;font-family:'Orbitron',monospace;}
-  .br2{color:var(--red);border-color:var(--red)}.bg2{color:var(--green);border-color:var(--green)}.bo2{color:var(--orange);border-color:var(--orange)}.bc2{color:var(--cyan);border-color:var(--cyan)}
-  .srow{display:flex;justify-content:space-between;align-items:center;padding:5px 12px;border-bottom:1px solid rgba(0,245,255,.04);}
-  .slabel{font-size:11px;color:rgba(200,234,240,.82);letter-spacing:1.5px;font-family:'Share Tech Mono',monospace;}
-  .sval{font-family:'Rajdhani',sans-serif;font-size:16px;font-weight:700}
-  .cv{color:var(--cyan);text-shadow:0 0 8px rgba(0,245,255,.4)}.gv{color:var(--green)}.rv{color:var(--red)}.ov{color:var(--orange)}.bv{color:var(--blue)}.yv{color:var(--yellow)}
-  .mbar-wrap{padding:6px 12px 10px}
-  .mbar-label{font-size:8px;color:var(--text-dim);letter-spacing:1px;margin-bottom:3px;display:flex;justify-content:space-between;}
-  .mbar{height:3px;background:rgba(255,255,255,.04);border-radius:2px;margin-bottom:6px;overflow:hidden;}
-  .mbar-fill{height:100%;border-radius:2px;}
-  .afeed{padding:4px 0;overflow-y:auto;flex:1;}
-  .aitem{display:flex;gap:8px;align-items:flex-start;padding:6px 12px;border-bottom:1px solid rgba(0,245,255,.03);cursor:pointer;transition:background .15s;}
-  .aitem:hover{background:rgba(0,245,255,.04)}
-  .adot{width:6px;height:6px;border-radius:50%;margin-top:3px;flex-shrink:0;}
-  .aname{font-size:10px;margin-bottom:1px}
-  .asub{font-size:9px;color:var(--text-dim)}
-  .atable{width:100%;border-collapse:collapse;font-size:9px;}
-  .atable th{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:1.5px;color:var(--text-dim);padding:6px 8px;border-bottom:1px solid var(--border);text-align:left;font-weight:400;}
-  .atable td{padding:4px 8px;border-bottom:1px solid rgba(0,245,255,.03);cursor:pointer;}
-  .atable tr:hover td{background:rgba(0,245,255,.04)}
-  .atable .acct{color:var(--cyan);font-family:'Rajdhani',sans-serif;font-weight:400;font-size:12px;letter-spacing:.3px;}
-  .atable .nm{color:var(--text);font-size:12px;font-family:'Rajdhani',sans-serif;font-weight:600;}
-  .atable .bal{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;text-align:right;}
-  .pill{display:inline-block;padding:1px 4px;border:1px solid;font-size:7px;letter-spacing:.5px;}
-  .map-panel{flex:1;position:relative;overflow:hidden;min-height:260px;}
-  #mapGl{position:absolute;inset:0;z-index:0;}
-  .mapboxgl-ctrl-bottom-left,.mapboxgl-ctrl-bottom-right,.mapboxgl-ctrl-top-right{display:none;}
-  .mleg{position:absolute;bottom:8px;right:8px;background:rgba(2,10,18,.88);border:1px solid var(--border);padding:7px 10px;font-size:8px;z-index:10;}
-  .legrow{display:flex;align-items:center;gap:5px;color:var(--text-dim);margin-bottom:3px;}
-  .legdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;}
-  .dial-wrap{display:flex;justify-content:center;align-items:center;height:205px;position:relative;}
-  .dial-container{position:relative;width:186px;height:186px;}
-  .dial-svg{position:absolute;inset:0;width:100%;height:100%;animation:drot 80s linear infinite;}
-  @keyframes drot{from{transform:rotate(0)}to{transform:rotate(360deg)}}
-  .dial-center{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;}
-  .dval{font-family:'Orbitron',monospace;font-size:26px;font-weight:900;color:var(--cyan);text-shadow:0 0 20px var(--cyan);line-height:1;}
-  .dlabel{font-size:8px;color:var(--text-dim);letter-spacing:3px;margin-top:3px;}
-  .dbtn{position:absolute;width:40px;height:40px;border-radius:50%;background:var(--bg2);border:1px solid var(--border);display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;transition:all .2s;font-size:7px;color:var(--text-dim);letter-spacing:.5px;text-align:center;transform:translate(-50%,-50%);}
-  .dbtn:hover,.dbtn.active{background:rgba(0,245,255,.1);border-color:var(--cyan);color:var(--cyan);box-shadow:0 0 14px rgba(0,245,255,.3);}
-  .dicon{font-size:13px;margin-bottom:1px;}
-  .clog{overflow-y:auto;flex:1;}
-  .citem{display:flex;gap:7px;padding:5px 12px;border-bottom:1px solid rgba(0,245,255,.03);cursor:pointer;transition:background .15s;align-items:flex-start;}
-  .citem:hover{background:rgba(0,245,255,.03)}
-  .ccat{font-size:7px;padding:2px 4px;border:1px solid;letter-spacing:.5px;white-space:nowrap;flex-shrink:0;margin-top:1px;}
-  .cinfo{flex:1;min-width:0;}
-  .cname{font-size:9px;color:var(--text);margin-bottom:1px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-  .csub{font-size:8px;color:var(--text-dim);}
-  .compitem{display:flex;align-items:center;gap:8px;padding:6px 12px;border-bottom:1px solid rgba(0,245,255,.03);cursor:pointer;transition:background .15s;}
-  .compitem:hover{background:rgba(0,245,255,.03)}
-  .compicon{width:28px;height:28px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:12px;flex-shrink:0;}
-  .compinfo{flex:1}.compname{font-size:9px;color:var(--text);margin-bottom:1px;}.compdue{font-size:8px;color:var(--text-dim);}
-  .compst{font-size:7px;padding:2px 5px;border:1px solid;letter-spacing:1px;}
-  .brow{display:flex;justify-content:space-between;padding:4px 12px;border-bottom:1px solid rgba(0,245,255,.04);}
-  .blabel{font-size:9px;color:var(--text-dim)}.bval{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:13px;}
-  .acard{position:fixed;top:50%;left:50%;transform:translate(-50%,-50%) scale(.9);width:355px;background:rgba(2,10,18,.98);border:1px solid var(--border-hi);box-shadow:0 0 50px rgba(0,245,255,.15);z-index:500;opacity:0;pointer-events:none;transition:all .2s;}
-  .acard.show{opacity:1;pointer-events:all;transform:translate(-50%,-50%) scale(1);}
-  .achead{background:linear-gradient(135deg,rgba(0,245,255,.08),transparent);border-bottom:1px solid var(--border);padding:13px 16px;display:flex;justify-content:space-between;align-items:flex-start;}
-  .acnum{font-family:'Orbitron',monospace;font-size:10px;color:var(--cyan);letter-spacing:2px;}
-  .acname{font-size:17px;font-weight:700;margin-top:3px;color:var(--text);font-family:'Rajdhani',sans-serif;}
-  .acstat{padding:3px 8px;border:1px solid;font-size:8px;letter-spacing:1.5px;font-family:'Orbitron',monospace;}
-  .acbody{padding:12px 16px;}
-  .acrow{display:flex;justify-content:space-between;padding:5px 0;border-bottom:1px solid rgba(0,245,255,.04);font-size:10px;}
-  .acrl{color:var(--text-dim)}.acrv{color:var(--text)}
-  .acbtns{padding:10px 16px;display:flex;gap:6px;border-top:1px solid var(--border);}
-  .acbtn{flex:1;padding:7px;background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'Share Tech Mono',monospace;font-size:8px;letter-spacing:1px;cursor:pointer;transition:all .2s;}
-  .acbtn:hover{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.05)}
-  .acbtn.pri{border-color:var(--cyan);color:var(--cyan);background:rgba(0,245,255,.07)}
-  .acclose{position:absolute;top:8px;right:12px;background:none;border:none;color:var(--text-dim);font-size:18px;cursor:pointer;}
-  .acclose:hover{color:var(--red)}
-  .modal{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:600;align-items:center;justify-content:center;}
-  .modal.show{display:flex}
-  .botnav{position:fixed;bottom:0;left:0;right:0;height:78px;background:linear-gradient(90deg,var(--bg2),#020e1c,var(--bg2));border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:5px;padding:0 14px;z-index:100;}
-  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:58px;height:68px;background:rgba(0,245,255,.04);border:1px solid rgba(0,245,255,.25);color:rgba(0,245,255,.58);cursor:pointer;transition:all .2s;font-size:8px;letter-spacing:.8px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;flex-shrink:0;}
-  .navbtn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--cyan);transform:scaleX(0);transition:transform .2s;}
-  .navbtn:hover::after,.navbtn.active::after{transform:scaleX(1)}
-  .navbtn:hover{color:rgba(0,245,255,.9);border-color:rgba(0,245,255,.5);background:rgba(0,245,255,.08);}
-  .navbtn.active{color:var(--cyan);border-color:var(--cyan);background:rgba(0,245,255,.11);box-shadow:0 0 16px rgba(0,245,255,.28),inset 0 0 14px rgba(0,245,255,.07);}
-  .navicon{font-size:20px;line-height:1;}
-  .navalert{position:absolute;top:5px;right:6px;width:13px;height:13px;background:var(--red);border-radius:50%;font-size:7px;display:flex;align-items:center;justify-content:center;color:#fff;font-family:'Orbitron',monospace;}
-</style>
+  <link rel="stylesheet" href="./styles/main.css">
 </head>
-<body>
-<div class="corner tl"></div><div class="corner tr"></div>
-<div class="corner bl"></div><div class="corner br"></div>
+<body data-page="index">
 <div class="topbar">
   <div class="logo">RADEUS</div>
   <div style="display:flex;align-items:center;gap:16px">
     <div class="sdot"></div>
-    <span style="font-size:9px;color:var(--text-dim);letter-spacing:2px">SYSTEM ONLINE</span>
+    <span style="font-size:9px;color:var(--text-muted);letter-spacing:2px">SYSTEM ONLINE</span>
     <select class="sys-select" id="sysSelect" onchange="switchSystem(this.value)">
-      <option value="ALL">&#x2b21; LOADING SYSTEMS...</option>
+      <option value="ALL">&#x2b21; LOADING...</option>
     </select>
   </div>
   <div style="display:flex;align-items:center;gap:14px">
-    <span style="font-size:9px;color:var(--text-dim);font-family:'Share Tech Mono',monospace">OPERATOR: <span id="operatorName" style="color:var(--cyan)">&#x2014;</span></span><button id="logoutBtn" style="font-family:'Orbitron',monospace;font-size:7px;padding:4px 9px;border:1px solid rgba(0,245,255,.25);color:rgba(0,245,255,.45);background:transparent;cursor:pointer;letter-spacing:1px;margin-left:10px;transition:all .15s;" onmouseover="this.style.color='var(--cyan)';this.style.borderColor='var(--cyan)'" onmouseout="this.style.color='rgba(0,245,255,.45)';this.style.borderColor='rgba(0,245,255,.25)'">SIGN OUT</button>
+    <span class="topbar-meta">OPERATOR: <span id="operatorName" class="operator-name">&#x2014;</span></span><button class="signout-btn" id="logoutBtn">SIGN OUT</button>
     <span id="clock">--:--:--</span>
   </div>
 </div>
@@ -141,32 +27,32 @@
   <div class="ticker-tag">&#x2b21; LIVE FEED</div>
   <div style="overflow:hidden;flex:1">
     <div class="ticker-track" id="tickerTrack">
-      <span class="ti">RADEUS COMMAND &mdash; INITIALIZING LIVE FEED...</span>
+      <span class="ti">RADEUS COMMAND — <span class="g">LOADING...</span></span>
     </div>
   </div>
 </div>
 <div class="main">
   <div class="col">
     <div class="panel">
-      <div class="ptitle" id="statusTitle">LOADING... &mdash; STATUS <span class="badge bg2">BILLING OPEN</span></div>
+      <div class="ptitle" id="statusTitle">ALL SYSTEMS &mdash; NETWORK STATUS <span class="badge bg2">LOADING</span></div>
       <div class="srow"><span class="slabel">TOTAL ACCOUNTS</span><span class="sval cv" id="stat-total">&mdash;</span></div>
       <div class="srow"><span class="slabel">CURRENT / PAID</span><span class="sval gv" id="stat-current">&mdash;</span></div>
       <div class="srow"><span class="slabel">CREDIT BALANCE</span><span class="sval bv" id="stat-credit">&mdash;</span></div>
       <div class="srow"><span class="slabel">PAST DUE</span><span class="sval ov" id="stat-pastdue">&mdash;</span></div>
       <div class="srow"><span class="slabel">CRITICAL (&gt;$500)</span><span class="sval rv" id="stat-critical">&mdash;</span></div>
-      <div class="srow"><span class="slabel">BILL DATE</span><span class="sval" id="stat-billdate" style="color:var(--cyan);font-weight:700">&mdash;</span></div>
+      <div class="srow"><span class="slabel">BILL DATE</span><span class="sval" id="stat-billdate" style="color:var(--primary);font-weight:700">&mdash;</span></div>
       <div class="srow"><span class="slabel">DUE DATE</span><span class="sval yv" id="stat-duedate" style="font-weight:700">&mdash;</span></div>
       <div class="mbar-wrap" style="margin-top:4px">
-        <div class="mbar-label"><span>COLLECTION RATE (EST)</span><span id="collRateLbl" style="color:var(--green)">&mdash;</span></div>
-        <div class="mbar"><div class="mbar-fill" id="collBar" style="width:0%;background:linear-gradient(90deg,var(--green),var(--cyan))"></div></div>
-        <div class="mbar-label"><span>ACCOUNTS BILLED</span><span style="color:var(--cyan)">100%</span></div>
-        <div class="mbar"><div class="mbar-fill" id="billedBar" style="width:100%;background:linear-gradient(90deg,var(--cyan-dim),var(--cyan))"></div></div>
+        <div class="mbar-label"><span>COLLECTION RATE (EST)</span><span id="collRateLbl" style="color:var(--success)">&mdash;</span></div>
+        <div class="mbar"><div class="mbar-fill" id="collBar" style="width:0%;background:linear-gradient(90deg,var(--success),var(--primary))"></div></div>
+        <div class="mbar-label"><span>ACCOUNTS BILLED</span><span style="color:var(--primary)">100%</span></div>
+        <div class="mbar"><div class="mbar-fill" id="billedBar" style="width:100%;background:linear-gradient(90deg,rgba(44,123,162,.5),var(--primary))"></div></div>
       </div>
     </div>
     <div class="panel" style="flex:1;display:flex;flex-direction:column">
       <div class="ptitle" id="critTitle">CRITICAL ACCOUNTS <span class="badge br2" id="critBadge">&mdash; URGENT</span></div>
       <div class="afeed" id="critFeed">
-        <div style="padding:24px 12px;text-align:center;color:var(--text-dim);font-size:9px;letter-spacing:2px">SELECT A SYSTEM</div>
+        <div style="padding:24px 12px;text-align:center;color:var(--text-muted);font-size:9px;letter-spacing:2px">SELECT A SYSTEM</div>
       </div>
     </div>
   </div>
@@ -174,31 +60,31 @@
     <div class="panel map-panel">
       <div class="ptitle" style="flex-wrap:wrap;gap:4px">
         <span id="mapTitle">RADEUS NETWORK &mdash; LOADING...</span>
-        <div style="display:flex;gap:4px">
-          <button onclick="filterMap('all',this)" style="font-size:7px;padding:2px 6px;border:1px solid var(--cyan);color:var(--cyan);background:rgba(0,245,255,.08);cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px">ALL</button>
-          <button onclick="filterMap('red',this)" style="font-size:7px;padding:2px 6px;border:1px solid var(--border);color:var(--text-dim);background:transparent;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px">CRITICAL</button>
-          <button onclick="filterMap('ok',this)" style="font-size:7px;padding:2px 6px;border:1px solid var(--border);color:var(--text-dim);background:transparent;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px">CURRENT</button>
+        <div class="map-fbtns">
+          <button class="map-fbtn active" onclick="filterMap('all',this)">ALL</button>
+          <button class="map-fbtn" onclick="filterMap('red',this)">CRITICAL</button>
+          <button class="map-fbtn" onclick="filterMap('ok',this)">CURRENT</button>
         </div>
       </div>
       <div style="position:relative;height:calc(100% - 36px)">
         <div id="mapGl"></div>
         <div class="mleg">
-          <div class="legrow"><div class="legdot" style="background:var(--green)"></div>CURRENT</div>
-          <div class="legrow"><div class="legdot" style="background:var(--yellow)"></div>DUE SOON</div>
-          <div class="legrow"><div class="legdot" style="background:var(--orange)"></div>PAST DUE</div>
-          <div class="legrow"><div class="legdot" style="background:var(--red)"></div>CRITICAL</div>
-          <div class="legrow"><div class="legdot" style="background:var(--blue)"></div>CREDIT BAL</div>
+          <div class="legrow"><div class="legdot" style="background:var(--success)"></div>CURRENT</div>
+          <div class="legrow"><div class="legdot" style="background:var(--warning)"></div>DUE SOON</div>
+          <div class="legrow"><div class="legdot" style="background:var(--warning)"></div>PAST DUE</div>
+          <div class="legrow"><div class="legdot" style="background:var(--danger)"></div>CRITICAL</div>
+          <div class="legrow"><div class="legdot" style="background:var(--info)"></div>CREDIT BAL</div>
           <div class="legrow"><div class="legdot" style="background:#333"></div>RELIGIOUS/INACT</div>
         </div>
       </div>
     </div>
     <div class="panel" style="height:190px;overflow:hidden;display:flex;flex-direction:column">
-      <div class="ptitle" id="regTitle">ACCOUNT REGISTER &mdash; LOADING... <span class="badge bc2" id="regBadge">&mdash; ACCTS</span></div>
+      <div class="ptitle" id="regTitle">SYSTEM DIRECTORY &mdash; RADEUS NETWORK <span class="badge bc2" id="regBadge">&mdash;</span></div>
       <div style="overflow-y:auto;flex:1">
         <table class="atable">
-          <thead><tr><th>ACCT #</th><th>CUSTOMER NAME</th><th>ADDRESS</th><th>STATUS</th><th style="text-align:right">BALANCE</th></tr></thead>
+          <thead><tr><th>ACCT #</th><th>CUSTOMER NAME</th><th>STATUS</th><th style="text-align:right">BALANCE</th></tr></thead>
           <tbody id="acctTable">
-            <tr><td colspan="5" style="text-align:center;padding:16px;color:var(--text-dim);font-size:9px;letter-spacing:2px">SELECT A SYSTEM</td></tr>
+            <tr><td colspan="4" style="text-align:center;padding:16px;color:var(--text-muted);font-size:9px;letter-spacing:2px">SELECT A SYSTEM</td></tr>
           </tbody>
         </table>
       </div>
@@ -210,11 +96,11 @@
       <div class="dial-wrap">
         <div class="dial-container">
           <svg class="dial-svg" viewBox="0 0 186 186">
-            <circle cx="93" cy="93" r="82" fill="none" stroke="rgba(0,245,255,.06)" stroke-width="1"/>
-            <circle cx="93" cy="93" r="82" fill="none" stroke="rgba(0,245,255,.18)" stroke-width="1" stroke-dasharray="3 7"/>
-            <circle cx="93" cy="93" r="71" fill="none" stroke="rgba(0,245,255,.07)" stroke-width="8"/>
-            <circle cx="93" cy="93" r="71" fill="none" stroke="rgba(0,255,136,.45)" stroke-width="8" stroke-dasharray="292 446" stroke-dashoffset="111" stroke-linecap="round" transform="rotate(-90 93 93)"/>
-            <g stroke="rgba(0,245,255,.28)" stroke-width="1">
+            <circle cx="93" cy="93" r="82" fill="none" stroke="rgba(44,123,162,.06)" stroke-width="1"/>
+            <circle cx="93" cy="93" r="82" fill="none" stroke="rgba(44,123,162,.18)" stroke-width="1" stroke-dasharray="3 7"/>
+            <circle cx="93" cy="93" r="71" fill="none" stroke="rgba(44,123,162,.07)" stroke-width="8"/>
+            <circle cx="93" cy="93" r="71" fill="none" stroke="rgba(52,139,103,.45)" stroke-width="8" stroke-dasharray="292 446" stroke-dashoffset="111" stroke-linecap="round" transform="rotate(-90 93 93)"/>
+            <g stroke="rgba(44,123,162,.28)" stroke-width="1">
               <line x1="93" y1="4" x2="93" y2="12" transform="rotate(0 93 93)"/>
               <line x1="93" y1="4" x2="93" y2="12" transform="rotate(30 93 93)"/>
               <line x1="93" y1="4" x2="93" y2="12" transform="rotate(60 93 93)"/>
@@ -242,15 +128,13 @@
         </div>
       </div>
     </div>
-    <div class="panel" style="flex:1;display:flex;flex-direction:column">
-      <div class="ptitle">RECENT CALL LOG <span class="badge bc2">LIVE</span></div>
-      <div class="clog" id="clogPanel">
-        <div style="padding:16px 12px;text-align:center;color:var(--text-dim);font-size:9px;letter-spacing:2px">LOADING CALL LOG...</div>
-      </div>
-    </div>
     <div class="panel">
       <div class="ptitle">COMPLIANCE &amp; BILLING <span class="badge bo2">ACTION NEEDED</span></div>
-      <div id="complianceItems"><div style="padding:12px;text-align:center;color:var(--text-dim);font-size:9px;letter-spacing:2px">LOADING COMPLIANCE...</div></div>
+      <div class="compitem">
+        <div class="compicon ci-primary">&#x1f4cb;</div>
+        <div class="compinfo"><div class="compname">COMPLIANCE STATUS</div><div class="compdue">SELECT A SYSTEM FOR DETAILS</div></div>
+        <div class="compst cs-primary">VIEW</div>
+      </div>
       <div class="brow"><span class="blabel">APRIL BILLING TOTAL</span><span class="bval cv" id="compBillTotal">&mdash;</span></div>
       <div class="brow"><span class="blabel">TOTAL OUTSTANDING</span><span class="bval rv" id="compOutstanding">&mdash;</span></div>
       <div class="brow"><span class="blabel">DUE DATE</span><span class="bval yv" id="compDueDate">&mdash;</span></div>
@@ -258,138 +142,181 @@
   </div>
 </div>
 <div class="botnav">
-  <a class="navbtn active" href="index.html"><span class="navicon">&#x2b21;</span>COMMAND</a>
-  <a class="navbtn" href="accounts.html"><span class="navicon">&#x1f464;</span>ACCOUNTS<span class="navalert" id="nav-acct-alert" style="display:none"></span></a>
-  <a class="navbtn" href="readings.html"><span class="navicon">&#x23f1;&#xfe0f;</span>READINGS</a>
-  <a class="navbtn" href="billing.html"><span class="navicon">&#x1f9fe;</span>BILLING</a>
-  <a class="navbtn" href="compliance.html"><span class="navicon">&#x1f4cb;</span>COMPLY<span class="navalert" id="nav-comply-alert" style="display:none"></span></a>
-  <a class="navbtn" href="payments.html"><span class="navicon">&#x1f4b5;</span>PAYMENTS</a>
-  <a class="navbtn" href="workorders.html"><span class="navicon">&#x1f527;</span>WO's</a>
-  <a class="navbtn" href="reports.html"><span class="navicon">&#x1f4ca;</span>REPORTS</a>
-  <a class="navbtn" href="comms.html"><span class="navicon">&#x1f4e1;</span>COMMS<span class="navalert" id="nav-comms-alert" style="display:none"></span></a>
-  <a class="navbtn" href="system.html"><span class="navicon">&#x2699;</span>SYSTEM</a>
+  <a class="navbtn active" href="index.html"><span class="navicon">⬡</span>COMMAND</a>
+  <a class="navbtn" href="accounts.html"><span class="navicon">👤</span>ACCOUNTS<span class="navalert" id="nav-acct-alert" style="display:none"></span></a>
+  <a class="navbtn" href="readings.html"><span class="navicon">⏱️</span>READINGS</a>
+  <a class="navbtn" href="billing.html"><span class="navicon">🧾</span>BILLING</a>
+  <a class="navbtn" href="compliance.html"><span class="navicon">📋</span>COMPLY<span class="navalert" id="nav-comply-alert" style="display:none"></span></a>
+  <a class="navbtn" href="payments.html"><span class="navicon">💵</span>PAYMENTS</a>
+  <a class="navbtn" href="workorders.html"><span class="navicon">🔧</span>WO's</a>
+  <a class="navbtn" href="reports.html"><span class="navicon">📊</span>REPORTS</a>
+  <a class="navbtn" href="comms.html"><span class="navicon">📡</span>COMMS<span class="navalert" id="nav-comms-alert" style="display:none"></span></a>
+  <a class="navbtn" href="system.html"><span class="navicon">⚙</span>SYSTEM</a>
 </div>
-<div class="acard" id="accard">
-  <button class="acclose" onclick="closeCard()">&#x2715;</button>
-  <div class="achead">
-    <div><div class="acnum" id="ac-num">&mdash;</div><div class="acname" id="ac-name">&mdash;</div></div>
-    <div class="acstat" id="ac-stat" style="color:var(--green);border-color:var(--green)">&mdash;</div>
-  </div>
-  <div class="acbody">
-    <div class="acrow"><span class="acrl">SERVICE ADDRESS</span><span class="acrv" id="ac-addr">&mdash;</span></div>
-    <div class="acrow"><span class="acrl">ACCOUNT TYPE</span><span class="acrv" id="ac-type">&mdash;</span></div>
-    <div class="acrow"><span class="acrl">CURRENT BALANCE</span><span class="acrv" id="ac-bal">&mdash;</span></div>
-    <div class="acrow"><span class="acrl">LAST PAYMENT</span><span class="acrv" id="ac-pmt">&mdash;</span></div>
-    <div class="acrow"><span class="acrl">BASE RATE</span><span class="acrv" id="ac-baserate">&mdash;</span></div>
-    <div class="acrow"><span class="acrl">ENERGY SURCHARGE</span><span class="acrv" id="ac-surcharge">&mdash;</span></div>
-    <div class="acrow"><span class="acrl">LATE FEE (IF LATE)</span><span class="acrv" id="ac-latefee">&mdash;</span></div>
-    <div class="acrow"><span class="acrl">SYSTEM</span><span class="acrv" id="ac-sysname">&mdash;</span></div>
-  </div>
-  <div class="acbtns">
-    <button class="acbtn pri" onclick="window.location='accounts.html'">FULL ACCOUNT</button>
-    <button class="acbtn">POST PAYMENT</button>
-    <button class="acbtn">SEND NOTICE</button>
-    <button class="acbtn" onclick="closeCard()">CLOSE</button>
-  </div>
-</div>
-<div class="modal" id="bwnModal">
-  <div style="background:var(--bg2);border:1px solid var(--red);width:420px;box-shadow:0 0 50px rgba(255,34,68,.25)">
-    <div style="background:rgba(255,34,68,.1);padding:14px 18px;border-bottom:1px solid rgba(255,34,68,.25);font-family:'Orbitron',monospace;font-size:11px;color:var(--red);letter-spacing:3px">&#x1f6a8; BOIL WATER NOTICE &mdash; ACTIVE EVENT</div>
-    <div style="padding:18px;font-size:10px;color:var(--text-dim);line-height:2.2">
-      <div style="color:var(--text);font-size:11px;margin-bottom:10px;letter-spacing:1px">ACTIVE BOIL WATER NOTICE</div>
-      <div style="color:var(--text-dim);font-size:9px;margin-bottom:12px">BWN event details loaded from compliance database.</div>
-      <div>&#x23f1; 24-HR TCEQ NOTIFICATION CLOCK &mdash; <span style="color:var(--red)">RUNNING</span></div>
-      <div>&#x1f4c4; BWN ISSUANCE DOCUMENT &mdash; <span style="color:var(--green)">GENERATED &#x2713;</span></div>
-      <div>&#x1f4cb; COMMUNITY POSTING CHECKLIST &mdash; <span style="color:var(--yellow)">PENDING CONFIRMATION</span></div>
-      <div>&#x1f4ec; RESCISSION PACKET &mdash; <span style="color:var(--text-dim)">QUEUED</span></div>
-      <div>&#x1f4dc; CERT OF DELIVERY TO TCEQ &mdash; <span style="color:var(--text-dim)">PENDING SUBMISSION</span></div>
+
+<!-- ══════════════════════════════════════════════════════════
+     ACCOUNT QUICK-CARD OVERLAY
+     Opens when a map dot or directory row is clicked.
+     "FULL ACCOUNT" button navigates to accounts.html 
+     ══════════════════════════════════════════════════════════ -->
+<div class="cmd-overlay" id="accardOverlay" aria-hidden="true" style="visibility:hidden;opacity:0;pointer-events:none" onclick="overlayBgClick(event,'accardOverlay')">
+  <div class="cmd-modal cmd-modal-acct" id="accard">
+    <div class="cmd-modal-hdr">
+      <div class="cmd-modal-id">
+        <span class="cmd-acnum" id="ac-num">&mdash;</span>
+        <span class="cmd-acname" id="ac-name">&mdash;</span>
+      </div>
+      <div class="cmd-modal-hdr-right">
+        <span class="cmd-acstat" id="ac-stat">&mdash;</span>
+        <button class="cmd-modal-close" onclick="closeCard()">&#x2715;</button>
+      </div>
     </div>
-    <div style="padding:12px 18px;display:flex;gap:8px;border-top:1px solid rgba(255,34,68,.2)">
-      <button onclick="closeBWN()" style="flex:1;padding:9px;background:transparent;border:1px solid var(--border);color:var(--text-dim);font-family:'Share Tech Mono',monospace;cursor:pointer;font-size:10px;letter-spacing:1px">CLOSE</button>
-      <button onclick="closeBWN()" style="flex:1;padding:9px;background:rgba(255,34,68,.1);border:1px solid var(--red);color:var(--red);font-family:'Share Tech Mono',monospace;cursor:pointer;font-size:10px;letter-spacing:1px">RESCIND BWN</button>
-      <button onclick="closeBWN()" style="flex:1;padding:9px;background:rgba(0,245,255,.07);border:1px solid var(--cyan);color:var(--cyan);font-family:'Share Tech Mono',monospace;cursor:pointer;font-size:10px;letter-spacing:1px">VIEW DOCS</button>
+    <div class="cmd-acbody">
+      <div class="cmd-acgrid">
+        <!-- Left col: account details -->
+        <div class="cmd-acgrid-col">
+          <div class="cmd-acgrid-title">ACCOUNT INFO</div>
+          <div class="cmd-acrow"><span class="cmd-acrl">ACCOUNT TYPE</span><span class="cmd-acrv" id="ac-type">&mdash;</span></div>
+          <div class="cmd-acrow"><span class="cmd-acrl">SERVICE ADDRESS</span><span class="cmd-acrv" id="ac-addr">&mdash;</span></div>
+          <div class="cmd-acrow"><span class="cmd-acrl">SYSTEM</span><span class="cmd-acrv" id="ac-sysname">&mdash;</span></div>
+          <div class="cmd-acrow"><span class="cmd-acrl">LAST PAYMENT</span><span class="cmd-acrv" id="ac-pmt">&mdash;</span></div>
+        </div>
+        <!-- Right col: balance + rates -->
+        <div class="cmd-acgrid-col cmd-acgrid-col-bal">
+          <div class="cmd-acgrid-title">BALANCE &amp; RATES</div>
+          <div class="cmd-acrow cmd-acrow-bal"><span class="cmd-acrl">CURRENT BALANCE</span><span class="cmd-acrv cmd-acrv-big" id="ac-bal">&mdash;</span></div>
+          <div class="cmd-acrow"><span class="cmd-acrl">BASE RATE</span><span class="cmd-acrv" id="ac-baserate">&mdash;</span></div>
+          <div class="cmd-acrow"><span class="cmd-acrl">ENERGY SURCHARGE</span><span class="cmd-acrv" id="ac-surcharge">&mdash;</span></div>
+          <div class="cmd-acrow"><span class="cmd-acrl">LATE FEE</span><span class="cmd-acrv" id="ac-latefee">&mdash;</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="cmd-acbtns">
+      <button class="cmd-acbtn cmd-acbtn-pri" onclick="window.location='accounts.html'">&#x1f464; FULL ACCOUNT RECORD</button>
+      <button class="cmd-acbtn cmd-acbtn-green" onclick="goToPage('billing.html')">&#x1f9fe; BILLING</button>
+      <button class="cmd-acbtn cmd-acbtn-dim" onclick="goToPage('comms.html')">&#x1f4e1; COMM LOG</button>
+      <button class="cmd-acbtn cmd-acbtn-close" onclick="closeCard()">&#x2715; CLOSE</button>
     </div>
   </div>
 </div>
+
+<!-- ══════════════════════════════════════════════════════════
+     BOIL WATER NOTICE OVERLAY
+     Properly layered above map, always centered
+     ══════════════════════════════════════════════════════════ -->
+<div class="cmd-overlay" id="bwnOverlay" aria-hidden="true" style="visibility:hidden;opacity:0;pointer-events:none" onclick="overlayBgClick(event,'bwnOverlay')">
+  <div class="cmd-modal cmd-modal-bwn">
+    <div class="cmd-modal-hdr cmd-modal-hdr-danger">
+      <div>
+        <div class="cmd-modal-title-danger">&#x1f6a8; BOIL WATER NOTICE &mdash; ACTIVE EVENT</div>
+        <div class="cmd-modal-sub" id="bwn-sys-name">SYSTEM: &mdash;</div>
+      </div>
+      <button class="cmd-modal-close cmd-modal-close-danger" onclick="closeBWN()">&#x2715;</button>
+    </div>
+    <div class="cmd-bwn-body">
+      <div class="cmd-bwn-alert">
+        <div class="cmd-bwn-alert-icon">&#x26a0;</div>
+        <div>
+          <div class="cmd-bwn-alert-title">ACTIVE BOIL WATER EVENT</div>
+          <div class="cmd-bwn-alert-desc" id="bwn-desc">CUSTOMER REPORT: Water undrinkable. BWN issued. Customer directed to website.</div>
+        </div>
+      </div>
+      <div class="cmd-bwn-checklist">
+        <div class="cmd-bwn-check"><span class="cmd-bwn-chk-icon run">&#x23f1;</span><div><div class="cmd-bwn-chk-label">24-HR TCEQ NOTIFICATION CLOCK</div><div class="cmd-bwn-chk-val run">RUNNING</div></div></div>
+        <div class="cmd-bwn-check"><span class="cmd-bwn-chk-icon ok">&#x1f4c4;</span><div><div class="cmd-bwn-chk-label">BWN ISSUANCE DOCUMENT</div><div class="cmd-bwn-chk-val ok">GENERATED &#x2713;</div></div></div>
+        <div class="cmd-bwn-check"><span class="cmd-bwn-chk-icon warn">&#x1f4cb;</span><div><div class="cmd-bwn-chk-label">COMMUNITY POSTING CHECKLIST</div><div class="cmd-bwn-chk-val warn">PENDING CONFIRMATION</div></div></div>
+        <div class="cmd-bwn-check"><span class="cmd-bwn-chk-icon dim">&#x1f4ec;</span><div><div class="cmd-bwn-chk-label">RESCISSION PACKET</div><div class="cmd-bwn-chk-val dim">QUEUED</div></div></div>
+        <div class="cmd-bwn-check"><span class="cmd-bwn-chk-icon dim">&#x1f4dc;</span><div><div class="cmd-bwn-chk-label">CERT OF DELIVERY TO TCEQ</div><div class="cmd-bwn-chk-val dim">PENDING SUBMISSION</div></div></div>
+      </div>
+    </div>
+    <div class="cmd-bwn-foot">
+      <button class="cmd-bwn-btn cmd-bwn-btn-close" onclick="closeBWN()">CLOSE</button>
+      <button class="cmd-bwn-btn cmd-bwn-btn-danger" onclick="closeBWN()">&#x26a1; RESCIND BWN</button>
+      <button class="cmd-bwn-btn cmd-bwn-btn-primary" onclick="goToPage('compliance.html')">&#x1f4cb; VIEW COMPLIANCE DOCS</button>
+    </div>
+  </div>
+</div>
+
 <script src="https://api.mapbox.com/mapbox-gl-js/v3.3.0/mapbox-gl.js"></script>
 <script>
   const SUPA_URL='https://bvpesxpptgdwkhsewhke.supabase.co';
   const SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
   const MAPBOX_TOKEN='pk.eyJ1IjoicmFkZXVzIiwiYSI6ImNtbzNtYXNqMzE2ZW8ycXBuYW04cmo4amoifQ.Q98K-t05aYn4bvViWOkw1Q';
-  let ORG_ID=null; // Set from auth
-  let currentSystem=null,radMap=null,dialValues={},allSystems=[];
+  let ORG_ID=null;
+  let currentSystem=null,radMap=null,dialValues={};
   function tick(){const n=new Date();document.getElementById('clock').textContent=n.toTimeString().slice(0,8);}
   setInterval(tick,1000);tick();
   async function supa(table,params=''){try{const r=await fetch(`${SUPA_URL}/rest/v1/${table}${params}`,{headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`}});if(!r.ok){console.warn('Supabase',r.status,table);return null;}return await r.json();}catch(e){console.warn('Supabase offline:',e.message);return null;}}
   function fmtBal(n){n=Number(n);if(n<0)return`($${Math.abs(n).toFixed(2)})`;return`$${n.toFixed(2)}`;}
-  function classify(bal,type){if(type==='RELIGIOUS')return{label:'RELIGIOUS',color:'var(--text-dim)'};if(bal<-0.01)return{label:'CREDIT',color:'var(--blue)'};if(Math.abs(bal)<0.01)return{label:'CURRENT',color:'var(--green)'};if(bal>500)return{label:'CRITICAL',color:'var(--red)'};return{label:'PAST DUE',color:'var(--orange)'};}
-  function updateMapboxDots(accounts,balMap){if(!radMap)return;const src=radMap.getSource('acct-src');if(!src)return;const features=accounts.filter(a=>a.service_addresses?.latitude&&a.service_addresses?.longitude).map(a=>{const bal=Number(balMap[a.account_id]?.current_balance??0);const cls=classify(bal,a.account_type);const dot=bal<-0.01?'#0088ff':Math.abs(bal)<0.01?'#00ff88':bal>500?'#ff2244':a.account_type==='RELIGIOUS'?'#444444':'#ff8800';const name=a.customers?.full_name||'--';const addr=a.service_addresses?.street||'--';const lastPmt=balMap[a.account_id]?.last_payment_date?new Date(balMap[a.account_id].last_payment_date).toLocaleDateString():'None';return{type:'Feature',geometry:{type:'Point',coordinates:[parseFloat(a.service_addresses.longitude),parseFloat(a.service_addresses.latitude)]},properties:{acct:a.account_number,name,addr,status:cls.label,bal:fmtBal(bal),type:a.account_type,lastPmt,dot}};});src.setData({type:'FeatureCollection',features});}
+  function classify(bal,type){if(type==='RELIGIOUS')return{label:'RELIGIOUS',color:'var(--text-muted)'};if(bal<-0.01)return{label:'CREDIT',color:'var(--info)'};if(Math.abs(bal)<0.01)return{label:'CURRENT',color:'var(--success)'};if(bal>500)return{label:'CRITICAL',color:'var(--danger)'};return{label:'PAST DUE',color:'var(--warning)'};}
+  function updateMapboxDots(accounts,balMap){if(!radMap)return;const src=radMap.getSource('acct-src');if(!src)return;const features=accounts.filter(a=>a.service_addresses?.latitude&&a.service_addresses?.longitude).map(a=>{const bal=Number(balMap[a.account_id]?.current_balance??0);const cls=classify(bal,a.account_type);const dot=bal<-0.01?'#4f8fbe':Math.abs(bal)<0.01?'#348b67':bal>500?'#bf6157':a.account_type==='RELIGIOUS'?'#8fa6b4':'#b8822f';const name=a.customers?.full_name||'--';const addr=a.service_addresses?.street||'--';const lastPmt=balMap[a.account_id]?.last_payment_date?new Date(balMap[a.account_id].last_payment_date).toLocaleDateString():'None';return{type:'Feature',geometry:{type:'Point',coordinates:[parseFloat(a.service_addresses.longitude),parseFloat(a.service_addresses.latitude)]},properties:{acct:a.account_number,name,addr,status:cls.label,bal:fmtBal(bal),type:a.account_type,lastPmt,dot}};});src.setData({type:'FeatureCollection',features});}
   async function geocodeAccounts(accounts,balMap){const needsGeo=accounts.filter(a=>a.service_addresses?.street&&!a.service_addresses?.latitude);if(!needsGeo.length)return;console.log(`Geocoding ${needsGeo.length} addresses...`);const BATCH=15;for(let i=0;i<needsGeo.length;i+=BATCH){const batch=needsGeo.slice(i,i+BATCH);await Promise.all(batch.map(async a=>{const addr=a.service_addresses;const q=encodeURIComponent(`${addr.street}, ${addr.city||''}, ${addr.state||'TX'} ${addr.zip||''}`);try{const r=await fetch(`https://api.mapbox.com/geocoding/v5/mapbox.places/${q}.json?access_token=${MAPBOX_TOKEN}&country=US&limit=1&types=address`);if(!r.ok)return;const data=await r.json();if(data.features?.length){const[lng,lat]=data.features[0].center;await fetch(`${SUPA_URL}/rest/v1/service_addresses?address_id=eq.${addr.address_id}`,{method:'PATCH',headers:{'apikey':SUPA_KEY,'Authorization':`Bearer ${SUPA_KEY}`,'Content-Type':'application/json','Prefer':'return=minimal'},body:JSON.stringify({latitude:lat,longitude:lng})});a.service_addresses.latitude=lat;a.service_addresses.longitude=lng;}}catch(e){}}));updateMapboxDots(accounts,balMap);}console.log('Geocoding complete.');}
   function updateTicker(sys,criticals){const track=document.getElementById('tickerTrack');if(!track)return;const items=[];criticals.slice(0,5).forEach(({a,bal})=>{const name=(a.customers?.full_name||'--').toUpperCase();const cls=classify(bal,a.account_type);const colorTag=bal>500?'r':'o';items.push(`<span class="ti">ACCT <span class="v">${a.account_number}</span> -- ${name} -- BAL <span class="${colorTag}">${fmtBal(bal)}</span> -- ${cls.label}</span>`);});items.push(`<span class="ti">BILLING CYCLE: <span class="o">${sys.system_name.toUpperCase()} -- APRIL 2026 -- DUE 05/01/2026</span></span>`);items.push(`<span class="ti">SYSTEM ONLINE: <span class="v">${sys.system_code}</span> -- <span class="g">RADEUS ACTIVE</span></span>`);const full=[...items,...items].join('\n');track.innerHTML=full;}
-  async function loadLiveData(systemId){const systems=await supa('water_systems',`?system_id=eq.${systemId}&select=*`);if(!systems||!systems.length){console.warn('No system found for',systemCode);return;}const sys=systems[0];currentSystem=sys;const mapTitle=document.getElementById('mapTitle');if(mapTitle)mapTitle.textContent=`SYSTEM MAP -- ${sys.system_name.toUpperCase()} // LIVE`;const accounts=await supa('accounts',`?system_id=eq.${sys.system_id}&status=neq.INACTIVE&select=account_id,account_number,account_type,status,customers(full_name),service_addresses(address_id,street,city,state,zip,latitude,longitude)`);const balances=await supa('account_balances',`?system_id=eq.${sys.system_id}&select=*`);if(!accounts||!balances)return;const balMap={};balances.forEach(b=>{balMap[b.account_id]=b;});let total=0,current=0,credits=0,pastDue=0,critical=0;const criticals=[];accounts.forEach(a=>{total++;const bal=Number(balMap[a.account_id]?.current_balance??0);if(a.account_type==='RELIGIOUS')return;if(bal<-0.01)credits++;else if(Math.abs(bal)<0.01)current++;else if(bal>500){critical++;criticals.push({a,bal});}else pastDue++;});criticals.sort((x,y)=>y.bal-x.bal);const sTitle=document.getElementById('statusTitle');if(sTitle)sTitle.childNodes[0].textContent=`${sys.system_code} -- APR 2026 STATUS `;const rTitle=document.getElementById('regTitle');if(rTitle)rTitle.childNodes[0].textContent=`ACCOUNT REGISTER -- ${sys.system_code} // APRIL 2026 `;const rBadge=document.getElementById('regBadge');if(rBadge)rBadge.textContent=`${accounts.length} ACCTS`;const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};s('stat-total',total);s('stat-current',current);s('stat-credit',credits);s('stat-pastdue',pastDue);s('stat-critical',critical);const pct=total>0?Math.round((current/total)*100):0;dialValues={'dval-collection':pct+'%','dval-accounts':total,'dval-calls':'--','dval-comply':'2','dval-critical':critical,'dval-systems':(allSystems||[]).length};s('dval',pct+'%');const collBar=document.getElementById('collBar');const collLbl=document.getElementById('collRateLbl');if(collBar)collBar.style.width=pct+'%';if(collLbl)collLbl.textContent=`~${pct}%`;const navAlert=document.getElementById('nav-acct-alert');if(navAlert){navAlert.textContent=critical>0?critical:'';navAlert.style.display=critical>0?'flex':'none';}const critBadge=document.getElementById('critBadge');if(critBadge)critBadge.textContent=`${critical} URGENT`;const feed=document.getElementById('critFeed');if(feed){feed.innerHTML='';if(criticals.length===0){feed.innerHTML='<div style="padding:24px 12px;text-align:center;color:var(--text-dim);font-size:9px;letter-spacing:2px">NO CRITICAL ACCOUNTS</div>';}else{criticals.forEach(({a,bal})=>{const name=a.customers?.full_name||'--';const addr=a.service_addresses?.street||'--';const cls=classify(bal,a.account_type);const lastPmt=balMap[a.account_id]?.last_payment_date?new Date(balMap[a.account_id].last_payment_date).toLocaleDateString():'None on file';const parts=name.split(' ');const short=parts.length>1?`${parts[0][0]}. ${parts.slice(1).join(' ')}`:name;const div=document.createElement('div');div.className='aitem';div.onclick=()=>showCard(a.account_number,name,addr,cls.label,fmtBal(bal),a.account_type,lastPmt);div.innerHTML=`<div class="adot" style="background:${cls.color};box-shadow:0 0 7px ${cls.color}"></div><div><div class="aname" style="color:${cls.color}">${a.account_number} -- ${short.toUpperCase()}</div><div class="asub">${addr} <span style="color:${cls.color}">${fmtBal(bal)}</span></div></div>`;feed.appendChild(div);});}}updateMapboxDots(accounts,balMap);geocodeAccounts(accounts,balMap);const mapped=accounts.filter(a=>a.service_addresses?.latitude&&a.service_addresses?.longitude);if(mapped.length>0&&radMap){const bounds=new mapboxgl.LngLatBounds();mapped.forEach(a=>bounds.extend([parseFloat(a.service_addresses.longitude),parseFloat(a.service_addresses.latitude)]));radMap.fitBounds(bounds,{padding:60,maxZoom:13,duration:1400});}else if(radMap){radMap.flyTo({center:[-98.5,30.5],zoom:9,duration:1400});}updateTicker(sys,criticals);const cycles=await supa('billing_cycles',`?system_id=eq.${sys.system_id}&order=cycle_year.desc,cycle_month.desc&limit=1`);if(cycles&&cycles.length){const c=cycles[0];if(c.statement_date){const bd=new Date(c.statement_date);s('stat-billdate',bd.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}));}if(c.due_date){const dd=new Date(c.due_date);const ddStr=dd.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});s('stat-duedate',ddStr);s('compDueDate',ddStr);}}const totalOutstanding=balances.reduce((sum,b)=>{const bal=Number(b.current_balance??0);return sum+(bal>0?bal:0);},0);const compOut=document.getElementById('compOutstanding');if(compOut&&totalOutstanding>0)compOut.textContent=`$${totalOutstanding.toFixed(2)}`;const tbody=document.getElementById('acctTable');if(tbody){tbody.innerHTML='';[...accounts].filter(a=>a.status!=='INACTIVE').sort((a,b)=>Number(balMap[b.account_id]?.current_balance??0)-Number(balMap[a.account_id]?.current_balance??0)).forEach(a=>{const bal=Number(balMap[a.account_id]?.current_balance??0);const lastPmt=balMap[a.account_id]?.last_payment_date?new Date(balMap[a.account_id].last_payment_date).toLocaleDateString():'None';const cls=classify(bal,a.account_type);const name=a.customers?.full_name||'--';const addr=a.service_addresses?.street||'--';const tr=document.createElement('tr');tr.onclick=()=>showCard(a.account_number,name,addr,cls.label,fmtBal(bal),a.account_type,lastPmt);tr.innerHTML=`<td class="acct">${a.account_number}</td><td class="nm">${name}</td><td style="color:#8ab8c8;font-family:'Rajdhani',sans-serif;font-size:11px;font-weight:500">${addr}</td><td><span class="pill" style="color:${cls.color};border-color:${cls.color}">${cls.label}</span></td><td class="bal" style="text-align:right;color:${cls.color}">${fmtBal(bal)}</td>`;tbody.appendChild(tr);});}const calls=await supa('communication_log',`?system_id=eq.${sys.system_id}&select=*&order=created_at.desc&limit=9`);if(calls&&calls.length){const clog=document.getElementById('clogPanel');if(clog){const catColors={'Leak or Outage':'var(--red)','Bill Question':'var(--cyan)','New Service':'var(--green)','Disconnection':'var(--yellow)','Maintenance':'var(--orange)','Water Quality Question':'var(--orange)','State Agency':'var(--purple)'};const catLabels={'Leak or Outage':'REPAIR','Bill Question':'BILL Q','New Service':'NEW SVC','Disconnection':'DISCON','Maintenance':'MAINT','Water Quality Question':'QUALITY','State Agency':'TCEQ'};clog.innerHTML='';calls.forEach(c=>{const col=catColors[c.category]||'var(--cyan)';const lbl=catLabels[c.category]||'NOTE';const d=document.createElement('div');d.className='citem';d.innerHTML=`<span class="ccat" style="color:${col};border-color:${col}">${lbl}</span><div class="cinfo"><div class="cname">${c.call_ref||''} -- ${c.caller_name||''} // ${c.customer_name||''}</div><div class="csub">${(c.description||'').substring(0,80)}</div></div>`;clog.appendChild(d);});}}console.log(`${accounts.length} accounts loaded for ${sys.system_name}`);}
-  function showCard(num,name,addr,status,bal,type,pmt){document.getElementById('ac-num').textContent=num;document.getElementById('ac-name').textContent=name;document.getElementById('ac-addr').textContent=addr;document.getElementById('ac-bal').textContent=bal;document.getElementById('ac-type').textContent=type;document.getElementById('ac-pmt').textContent=pmt;const s=document.getElementById('ac-stat');s.textContent=status;const cols={'CURRENT':'var(--green)','CREDIT':'var(--blue)','CREDIT BALANCE':'var(--blue)','PAST DUE':'var(--orange)','CRITICAL':'var(--red)','DISCONNECT ELIGIBLE':'var(--red)','ACTIVE -- RELIGIOUS':'var(--text-dim)','RELIGIOUS':'var(--text-dim)'};const c=cols[status]||'var(--yellow)';s.style.color=c;s.style.borderColor=c;if(currentSystem){const base=Number(currentSystem.base_rate||0);const surcharge=Number(currentSystem.energy_surcharge||0);const lateFee=Number(currentSystem.late_fee_amount||0);document.getElementById('ac-baserate').textContent=`$${base.toFixed(2)} / MONTH`;document.getElementById('ac-surcharge').textContent=surcharge>0?`$${surcharge.toFixed(2)} FLAT`:'N/A';document.getElementById('ac-latefee').textContent=lateFee>0?`$${lateFee.toFixed(2)} after due date`:'N/A';document.getElementById('ac-sysname').textContent=currentSystem.system_name;}document.getElementById('accard').classList.add('show');}
-  function closeCard(){document.getElementById('accard').classList.remove('show');}
+  async function loadLiveData(systemId){const systems=await supa('water_systems',`?system_id=eq.${systemId}&select=*`);if(!systems||!systems.length){console.warn('No system found for',systemId);return;}const sys=systems[0];currentSystem=sys;const mapTitle=document.getElementById('mapTitle');if(mapTitle)mapTitle.textContent=`SYSTEM MAP -- ${sys.system_name.toUpperCase()} // LIVE`;const accounts=await supa('accounts',`?system_id=eq.${sys.system_id}&status=neq.INACTIVE&select=account_id,account_number,account_type,status,customers(full_name),service_addresses(address_id,street,city,state,zip,latitude,longitude)`);const balances=await supa('account_balances',`?system_id=eq.${sys.system_id}&select=*`);if(!accounts||!balances)return;const balMap={};balances.forEach(b=>{balMap[b.account_id]=b;});let total=0,current=0,credits=0,pastDue=0,critical=0;const criticals=[];accounts.forEach(a=>{total++;const bal=Number(balMap[a.account_id]?.current_balance??0);if(a.account_type==='RELIGIOUS')return;if(bal<-0.01)credits++;else if(Math.abs(bal)<0.01)current++;else if(bal>500){critical++;criticals.push({a,bal});}else pastDue++;});criticals.sort((x,y)=>y.bal-x.bal);const sTitle=document.getElementById('statusTitle');if(sTitle)sTitle.childNodes[0].textContent=`${sys.system_code} -- APR 2026 STATUS `;const rTitle=document.getElementById('regTitle');if(rTitle)rTitle.childNodes[0].textContent=`ACCOUNT REGISTER -- ${sys.system_code} // APRIL 2026 `;const rBadge=document.getElementById('regBadge');if(rBadge)rBadge.textContent=`${accounts.length} ACCTS`;const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};s('stat-total',total);s('stat-current',current);s('stat-credit',credits);s('stat-pastdue',pastDue);s('stat-critical',critical);const pct=total>0?Math.round((current/total)*100):0;dialValues={'dval-collection':pct+'%','dval-accounts':total,'dval-calls':'--','dval-comply':'2','dval-critical':critical,'dval-systems':(allSystems||[]).length};s('dval',pct+'%');const collBar=document.getElementById('collBar');const collLbl=document.getElementById('collRateLbl');if(collBar)collBar.style.width=pct+'%';if(collLbl)collLbl.textContent=`~${pct}%`;const navAlert=document.getElementById('nav-acct-alert');if(navAlert){navAlert.textContent=critical>0?critical:'';navAlert.style.display=critical>0?'flex':'none';}const critBadge=document.getElementById('critBadge');if(critBadge)critBadge.textContent=`${critical} URGENT`;const feed=document.getElementById('critFeed');if(feed){feed.innerHTML='';if(criticals.length===0){feed.innerHTML='<div style="padding:24px 12px;text-align:center;color:var(--text-muted);font-size:9px;letter-spacing:2px">NO CRITICAL ACCOUNTS</div>';}else{criticals.forEach(({a,bal})=>{const name=a.customers?.full_name||'--';const addr=a.service_addresses?.street||'--';const cls=classify(bal,a.account_type);const lastPmt=balMap[a.account_id]?.last_payment_date?new Date(balMap[a.account_id].last_payment_date).toLocaleDateString():'None on file';const parts=name.split(' ');const short=parts.length>1?`${parts[0][0]}. ${parts.slice(1).join(' ')}`:name;const div=document.createElement('div');div.className='aitem';div.onclick=()=>showCard(a.account_number,name,addr,cls.label,fmtBal(bal),a.account_type,lastPmt);div.innerHTML=`<div class="adot" style="background:${cls.color};box-shadow:0 0 7px ${cls.color}"></div><div><div class="aname" style="color:${cls.color}">${a.account_number} -- ${short.toUpperCase()}</div><div class="asub">${addr} <span style="color:${cls.color}">${fmtBal(bal)}</span></div></div>`;feed.appendChild(div);});}}updateMapboxDots(accounts,balMap);geocodeAccounts(accounts,balMap);const mapped=accounts.filter(a=>a.service_addresses?.latitude&&a.service_addresses?.longitude);if(mapped.length>0&&radMap){const bounds=new mapboxgl.LngLatBounds();mapped.forEach(a=>bounds.extend([parseFloat(a.service_addresses.longitude),parseFloat(a.service_addresses.latitude)]));radMap.fitBounds(bounds,{padding:60,maxZoom:13,duration:1400});}else if(radMap){radMap.flyTo({center:[-99.5,31.0],zoom:6,duration:1400});}updateTicker(sys,criticals);const cycles=await supa('billing_cycles',`?system_id=eq.${sys.system_id}&order=cycle_year.desc,cycle_month.desc&limit=1`);if(cycles&&cycles.length){const c=cycles[0];if(c.statement_date){const bd=new Date(c.statement_date);s('stat-billdate',bd.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'}));}if(c.due_date){const dd=new Date(c.due_date);const ddStr=dd.toLocaleDateString('en-US',{month:'2-digit',day:'2-digit',year:'numeric'});s('stat-duedate',ddStr);s('compDueDate',ddStr);}}const totalOutstanding=balances.reduce((sum,b)=>{const bal=Number(b.current_balance??0);return sum+(bal>0?bal:0);},0);const compOut=document.getElementById('compOutstanding');if(compOut&&totalOutstanding>0)compOut.textContent=`$${totalOutstanding.toFixed(2)}`;const tbody=document.getElementById('acctTable');if(tbody){tbody.innerHTML='';[...accounts].filter(a=>a.status!=='INACTIVE').sort((a,b)=>Number(balMap[b.account_id]?.current_balance??0)-Number(balMap[a.account_id]?.current_balance??0)).forEach(a=>{const bal=Number(balMap[a.account_id]?.current_balance??0);const lastPmt=balMap[a.account_id]?.last_payment_date?new Date(balMap[a.account_id].last_payment_date).toLocaleDateString():'None';const cls=classify(bal,a.account_type);const name=a.customers?.full_name||'--';const addr=a.service_addresses?.street||'--';const tr=document.createElement('tr');tr.onclick=()=>showCard(a.account_number,name,addr,cls.label,fmtBal(bal),a.account_type,lastPmt);tr.innerHTML=`<td class="acct">${a.account_number}</td><td class="nm">${name}</td><td><span class="pill" style="color:${cls.color};border-color:${cls.color}">${cls.label}</span></td><td class="bal" style="text-align:right;color:${cls.color}">${fmtBal(bal)}</td>`;tbody.appendChild(tr);});}const calls=await supa('communication_log',`?system_id=eq.${sys.system_id}&select=*&order=created_at.desc&limit=9`);if(calls&&calls.length){const clog=document.getElementById('clogPanel');if(clog){const catColors={'Leak or Outage':'var(--danger)','Bill Question':'var(--primary)','New Service':'var(--success)','Disconnection':'var(--warning)','Maintenance':'var(--warning)','Water Quality Question':'var(--warning)','State Agency':'color:#7d8eb6'};const catLabels={'Leak or Outage':'REPAIR','Bill Question':'BILL Q','New Service':'NEW SVC','Disconnection':'DISCON','Maintenance':'MAINT','Water Quality Question':'QUALITY','State Agency':'TCEQ'};clog.innerHTML='';calls.forEach(c=>{const col=catColors[c.category]||'var(--primary)';const lbl=catLabels[c.category]||'NOTE';const d=document.createElement('div');d.className='citem';d.innerHTML=`<span class="ccat" style="color:${col};border-color:${col}">${lbl}</span><div class="cinfo"><div class="cname">${c.call_ref||''} -- ${c.caller_name||''} // ${c.customer_name||''}</div><div class="csub">${(c.description||'').substring(0,80)}</div></div>`;clog.appendChild(d);});}}console.log(`${accounts.length} accounts loaded for ${sys.system_name}`);}
   function setDial(key,label,el){document.getElementById('dval').textContent=dialValues[key]||'--';document.getElementById('dlabel').textContent=label;document.querySelectorAll('.dbtn').forEach(b=>b.classList.remove('active'));el.classList.add('active');}
   function switchSystem(v){if(v==='ALL'){loadNetworkView();return;}loadLiveData(v);}
-  async function loadNetworkView(){const orgName=window._orgName||'NETWORK';const mt=document.getElementById('mapTitle');if(mt)mt.textContent=orgName+' -- '+(allSystems||[]).length+' SYSTEMS';if(radMap)radMap.flyTo({center:[-99.5,31.0],zoom:5.8,duration:1400});const sTitle=document.getElementById('statusTitle');if(sTitle)sTitle.childNodes[0].textContent=orgName+' -- STATUS ';const rTitle=document.getElementById('regTitle');if(rTitle)rTitle.childNodes[0].textContent='SYSTEM DIRECTORY -- '+orgName+' ';const rBadge=document.getElementById('regBadge');if(rBadge)rBadge.textContent=(allSystems||[]).length+' SYSTEMS';if(!allSystems.length)return;const sysIds=allSystems.map(s=>s.system_id).join(',');const[bals,accounts]=await Promise.all([supa('account_balances',`?system_id=in.(${sysIds})&select=account_id,current_balance&limit=1000`),supa('accounts',`?system_id=in.(${sysIds})&status=neq.INACTIVE&select=account_id,account_number,account_type,system_id,customers(full_name),service_addresses(latitude,longitude)&limit=1000`)]);if(bals&&bals.length){let total=bals.length,current=0,credits=0,pastDue=0,critical=0,outstanding=0;const balMap={};bals.forEach(b=>{balMap[b.account_id]=Number(b.current_balance??0);const bal=Number(b.current_balance??0);if(bal<-0.01)credits++;else if(Math.abs(bal)<0.01)current++;else if(bal>500){critical++;}else pastDue++;if(bal>0)outstanding+=bal;});const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};s('stat-total',total);s('stat-current',current);s('stat-credit',credits);s('stat-pastdue',pastDue);s('stat-critical',critical);s('stat-billdate','NETWORK');s('stat-duedate','MULTI');const collLbl=document.getElementById('collRateLbl');const collBar=document.getElementById('collBar');const pct=total>0?Math.round((current/total)*100):0;if(collLbl)collLbl.textContent=`~${pct}%`;if(collBar)collBar.style.width=pct+'%';const compOut=document.getElementById('compOutstanding');if(compOut)compOut.textContent=`$${outstanding.toFixed(2)}`;const track=document.getElementById('tickerTrack');if(track){const sysCount=(allSystems||[]).length;const msg=`<span class="ti">${orgName} -- <span class="g">${sysCount} SYSTEMS ONLINE</span> -- ${total} ACCOUNTS</span>`;track.innerHTML=msg+msg;}if(accounts&&radMap){const features=accounts.filter(a=>a.service_addresses?.latitude&&a.service_addresses?.longitude).map(a=>{const bal=balMap[a.account_id]??0;const dot=bal<-0.01?'#0088ff':Math.abs(bal)<0.01?'#00ff88':bal>500?'#ff2244':a.account_type==='RELIGIOUS'?'#444':'#ff8800';const name=a.customers?.full_name||'--';return{type:'Feature',geometry:{type:'Point',coordinates:[parseFloat(a.service_addresses.longitude),parseFloat(a.service_addresses.latitude)]},properties:{acct:a.account_number,name,addr:'--',status:bal>500?'CRITICAL':Math.abs(bal)<0.01?'CURRENT':'PAST DUE',bal:fmtBal(bal),type:a.account_type,lastPmt:'--',dot}};});const src=radMap.getSource('acct-src');if(src)src.setData({type:'FeatureCollection',features});}const tbody=document.getElementById('acctTable');if(tbody){tbody.innerHTML='';allSystems.forEach(sys=>{const sysAccts=(accounts||[]).filter(a=>a.system_id===sys.system_id);const tr=document.createElement('tr');tr.onclick=()=>{document.getElementById('sysSelect').value=sys.system_id;loadLiveData(sys.system_id);};tr.innerHTML=`<td class="acct" style="cursor:pointer">${sys.system_code}</td><td class="nm">${sys.system_name}</td><td style="color:#8ab8c8;font-family:'Rajdhani',sans-serif;font-size:11px">${sysAccts.length} ACCOUNTS</td><td><span class="pill" style="color:var(--green);border-color:var(--green)">ONLINE</span></td><td class="bal" style="text-align:right;color:var(--cyan)">VIEW</td>`;tbody.appendChild(tr);});}}const feed=document.getElementById('critFeed');if(feed)feed.innerHTML='<div style="padding:12px;font-size:9px;color:var(--text-dim);letter-spacing:1px;text-align:center">SELECT A SYSTEM FOR DETAIL</div>';const critBadge=document.getElementById('critBadge');if(critBadge)critBadge.textContent='NETWORK';}
-  function filterMap(type,el){document.querySelectorAll('[onclick^="filterMap"]').forEach(b=>{b.style.borderColor='var(--border)';b.style.color='var(--text-dim)';b.style.background='transparent';});el.style.borderColor='var(--cyan)';el.style.color='var(--cyan)';el.style.background='rgba(0,245,255,.08)';if(!radMap||!radMap.getLayer('acct-dots'))return;const base=['!',['has','point_count']];if(type==='red')radMap.setFilter('acct-dots',['all',base,['==',['get','dot'],'#ff2244']]);else if(type==='ok')radMap.setFilter('acct-dots',['all',base,['==',['get','dot'],'#00ff88']]);else radMap.setFilter('acct-dots',base);}
-  function showBWN(){document.getElementById('bwnModal').classList.add('show');}
-  function closeBWN(){document.getElementById('bwnModal').classList.remove('show');}
+  async function loadNetworkView(){const mt=document.getElementById('mapTitle');if(mt)mt.textContent='RADEUS NETWORK -- ALL SYSTEMS';if(radMap)radMap.flyTo({center:[-99.5,31.0],zoom:5.8,duration:1400});const sTitle=document.getElementById('statusTitle');if(sTitle)sTitle.childNodes[0].textContent='ALL SYSTEMS -- NETWORK STATUS ';const rTitle=document.getElementById('regTitle');if(rTitle)rTitle.childNodes[0].textContent='SYSTEM DIRECTORY -- RADEUS NETWORK ';const rBadge=document.getElementById('regBadge');if(rBadge)rBadge.textContent='ALL SYSTEMS';const track=document.getElementById('tickerTrack');const[bals,accounts]=await Promise.all([supa('account_balances','?select=account_id,current_balance&limit=5000'),supa('accounts','?status=neq.INACTIVE&select=account_id,account_number,account_type,system_id,customers(full_name),service_addresses(latitude,longitude)&limit=5000')]);if(bals&&bals.length){let total=bals.length,current=0,credits=0,pastDue=0,critical=0,outstanding=0;const balMap={};bals.forEach(b=>{balMap[b.account_id]=Number(b.current_balance??0);const bal=Number(b.current_balance??0);if(bal<-0.01)credits++;else if(Math.abs(bal)<0.01)current++;else if(bal>500){critical++;}else if(bal>0)pastDue++;if(bal>0)outstanding+=bal;});const s=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};s('stat-total',total);s('stat-current',current);s('stat-credit',credits);s('stat-pastdue',pastDue);s('stat-critical',critical);s('stat-billdate','NETWORK');s('stat-duedate','MULTI');const collLbl=document.getElementById('collRateLbl');const collBar=document.getElementById('collBar');const pct=total>0?Math.round((current/total)*100):0;if(collLbl)collLbl.textContent=`~${pct}%`;if(collBar)collBar.style.width=pct+'%';const compOut=document.getElementById('compOutstanding');if(compOut)compOut.textContent=`$${outstanding.toFixed(2)}`;dialValues={'dval-collection':pct+'%','dval-accounts':total,'dval-calls':'--','dval-comply':'--','dval-critical':critical,'dval-systems':'--'};s('dval',pct+'%');if(accounts&&radMap){const features=accounts.filter(a=>a.service_addresses?.latitude&&a.service_addresses?.longitude).map(a=>{const bal=balMap[a.account_id]??0;const dot=bal<-0.01?'#4f8fbe':Math.abs(bal)<0.01?'#348b67':bal>500?'#bf6157':a.account_type==='RELIGIOUS'?'#8fa6b4':'#b8822f';const name=a.customers?.full_name||'--';return{type:'Feature',geometry:{type:'Point',coordinates:[parseFloat(a.service_addresses.longitude),parseFloat(a.service_addresses.latitude)]},properties:{acct:a.account_number,name,addr:'--',status:bal>500?'CRITICAL':Math.abs(bal)<0.01?'CURRENT':'PAST DUE',bal:fmtBal(bal),type:a.account_type,lastPmt:'--',dot}};});const src=radMap.getSource('acct-src');if(src)src.setData({type:'FeatureCollection',features});}const tbody=document.getElementById('acctTable');if(tbody){const systems=await supa('water_systems',`?org_id=eq.${ORG_ID}&select=system_id,system_code,system_name&order=system_name`);const sel=document.getElementById('sysSelect');if(sel)sel.innerHTML='<option value="ALL">⬡ ALL SYSTEMS</option>'+systems.map(s=>`<option value="${s.system_id}">⬡ ${s.system_name.toUpperCase()}</option>`).join('');dialValues['dval-systems']=systems.length;tbody.innerHTML='';(systems||[]).forEach(sys=>{const sysAccts=(accounts||[]).filter(a=>a.system_id===sys.system_id);const tr=document.createElement('tr');tr.onclick=()=>{document.getElementById('sysSelect').value=sys.system_id;loadLiveData(sys.system_id);};tr.innerHTML=`<td class="acct" style="cursor:pointer">${sys.system_code}</td><td class="nm">${sys.system_name} <span style="color:var(--text-soft);font-family:'Rajdhani',sans-serif;font-size:11px;margin-left:8px">${sysAccts.length} ACCOUNTS</span></td><td><span class="pill" style="color:var(--success);border-color:var(--success)">ONLINE</span></td><td class="bal" style="text-align:right;color:var(--primary)">VIEW</td>`;tbody.appendChild(tr);});if(track){const tItems=[];tItems.push(`<span class="ti">RADEUS NETWORK -- <span class="g">${systems.length} SYSTEMS ONLINE</span> -- ${total} ACCOUNTS -- COLLECTION ${pct}%</span>`);if(critical>0)tItems.push(`<span class="ti"><span class="r">${critical} CRITICAL ACCOUNT${critical>1?'S':''}</span> -- $${outstanding.toFixed(2)} OUTSTANDING</span>`);if(pastDue>0)tItems.push(`<span class="ti"><span class="o">${pastDue} PAST DUE</span> -- ${current} CURRENT -- ${credits} CREDIT BALANCE</span>`);tItems.push(`<span class="ti">SYSTEM DIRECTORY: ${systems.map(s=>s.system_code).join(' · ')}</span>`);track.innerHTML=tItems.join('')+tItems.join('');}}}const feed=document.getElementById('critFeed');if(feed)feed.innerHTML='<div style="padding:12px;font-size:9px;color:var(--text-muted);letter-spacing:1px;text-align:center">SELECT A SYSTEM FOR DETAIL</div>';const critBadge=document.getElementById('critBadge');if(critBadge)critBadge.textContent='NETWORK';}
+  function filterMap(type,el){document.querySelectorAll('[onclick^="filterMap"]').forEach(b=>{b.style.borderColor='var(--border)';b.style.color='var(--text-muted)';b.style.background='transparent';});el.style.borderColor='var(--primary)';el.style.color='var(--primary)';el.style.background='rgba(0,245,255,.08)';if(!radMap||!radMap.getLayer('acct-dots'))return;const base=['!',['has','point_count']];if(type==='red')radMap.setFilter('acct-dots',['all',base,['==',['get','dot'],'#bf6157']]);else if(type==='ok')radMap.setFilter('acct-dots',['all',base,['==',['get','dot'],'#348b67']]);else radMap.setFilter('acct-dots',base);}
+  
+  
   document.addEventListener('keydown',e=>{if(e.key==='Escape'){closeCard();closeBWN();}});
+    function overlayBgClick(e, overlayId) {
+    if (e.target.id === overlayId) {
+      document.getElementById(overlayId).classList.remove('show');
+    }
+  }
+  function goToPage(url) { window.location.href = url; }
+  function showBWN(sysName, desc) {
+    if (sysName) document.getElementById('bwn-sys-name').textContent = 'SYSTEM: ' + sysName;
+    if (desc) document.getElementById('bwn-desc').textContent = desc;
+    const bwno=document.getElementById('bwnOverlay');
+    bwno.style.visibility='';bwno.style.opacity='';bwno.style.pointerEvents='';
+    bwno.classList.add('show'); bwno.setAttribute('aria-hidden','false');
+  }
+  function closeBWN() {
+    const bwno=document.getElementById('bwnOverlay');
+    bwno.classList.remove('show');
+    bwno.style.visibility='hidden';bwno.style.opacity='0';bwno.style.pointerEvents='none';
+    bwno.setAttribute('aria-hidden','true');
+  }
+  function showCard(num,name,addr,status,bal,type,pmt) {
+    document.getElementById('ac-num').textContent  = num;
+    document.getElementById('ac-name').textContent = name;
+    document.getElementById('ac-addr').textContent = addr;
+    document.getElementById('ac-bal').textContent  = bal;
+    document.getElementById('ac-type').textContent = type;
+    document.getElementById('ac-pmt').textContent  = pmt;
+    const s = document.getElementById('ac-stat');
+    s.textContent = status;
+    const cols = {
+      'CURRENT':'var(--success)','CREDIT':'var(--info)','CREDIT BALANCE':'var(--info)',
+      'PAST DUE':'var(--warning)','CRITICAL':'var(--danger)','DISCONNECT ELIGIBLE':'var(--danger)',
+      'ACTIVE -- RELIGIOUS':'var(--text-muted)','RELIGIOUS':'var(--text-muted)'
+    };
+    const c = cols[status] || 'var(--warning)';
+    s.style.color = c; s.style.borderColor = c;
+    if (currentSystem) {
+      const base     = Number(currentSystem.base_rate||0);
+      const surcharge= Number(currentSystem.energy_surcharge||0);
+      const lateFee  = Number(currentSystem.late_fee_amount||0);
+      document.getElementById('ac-baserate').textContent  = '$'+base.toFixed(2)+' / MONTH';
+      document.getElementById('ac-surcharge').textContent = surcharge>0?'$'+surcharge.toFixed(2)+' FLAT':'N/A';
+      document.getElementById('ac-latefee').textContent   = lateFee>0?'$'+lateFee.toFixed(2)+' after due date':'N/A';
+      document.getElementById('ac-sysname').textContent   = currentSystem.system_name;
+    }
+    const aco=document.getElementById('accardOverlay');
+    aco.style.visibility='';aco.style.opacity='';aco.style.pointerEvents='';
+    aco.classList.add('show'); aco.setAttribute('aria-hidden','false');
+  }
+  function closeCard() {
+    const aco=document.getElementById('accardOverlay');
+    aco.classList.remove('show');
+    aco.style.visibility='hidden';aco.style.opacity='0';aco.style.pointerEvents='none';
+    aco.setAttribute('aria-hidden','true');
+  }
   mapboxgl.accessToken=MAPBOX_TOKEN;
   radMap=new mapboxgl.Map({container:'mapGl',style:'mapbox://styles/mapbox/dark-v11',center:[-99.5,31.0],zoom:5.8,minZoom:4,maxZoom:18});
-  radMap.on('load',()=>{radMap.addSource('acct-src',{type:'geojson',data:{type:'FeatureCollection',features:[]},cluster:true,clusterMaxZoom:13,clusterRadius:30});radMap.addLayer({id:'clusters',type:'circle',source:'acct-src',filter:['has','point_count'],paint:{'circle-color':['step',['get','point_count'],'#00aa66',5,'#ff8800',15,'#ff2244'],'circle-radius':['step',['get','point_count'],14,5,20,15,28],'circle-stroke-width':1,'circle-stroke-color':'rgba(0,0,0,.4)','circle-opacity':.85}});radMap.addLayer({id:'cluster-count',type:'symbol',source:'acct-src',filter:['has','point_count'],layout:{'text-field':['get','point_count_abbreviated'],'text-font':['DIN Offc Pro Bold','Arial Unicode MS Bold'],'text-size':10},paint:{'text-color':'#fff'}});radMap.addLayer({id:'acct-dots',type:'circle',source:'acct-src',filter:['!',['has','point_count']],paint:{'circle-color':['get','dot'],'circle-radius':7,'circle-stroke-width':1.5,'circle-stroke-color':'rgba(2,12,20,.7)','circle-opacity':.9}});radMap.on('click','acct-dots',e=>{const p=e.features[0].properties;showCard(p.acct,p.name,p.addr,p.status,p.bal,p.type,p.lastPmt);});radMap.on('click','clusters',e=>{const f=radMap.queryRenderedFeatures(e.point,{layers:['clusters']});radMap.getSource('acct-src').getClusterExpansionZoom(f[0].properties.cluster_id,(err,zoom)=>{if(!err)radMap.easeTo({center:f[0].geometry.coordinates,zoom});});});radMap.on('mouseenter','acct-dots',()=>radMap.getCanvas().style.cursor='pointer');radMap.on('mouseleave','acct-dots',()=>radMap.getCanvas().style.cursor='');radMap.on('mouseenter','clusters',()=>radMap.getCanvas().style.cursor='pointer');radMap.on('mouseleave','clusters',()=>radMap.getCanvas().style.cursor='');loadSystemsForCommand();});
-  async function loadSystemsForCommand(){
-    if(!ORG_ID)return;
-    const [systems, orgs]=await Promise.all([
-      supa('water_systems',`?org_id=eq.${ORG_ID}&select=system_id,system_code,system_name&order=system_name`),
-      supa('organizations',`?org_id=eq.${ORG_ID}&select=org_name&limit=1`)
-    ]);
-    allSystems=systems||[];
-    const orgName=(orgs&&orgs[0]?.org_name)?orgs[0].org_name.toUpperCase():'MY SYSTEMS';
-    const sel=document.getElementById('sysSelect');
-    sel.innerHTML=`<option value="ALL">&#x2b21; ${orgName}</option>`;
-    allSystems.forEach(s=>{const o=document.createElement('option');o.value=s.system_id;o.textContent='\u2B21 '+s.system_name.toUpperCase();sel.appendChild(o);});
-    sel.value='ALL';
-    // Store org name for use in network view
-    window._orgName=orgName;
-    loadNetworkView();
-    loadComplianceSummary();
-    loadCallLogForCommand();
-  }
-  async function loadComplianceSummary(){
-    if(!allSystems.length)return;
-    const sysIds=allSystems.map(s=>s.system_id).join(',');
-    const events=await supa('compliance_events',`?system_id=in.(${sysIds})&status=neq.RESOLVED&select=event_id,category,description,status,system_id&order=status.asc&limit=5`);
-    const el=document.getElementById('complianceItems');
-    if(!el)return;
-    if(!events||!events.length){el.innerHTML='<div style="padding:12px;text-align:center;color:var(--green);font-size:9px;letter-spacing:2px">ALL COMPLIANT</div>';return;}
-    el.innerHTML='';
-    events.slice(0,3).forEach(ev=>{
-      const sys=allSystems.find(s=>s.system_id===ev.system_id);
-      const sysName=sys?sys.system_name:'—';
-      const isActive=ev.status==='ACTIVE';
-      const isOverdue=ev.status==='OVERDUE';
-      const icon=isActive?'\u1F6A8':isOverdue?'\uD83D\uDCCB':'\u2713';
-      const color=isActive?'var(--red)':isOverdue?'var(--orange)':'var(--green)';
-      const statusLabel=isActive?'ACTIVE':isOverdue?'OVERDUE':'DUE';
-      const div=document.createElement('div');div.className='compitem';
-      div.innerHTML=`<div class="compicon" style="background:rgba(255,119,0,.08);color:${color}">${ev.category==='BWN'?'🚨':'📋'}</div><div class="compinfo"><div class="compname">${ev.description||ev.category}</div><div class="compdue">${sysName}</div></div><div class="compst" style="color:${color};border-color:${color}">${statusLabel}</div>`;
-      el.appendChild(div);
-    });
-  }
-  async function loadCallLogForCommand(){
-    if(!allSystems.length)return;
-    const sysIds=allSystems.map(s=>s.system_id).join(',');
-    const calls=await supa('communication_log',`?system_id=in.(${sysIds})&select=*&order=created_at.desc&limit=9`);
-    const clog=document.getElementById('clogPanel');
-    if(!clog)return;
-    if(!calls||!calls.length){clog.innerHTML='<div style="padding:16px 12px;text-align:center;color:var(--text-dim);font-size:9px;letter-spacing:2px">NO RECENT CALLS</div>';return;}
-    const catColors={'Leak or Outage':'var(--red)','Bill Question':'var(--cyan)','New Service':'var(--green)','Disconnection':'var(--yellow)','Maintenance':'var(--orange)','Water Quality Question':'var(--orange)','State Agency':'var(--purple)'};
-    const catLabels={'Leak or Outage':'REPAIR','Bill Question':'BILL Q','New Service':'NEW SVC','Disconnection':'DISCON','Maintenance':'MAINT','Water Quality Question':'QUALITY','State Agency':'TCEQ'};
-    clog.innerHTML='';
-    calls.forEach(c=>{const col=catColors[c.category]||'var(--cyan)';const lbl=catLabels[c.category]||'NOTE';const d=document.createElement('div');d.className='citem';d.innerHTML=`<span class="ccat" style="color:${col};border-color:${col}">${lbl}</span><div class="cinfo"><div class="cname">${c.call_ref||''} -- ${c.caller_name||''} // ${c.customer_name||''}</div><div class="csub">${(c.description||'').substring(0,80)}</div></div>`;clog.appendChild(d);});
-  }
+  radMap.on('load',()=>{radMap.addSource('acct-src',{type:'geojson',data:{type:'FeatureCollection',features:[]},cluster:true,clusterMaxZoom:13,clusterRadius:30});radMap.addLayer({id:'clusters',type:'circle',source:'acct-src',filter:['has','point_count'],paint:{'circle-color':['step',['get','point_count'],'#348b67',5,'#b8822f',15,'#bf6157'],'circle-radius':['step',['get','point_count'],14,5,20,15,28],'circle-stroke-width':1,'circle-stroke-color':'rgba(0,0,0,.4)','circle-opacity':.85}});radMap.addLayer({id:'cluster-count',type:'symbol',source:'acct-src',filter:['has','point_count'],layout:{'text-field':['get','point_count_abbreviated'],'text-font':['DIN Offc Pro Bold','Arial Unicode MS Bold'],'text-size':10},paint:{'text-color':'#fff'}});radMap.addLayer({id:'acct-dots',type:'circle',source:'acct-src',filter:['!',['has','point_count']],paint:{'circle-color':['get','dot'],'circle-radius':7,'circle-stroke-width':1.5,'circle-stroke-color':'rgba(2,12,20,.7)','circle-opacity':.9}});radMap.on('click','acct-dots',e=>{const p=e.features[0].properties;showCard(p.acct,p.name,p.addr,p.status,p.bal,p.type,p.lastPmt);});radMap.on('click','clusters',e=>{const f=radMap.queryRenderedFeatures(e.point,{layers:['clusters']});radMap.getSource('acct-src').getClusterExpansionZoom(f[0].properties.cluster_id,(err,zoom)=>{if(!err)radMap.easeTo({center:f[0].geometry.coordinates,zoom});});});radMap.on('mouseenter','acct-dots',()=>radMap.getCanvas().style.cursor='pointer');radMap.on('mouseleave','acct-dots',()=>radMap.getCanvas().style.cursor='');radMap.on('mouseenter','clusters',()=>radMap.getCanvas().style.cursor='pointer');radMap.on('mouseleave','clusters',()=>radMap.getCanvas().style.cursor='');document.getElementById('sysSelect').value='ALL';loadNetworkView();});
 </script>
 <script>
 // ── RADEUS Auth (inlined) ─────────────────────────────────
