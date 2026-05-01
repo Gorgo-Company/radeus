@@ -5,262 +5,27 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>RADEUS — Comply</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --orange:#ff7700;--orange-dim:rgba(255,119,0,.4);
-    --cyan:#00f5ff;--green:#00ff88;--red:#ff2244;
-    --yellow:#e8b400;--blue:#1a6fff;--purple:#aa00ff;
-    --bg:#0f0800;--bg2:#160d00;--bg3:#0a0500;
-    --panel:rgba(255,119,0,.03);--border:rgba(255,119,0,.15);
-    --border-hi:rgba(255,119,0,.45);--text:#f0e0c0;
-    --text-dim:#3a2010;--text-mid:#7a5020;
-  }
-  *{margin:0;padding:0;box-sizing:border-box;}
-  body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;overflow:hidden;height:100vh;width:100vw;}
-  body::before{content:'';position:fixed;inset:0;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.07) 2px,rgba(0,0,0,.07) 4px);pointer-events:none;z-index:1000;}
+  <link rel="stylesheet" href="./styles/main.css">
 
-  .boot-scan{position:fixed;top:46px;left:0;right:0;height:3px;background:linear-gradient(90deg,transparent,rgba(255,119,0,.9) 50%,transparent);box-shadow:0 0 30px rgba(255,119,0,.8),0 0 60px rgba(255,119,0,.4);z-index:2000;animation:bootScan 1.4s ease-in forwards;pointer-events:none;}
-  @keyframes bootScan{0%{top:46px;opacity:0}5%{opacity:1}90%{opacity:.7}100%{top:calc(100vh - 78px);opacity:0}}
-  .boot-fade{opacity:0;transition:opacity .5s ease;}
-  .boot-fade.visible{opacity:1;}
-
-  .corner{position:fixed;width:36px;height:36px;border-color:var(--orange);border-style:solid;opacity:.3;z-index:999;}
-  .tl{top:6px;left:6px;border-width:2px 0 0 2px}.tr{top:6px;right:6px;border-width:2px 2px 0 0}
-  .bl{bottom:6px;left:6px;border-width:0 0 2px 2px}.br{bottom:6px;right:6px;border-width:0 2px 2px 0}
-
-  .topbar{position:fixed;top:0;left:0;right:0;height:46px;background:linear-gradient(90deg,#160d00,#0f0800,#160d00);border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;padding:0 18px;z-index:100;}
-  .logo{font-family:'Orbitron',monospace;font-weight:900;font-size:20px;color:var(--orange);letter-spacing:8px;text-shadow:0 0 20px var(--orange),0 0 50px rgba(255,119,0,.2);text-decoration:none;}
-  .sys-select{background:rgba(255,119,0,.07);border:1px solid var(--border-hi);color:var(--orange);font-family:'Share Tech Mono',monospace;font-size:11px;padding:4px 12px;letter-spacing:1px;cursor:pointer;outline:none;}
-  .sys-select option{background:#160d00;color:var(--orange);font-family:'Share Tech Mono',monospace;}
-  .sdot{width:7px;height:7px;border-radius:50%;background:var(--orange);box-shadow:0 0 8px var(--orange);animation:blink 2s infinite;}
-  @keyframes blink{0%,100%{opacity:1}50%{opacity:.2}}
-  #clock{color:var(--orange);font-size:13px;letter-spacing:2px;font-family:'Share Tech Mono',monospace;}
-
-  .alert-bar{position:fixed;top:46px;left:0;right:0;height:32px;z-index:99;display:flex;align-items:center;overflow:hidden;border-bottom:1px solid var(--border);}
-  .alert-bar.critical{border-color:var(--red);animation:alertPulse 1.5s ease-in-out infinite;}
-  @keyframes alertPulse{0%,100%{background:rgba(255,34,68,.08)}50%{background:rgba(255,34,68,.18)}}
-  .alert-bar.clear{background:rgba(0,255,136,.04);border-color:rgba(0,255,136,.2);}
-  .alert-tag{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:2px;padding:0 14px;height:100%;display:flex;align-items:center;white-space:nowrap;flex-shrink:0;}
-  .alert-tag.crit{background:var(--red);color:#fff;}
-  .alert-tag.ok{background:rgba(0,255,136,.15);color:var(--green);}
-  .alert-scroll{overflow:hidden;flex:1;height:100%;display:flex;align-items:center;}
-  .alert-track{display:flex;white-space:nowrap;font-family:'Share Tech Mono',monospace;font-size:10px;letter-spacing:.5px;animation:alertTick 30s linear infinite;}
-  @keyframes alertTick{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-  .alert-item{padding:0 30px;display:inline;}
-
-  .statsbar{position:fixed;top:78px;left:0;right:0;height:52px;background:rgba(15,8,0,.95);border-bottom:1px solid var(--border);display:flex;align-items:stretch;z-index:98;}
-  .stat-cell{display:flex;flex-direction:column;align-items:center;justify-content:center;padding:0 18px;border-right:1px solid var(--border);flex:1;min-width:0;overflow:hidden;}
-  .stat-cell:last-child{border-right:none;}
-  .stat-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(255,180,100,.8);letter-spacing:2px;white-space:nowrap;}
-  .stat-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:22px;letter-spacing:.5px;white-space:nowrap;text-shadow:0 0 10px currentColor;}
-  .sv-or{color:var(--orange);}.sv-red{color:var(--red);}.sv-green{color:var(--green);}.sv-yellow{color:var(--yellow);}.sv-dim{color:var(--text-mid);}
-
-  .main{position:fixed;top:130px;bottom:78px;left:0;right:0;display:flex;overflow:hidden;}
-
-  .left-panel{width:300px;flex-shrink:0;border-right:1px solid var(--border);background:rgba(255,119,0,.02);display:flex;flex-direction:column;overflow:hidden;}
-  .lp-section{padding:8px 12px;border-bottom:1px solid rgba(255,119,0,.08);flex-shrink:0;}
-  .lp-section-grow{padding:8px 12px;border-bottom:1px solid rgba(255,119,0,.08);flex:1;min-height:0;overflow:hidden;display:flex;flex-direction:column;}
-  .lp-title{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:2.5px;color:rgba(255,150,60,.75);margin-bottom:8px;}
-
-  .gauge-wrap{display:flex;flex-direction:column;align-items:center;gap:4px;}
-  .gauge-svg{overflow:visible;}
-  .gauge-tick{stroke:rgba(255,119,0,.2);stroke-width:1;}
-  .gauge-tick-major{stroke:rgba(255,119,0,.4);stroke-width:1.5;}
-  .gauge-bg-arc{fill:none;stroke:rgba(255,119,0,.08);stroke-width:14;}
-  .gauge-arc{fill:none;stroke:var(--orange);stroke-width:12;stroke-linecap:round;filter:drop-shadow(0 0 6px rgba(255,119,0,.5));transition:stroke-dasharray 1.2s ease;}
-  .gauge-sweep{transform-origin:100px 100px;animation:sweep 8s linear infinite;opacity:.0;}
-  .gauge-sector{transform-origin:100px 100px;animation:sweep 8s linear infinite;}
-  @keyframes sweep{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
-  .gauge-center-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:28px;fill:var(--orange);text-anchor:middle;}
-  .gauge-center-lbl{font-family:'Share Tech Mono',monospace;font-size:8px;fill:rgba(255,150,60,.65);text-anchor:middle;letter-spacing:2px;}
-  .gauge-note{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(255,150,60,.65);letter-spacing:1px;text-align:center;}
-
-  .mini-grid{display:grid;grid-template-columns:1fr 1fr;gap:5px;}
-  .mini-gauge{display:flex;flex-direction:column;align-items:center;gap:2px;padding:5px;border:1px solid var(--border);background:rgba(255,119,0,.02);position:relative;transition:border-color .2s;}
-  .mini-gauge:hover{border-color:var(--border-hi);}
-  .mini-gauge.alert{border-color:rgba(255,34,68,.4);animation:miniAlert 2s ease-in-out infinite;}
-  @keyframes miniAlert{0%,100%{background:rgba(255,34,68,.04)}50%{background:rgba(255,34,68,.1)}}
-  .mini-svg{overflow:visible;}
-  .mini-arc-bg{fill:none;stroke:rgba(255,119,0,.1);stroke-width:8;stroke-linecap:round;}
-  .mini-arc{fill:none;stroke-width:7;stroke-linecap:round;transition:stroke-dasharray .8s ease;}
-  .mini-label{font-family:'Orbitron',monospace;font-size:7px;color:rgba(255,150,60,.72);letter-spacing:1.5px;text-align:center;}
-  .mini-val{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:14px;text-align:center;}
-  .mini-sub{font-family:'Share Tech Mono',monospace;font-size:7px;color:rgba(255,180,100,.6);letter-spacing:1px;text-align:center;}
-
-  .node-grid{display:flex;flex-wrap:wrap;gap:6px;}
-  .sys-node{display:flex;flex-direction:column;align-items:center;gap:2px;cursor:pointer;transition:all .2s;padding:4px;}
-  .sys-node:hover .node-hex{opacity:1;}
-  .node-hex{font-size:22px;line-height:1;opacity:.6;transition:all .2s;}
-  .node-name{font-family:'Share Tech Mono',monospace;font-size:6px;letter-spacing:.5px;color:rgba(255,150,60,.55);text-align:center;max-width:52px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
-
-  .right-panel{flex:1;display:flex;flex-direction:column;overflow:hidden;}
-  .filterbar{height:36px;flex-shrink:0;background:rgba(10,5,0,.98);border-bottom:1px solid rgba(255,119,0,.07);display:flex;align-items:center;padding:0 16px;gap:6px;}
-  .fbtn{font-size:8px;padding:4px 10px;border:1px solid rgba(255,119,0,.2);color:rgba(255,150,60,.6);background:transparent;cursor:pointer;font-family:'Share Tech Mono',monospace;letter-spacing:1px;transition:all .15s;white-space:nowrap;}
-  .fbtn:hover,.fbtn.active{border-color:var(--orange);color:var(--orange);background:rgba(255,119,0,.07);}
-  .f-right{margin-left:auto;display:flex;align-items:center;gap:10px;}
-  .add-btn{font-family:'Orbitron',monospace;font-size:8px;padding:5px 12px;border:1px solid var(--green);color:var(--green);background:rgba(0,255,136,.05);cursor:pointer;letter-spacing:1px;transition:all .15s;}
-  .add-btn:hover{background:rgba(0,255,136,.14);}
-  .row-count{font-family:'Orbitron',monospace;font-size:9px;color:rgba(255,150,60,.6);letter-spacing:1px;}
-
-  .table-wrap{flex:1;overflow-y:auto;}
-  .ctable{width:100%;border-collapse:collapse;}
-  .ctable thead{position:sticky;top:0;z-index:10;}
-  .ctable th{font-family:'Orbitron',monospace;font-size:7px;letter-spacing:1.5px;color:rgba(255,150,60,.7);padding:8px 12px;border-bottom:2px solid var(--border);text-align:left;font-weight:400;background:var(--bg);white-space:nowrap;cursor:pointer;}
-  .ctable th:hover{color:var(--orange);}
-  .ctable td{padding:8px 12px;border-bottom:1px solid rgba(255,119,0,.04);vertical-align:middle;}
-  .ctable tr{position:relative;cursor:pointer;}
-  .ctable tr:hover td{background:rgba(255,119,0,.03);}
-  .ctable tr.row-critical td{background:rgba(255,34,68,.04);}
-  .ctable tr.row-critical:hover td{background:rgba(255,34,68,.08);}
-  .ctable tr.row-overdue td{background:rgba(255,119,0,.04);}
-  .ctable tr.selected td{background:rgba(255,119,0,.08);border-left:2px solid var(--orange);}
-
-  .td-priority{text-align:center;width:28px;}
-  .prio-dot{width:10px;height:10px;border-radius:50%;display:inline-block;}
-  .p-crit{background:var(--red);box-shadow:0 0 8px var(--red);animation:prioPulse 1.5s ease-in-out infinite;}
-  @keyframes prioPulse{0%,100%{opacity:1}50%{opacity:.4}}
-  .p-high{background:var(--orange);box-shadow:0 0 6px var(--orange);}
-  .p-med{background:var(--yellow);box-shadow:0 0 4px var(--yellow);}
-  .p-low{background:var(--text-dim);}
-  .cat-badge{font-family:'Orbitron',monospace;font-size:7px;padding:2px 6px;border:1px solid;letter-spacing:1px;white-space:nowrap;display:inline-block;}
-  .cat-bwn{border-color:var(--red);color:var(--red);background:rgba(255,34,68,.07);}
-  .cat-ccr{border-color:var(--cyan);color:var(--cyan);}
-  .cat-lsli{border-color:var(--blue);color:var(--blue);}
-  .cat-tcr{border-color:var(--green);color:var(--green);}
-  .cat-dbp{border-color:var(--yellow);color:var(--yellow);}
-  .cat-lcr{border-color:var(--purple);color:var(--purple);}
-  .cat-mor{border-color:var(--orange);color:var(--orange);}
-  .cat-san{border-color:rgba(255,119,0,.5);color:rgba(255,119,0,.7);}
-  .cat-pfas{border-color:rgba(0,136,255,.6);color:var(--blue);}
-  .cat-erp{border-color:rgba(255,221,0,.5);color:var(--yellow);}
-  .cat-other{border-color:var(--border);color:var(--text-mid);}
-  .td-desc{font-size:12px;font-weight:600;color:var(--text);max-width:240px;}
-  .td-reg{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-mid);white-space:nowrap;}
-  .td-freq{font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-mid);}
-  .td-due{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text);white-space:nowrap;}
-  .countdown{display:flex;flex-direction:column;align-items:flex-end;gap:1px;}
-  .cd-num{font-family:'Rajdhani',sans-serif;font-weight:700;font-size:17px;white-space:nowrap;}
-  .cd-lbl{font-family:'Share Tech Mono',monospace;font-size:7px;color:var(--text-dim);letter-spacing:1.5px;}
-  .cd-overdue{color:var(--red);text-shadow:0 0 8px rgba(255,34,68,.5);}
-  .cd-critical{color:var(--red);}
-  .cd-soon{color:var(--orange);text-shadow:0 0 8px rgba(255,119,0,.4);}
-  .cd-ok{color:var(--text-mid);}
-  .cd-na{color:var(--text-dim);}
-
-  .pill{font-family:'Orbitron',monospace;font-size:7px;padding:3px 8px;border:1px solid;letter-spacing:1.5px;white-space:nowrap;display:inline-block;}
-  .pill-active{border-color:var(--red);color:var(--red);background:rgba(255,34,68,.08);box-shadow:0 0 8px rgba(255,34,68,.2);animation:pillPulse 1.5s ease-in-out infinite;}
-  @keyframes pillPulse{0%,100%{box-shadow:0 0 8px rgba(255,34,68,.2)}50%{box-shadow:0 0 18px rgba(255,34,68,.5)}}
-  .pill-overdue{border-color:var(--orange);color:var(--orange);background:rgba(255,119,0,.08);}
-  .pill-due-soon{border-color:var(--yellow);color:var(--yellow);background:rgba(232,180,0,.06);}
-  .pill-upcoming{border-color:rgba(255,119,0,.3);color:rgba(255,119,0,.5);}
-  .pill-compliant{border-color:var(--green);color:var(--green);background:rgba(0,255,136,.05);}
-  .pill-resolved{border-color:var(--text-dim);color:var(--text-dim);}
-
-  .action-btn{background:transparent;border:1px solid rgba(255,119,0,.25);color:rgba(255,119,0,.5);font-family:'Orbitron',monospace;font-size:7px;padding:3px 8px;cursor:pointer;letter-spacing:1px;transition:all .15s;white-space:nowrap;}
-  .action-btn:hover{border-color:var(--orange);color:var(--orange);background:rgba(255,119,0,.08);}
-
-  .detail-panel{position:fixed;top:0;right:-540px;bottom:78px;width:540px;background:#120900;border-left:1px solid var(--border-hi);z-index:300;display:flex;flex-direction:column;transition:right .25s ease;box-shadow:-20px 0 60px rgba(0,0,0,.8);}
-  .detail-panel.open{right:0;}
-  .dp-header{padding:14px 18px;border-bottom:1px solid var(--border);background:linear-gradient(135deg,rgba(255,119,0,.08),transparent);flex-shrink:0;position:relative;}
-  .dp-title{font-family:'Orbitron',monospace;font-size:11px;color:var(--orange);letter-spacing:3px;margin-bottom:3px;}
-  .dp-sub{font-family:'Share Tech Mono',monospace;font-size:9px;color:rgba(255,150,60,.6);letter-spacing:1px;}
-  .dp-close{position:absolute;top:12px;right:14px;background:none;border:none;color:var(--text-mid);font-size:20px;cursor:pointer;}
-  .dp-close:hover{color:var(--red);}
-  .dp-body{flex:1;overflow-y:auto;}
-  .dp-section{border-bottom:1px solid rgba(255,119,0,.07);}
-  .dp-section-title{font-family:'Orbitron',monospace;font-size:8px;letter-spacing:2px;color:rgba(255,150,60,.7);padding:8px 18px;background:rgba(255,119,0,.025);border-bottom:1px solid rgba(255,119,0,.05);}
-  .dp-row{display:flex;justify-content:space-between;align-items:flex-start;padding:8px 18px;border-bottom:1px solid rgba(255,119,0,.03);}
-  .dp-label{font-family:'Share Tech Mono',monospace;font-size:8px;color:rgba(255,150,60,.65);letter-spacing:1px;flex-shrink:0;}
-  .dp-val{font-family:'Share Tech Mono',monospace;font-size:10px;color:var(--text);text-align:right;max-width:280px;word-break:break-word;}
-  .dp-notes{padding:12px 18px;font-family:'Rajdhani',sans-serif;font-size:13px;color:rgba(255,180,100,.7);line-height:1.5;}
-  .dp-footer{flex-shrink:0;padding:12px 18px;border-top:1px solid var(--border);display:flex;gap:8px;flex-wrap:wrap;}
-  .dp-btn{flex:1;min-width:80px;padding:9px;font-family:'Orbitron',monospace;font-size:7px;letter-spacing:1px;cursor:pointer;border:1px solid;background:transparent;text-align:center;transition:all .15s;}
-  .dp-btn-or{border-color:var(--orange);color:var(--orange);}
-  .dp-btn-or:hover{background:rgba(255,119,0,.1);}
-  .dp-btn-g{border-color:var(--green);color:var(--green);}
-  .dp-btn-g:hover{background:rgba(0,255,136,.1);}
-  .dp-btn-r{border-color:var(--red);color:var(--red);}
-  .dp-btn-r:hover{background:rgba(255,34,68,.1);}
-  .dp-btn-ghost{border-color:var(--border);color:var(--text-mid);}
-  .dp-btn-ghost:hover{border-color:var(--orange);color:var(--orange);}
-
-  .modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.88);z-index:500;align-items:center;justify-content:center;}
-  .modal-overlay.show{display:flex;}
-  .modal{background:#120900;border:1px solid var(--border-hi);width:500px;max-width:94vw;box-shadow:0 0 60px rgba(255,119,0,.1);}
-  .modal-header{padding:16px 20px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;}
-  .modal-title{font-family:'Orbitron',monospace;font-size:11px;color:var(--orange);letter-spacing:3px;}
-  .modal-x{background:transparent;border:none;color:var(--text-mid);font-size:20px;cursor:pointer;}
-  .modal-x:hover{color:var(--red);}
-  .modal-body{padding:20px;}
-  .modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:10px;}
-  .frow{display:flex;flex-direction:column;gap:4px;margin-bottom:12px;}
-  .frow2{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;}
-  .flabel{font-family:'Share Tech Mono',monospace;font-size:8px;color:var(--text-mid);letter-spacing:2px;}
-  .finput{background:rgba(255,119,0,.05);border:1px solid rgba(255,119,0,.22);color:var(--orange);font-family:'Share Tech Mono',monospace;font-size:11px;padding:8px 10px;outline:none;width:100%;transition:all .15s;}
-  .finput:focus{border-color:var(--border-hi);background:rgba(255,119,0,.09);}
-  .finput option{background:#120900;color:var(--orange);}
-  .finput::placeholder{color:var(--text-dim);}
-  .btn{font-family:'Orbitron',monospace;font-size:8px;padding:9px 18px;border:1px solid;cursor:pointer;letter-spacing:1px;background:transparent;transition:all .15s;}
-  .btn-or{border-color:var(--orange);color:var(--orange);}
-  .btn-or:hover{background:rgba(255,119,0,.1);}
-  .btn-ghost{border-color:var(--border);color:var(--text-mid);}
-  .btn-ghost:hover{border-color:var(--orange);color:var(--orange);}
-
-  .loading-row td{color:var(--text-dim);font-size:10px;letter-spacing:2px;text-align:center;padding:60px;font-family:'Share Tech Mono',monospace;}
-
-  .toast{position:fixed;bottom:88px;right:20px;background:#120900;border:1px solid var(--orange);padding:10px 18px;font-family:'Orbitron',monospace;font-size:9px;color:var(--orange);letter-spacing:2px;z-index:900;opacity:0;transition:opacity .3s;pointer-events:none;max-width:320px;line-height:1.5;}
-  .toast.show{opacity:1;}
-  .toast.t-ok{border-color:var(--green);color:var(--green);}
-  .toast.t-err{border-color:var(--red);color:var(--red);}
-
-  ::-webkit-scrollbar{width:3px;height:3px;}
-  ::-webkit-scrollbar-track{background:transparent;}
-  ::-webkit-scrollbar-thumb{background:rgba(255,119,0,.2);}
-
-  /* RESPONSIVE HEIGHT — keeps all 3 left sections visible */
-  .gauge-svg{overflow:visible;width:148px;height:148px;}
-  @media (max-height:820px){
-    .gauge-svg{width:128px;height:128px;}
-    .gauge-wrap{gap:2px;}
-    .lp-section{padding:6px 12px;}
-    .lp-section-grow{padding:6px 12px;}
-    .lp-title{margin-bottom:5px;}
-    .mini-gauge{padding:4px;}
-    .mini-grid{gap:4px;}
-  }
-  @media (max-height:680px){
-    .gauge-svg{width:108px;height:108px;}
-    .mini-svg{width:58px;height:42px;}
-  }
-
-  /* BOTTOM NAV */
-  .botnav{position:fixed;bottom:0;left:0;right:0;height:78px;background:linear-gradient(90deg,#160d00,#0f0800,#160d00);border-top:1px solid var(--border);display:flex;align-items:center;justify-content:center;gap:5px;padding:0 14px;z-index:100;}
-  .navbtn{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;width:58px;height:68px;background:rgba(255,119,0,.04);border:1px solid rgba(255,119,0,.25);color:rgba(255,119,0,.58);cursor:pointer;transition:all .2s;font-size:8px;letter-spacing:.8px;text-transform:uppercase;font-family:'Share Tech Mono',monospace;position:relative;overflow:hidden;text-decoration:none;flex-shrink:0;}
-  .navbtn::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:var(--orange);transform:scaleX(0);transition:transform .2s;}
-  .navbtn:hover::after,.navbtn.active::after{transform:scaleX(1);}
-  .navbtn:hover{color:rgba(255,119,0,.9);border-color:rgba(255,119,0,.5);background:rgba(255,119,0,.08);}
-  .navbtn.active{color:var(--orange);border-color:var(--orange);background:rgba(255,119,0,.11);box-shadow:0 0 16px rgba(255,119,0,.3),inset 0 0 14px rgba(255,119,0,.08);}
-  .navicon{font-size:20px;line-height:1;}
-</style>
 </head>
-<body>
-
-<div class="boot-scan" id="bootScan"></div>
+<body data-page="compliance">
+<div class="sonar-line"></div>
 <div class="corner tl"></div><div class="corner tr"></div>
 <div class="corner bl"></div><div class="corner br"></div>
+
 
 <!-- TOP BAR -->
 <div class="topbar">
   <a class="logo" href="index.html">RADEUS</a>
   <div style="display:flex;align-items:center;gap:14px">
     <div class="sdot"></div>
-    <span style="font-size:12px;color:var(--text-mid);letter-spacing:3px;font-family:'Share Tech Mono',monospace">COMPLIANCE</span>
+    <span class="operator-label">COMPLIANCE</span>
     <select class="sys-select" id="sysSelect" onchange="switchSystem(this.value)">
       <option value="">⬡ LOADING...</option>
     </select>
   </div>
   <div style="display:flex;align-items:center;gap:14px">
-    <span style="font-size:9px;color:var(--text-dim);font-family:'Share Tech Mono',monospace">OPERATOR: <span id="operatorName" style="color:var(--orange)">—</span></span>
+    <span class="topbar-meta">OPERATOR: <span id="operatorName" class="operator-name">—</span></span>
     <span id="clock">--:--:--</span>
   </div>
 </div>
@@ -270,14 +35,14 @@
   <div class="alert-tag ok" id="alertTag">⬡ STATUS</div>
   <div class="alert-scroll">
     <div class="alert-track" id="alertTrack">
-      <span class="alert-item" id="alertContent" style="color:var(--green)">ALL SYSTEMS NOMINAL — NO ACTIVE VIOLATIONS DETECTED — COMPLIANCE STATUS: MONITORING</span>
-      <span class="alert-item" style="color:var(--green)">ALL SYSTEMS NOMINAL — NO ACTIVE VIOLATIONS DETECTED — COMPLIANCE STATUS: MONITORING</span>
+      <span class="alert-item" id="alertContent" style="color:var(--success)">ALL SYSTEMS NOMINAL — NO ACTIVE VIOLATIONS DETECTED — COMPLIANCE STATUS: MONITORING</span>
+      <span class="alert-item" style="color:var(--success)">ALL SYSTEMS NOMINAL — NO ACTIVE VIOLATIONS DETECTED — COMPLIANCE STATUS: MONITORING</span>
     </div>
   </div>
 </div>
 
 <!-- STATS BAR -->
-<div class="statsbar boot-fade" id="statsBar">
+<div class="statsbar" id="statsBar">
   <div class="stat-cell"><div class="stat-label">TOTAL ITEMS</div><div class="stat-val sv-or" id="st-total">—</div></div>
   <div class="stat-cell"><div class="stat-label">OVERDUE</div><div class="stat-val sv-red" id="st-overdue">—</div></div>
   <div class="stat-cell"><div class="stat-label">DUE ≤30 DAYS</div><div class="stat-val sv-yellow" id="st-soon">—</div></div>
@@ -287,28 +52,28 @@
 </div>
 
 <!-- MAIN -->
-<div class="main boot-fade" id="mainArea">
+<div class="main" id="mainArea">
   <div class="left-panel">
     <div class="lp-section">
-      <div class="lp-title">⬡ SYSTEM COMPLIANCE HEALTH</div>
+      <div class="lp-title">⬡ SYSTEM COMPLIANCE</div>
       <div class="gauge-wrap">
         <svg class="gauge-svg" viewBox="0 0 200 200" id="radarSvg">
           <defs>
-            <linearGradient id="arcGradRed" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff2244"/><stop offset="65%" stop-color="#ff5566"/><stop offset="100%" stop-color="#ffbbcc"/></linearGradient>
-            <linearGradient id="arcGradOrange" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff7700"/><stop offset="65%" stop-color="#ff9944"/><stop offset="100%" stop-color="#ffe8cc"/></linearGradient>
-            <linearGradient id="arcGradGreen" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00ff88"/><stop offset="65%" stop-color="#44ffaa"/><stop offset="100%" stop-color="#ccffee"/></linearGradient>
+            <linearGradient id="arcGradRed" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff2244"/><stop offset="65%" stop-color="#ff5571"/><stop offset="100%" stop-color="#ffb0bd"/></linearGradient>
+            <linearGradient id="arcGradOrange" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#ff8800"/><stop offset="65%" stop-color="#ffaa3d"/><stop offset="100%" stop-color="#ffd9a0"/></linearGradient>
+            <linearGradient id="arcGradGreen" x1="0%" y1="0%" x2="100%" y2="100%"><stop offset="0%" stop-color="#00ff88"/><stop offset="65%" stop-color="#5affb0"/><stop offset="100%" stop-color="#c0ffe0"/></linearGradient>
           </defs>
           <g id="tickMarks"></g>
           <circle class="gauge-bg-arc" cx="100" cy="100" r="76" stroke-dasharray="478 478" transform="rotate(-90 100 100)"/>
-          <path class="gauge-sector" id="sweepSector" fill="rgba(255,119,0,.08)" d="M100,100 L100,24 A76,76 0 0,1 110,24.8 Z"/>
+          <path class="gauge-sector" id="sweepSector" fill="rgba(255,136,0,.06)" d="M100,100 L100,24 A76,76 0 0,1 110,24.8 Z"/>
           <circle class="gauge-arc" id="gaugeArc" cx="100" cy="100" r="76" stroke-dasharray="0 478" transform="rotate(-90 100 100)"/>
-          <circle id="gaugeArcHi" cx="100" cy="100" r="76" fill="none" stroke="rgba(255,220,220,.45)" stroke-width="4" stroke-linecap="round" stroke-dasharray="0 478" transform="rotate(-90 100 100)"/>
-          <line class="gauge-sweep" id="sweepLine" x1="100" y1="100" x2="100" y2="25" stroke="rgba(255,119,0,.7)" stroke-width="1.5"/>
-          <circle cx="100" cy="100" r="92" fill="none" stroke="rgba(255,119,0,.06)" stroke-width=".5"/>
-          <circle cx="100" cy="100" r="88" fill="none" stroke="rgba(255,119,0,.1)" stroke-width=".5" stroke-dasharray="4 4"/>
+          <circle id="gaugeArcHi" cx="100" cy="100" r="76" fill="none" stroke="rgba(255,136,0,.35)" stroke-width="4" stroke-linecap="round" stroke-dasharray="0 478" transform="rotate(-90 100 100)"/>
+          <line class="gauge-sweep" id="sweepLine" x1="100" y1="100" x2="100" y2="25" stroke="rgba(255,136,0,.6)" stroke-width="1.5"/>
+          <circle cx="100" cy="100" r="92" fill="none" stroke="var(--border)" stroke-width=".5"/>
+          <circle cx="100" cy="100" r="88" fill="none" stroke="var(--border-strong)" stroke-width=".5" stroke-dasharray="4 4"/>
           <text class="gauge-center-val" id="gaugePct" x="100" y="96">—</text>
           <text class="gauge-center-lbl" x="100" y="112">COMPLIANT</text>
-          <circle cx="100" cy="100" r="55" fill="none" stroke="rgba(255,119,0,.06)" stroke-width="1"/>
+          <circle cx="100" cy="100" r="55" fill="none" stroke="var(--border)" stroke-width="1"/>
         </svg>
         <div class="gauge-note" id="gaugeNote">LOADING DATA...</div>
       </div>
@@ -318,28 +83,38 @@
       <div class="lp-title">◎ CATEGORY STATUS</div>
       <div class="mini-grid">
         <div class="mini-gauge" id="mini-bwn">
-          <svg class="mini-svg" width="70" height="52" viewBox="0 0 70 52"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-bwn" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--red)" stroke-linecap="round" fill="none" stroke-width="7"/><text x="35" y="38" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="16" fill="var(--red)" id="val-bwn">0</text></svg>
+          <svg class="mini-svg" width="70" height="56" viewBox="0 0 70 56"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-bwn" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--danger)" stroke-linecap="round" fill="none" stroke-width="5"/><text x="35" y="42" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="13" fill="var(--danger)" id="val-bwn">0</text></svg>
           <div class="mini-label">BOIL WATER</div><div class="mini-sub" id="sub-bwn">ACTIVE</div>
         </div>
         <div class="mini-gauge" id="mini-tcr">
-          <svg class="mini-svg" width="70" height="52" viewBox="0 0 70 52"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-tcr" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--green)" stroke-linecap="round" fill="none" stroke-width="7" stroke-dasharray="0 88"/><text x="35" y="38" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="16" fill="var(--green)" id="val-tcr">—</text></svg>
+          <svg class="mini-svg" width="70" height="56" viewBox="0 0 70 56"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-tcr" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--success)" stroke-linecap="round" fill="none" stroke-width="5" stroke-dasharray="0 88"/><text x="35" y="42" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="13" fill="var(--success)" id="val-tcr">—</text></svg>
           <div class="mini-label">SAMPLING</div><div class="mini-sub" id="sub-tcr">TCR / LCR / DBP</div>
         </div>
         <div class="mini-gauge" id="mini-rep">
-          <svg class="mini-svg" width="70" height="52" viewBox="0 0 70 52"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-rep" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--orange)" stroke-linecap="round" fill="none" stroke-width="7" stroke-dasharray="0 88"/><text x="35" y="38" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="16" fill="var(--orange)" id="val-rep">—</text></svg>
+          <svg class="mini-svg" width="70" height="56" viewBox="0 0 70 56"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-rep" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--warning)" stroke-linecap="round" fill="none" stroke-width="5" stroke-dasharray="0 88"/><text x="35" y="42" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="13" fill="var(--warning)" id="val-rep">—</text></svg>
           <div class="mini-label">REPORTING</div><div class="mini-sub" id="sub-rep">CCR / MOR / LSLI</div>
         </div>
         <div class="mini-gauge" id="mini-survey">
-          <svg class="mini-svg" width="70" height="52" viewBox="0 0 70 52"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-survey" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--cyan)" stroke-linecap="round" fill="none" stroke-width="7" stroke-dasharray="88 88"/><text x="35" y="38" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="16" fill="var(--cyan)" id="val-survey">—</text></svg>
+          <svg class="mini-svg" width="70" height="56" viewBox="0 0 70 56"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-survey" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--primary)" stroke-linecap="round" fill="none" stroke-width="5" stroke-dasharray="88 88"/><text x="35" y="42" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="13" fill="var(--primary)" id="val-survey">—</text></svg>
           <div class="mini-label">SURVEYS / ERP</div><div class="mini-sub" id="sub-survey">SANITARY / PLANS</div>
         </div>
       </div>
     </div>
 
-    <div class="lp-section-grow">
-      <div class="lp-title">⬡ NETWORK STATUS</div>
-      <div class="node-grid" id="nodeGrid" style="overflow-y:auto;flex:1"><div style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--text-dim)">LOADING...</div></div>
+    <div class="lp-section">
+      <div class="lp-title">◎ CYBERSECURITY &amp; AI</div>
+      <div class="cyber-box">
+        <div class="cyber-row">
+          <div class="cyber-status">
+            <div class="cyber-dot"></div>
+            <div class="cyber-status-text">PROTECTED</div>
+          </div>
+          <a class="cyber-trial-btn" href="https://gorgo-company.github.io/watersecure/" target="_blank" rel="noopener">▶ TRIAL</a>
+        </div>
+        <div class="cyber-desc">AI threat detection &amp; AWIA-aligned cyber assessment.</div>
+      </div>
     </div>
+
   </div>
 
   <div class="right-panel">
@@ -357,7 +132,7 @@
       </div>
     </div>
     <div class="table-wrap">
-      <table class="ctable">
+      <table class="atable">
         <thead><tr><th>●</th><th>CAT</th><th>DESCRIPTION</th><th>REGULATION</th><th>FREQ</th><th>DUE DATE</th><th style="text-align:right">DAYS</th><th>STATUS</th><th></th></tr></thead>
         <tbody id="complyTable"><tr class="loading-row"><td colspan="9">LOADING COMPLIANCE DATA...</td></tr></tbody>
       </table>
@@ -432,7 +207,7 @@
 <div class="toast" id="toast"></div>
 
 <!-- BOTTOM NAV -->
-<div class="botnav boot-fade">
+<div class="botnav">
   <a class="navbtn" href="index.html"><span class="navicon">⬡</span>COMMAND</a>
   <a class="navbtn" href="accounts.html"><span class="navicon">👤</span>ACCOUNTS</a>
   <a class="navbtn" href="readings.html"><span class="navicon">⏱️</span>READINGS</a>
@@ -448,28 +223,7 @@
 <script>
 const SUPA_URL = 'https://bvpesxpptgdwkhsewhke.supabase.co';
 const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
-let ORG_ID = null; // Set dynamically from auth
-
-  // ── AUTH BOOTSTRAP ─────────────────────────────────────────
-  (function(){
-    const SESSION_KEY='radeus_session';
-    const s=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');
-    if(!s||!s.expires_at||s.expires_at<Date.now()/1000){window.location.href='login.html';return;}
-    const staff=JSON.parse(localStorage.getItem('radeus_staff')||'null');
-    if(!staff||!staff.org_id){window.location.href='login.html';return;}
-    ORG_ID=staff.org_id;
-    // Inject operator name if element exists
-    const opEl=document.getElementById('operatorName');
-    if(opEl)opEl.textContent=staff.name||'OPERATOR';
-    const roleEl=document.getElementById('operatorRole');
-    if(roleEl)roleEl.textContent=staff.role||'';
-    // Wire logout if button exists
-    const lb=document.getElementById('logoutBtn');
-    if(lb)lb.addEventListener('click',()=>{
-      if(s.access_token){fetch('https://bvpesxpptgdwkhsewhke.supabase.co/auth/v1/logout',{method:'POST',headers:{'apikey':'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8','Authorization':`Bearer ${s.access_token}`}}).catch(()=>{});}
-      localStorage.removeItem(SESSION_KEY);localStorage.removeItem('radeus_staff');window.location.href='login.html';
-    });
-  })();
+let ORG_ID = null;
 
 let activeSystemId = null;
 let allSystems     = [];
@@ -481,7 +235,7 @@ let selectedEvent  = null;
 function tick(){document.getElementById('clock').textContent=new Date().toTimeString().slice(0,8);}
 setInterval(tick,1000); tick();
 
-setTimeout(() => {document.querySelectorAll('.boot-fade').forEach(el => el.classList.add('visible'));}, 1300);
+// boot animation removed for Enterprise
 setTimeout(() => drawTickMarks(), 200);
 
 async function supa(table, params='', method='GET', body=null) {
@@ -536,35 +290,39 @@ function prioDot(p) {
 }
 
 function countdownHtml(ev, status) {
-  if (status==='ACTIVE')   return `<div class="countdown"><div class="cd-num cd-critical">ACTIVE</div><div class="cd-lbl">VIOLATION</div></div>`;
+  if (status==='ACTIVE')   return `<div class="countdown"><div class="cd-num cd-critical">ACTIVE</div><div class="cd-lbl cd-lbl-left">VIOLATION</div></div>`;
   if (status==='RESOLVED') return `<div class="countdown"><div class="cd-num cd-ok" style="font-size:11px">CLOSED</div></div>`;
   if (!ev.due_date)        return `<div class="countdown"><div class="cd-num cd-na">—</div></div>`;
   const d = daysUntil(ev.due_date);
-  if (d < 0) return `<div class="countdown"><div class="cd-num cd-overdue">${Math.abs(d)}d</div><div class="cd-lbl">OVERDUE</div></div>`;
+  if (d < 0) return `<div class="countdown"><div class="cd-num cd-overdue">${Math.abs(d)}d</div><div class="cd-lbl cd-lbl-left">OVERDUE</div></div>`;
   if (d===0) return `<div class="countdown"><div class="cd-num cd-critical">TODAY</div></div>`;
-  if (d<=30) return `<div class="countdown"><div class="cd-num cd-soon">${d}d</div><div class="cd-lbl">DAYS LEFT</div></div>`;
-  return `<div class="countdown"><div class="cd-num cd-ok">${d}d</div><div class="cd-lbl">DAYS</div></div>`;
+  if (d<=30) return `<div class="countdown"><div class="cd-num cd-soon">${d}d</div><div class="cd-lbl cd-lbl-left">DAYS LEFT</div></div>`;
+  return `<div class="countdown"><div class="cd-num cd-ok">${d}d</div><div class="cd-lbl cd-lbl-left">DAYS</div></div>`;
 }
 
 async function loadSystems() {
+  if(!ORG_ID)return;
   const systems = await supa('water_systems',`?org_id=eq.${ORG_ID}&select=system_id,system_code,system_name&order=system_name`);
   if (!systems?.length){ toast('NO SYSTEMS FOUND','err'); return; }
   allSystems = systems;
   const sel = document.getElementById('sysSelect');
-  sel.innerHTML = '<option value="ALL">⬡ ALL SYSTEMS</option>' + systems.map(s=>`<option value="${s.system_id}">⬡ ${s.system_name.toUpperCase()}</option>`).join('');
-  activeSystemId = 'ALL';
-  renderNodeGrid();
+  if(systems.length===1){
+    sel.innerHTML=`<option value="${systems[0].system_id}">⬡ ${systems[0].system_name.toUpperCase()}</option>`;
+    activeSystemId = systems[0].system_id;
+  } else {
+    sel.innerHTML = '<option value="ALL">⬡ ALL SYSTEMS</option>'+systems.map(s=>`<option value="${s.system_id}">⬡ ${s.system_name.toUpperCase()}</option>`).join('');
+    sel.value='ALL';
+    activeSystemId = null;
+  }
   loadEvents();
 }
 
-function switchSystem(id) { activeSystemId = id; loadEvents(); }
+function switchSystem(id) { activeSystemId=(id==='ALL')?null:id; loadEvents(); }
 
 async function loadEvents() {
   document.getElementById('complyTable').innerHTML='<tr class="loading-row"><td colspan="9">LOADING COMPLIANCE DATA...</td></tr>';
-  const sysFilter = activeSystemId === 'ALL'
-    ? `system_id=in.(${allSystems.map(s=>s.system_id).join(',')})`
-    : `system_id=eq.${activeSystemId}`;
-  const data = await supa('compliance_events',`?${sysFilter}&order=priority.asc,due_date.asc&select=*`);
+  const sf=activeSystemId?`system_id=eq.${activeSystemId}`:`system_id=in.(${allSystems.map(s=>s.system_id).join(',')})`;
+  const data = await supa('compliance_events',`?${sf}&order=priority.asc,due_date.asc&select=*`);
   allEvents = (data||[]).map(ev => ({...ev, _status: computeStatus(ev)}));
   updateStats(); updateAlertBar(); updateGauge(); updateMiniGauges(); applyFilter();
 }
@@ -577,8 +335,8 @@ function updateStats() {
 
 function updateAlertBar() {
   const bar=document.getElementById('alertBar');const tag=document.getElementById('alertTag');const track=document.getElementById('alertTrack');const criticals=allEvents.filter(e=>['ACTIVE','OVERDUE'].includes(e._status));
-  if(!criticals.length){bar.className='alert-bar clear';tag.className='alert-tag ok';tag.textContent='⬡ STATUS';const msg='ALL SYSTEMS NOMINAL — NO ACTIVE VIOLATIONS — COMPLIANCE STATUS: MONITORING';track.innerHTML=`<span class="alert-item" style="color:var(--green)">${msg}</span><span class="alert-item" style="color:var(--green)">${msg}</span>`;return;}
-  bar.className='alert-bar critical';tag.className='alert-tag crit';tag.textContent='⚠ BREACH';const items=criticals.map(e=>`<span class="alert-item" style="color:var(--red)">⚠ ${e._status} — ${e.description||e.event_type} — ${e.regulation||''}  ·  </span>`).join('');track.innerHTML=items+items;
+  if(!criticals.length){bar.className='alert-bar clear';tag.className='alert-tag ok';tag.textContent='⬡ STATUS';const msg='ALL SYSTEMS NOMINAL — NO ACTIVE VIOLATIONS — COMPLIANCE STATUS: MONITORING';track.innerHTML=`<span class="alert-item" style="color:var(--success)">${msg}</span><span class="alert-item" style="color:var(--success)">${msg}</span>`;return;}
+  bar.className='alert-bar critical';tag.className='alert-tag crit';tag.textContent='⚠ BREACH';const items=criticals.map(e=>`<span class="alert-item" style="color:var(--danger)">⚠ ${e._status} — ${e.description||e.event_type} — ${e.regulation||''}  ·  </span>`).join('');track.innerHTML=items+items;
 }
 
 function drawTickMarks() {
@@ -588,11 +346,11 @@ function drawTickMarks() {
 
 function updateGauge() {
   const total=allEvents.length;const compliant=allEvents.filter(e=>['COMPLIANT','RESOLVED'].includes(e._status)).length;const pct=total>0?Math.round((compliant/total)*100):100;const circ=2*Math.PI*76;const dash=(pct/100)*circ;const arc=document.getElementById('gaugeArc');const arcHi=document.getElementById('gaugeArcHi');const pctEl=document.getElementById('gaugePct');const noteEl=document.getElementById('gaugeNote');
-  const gradId=pct>=80?'arcGradGreen':pct>=50?'arcGradOrange':'arcGradRed';const baseCol=pct>=80?'var(--green)':pct>=50?'var(--orange)':'var(--red)';const glowCol=pct>=80?'rgba(0,255,136,.8)':pct>=50?'rgba(255,119,0,.8)':'rgba(255,50,80,.8)';
+  const gradId=pct>=80?'arcGradGreen':pct>=50?'arcGradOrange':'arcGradRed';const baseCol=pct>=80?'var(--success)':pct>=50?'var(--warning)':'var(--danger)';const glowCol=pct>=80?'rgba(0,255,136,.6)':pct>=50?'rgba(255,136,0,.6)':'rgba(255,34,68,.6)';
   if(arc){arc.style.strokeDasharray=`${dash} ${circ}`;arc.setAttribute('stroke',`url(#${gradId})`);arc.style.filter=`drop-shadow(0 0 7px ${glowCol}) drop-shadow(0 0 2px rgba(255,255,255,.35))`;}
   if(arcHi){arcHi.style.strokeDasharray=`${Math.max(0,dash-8)} ${circ}`;}
   if(pctEl){pctEl.textContent=pct+'%';pctEl.setAttribute('fill',baseCol);}
-  if(noteEl){const overdue=allEvents.filter(e=>e._status==='OVERDUE').length;const active=allEvents.filter(e=>e._status==='ACTIVE').length;noteEl.textContent=active+overdue>0?`${active+overdue} ITEM${active+overdue>1?'S':''} NEED ATTENTION`:`${compliant} OF ${total} ITEMS COMPLIANT`;noteEl.style.color=active+overdue>0?'var(--red)':'var(--text-mid)';}
+  if(noteEl){const overdue=allEvents.filter(e=>e._status==='OVERDUE').length;const active=allEvents.filter(e=>e._status==='ACTIVE').length;noteEl.textContent=active+overdue>0?`${active+overdue} ITEM${active+overdue>1?'S':''} NEED ATTENTION`:`${compliant} OF ${total} ITEMS COMPLIANT`;noteEl.style.color=active+overdue>0?'var(--danger)':'var(--text-muted)';}
 }
 
 function setMiniArc(id, pct, color) {
@@ -603,29 +361,28 @@ function setMiniArc(id, pct, color) {
 function updateMiniGauges() {
   const bwnActive=allEvents.filter(e=>e.category==='BWN'&&e._status==='ACTIVE').length;
   const bwnEl=document.getElementById('val-bwn');if(bwnEl)bwnEl.textContent=bwnActive;
-  setMiniArc('arc-bwn',bwnActive>0?100:0,bwnActive>0?'var(--red)':'rgba(255,34,68,.2)');
+  setMiniArc('arc-bwn',bwnActive>0?100:0,bwnActive>0?'var(--danger)':'rgba(255,34,68,.12)');
   const bwnMini=document.getElementById('mini-bwn');if(bwnMini)bwnMini.classList.toggle('alert',bwnActive>0);
   document.getElementById('sub-bwn').textContent=bwnActive+' ACTIVE';
   const sampItems=allEvents.filter(e=>['TCR','LCR','DBP'].includes(e.category));const sampOk=sampItems.filter(e=>['COMPLIANT','RESOLVED'].includes(e._status)).length;const sampPct=sampItems.length>0?Math.round((sampOk/sampItems.length)*100):100;
   const sampEl=document.getElementById('val-tcr');if(sampEl)sampEl.textContent=sampPct+'%';
-  setMiniArc('arc-tcr',sampPct,sampPct>=80?'var(--green)':sampPct>=50?'var(--orange)':'var(--red)');
+  setMiniArc('arc-tcr',sampPct,sampPct>=80?'var(--success)':sampPct>=50?'var(--warning)':'var(--danger)');
   document.getElementById('sub-tcr').textContent=`${sampOk}/${sampItems.length} OK`;
   const repItems=allEvents.filter(e=>['CCR','MOR','LSLI'].includes(e.category));const repOk=repItems.filter(e=>['COMPLIANT','RESOLVED'].includes(e._status)).length;const repPct=repItems.length>0?Math.round((repOk/repItems.length)*100):100;
   const repEl=document.getElementById('val-rep');if(repEl)repEl.textContent=repPct+'%';
-  setMiniArc('arc-rep',repPct,repPct>=80?'var(--green)':repPct>=50?'var(--orange)':'var(--red)');
+  setMiniArc('arc-rep',repPct,repPct>=80?'var(--success)':repPct>=50?'var(--warning)':'var(--danger)');
   document.getElementById('sub-rep').textContent=`${repOk}/${repItems.length} OK`;
   const surItems=allEvents.filter(e=>['SANITARY','ERP'].includes(e.category));const surOk=surItems.filter(e=>['COMPLIANT','RESOLVED'].includes(e._status)).length;const surPct=surItems.length>0?Math.round((surOk/surItems.length)*100):100;
   const surEl=document.getElementById('val-survey');if(surEl)surEl.textContent=surPct+'%';
-  setMiniArc('arc-survey',surPct,surPct>=80?'var(--cyan)':surPct>=50?'var(--orange)':'var(--red)');
+  setMiniArc('arc-survey',surPct,surPct>=80?'var(--primary)':surPct>=50?'var(--warning)':'var(--danger)');
   document.getElementById('sub-survey').textContent=`${surOk}/${surItems.length} OK`;
 }
 
 function renderNodeGrid() {
   const grid=document.getElementById('nodeGrid');if(!grid||!allSystems.length)return;
-  grid.innerHTML=allSystems.map(s=>{const short=s.system_name.replace(/\s*(NEW\s*WATER\s*SYSTEM|NWS|WATER)\s*/gi,'').trim().slice(0,8).toUpperCase();return`<div class="sys-node" onclick="switchSystemByCode('${s.system_id}')" title="${s.system_name}"><div class="node-hex" style="color:var(--text-dim)">⬡</div><div class="node-name">${short}</div></div>`;}).join('');
+  grid.innerHTML=allSystems.map(s=>{const short=s.system_name.replace(/\s*(NEW\s*WATER\s*SYSTEM|NWS|WATER)\s*/gi,'').trim().slice(0,8).toUpperCase();return`<div class="sys-node" onclick="switchSystemByCode('${s.system_id}')" title="${s.system_name}"><div class="node-hex" style="color:var(--text-muted)">⬡</div><div class="node-name">${short}</div></div>`;}).join('');
 }
 
-function switchSystemByCode(id){document.getElementById('sysSelect').value=id;switchSystem(id);}
 
 function setFilter(f, btn) {
   currentFilter=f;document.querySelectorAll('.fbtn').forEach(b=>b.classList.remove('active'));btn.classList.add('active');applyFilter();
@@ -639,7 +396,7 @@ function applyFilter() {
 
 function renderTable() {
   const tbody=document.getElementById('complyTable');
-  if(!filtered.length){tbody.innerHTML='<tr class="loading-row"><td colspan="9" style="color:var(--text-dim)">NO ITEMS MATCH FILTER</td></tr>';return;}
+  if(!filtered.length){tbody.innerHTML='<tr class="loading-row"><td colspan="9" style="color:var(--text-muted)">NO ITEMS MATCH FILTER</td></tr>';return;}
   tbody.innerHTML='';
   filtered.forEach(ev=>{const s=ev._status;const tr=document.createElement('tr');if(s==='ACTIVE')tr.classList.add('row-critical');if(s==='OVERDUE')tr.classList.add('row-overdue');if(selectedEvent?.event_id===ev.event_id)tr.classList.add('selected');tr.onclick=()=>openDetail(ev);tr.innerHTML=`<td class="td-priority">${prioDot(ev.priority)}</td><td>${catBadge(ev.category)}</td><td class="td-desc">${ev.description||ev.event_type||'—'}</td><td class="td-reg">${ev.regulation||'—'}</td><td class="td-freq">${(ev.frequency||'').replace('ANNUAL','YR').replace('MONTHLY','MO').replace('QUARTERLY','QTR').replace('DAILY','DLY').replace('WEEKLY','WK').replace('EVENT','EVT').replace('9YEAR','9YR').replace('5YEAR','5YR').replace('3YEAR','3YR')}</td><td class="td-due">${fmtDate(ev.due_date)}</td><td style="text-align:right">${countdownHtml(ev,s)}</td><td>${statusPill(s)}</td><td><button class="action-btn" onclick="event.stopPropagation();openDetail(allEvents.find(e=>e.event_id==='${ev.event_id}'))">···</button></td>`;tbody.appendChild(tr);});
 }
@@ -648,9 +405,9 @@ function openDetail(ev) {
   if(!ev)return;selectedEvent=ev;renderTable();
   document.getElementById('dp-title').textContent=`${ev.category||'COMPLY'} — ${ev._status}`;
   document.getElementById('dp-sub').textContent=ev.regulation||ev.event_type||'—';
-  document.getElementById('dp-body').innerHTML=`<div class="dp-section"><div class="dp-section-title">EVENT DETAIL</div><div class="dp-row"><div class="dp-label">DESCRIPTION</div><div class="dp-val">${ev.description||'—'}</div></div><div class="dp-row"><div class="dp-label">CATEGORY</div><div class="dp-val">${catBadge(ev.category)} ${statusPill(ev._status)}</div></div><div class="dp-row"><div class="dp-label">PRIORITY</div><div class="dp-val">${prioDot(ev.priority)} ${ev.priority||'—'}</div></div><div class="dp-row"><div class="dp-label">REGULATION</div><div class="dp-val">${ev.regulation||'—'}</div></div><div class="dp-row"><div class="dp-label">AGENCY</div><div class="dp-val">${ev.agency||'—'}</div></div><div class="dp-row"><div class="dp-label">FREQUENCY</div><div class="dp-val">${ev.frequency||'—'}</div></div></div><div class="dp-section"><div class="dp-section-title">DATES</div><div class="dp-row"><div class="dp-label">EVENT DATE</div><div class="dp-val">${fmtDate(ev.event_date)}</div></div><div class="dp-row"><div class="dp-label">DUE DATE</div><div class="dp-val">${fmtDate(ev.due_date)}</div></div><div class="dp-row"><div class="dp-label">DAYS REMAINING</div><div class="dp-val" style="${ev.due_date&&daysUntil(ev.due_date)<0?'color:var(--red)':''}">${ev.due_date?(daysUntil(ev.due_date)<0?'OVERDUE BY '+Math.abs(daysUntil(ev.due_date))+' DAYS':daysUntil(ev.due_date)+' DAYS'):'—'}</div></div>${ev.resolved_date?`<div class="dp-row"><div class="dp-label">RESOLVED</div><div class="dp-val" style="color:var(--green)">${fmtDate(ev.resolved_date)}</div></div>`:''}</div>${ev.notes?`<div class="dp-section"><div class="dp-section-title">NOTES</div><div class="dp-notes">${ev.notes}</div></div>`:''}`;
+  document.getElementById('dp-body').innerHTML=`<div class="dp-section"><div class="dp-section-title">EVENT DETAIL</div><div class="dp-row"><div class="dp-label">DESCRIPTION</div><div class="dp-val">${ev.description||'—'}</div></div><div class="dp-row"><div class="dp-label">CATEGORY</div><div class="dp-val">${catBadge(ev.category)} ${statusPill(ev._status)}</div></div><div class="dp-row"><div class="dp-label">PRIORITY</div><div class="dp-val">${prioDot(ev.priority)} ${ev.priority||'—'}</div></div><div class="dp-row"><div class="dp-label">REGULATION</div><div class="dp-val">${ev.regulation||'—'}</div></div><div class="dp-row"><div class="dp-label">AGENCY</div><div class="dp-val">${ev.agency||'—'}</div></div><div class="dp-row"><div class="dp-label">FREQUENCY</div><div class="dp-val">${ev.frequency||'—'}</div></div></div><div class="dp-section"><div class="dp-section-title">DATES</div><div class="dp-row"><div class="dp-label">EVENT DATE</div><div class="dp-val">${fmtDate(ev.event_date)}</div></div><div class="dp-row"><div class="dp-label">DUE DATE</div><div class="dp-val">${fmtDate(ev.due_date)}</div></div><div class="dp-row"><div class="dp-label">DAYS REMAINING</div><div class="dp-val" style="${ev.due_date&&daysUntil(ev.due_date)<0?'color:var(--danger)':''}">${ev.due_date?(daysUntil(ev.due_date)<0?'OVERDUE BY '+Math.abs(daysUntil(ev.due_date))+' DAYS':daysUntil(ev.due_date)+' DAYS'):'—'}</div></div>${ev.resolved_date?`<div class="dp-row"><div class="dp-label">RESOLVED</div><div class="dp-val" style="color:var(--success)">${fmtDate(ev.resolved_date)}</div></div>`:''}</div>${ev.notes?`<div class="dp-section"><div class="dp-section-title">NOTES</div><div class="dp-notes">${ev.notes}</div></div>`:''}`;
   const isActive=ev._status==='ACTIVE';
-  document.getElementById('dp-footer').innerHTML=`${isActive?`<button class="dp-btn dp-btn-g" onclick="markResolved('${ev.event_id}')">✓ MARK RESOLVED</button>`:''}<button class="dp-btn dp-btn-or" onclick="editStatus('${ev.event_id}','RESOLVED')">CLOSE ITEM</button><button class="dp-btn dp-btn-ghost" onclick="closeDetail()">✕ CLOSE</button>`;
+  document.getElementById('dp-footer').innerHTML=`${isActive?`<button class="dp-btn dp-btn-g" onclick="markResolved('${ev.event_id}')">✓ MARK RESOLVED</button>`:''}<button class="dp-btn dp-btn-or" onclick="openCompEdit('${ev.event_id}')">✏️ EDIT</button><button class="dp-btn dp-btn-or" onclick="editStatus('${ev.event_id}','RESOLVED')">CLOSE ITEM</button><button class="dp-btn dp-btn-ghost" onclick="closeDetail()">✕ CLOSE</button>`;
   document.getElementById('detailPanel').classList.add('open');
 }
 
@@ -668,8 +425,159 @@ async function submitAdd() {
   const result=await supa('compliance_events','','POST',body);if(result){toast('COMPLIANCE ITEM ADDED','ok');closeModal();loadEvents();}else{toast('ERROR ADDING ITEM','err');}
 }
 
-document.addEventListener('keydown', e => { if(e.key==='Escape') closeDetail(); });
+document.addEventListener('keydown', e => { if(e.key==='Escape'){closeDetail();closeCompEdit();} });
+
+function openCompEdit(eventId){
+  const ev=allEvents.find(e=>e.event_id===eventId);if(!ev)return;
+  document.getElementById('compEditModal').classList.add('show');
+  document.getElementById('ce-title-val').textContent=(ev.category||'EVENT')+' — '+(ev.event_type||ev.description||'').substring(0,40);
+  document.getElementById('ce-desc').value=ev.description||'';
+  document.getElementById('ce-cat').value=ev.category||'MONITORING';
+  document.getElementById('ce-priority').value=ev.priority||'ROUTINE';
+  document.getElementById('ce-status').value=ev.status||'UPCOMING';
+  document.getElementById('ce-agency').value=ev.agency||'';
+  document.getElementById('ce-reg').value=ev.regulation||'';
+  document.getElementById('ce-freq').value=ev.frequency||'ANNUAL';
+  document.getElementById('ce-due').value=ev.due_date||'';
+  document.getElementById('ce-notes').value=ev.notes||'';
+  document.getElementById('ce-eventId').value=eventId;
+}
+function closeCompEdit(){document.getElementById('compEditModal').classList.remove('show');}
+async function saveCompEdit(){
+  const eventId=document.getElementById('ce-eventId').value;if(!eventId)return;
+  const body={
+    description:document.getElementById('ce-desc').value.trim(),
+    category:document.getElementById('ce-cat').value,
+    event_type:document.getElementById('ce-cat').value,
+    priority:document.getElementById('ce-priority').value,
+    status:document.getElementById('ce-status').value,
+    agency:document.getElementById('ce-agency').value.trim()||null,
+    regulation:document.getElementById('ce-reg').value.trim()||null,
+    frequency:document.getElementById('ce-freq').value,
+    due_date:document.getElementById('ce-due').value||null,
+    notes:document.getElementById('ce-notes').value.trim()||null
+  };
+  if(body.status==='RESOLVED')body.resolved_date=today();
+  const r=await supa('compliance_events',`?event_id=eq.${eventId}`,'PATCH',body);
+  if(r!==null){toast('✓ COMPLIANCE ITEM UPDATED','ok');closeCompEdit();closeDetail();loadEvents();}
+  else toast('ERROR UPDATING','err');
+}
+
 window.addEventListener('DOMContentLoaded', loadSystems);
 </script>
+
+<!-- COMPLIANCE EDIT MODAL -->
+<div class="modal-overlay" id="compEditModal">
+  <div class="modal">
+    <div class="modal-header">
+      <div>
+        <div class="modal-title">EDIT COMPLIANCE ITEM</div>
+        <div class="modal-sub" id="ce-title-val">—</div>
+      </div>
+      <button class="modal-x" onclick="closeCompEdit()">✕</button>
+    </div>
+    <input type="hidden" id="ce-eventId">
+    <div class="modal-body">
+      <div class="frow">
+        <div class="flabel">DESCRIPTION</div>
+        <input class="finput" type="text" id="ce-desc">
+      </div>
+      <div class="frow3">
+        <div>
+          <div class="flabel">CATEGORY</div>
+          <select class="finput" id="ce-cat">
+            <option value="MONITORING">MONITORING</option><option value="TESTING">TESTING</option><option value="REPORTING">REPORTING</option><option value="BWN">BWN</option><option value="INSPECTION">INSPECTION</option><option value="AUDIT">AUDIT</option><option value="TRAINING">TRAINING</option>
+          </select>
+        </div>
+        <div>
+          <div class="flabel">PRIORITY</div>
+          <select class="finput" id="ce-priority">
+            <option value="ROUTINE">ROUTINE</option><option value="HIGH">HIGH</option><option value="CRITICAL">CRITICAL</option>
+          </select>
+        </div>
+        <div>
+          <div class="flabel">STATUS</div>
+          <select class="finput" id="ce-status">
+            <option value="UPCOMING">UPCOMING</option><option value="DUE_SOON">DUE SOON</option><option value="ACTIVE">ACTIVE</option><option value="OVERDUE">OVERDUE</option><option value="COMPLIANT">COMPLIANT</option><option value="RESOLVED">RESOLVED</option>
+          </select>
+        </div>
+      </div>
+      <div class="frow2">
+        <div>
+          <div class="flabel">AGENCY</div>
+          <input class="finput" type="text" id="ce-agency" placeholder="e.g. TCEQ">
+        </div>
+        <div>
+          <div class="flabel">REGULATION</div>
+          <input class="finput" type="text" id="ce-reg" placeholder="e.g. 30 TAC 290">
+        </div>
+      </div>
+      <div class="frow2">
+        <div>
+          <div class="flabel">FREQUENCY</div>
+          <select class="finput" id="ce-freq">
+            <option value="MONTHLY">MONTHLY</option><option value="QUARTERLY">QUARTERLY</option><option value="ANNUAL">ANNUAL</option><option value="AS_NEEDED">AS NEEDED</option><option value="ONE_TIME">ONE TIME</option>
+          </select>
+        </div>
+        <div>
+          <div class="flabel">DUE DATE</div>
+          <input class="finput" type="date" id="ce-due">
+        </div>
+      </div>
+      <div class="frow">
+        <div class="flabel">NOTES</div>
+        <textarea class="finput" id="ce-notes" rows="3"></textarea>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button class="btn btn-ghost" onclick="closeCompEdit()">CANCEL</button>
+      <button class="btn btn-pri" onclick="saveCompEdit()">SAVE CHANGES</button>
+    </div>
+  </div>
+</div>
+<!-- AUTH BOOTSTRAP -->
+<script>
+const _SUPA_URL='https://bvpesxpptgdwkhsewhke.supabase.co';
+const _SUPA_KEY='eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
+const SESSION_KEY='radeus_session';
+function getSession(){try{const s=JSON.parse(localStorage.getItem(SESSION_KEY)||'null');if(!s)return null;if(s.expires_at&&Date.now()/1000>s.expires_at){localStorage.removeItem(SESSION_KEY);return null;}return s;}catch{return null;}}
+function getStoredStaff(){try{const r=localStorage.getItem('radeus_staff');return r?JSON.parse(r):null;}catch{return null;}}
+function signOut(){const s=getSession();if(s?.access_token){fetch(`${_SUPA_URL}/auth/v1/logout`,{method:'POST',headers:{'apikey':_SUPA_KEY,'Authorization':`Bearer ${s.access_token}`}}).catch(()=>{});}localStorage.removeItem(SESSION_KEY);localStorage.removeItem('radeus_staff');window.location.href='login.html';}
+(function initAuth(){
+  const s=getSession();
+  if(!s||s.expires_at<Date.now()/1000){window.location.href='login.html';return;}
+  const staff=getStoredStaff();
+  if(!staff||!staff.org_id){window.location.href='login.html';return;}
+  ORG_ID=staff.org_id;
+  const el=document.getElementById('operatorName');
+  if(el)el.textContent=staff.name||'OPERATOR';
+})();
+</script>
+<style>
+/* Sonar sweep — red, horizontal line moving top to bottom */
+.sonar-line {
+  position: fixed;
+  left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(255,34,68,.6) 20%,
+    rgba(255,34,68,1) 50%,
+    rgba(255,34,68,.6) 80%,
+    transparent 100%
+  );
+  pointer-events: none;
+  z-index: 998;
+  animation: sonarSweep 8s linear infinite;
+  box-shadow: 0 0 8px rgba(255,34,68,.5);
+  opacity: 0.6;
+}
+@keyframes sonarSweep {
+  0%   { top: -2px; opacity: 0; }
+  4%   { opacity: 0.6; }
+  96%  { opacity: 0.6; }
+  100% { top: 100vh; opacity: 0; }
+}
+</style>
 </body>
 </html>
