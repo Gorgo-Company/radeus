@@ -7417,3 +7417,172 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   border-color: var(--border);
   color: var(--primary);
 }
+
+   /* ─── [data-page="mig"] Migration Workbench ──────────────────────────────── */
+
+/* ── Step bar items ──────────────────────────────────────────────────────── */
+[data-page="mig"] .step-item {
+  display: flex; align-items: center; gap: 7px;
+  padding: 0 18px;
+  border-right: 1px solid var(--border);
+  font-family: var(--font-mono); font-size: 9px; letter-spacing: 1.5px;
+  color: var(--text-muted);
+  cursor: default;
+  position: relative;
+  flex-shrink: 0;
+}
+[data-page="mig"] .step-item.active {
+  color: var(--cyan);
+  background: rgba(0, 245, 255, .04);
+}
+[data-page="mig"] .step-item.active::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0;
+  height: 2px;
+  background: var(--cyan);
+}
+[data-page="mig"] .step-item.done { color: var(--success); }
+[data-page="mig"] .step-n {
+  font-family: var(--font-display); font-size: 8px; font-weight: 700;
+  width: 18px; height: 18px;
+  border: 1px solid; border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  flex-shrink: 0;
+}
+[data-page="mig"] .step-item.active .step-n  { border-color: var(--cyan);    color: var(--cyan);    }
+[data-page="mig"] .step-item.done   .step-n  { border-color: var(--success); color: var(--success); }
+[data-page="mig"] .step-item:not(.active):not(.done) .step-n {
+  border-color: var(--border); color: var(--text-muted);
+}
+[data-page="mig"] .step-lbl { text-transform: uppercase; }
+
+/* ── Drop zones ──────────────────────────────────────────────────────────── */
+[data-page="mig"] .drop-zone {
+  border: 1px dashed var(--border);
+  background: var(--surface);
+  padding: 12px;
+  text-align: center;
+  cursor: pointer;
+  transition: all .2s;
+  position: relative;
+}
+[data-page="mig"] .drop-zone:hover {
+  border-color: var(--border-strong);
+  background: var(--primary-soft);
+}
+[data-page="mig"] .drop-zone.loaded {
+  border-color: var(--success);
+  border-style: solid;
+  background: rgba(0, 255, 136, .04);
+}
+[data-page="mig"] .drop-zone.dragover {
+  border-color: var(--cyan);
+  background: rgba(0, 245, 255, .08);
+}
+[data-page="mig"] .dz-icon  { font-size: 22px; margin-bottom: 4px; opacity: .5; }
+[data-page="mig"] .dz-label { font-family: var(--font-display); font-size: 8px;  color: var(--text-muted); letter-spacing: 2px; }
+[data-page="mig"] .dz-sub   { font-family: var(--font-mono);    font-size: 7px;  color: var(--text-muted); letter-spacing: 1px; margin-top: 2px; }
+[data-page="mig"] .dz-note  { font-family: var(--font-mono);    font-size: 9px;  color: var(--text-soft);  margin-top: 4px; letter-spacing: .5px; }
+[data-page="mig"] .drop-zone.loaded .dz-note { color: var(--success); }
+
+/* ── Field mapping rows ──────────────────────────────────────────────────── */
+[data-page="mig"] .map-section-hdr {
+  padding: 7px 14px;
+  font-family: var(--font-display); font-size: 8px; letter-spacing: 2.5px;
+  background: var(--surface-strong);
+  border-bottom: 1px solid var(--border);
+  position: sticky; top: 0; z-index: 5;
+  display: flex; align-items: center; gap: 8px;
+}
+[data-page="mig"] .map-row {
+  display: flex; align-items: center; gap: 0;
+  border-bottom: 1px solid rgba(0, 245, 255, .03);
+  min-height: 36px;
+}
+[data-page="mig"] .map-row:hover { background: rgba(0, 245, 255, .03); }
+[data-page="mig"] .map-src {
+  width: 180px; flex-shrink: 0; padding: 6px 12px;
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-soft);
+  border-right: 1px solid var(--border);
+}
+[data-page="mig"] .map-arr {
+  padding: 0 10px; font-size: 14px; color: var(--text-muted); flex-shrink: 0;
+}
+[data-page="mig"] .map-target { flex: 1; padding: 4px 8px; }
+[data-page="mig"] .map-target select {
+  width: 100%;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  color: var(--cyan);
+  font-family: var(--font-mono); font-size: 10px;
+  padding: 4px 8px; outline: none;
+}
+[data-page="mig"] .map-target select:focus  { border-color: var(--border-strong); }
+[data-page="mig"] .map-target select option { background: var(--bg); color: var(--text); }
+[data-page="mig"] .map-conf {
+  width: 52px; flex-shrink: 0; text-align: center; padding: 0 4px;
+  font-family: var(--font-display); font-size: 7px; letter-spacing: 1px;
+}
+[data-page="mig"] .conf-hi  { color: var(--success); }
+[data-page="mig"] .conf-med { color: var(--warning);  }
+[data-page="mig"] .conf-lo  { color: var(--danger);   }
+[data-page="mig"] .map-note {
+  width: 140px; flex-shrink: 0; padding: 0 10px;
+  font-family: var(--font-mono); font-size: 9px;
+  color: var(--text-muted); letter-spacing: .3px;
+}
+
+/* ── Flag cards ──────────────────────────────────────────────────────────── */
+[data-page="mig"] .flag-card {
+  border: 1px solid; padding: 8px 10px; margin-bottom: 6px;
+  border-radius: var(--radius);
+}
+[data-page="mig"] .flag-warn { border-color: rgba(255, 136, 0, .4);  background: rgba(255, 136, 0, .05);  }
+[data-page="mig"] .flag-ok   { border-color: rgba(0, 255, 136, .3);  background: rgba(0, 255, 136, .03);  }
+[data-page="mig"] .flag-info { border-color: var(--border);           background: var(--surface);           }
+[data-page="mig"] .flag-err  { border-color: rgba(255, 34, 68, .4);  background: rgba(255, 34, 68, .06);  }
+[data-page="mig"] .flag-title {
+  font-family: var(--font-mono); font-size: 9px;
+  letter-spacing: 1px; margin-bottom: 3px;
+}
+[data-page="mig"] .flag-warn .flag-title { color: var(--warning);   }
+[data-page="mig"] .flag-ok   .flag-title { color: var(--success);   }
+[data-page="mig"] .flag-info .flag-title { color: var(--text-soft); }
+[data-page="mig"] .flag-err  .flag-title { color: var(--danger);    }
+[data-page="mig"] .flag-body {
+  font-family: var(--font-num); font-size: 11px;
+  color: var(--text-soft); line-height: 1.4;
+}
+
+/* ── Export blocks ───────────────────────────────────────────────────────── */
+[data-page="mig"] .export-block {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  overflow: hidden;
+}
+[data-page="mig"] .export-block-hdr {
+  padding: 8px 14px;
+  border-bottom: 1px solid var(--border);
+  display: flex; align-items: center; justify-content: space-between;
+  background: var(--surface-strong);
+}
+[data-page="mig"] .export-block-title {
+  font-family: var(--font-display); font-size: 9px;
+  color: var(--primary); letter-spacing: 2px;
+}
+[data-page="mig"] .export-sql {
+  font-family: var(--font-mono); font-size: 10px; color: var(--text-soft);
+  padding: 12px 14px;
+  overflow-x: auto; white-space: pre;
+  max-height: 260px; overflow-y: auto;
+  line-height: 1.7;
+  background: rgba(0, 0, 0, .3);
+}
+
+/* ── SQL syntax highlight ────────────────────────────────────────────────── */
+[data-page="mig"] .sql-kw   { color: var(--cyan);       }
+[data-page="mig"] .sql-str  { color: var(--success);    }
+[data-page="mig"] .sql-num  { color: var(--warning);    }
+[data-page="mig"] .sql-tbl  { color: var(--yellow);     }
+[data-page="mig"] .sql-col  { color: var(--text);       }
+[data-page="mig"] .sql-null { color: var(--text-muted); }
