@@ -1,19 +1,19 @@
 /* ============================================================================
-   RADEUS PRO — Water Utility Management Platform
-   Master stylesheet · Dark military command-center theme
-   Drop-in replacement for Enterprise main.css. Same selector vocabulary,
-   same data-page scoping, same JS contracts. Re-skinned only.
+   RADEUS PRO â€” Water Utility Management Platform
+   Master stylesheet Â· Dark military command-center theme
+   Shared RADEUS PRO stylesheet. Same selector vocabulary,
+   same data-page scoping, same JS contracts.
    ============================================================================ */
 
-/* ───────────────────────────── ROOT TOKENS ──────────────────────────────────
-   Pro raw palette + Enterprise variable aliases.
-   Every Enterprise rule that reads var(--primary), var(--success), etc. picks
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ ROOT TOKENS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Pro raw palette + legacy variable aliases.
+   Every rule that reads var(--primary), var(--success), etc. picks
    up Pro colors automatically through these aliases.
    --------------------------------------------------------------------------- */
 :root {
   color-scheme: dark;
 
-  /* ── Pro raw palette ──────────────────────────────────────────────────── */
+  /* â”€â”€ Pro raw palette â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --cyan:        #00f5ff;
   --cyan-dim:    #00a8b5;
   --green:       #00ff88;
@@ -27,7 +27,7 @@
   --wo:          #8ab85e;     /* workorders accent */
   --sys:         #ffffff;     /* system page accent */
 
-  /* ── Enterprise variable aliases → Pro palette ────────────────────────── */
+  /* â”€â”€ Legacy variable aliases â†’ Pro palette â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --primary:        var(--cyan);
   --primary-soft:   rgba(0, 245, 255, 0.10);
   --success:        var(--green);
@@ -35,7 +35,7 @@
   --danger:         var(--red);
   --info:           var(--blue);
 
-  /* ── Surfaces & chrome ────────────────────────────────────────────────── */
+  /* â”€â”€ Surfaces & chrome â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --bg:             #020c14;
   --bg2:            #041220;
   --surface:        rgba(0, 245, 255, 0.03);
@@ -45,27 +45,27 @@
   --border-strong:  rgba(0, 245, 255, 0.42);
   --shadow:         0 0 24px rgba(0, 245, 255, 0.08);
 
-  /* ── Text ─────────────────────────────────────────────────────────────── */
+  /* â”€â”€ Text â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --text:       #c8eaf0;
   --text-soft:  rgba(200, 234, 240, 0.78);
   --text-muted: #3d6a78;
 
-  /* ── Radii (sharp tactical edges) ─────────────────────────────────────── */
+  /* â”€â”€ Radii (sharp tactical edges) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --radius-sm: 0px;
   --radius:    2px;
   --radius-lg: 4px;
   --radius-xl: 6px;
   --pill:      0px;
 
-  /* ── Fonts (mono everywhere in Pro) ───────────────────────────────────── */
+  /* â”€â”€ Fonts (mono everywhere in Pro) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
   --font-display: 'Orbitron', monospace;
   --font-mono:    'Share Tech Mono', monospace;
   --font-num:     'Rajdhani', sans-serif;
   --font-sans:    'Share Tech Mono', monospace;
 }
 
-/* ───────────────────────────── PER-PAGE ACCENT RETARGETS ─────────────────────
-   Each page's --primary points to its own Pro accent. Enterprise rules that use
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ PER-PAGE ACCENT RETARGETS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
+   Each page's --primary points to its own Pro accent. shared rules that use
    var(--primary) automatically inherit the right color per page.
    --------------------------------------------------------------------------- */
 body[data-page="login"] {
@@ -195,9 +195,9 @@ body[data-page="portal"] {
   --text-muted:   #1a4a6a;
 }
 
-/* index, accounts, command, mig already use the cyan defaults from :root */
+/* index, accounts, migration already use the cyan defaults from :root */
 
-/* ───────────────────────────── RESET ───────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ RESET â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 * { margin: 0; padding: 0; box-sizing: border-box; }
 
 html, body {
@@ -222,7 +222,7 @@ body[data-page="mig"]   { overflow: hidden; display: flex; flex-direction: colum
 
 a { color: inherit; text-decoration: none; }
 
-/* ───────────────────────────── SCANLINE OVERLAY (Pro signature) ─────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ SCANLINE OVERLAY (Pro signature) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Subtle CRT scanline; pointer-events:none so it never blocks clicks.
    Suppressed on login/portal/mig (those pages have their own gradient bg).
    --------------------------------------------------------------------------- */
@@ -239,7 +239,7 @@ body::before {
 }
 body[data-page="mig"]::before { display: none; }
 
-/* Operator pages get tactical crosshair cursor; portal/login/mig stay default */
+/* Operator pages get water drop cursor â€” RADEUS signature; portal/login/mig stay default */
 body[data-page="index"],
 body[data-page="accounts"],
 body[data-page="readings"],
@@ -249,12 +249,11 @@ body[data-page="compliance"],
 body[data-page="workorders"],
 body[data-page="reports"],
 body[data-page="comms"],
-body[data-page="system"],
-body[data-page="command"] {
-  cursor: crosshair;
+body[data-page="system"] {
+  cursor: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24"><defs><linearGradient id="g" x1="0%" y1="0%" x2="0%" y2="100%"><stop offset="0%" stop-color="%2300d4ff"/><stop offset="100%" stop-color="%230066aa"/></linearGradient></defs><path d="M12 2 C12 2 4 11 4 16 C4 20.5 7.5 23 12 23 C16.5 23 20 20.5 20 16 C20 11 12 2 12 2 Z" fill="url(%23g)" stroke="%2300f5ff" stroke-width="1"/><ellipse cx="9.5" cy="14" rx="2" ry="3" fill="%23ffffff" opacity="0.5"/></svg>') 12 2, pointer;
 }
 
-/* ───────────────────────────── CORNER BRACKETS (Pro signature) ──────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ CORNER BRACKETS (Pro signature) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    Operator pages have <div class="corner tl/tr/bl/br"></div> markup.
    Login/portal/mig hide them.
    --------------------------------------------------------------------------- */
@@ -279,12 +278,12 @@ body[data-page="login"] .corner.tr { left: auto; right: 10px; }
 body[data-page="login"] .corner.bl { top: auto; bottom: 10px; left: 10px; }
 body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right: 10px; }
 
-/* ───────────────────────────── SCROLLBAR ───────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ SCROLLBAR â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 ::-webkit-scrollbar       { width: 4px; height: 4px; }
 ::-webkit-scrollbar-track { background: transparent; }
 ::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 0; }
 
-/* ───────────────────────────── ANIMATIONS ───────────────────────────── */
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ ANIMATIONS â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: .2; } }
 @keyframes tick  { 0% { transform: translateX(0); } 100% { transform: translateX(-50%); } }
 @keyframes drot  { from { transform: rotate(0); } to { transform: rotate(360deg); } }
@@ -338,7 +337,8 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 
 .tagline,
 .system-online-label,
-.operator-label {
+.operator-label,
+.tb-op-label {
   font-family: var(--font-mono);
   font-size: 9px;
   color: var(--text-muted);
@@ -350,7 +350,14 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   color: var(--text-muted);
   letter-spacing: 2px;
 }
-.operator-name { color: var(--primary); }
+.operator-name,
+.op-name {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 400;
+  letter-spacing: 2px;
+}
 
 .sys-select {
   background: var(--primary-soft);
@@ -615,7 +622,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 .yv { color: var(--yellow);  }
 
 /* ============================================================================
-   MINI PROGRESS BARS (collection rate, accounts billed — index left rail)
+   MINI PROGRESS BARS (collection rate, accounts billed â€” index left rail)
    ============================================================================ */
 .mbar-wrap   { padding: 6px 12px 10px; }
 .mbar-label {
@@ -636,7 +643,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 .mbar-fill { height: 100%; border-radius: 2px; }
 
 /* ============================================================================
-   LEGEND ROW (.mleg .legrow .legdot — used in map panels)
+   LEGEND ROW (.mleg .legrow .legdot â€” used in map panels)
    ============================================================================ */
 .mleg .legrow,
 .legrow {
@@ -859,7 +866,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 .bal-orange  { color: var(--warning); }
 .bal-red     { color: var(--danger);  }
 
-/* Toolbar / filterbar — used as filter row with buttons */
+/* Toolbar / filterbar â€” used as filter row with buttons */
 .toolbar,
 .filterbar,
 .actionbar {
@@ -913,7 +920,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 
 
 /* ============================================================================
-   TABLES — base
+   TABLES â€” base
    ============================================================================ */
 .atable,
 .rtable {
@@ -950,12 +957,12 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 .rtable tr:hover td {
   background: rgba(0, 245, 255, 0.04);
 }
-/* Selected row — background tint only, NEVER hard border-left */
+/* Selected row â€” background tint only, NEVER hard border-left */
 .atable tr.selected td,
 .rtable tr.selected td {
   background: rgba(0, 245, 255, 0.10);
 }
-/* Critical / overdue row highlights — also background tint only */
+/* Critical / overdue row highlights â€” also background tint only */
 .atable tr.row-critical td,
 .rtable tr.row-critical td { background: rgba(255, 34, 68, 0.06); }
 .atable tr.row-overdue  td,
@@ -1011,7 +1018,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 .empty-sub  { font-size: 9px; color: var(--text-muted); letter-spacing: 1px; }
 
 /* ============================================================================
-   MODALS — shared base
+   MODALS â€” shared base
    ============================================================================ */
 .modal,
 .modal-overlay {
@@ -1338,7 +1345,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 
 
 /* ============================================================================
-   COMMAND DIAL (index.html / command.html)
+   COMMAND DIAL (index.html)
    HTML structure:
      .dial-wrap > .dial-container > .dial-svg + .dial-center + .dbtn(s)
    ============================================================================ */
@@ -1409,7 +1416,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
    ACCOUNT CARD popover (compact card hover/click)
    ============================================================================ */
 /* ============================================================================
-   ACCOUNT QUICK-CARD OVERLAY (.acard) — opens from map dot or directory click
+   ACCOUNT QUICK-CARD OVERLAY (.acard) â€” opens from map dot or directory click
    Becomes a full-screen centered overlay with backdrop when .show is added
    ============================================================================ */
 .acard {
@@ -1436,7 +1443,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 .acard.show {
   /* Use grid to compose the card from its three direct children */
 }
-/* The card content frame — using a clever CSS-only trick: wrap children visually with a single
+/* The card content frame â€” using a clever CSS-only trick: wrap children visually with a single
    "card" appearance via outline+background painted on the .acard itself when .show is active */
 .acard.show {
   /* paint backdrop + center contents */
@@ -1520,7 +1527,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   white-space: nowrap;
   flex-shrink: 0;
 }
-/* Status modifier classes — applied by JS in showCard */
+/* Status modifier classes â€” applied by JS in showCard */
 .acstat.st-current   { color: var(--success);    border-color: var(--success);    background: rgba(0, 255, 136, 0.06); }
 .acstat.st-credit    { color: var(--blue);       border-color: var(--blue);       background: rgba(0, 136, 255, 0.06); }
 .acstat.st-pastdue   { color: var(--warning);    border-color: var(--warning);    background: rgba(255, 136, 0, 0.06); }
@@ -1578,7 +1585,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 .acbtn.pri:hover { background: rgba(0, 245, 255, 0.18); }
 
 /* ============================================================================
-   BOIL WATER NOTICE OVERLAY (#bwnModal) — uses .modal base from earlier
+   BOIL WATER NOTICE OVERLAY (#bwnModal) â€” uses .modal base from earlier
    .modal already provides full-screen overlay + centering when .show is added
    ============================================================================ */
 #bwnModal .bwn-card {
@@ -1734,10 +1741,10 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 /* End ACCOUNT CARD + BWN OVERLAY block */
 
 /* ============================================================================
-   PAGE-SCOPED OVERRIDES — minimal, only where Enterprise structure needs it
+   PAGE-SCOPED OVERRIDES â€” minimal, only where legacy structure needs it
    ============================================================================ */
 
-/* ─── [data-page="login"] ─────────────────────────────────────────────────── */
+/* â”€â”€â”€ [data-page="login"] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="login"] .card {
   position: relative; z-index: 1;
   width: 420px; max-width: 94vw;
@@ -1876,9 +1883,42 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   box-shadow: 0 0 5px var(--success);
 }
 
-/* ─── [data-page="index"] / [data-page="command"]  ─────────────────────────── */
-[data-page="index"] .main,
-[data-page="command"] .main {
+/* â”€â”€â”€ [data-page="index"]   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+
+/* Topbar overrides â€” index.html still has legacy embedded layout rules; shared topbar rules own operator chrome */
+[data-page="index"] .topbar-meta{
+  font-family: var(--font-mono) !important;
+  font-size: 9px !important;
+  color: var(--text-muted) !important;
+  letter-spacing: 2px !important;
+}
+[data-page="index"] .operator-name{
+  color: var(--primary) !important;
+  font-family: var(--font-mono) !important;
+  font-size: 9px !important;
+  font-weight: 400 !important;
+  letter-spacing: 2px !important;
+}
+[data-page="index"] .logout-btn{
+  font-family: var(--font-display) !important;
+  font-size: 7px !important;
+  padding: 4px 9px !important;
+  border: 1px solid var(--border-strong) !important;
+  color: var(--text-muted) !important;
+  background: transparent !important;
+  cursor: pointer !important;
+  letter-spacing: 1px !important;
+  margin-left: 10px !important;
+  transition: all .15s !important;
+  border-radius: var(--radius) !important;
+}
+[data-page="index"] .logout-btn:hover{
+  color: var(--primary) !important;
+  border-color: var(--primary) !important;
+  background: var(--primary-soft) !important;
+}
+
+[data-page="index"] .main{
   position: fixed;
   top: 72px; bottom: 80px;
   left: 0; right: 0;
@@ -1888,8 +1928,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   padding: 10px;
   overflow: hidden;
 }
-[data-page="index"] .col,
-[data-page="command"] .col {
+[data-page="index"] .col{
   display: flex; flex-direction: column;
   gap: 10px;
   overflow-y: auto;
@@ -1897,40 +1936,30 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   min-width: 0;
   min-height: 0;
 }
-/* Middle column has the map — keep it taking full vertical so map fills space */
-[data-page="index"] .main > .col:nth-child(2),
-[data-page="command"] .main > .col:nth-child(2) {
+/* Middle column has the map â€” keep it taking full vertical so map fills space */
+[data-page="index"] .main > .col:nth-child(2){
   overflow: hidden;
 }
-[data-page="index"] .map-panel,
-[data-page="command"] .map-panel {
+[data-page="index"] .map-panel{
   flex: 1 !important;
   min-height: 200px;
   overflow: hidden;
   position: relative;
 }
-[data-page="index"] .map-panel #mapGl,
-[data-page="command"] .map-panel #mapGl {
+[data-page="index"] .map-panel #mapGl{
   position: absolute;
   inset: 0;
   width: 100%;
   height: 100%;
 }
 /* Force Mapbox tiles to render on a dark background even before the style loads */
-[data-page="index"] .map-panel,
-[data-page="command"] .map-panel { background: #020c14; }
-[data-page="index"] .mapboxgl-canvas-container,
-[data-page="command"] .mapboxgl-canvas-container,
-[data-page="index"] .mapboxgl-canvas,
-[data-page="command"] .mapboxgl-canvas { background: #020c14; }
-/* Hide Mapbox attribution/logo in tight panels (still required by ToS in production —
+[data-page="index"] .map-panel{ background: #020c14; }
+[data-page="index"] .mapboxgl-canvas-container{ background: #020c14; }
+/* Hide Mapbox attribution/logo in tight panels (still required by ToS in production â€”
    reveal on hover by un-setting via .mapboxgl-ctrl-attrib if needed) */
-[data-page="index"] .mapboxgl-ctrl-bottom-left,
-[data-page="command"] .mapboxgl-ctrl-bottom-left { display: none; }
-[data-page="index"] .mapboxgl-ctrl-bottom-right,
-[data-page="command"] .mapboxgl-ctrl-bottom-right { opacity: .35; transform: scale(.75); transform-origin: bottom right; }
-[data-page="index"] .mleg,
-[data-page="command"] .mleg {
+[data-page="index"] .mapboxgl-ctrl-bottom-left{ display: none; }
+[data-page="index"] .mapboxgl-ctrl-bottom-right{ opacity: .35; transform: scale(.75); transform-origin: bottom right; }
+[data-page="index"] .mleg{
   position: absolute;
   bottom: 8px; right: 8px;
   background: rgba(2, 12, 20, 0.88);
@@ -1945,16 +1974,14 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   letter-spacing: .8px;
   color: var(--text-soft);
 }
-[data-page="index"] .mleg .legrow,
-[data-page="command"] .mleg .legrow {
+[data-page="index"] .mleg .legrow{
   display: flex; align-items: center;
   gap: 6px;
   font-size: 8px;
   letter-spacing: .8px;
   margin-top: 0;
 }
-[data-page="index"] .legdot,
-[data-page="command"] .legdot {
+[data-page="index"] .legdot{
   width: 7px; height: 7px;
   border-radius: 50%;
   flex-shrink: 0;
@@ -1987,7 +2014,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   box-shadow: 0 0 8px rgba(0, 245, 255, 0.2);
 }
 
-/* ─── [data-page="accounts"] ──────────────────────────────────────────────── */
+/* â”€â”€â”€ [data-page="accounts"] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 /* Alias old var names */
 [data-page="accounts"] {
@@ -1998,7 +2025,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   --purple: #aa00ff;
 }
 
-/* ── Layout ─────────────────────────────────────────────────────────────── */
+/* â”€â”€ Layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .statsbar {
   top: 46px; height: 50px; padding: 0;
 }
@@ -2019,13 +2046,13 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   overflow-y: auto;
 }
 
-/* ── Topbar helpers ─────────────────────────────────────────────────────── */
+/* â”€â”€ Topbar helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .tb-group    { display: flex; align-items: center; gap: 14px; }
 [data-page="accounts"] .tb-tag      { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 2px; }
 [data-page="accounts"] .tb-op-label { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 2px; }
 [data-page="accounts"] .op-name     { font-family: var(--font-num); font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: .5px; }
 
-/* ── Stats bar — stat-pill layout (unique to accounts) ───────────────────── */
+/* â”€â”€ Stats bar â€” stat-pill layout (unique to accounts) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .stat-pill {
   display: flex; flex-direction: column;
   align-items: center; justify-content: center;
@@ -2060,12 +2087,12 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="accounts"] .bal-orange{ color: var(--warning); }
 [data-page="accounts"] .bal-blue  { color: var(--blue); }
 
-/* ── Toolbar ─────────────────────────────────────────────────────────────── */
+/* â”€â”€ Toolbar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .search-wrap {
   position: relative; flex: 1; max-width: 380px;
 }
 [data-page="accounts"] .search-wrap::before {
-  content: '⌕'; position: absolute; left: 10px; top: 50%;
+  content: 'âŒ•'; position: absolute; left: 10px; top: 50%;
   transform: translateY(-50%); color: var(--text-muted);
   font-size: 16px; pointer-events: none; opacity: .7;
 }
@@ -2094,20 +2121,20 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 }
 [data-page="accounts"] .new-acct-btn:hover { background: rgba(0, 255, 136, 0.16); }
 
-/* ── Accounts table ──────────────────────────────────────────────────────── */
+/* â”€â”€ Accounts table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .acct-list { width: 100%; }
 [data-page="accounts"] .atable { width: 100%; border-collapse: collapse; }
 [data-page="accounts"] .atable thead { position: sticky; top: 0; z-index: 10; }
 [data-page="accounts"] .atable th { font-family: var(--font-display); font-size: 7px; letter-spacing: 1.5px; color: var(--text-muted); padding: 8px 12px; border-bottom: 1px solid var(--border); text-align: left; font-weight: 400; background: var(--bg); white-space: nowrap; cursor: pointer; }
 [data-page="accounts"] .atable th:hover { color: var(--cyan); }
-[data-page="accounts"] .atable th.sort-asc::after  { content: ' ▲'; color: var(--cyan); }
-[data-page="accounts"] .atable th.sort-desc::after { content: ' ▼'; color: var(--cyan); }
+[data-page="accounts"] .atable th.sort-asc::after  { content: ' â–²'; color: var(--cyan); }
+[data-page="accounts"] .atable th.sort-desc::after { content: ' â–¼'; color: var(--cyan); }
 [data-page="accounts"] .atable td { padding: 8px 12px; border-bottom: 1px solid rgba(0, 245, 255, 0.04); vertical-align: middle; }
 [data-page="accounts"] .atable tr:hover td { background: rgba(0, 245, 255, .03); cursor: pointer; }
 [data-page="accounts"] .atable tr.selected td { background: rgba(0, 245, 255, .06); border-left: 2px solid var(--cyan); }
 [data-page="accounts"] .loading-row td { color: var(--text-muted); font-size: 10px; letter-spacing: 2px; text-align: center; padding: 60px; font-family: var(--font-mono); }
 
-/* ── Table cell classes ──────────────────────────────────────────────────── */
+/* â”€â”€ Table cell classes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .td-acct { font-family: var(--font-display); font-size: 9px; color: var(--cyan); letter-spacing: 1px; }
 [data-page="accounts"] .td-name { font-family: var(--font-num); font-size: 14px; font-weight: 600; color: var(--text); }
 [data-page="accounts"] .td-addr { font-family: var(--font-num); font-size: 14px; font-weight: 400; color: var(--text-soft); white-space: nowrap; max-width: 240px; overflow: hidden; text-overflow: ellipsis; }
@@ -2117,11 +2144,11 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 /* Balance: Orbitron to match stat counts */
 [data-page="accounts"] .td-bal { font-family: var(--font-num); font-size: 14px; font-weight: 700; text-align: right; white-space: nowrap; }
 
-/* ── Status pills in table ────────────────────────────────────────────────── */
+/* â”€â”€ Status pills in table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .pill { font-family: var(--font-display); font-size: 7px; padding: 2px 8px; border: 1px solid; letter-spacing: 1px; white-space: nowrap; border-radius: var(--radius); }
 [data-page="accounts"] .plan-pill { font-family: var(--font-display); font-size: 7px; padding: 2px 7px; border: 1px solid var(--warning); color: var(--warning); background: rgba(255,136,0,.06); letter-spacing: 1px; border-radius: var(--radius); }
 
-/* ── Detail panel — overrides global .detail-panel + .dp-header ──────────── */
+/* â”€â”€ Detail panel â€” overrides global .detail-panel + .dp-header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .detail-panel {
   position: fixed;
   top: 140px;
@@ -2216,7 +2243,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   padding: 0;
 }
 
-/* ── Compact info grid (top of body, no scroll) ──────────────────────────── */
+/* â”€â”€ Compact info grid (top of body, no scroll) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .dp-info-grid {
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
@@ -2257,7 +2284,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="accounts"] .dp-info-pmt-date { color: var(--text-muted); font-size: 11px; }
 [data-page="accounts"] .dp-info-pmt-amt { color: var(--success); font-weight: 700; }
 
-/* ── Transaction register section (scrollable bottom of body) ─────────────── */
+/* â”€â”€ Transaction register section (scrollable bottom of body) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .dp-txn-section {
   flex: 1; min-height: 0;
   display: flex; flex-direction: column;
@@ -2274,7 +2301,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="accounts"] .txn-wrap { flex: 1; overflow-y: auto; padding: 0; }
 [data-page="accounts"] .dp-txn-loading { padding: 20px; text-align: center; color: var(--text-muted); font-family: var(--font-mono); font-size: 9px; letter-spacing: 1px; }
 
-/* ── Transaction register ────────────────────────────────────────────────── */
+/* â”€â”€ Transaction register â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .txn-wrap { padding: 0; }
 [data-page="accounts"] .txn-row { display: flex; align-items: center; gap: 8px; padding: 6px 16px; border-bottom: 1px solid rgba(0,245,255,.03); font-size: 9px; }
 [data-page="accounts"] .txn-row:hover { background: rgba(0,245,255,.03); }
@@ -2283,7 +2310,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="accounts"] .txn-desc { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); flex: 1; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 [data-page="accounts"] .txn-amt { font-family: var(--font-num); font-size: 12px; font-weight: 700; white-space: nowrap; flex-shrink: 0; margin-left: auto; }
 
-/* ── Action buttons grid at panel bottom (3 cols × 2 rows = 6 buttons) ─── */
+/* â”€â”€ Action buttons grid at panel bottom (3 cols Ã— 2 rows = 6 buttons) â”€â”€â”€ */
 [data-page="accounts"] .dp-actions { padding: 10px 14px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 5px; border-top: 1px solid var(--border-strong); background: var(--surface); flex-shrink: 0; }
 [data-page="accounts"] .dp-btn { padding: 8px; border: 1px solid var(--border); color: var(--text-muted); background: transparent; font-family: var(--font-mono); font-size: 8px; letter-spacing: 1px; cursor: pointer; transition: all .15s; text-align: center; border-radius: var(--radius); }
 [data-page="accounts"] .dp-btn:hover { border-color: var(--cyan); color: var(--cyan); background: rgba(0,245,255,.05); }
@@ -2293,7 +2320,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="accounts"] .dp-btn.success { border-color: var(--success); color: var(--success); }
 [data-page="accounts"] .dp-btn.success:hover { background: rgba(0,255,136,.08); }
 
-/* ── Action panels (payment, arrangement, notice, disconnect) ───────────── */
+/* â”€â”€ Action panels (payment, arrangement, notice, disconnect) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .action-panel { display: none; position: fixed; top: 0; right: 0; bottom: 0; width: 480px; background: rgba(2,10,20,.98); border-left: 1px solid var(--border-strong); z-index: 500; flex-direction: column; box-shadow: -20px 0 60px rgba(0,0,0,.6); }
 [data-page="accounts"] .action-panel.show { display: flex; }
 [data-page="accounts"] .ap-header { padding: 16px 20px; border-bottom: 1px solid var(--border); background: linear-gradient(135deg, rgba(0,245,255,.08), transparent); display: flex; justify-content: space-between; align-items: center; flex-shrink: 0; }
@@ -2313,7 +2340,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="accounts"] .ap-btn.success { background: rgba(0,255,136,.06); border-color: var(--success); color: var(--success); }
 [data-page="accounts"] .ap-btn.success:hover { background: rgba(0,255,136,.15); }
 
-/* ── Form elements inside action panels ─────────────────────────────────── */
+/* â”€â”€ Form elements inside action panels â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .form-section { margin-bottom: 18px; }
 [data-page="accounts"] .form-label { font-family: var(--font-display); font-size: 8px; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 6px; display: block; }
 [data-page="accounts"] .form-row   { margin-bottom: 12px; }
@@ -2324,7 +2351,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="accounts"] .form-select:focus { border-color: var(--border-strong); }
 [data-page="accounts"] .form-select option { background: var(--bg); color: var(--text); }
 
-/* ── Modal (new account) ─────────────────────────────────────────────────── */
+/* â”€â”€ Modal (new account) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .modal { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 600; align-items: center; justify-content: center; }
 [data-page="accounts"] .modal.show { display: flex; }
 [data-page="accounts"] .modal-box { background: var(--bg); border: 1px solid var(--border-strong); width: 580px; max-width: 94vw; max-height: 88vh; border-radius: var(--radius); overflow: hidden; display: flex; flex-direction: column; }
@@ -2339,11 +2366,11 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="accounts"] .modal-btn.cancel { border-color: var(--border); color: var(--text-muted); }
 [data-page="accounts"] .modal-btn.cancel:hover { border-color: var(--danger); color: var(--danger); }
 
-/* ── Clickable BILL pill in transaction register ─────────────────────────── */
+/* â”€â”€ Clickable BILL pill in transaction register â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .txn-type-clickable { cursor: pointer; transition: all .15s; }
 [data-page="accounts"] .txn-type-clickable:hover { background: rgba(255, 136, 0, 0.12); transform: translateY(-1px); }
 
-/* ── Comm log panel (account-scoped communication history) ────────── */
+/* â”€â”€ Comm log panel (account-scoped communication history) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .comm-empty {
   padding: 30px 20px; text-align: center;
   font-family: var(--font-mono); font-size: 10px;
@@ -2389,7 +2416,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   color: var(--text-muted); letter-spacing: 1px;
 }
 
-/* ── Form section title (used inside edit account panel) ──────────── */
+/* â”€â”€ Form section title (used inside edit account panel) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .form-section-title {
   font-family: var(--font-display); font-size: 8px;
   color: var(--cyan); letter-spacing: 2.5px;
@@ -2398,10 +2425,10 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   text-transform: uppercase;
 }
 
-/* ── Nav alert badge ─────────────────────────────────────────────────────── */
+/* â”€â”€ Nav alert badge â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="accounts"] .navalert { position: absolute; top: 5px; right: 5px; background: var(--danger); color: #fff; font-family: var(--font-display); font-size: 7px; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-/* ─── [data-page="billing"] ───────────────────────────────────────────────── */
+/* â”€â”€â”€ [data-page="billing"] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="billing"] .cyclebar {
   position: fixed;
   top: 46px; left: 0; right: 0;
@@ -2476,7 +2503,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   left: 0; right: 0;
   overflow-y: auto;
 }
-/* ── Cycle status badges ─────────────────────────────────────────────────── */
+/* â”€â”€ Cycle status badges â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="billing"] .status-badge {
   font-family: var(--font-display);
   font-size: 9px;
@@ -2496,7 +2523,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   color: var(--text-soft);
 }
 
-/* ── Cycle gallery — ALL CYCLES view ────────────────────────────────────── */
+/* â”€â”€ Cycle gallery â€” ALL CYCLES view â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="billing"] .gallery {
   padding: 18px;
 }
@@ -2588,8 +2615,8 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   margin-left: 10px;
 }
 
-/* ── Billing-page table cells — match old hardcoded values from billing(6).html ── */
-/* td-name: NO font-family override → inherits Rajdhani 400 from body, then 13px/600 here */
+/* â”€â”€ Billing-page table cells â€” match old hardcoded values from billing(6).html â”€â”€ */
+/* td-name: NO font-family override â†’ inherits Rajdhani 400 from body, then 13px/600 here */
 [data-page="billing"] .td-name {
   font-family: var(--font-num);
   color: var(--text);
@@ -2628,7 +2655,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   white-space: nowrap;
   text-shadow: 0 0 8px rgba(232, 180, 0, .3);
 }
-/* stat-val on billing → Rajdhani 22px 700 — matches other pages */
+/* stat-val on billing â†’ Rajdhani 22px 700 â€” matches other pages */
 [data-page="billing"] .stat-val {
   font-family: var(--font-num);
   font-size: 22px;
@@ -2638,7 +2665,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   text-shadow: 0 0 10px currentColor;
 }
 
-/* ─── [data-page="readings"] ──────────────────────────────────────────────── */
+/* â”€â”€â”€ [data-page="readings"] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="readings"] .cyclebar {
   position: fixed;
   top: 46px; left: 0; right: 0;
@@ -2879,14 +2906,14 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   border-radius: var(--radius);
 }
 
-/* ── Operator name (topbar) ── */
+/* â”€â”€ Operator name (topbar) â”€â”€ */
 [data-page="readings"] .operator-name {
   font-family: var(--font-num);
   font-size: 14px; font-weight: 700;
   color: var(--text); letter-spacing: .5px;
 }
 
-/* ── Table: account number → blue, bill amount → blue ── */
+/* â”€â”€ Table: account number â†’ blue, bill amount â†’ blue â”€â”€ */
 [data-page="readings"] .td-acct {
   font-family: var(--font-display);
   font-size: 9px; font-weight: 400;
@@ -2904,7 +2931,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   text-align: right;
 }
 
-/* ── Date input — dark Pro theme matching notes-input, green date color ── */
+/* â”€â”€ Date input â€” dark Pro theme matching notes-input, green date color â”€â”€ */
 [data-page="readings"] .date-input {
   background: rgba(0, 255, 136, 0.04);
   border: 1px solid rgba(0, 255, 136, 0.25);
@@ -2926,12 +2953,12 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 
 
 
-/* ── Last column: billed badge + save button ── */
+/* â”€â”€ Last column: billed badge + save button â”€â”€ */
 [data-page="readings"] .td-save {
   display: flex; align-items: center; gap: 6px; white-space: nowrap;
 }
 
-/* ── Billed status badge (replaces save button) ── */
+/* â”€â”€ Billed status badge (replaces save button) â”€â”€ */
 [data-page="readings"] .billed-badge {
   font-family: var(--font-display);
   font-size: 7px; letter-spacing: 1.5px;
@@ -2948,7 +2975,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   background: transparent;
 }
 
-/* ─── [data-page="payments"] ──────────────────────────────────────────────── */
+/* â”€â”€â”€ [data-page="payments"] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 /* Alias old green-theme vars to Pro tokens so JS inline styles resolve correctly */
 [data-page="payments"] {
@@ -2960,7 +2987,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   --bg3:        var(--bg);
 }
 
-/* ── Layout offsets ─────────────────────────────────────────────────────── */
+/* â”€â”€ Layout offsets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="payments"] .statsbar {
   top: 46px; height: 56px;
 }
@@ -2999,14 +3026,14 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 }
 [data-page="payments"] .main.panel-open { right: 520px; }
 
-/* ── Topbar helpers ─────────────────────────────────────────────────────── */
+/* â”€â”€ Topbar helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="payments"] .tb-group { display: flex; align-items: center; gap: 14px; }
 [data-page="payments"] .tb-tag { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 3px; }
 [data-page="payments"] .topbar-meta { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 1px; }
 [data-page="payments"] .tb-op-label { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 2px; }
 [data-page="payments"] .op-name { font-family: var(--font-num); font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: .5px; }
 
-/* ── Control bar ────────────────────────────────────────────────────────── */
+/* â”€â”€ Control bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="payments"] .ctrl-group { display: flex; align-items: center; gap: 6px; flex-shrink: 0; }
 [data-page="payments"] .ctrl-label { font-family: var(--font-mono); font-size: 8px; color: var(--text-muted); letter-spacing: 2px; white-space: nowrap; }
 [data-page="payments"] .ctrl-divider { width: 1px; height: 32px; background: var(--border); margin: 0 4px; flex-shrink: 0; }
@@ -3040,7 +3067,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="payments"] .range-btn:hover,
 [data-page="payments"] .range-btn.active { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
 [data-page="payments"] .search-wrap { flex: 1; min-width: 180px; position: relative; }
-[data-page="payments"] .search-wrap::before { content: '⌕'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 16px; pointer-events: none; opacity: .6; }
+[data-page="payments"] .search-wrap::before { content: 'âŒ•'; position: absolute; left: 10px; top: 50%; transform: translateY(-50%); color: var(--primary); font-size: 16px; pointer-events: none; opacity: .6; }
 [data-page="payments"] .search-input {
   width: 100%;
   background: var(--surface);
@@ -3073,7 +3100,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="payments"] .ctrl-btn-dim { border-color: var(--border); color: var(--text-muted); }
 [data-page="payments"] .ctrl-btn-dim:hover { border-color: var(--primary); color: var(--primary); }
 
-/* ── Filter bar ─────────────────────────────────────────────────────────── */
+/* â”€â”€ Filter bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="payments"] .fbtn {
   font-family: var(--font-mono);
   font-size: 8px;
@@ -3108,13 +3135,13 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="payments"] .filter-right { margin-left: auto; display: flex; align-items: center; gap: 10px; flex-shrink: 0; }
 [data-page="payments"] .row-count { font-family: var(--font-display); font-size: 9px; color: var(--text-muted); letter-spacing: 1px; }
 
-/* ── Table ──────────────────────────────────────────────────────────────── */
+/* â”€â”€ Table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="payments"] .ptable { width: 100%; border-collapse: collapse; }
 [data-page="payments"] .ptable thead { position: sticky; top: 0; z-index: 10; }
 [data-page="payments"] .ptable th { font-family: var(--font-display); font-size: 7px; letter-spacing: 1.5px; color: var(--text-muted); padding: 8px 12px; border-bottom: 2px solid var(--border); text-align: left; font-weight: 400; background: var(--bg); white-space: nowrap; cursor: pointer; user-select: none; }
 [data-page="payments"] .ptable th:hover { color: var(--primary); }
-[data-page="payments"] .ptable th.sort-asc::after  { content: ' ▲'; color: var(--primary); }
-[data-page="payments"] .ptable th.sort-desc::after { content: ' ▼'; color: var(--primary); }
+[data-page="payments"] .ptable th.sort-asc::after  { content: ' â–²'; color: var(--primary); }
+[data-page="payments"] .ptable th.sort-desc::after { content: ' â–¼'; color: var(--primary); }
 [data-page="payments"] .ptable th.r { text-align: right; }
 [data-page="payments"] .ptable td { padding: 7px 12px; border-bottom: 1px solid rgba(0, 245, 255, 0.04); vertical-align: middle; font-size: 13px; }
 [data-page="payments"] .ptable tr:hover td { background: rgba(0, 245, 255, 0.03); cursor: pointer; }
@@ -3136,7 +3163,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="payments"] .open-btn { background: transparent; border: 1px solid var(--border); color: var(--text-muted); font-family: var(--font-display); font-size: 8px; padding: 3px 7px; cursor: pointer; letter-spacing: 1px; transition: all .15s; white-space: nowrap; border-radius: var(--radius); }
 [data-page="payments"] .open-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
 
-/* ── Payment method pills ────────────────────────────────────────────────── */
+/* â”€â”€ Payment method pills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="payments"] .mpill { font-family: var(--font-display); font-size: 7px; padding: 2px 7px; border: 1px solid; letter-spacing: 1px; white-space: nowrap; border-radius: var(--radius); }
 [data-page="payments"] .mp-check { border-color: rgba(0, 245, 255, .4); color: var(--cyan); }
 [data-page="payments"] .mp-cash  { border-color: rgba(0, 255, 136, .4); color: var(--success); }
@@ -3145,7 +3172,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="payments"] .mp-mo    { border-color: rgba(255, 136, 0, .4); color: var(--warning); }
 [data-page="payments"] .mp-other { border-color: var(--border); color: var(--text-muted); }
 
-/* ── Detail panel ────────────────────────────────────────────────────────── */
+/* â”€â”€ Detail panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="payments"] .detail-panel { position: fixed; top: 0; right: -520px; bottom: 78px; width: 520px; background: var(--bg); border-left: 1px solid var(--border-strong); z-index: 300; display: flex; flex-direction: column; transition: right .25s ease; box-shadow: -20px 0 60px rgba(0, 0, 0, .7); }
 [data-page="payments"] .detail-panel.open { right: 0; }
 [data-page="payments"] .dp-header { padding: 14px 18px; border-bottom: 1px solid var(--border); background: linear-gradient(135deg, var(--primary-soft), transparent); position: relative; flex-shrink: 0; }
@@ -3174,7 +3201,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="payments"] .dp-btn-ghost  { border-color: var(--border); color: var(--text-muted); }
 [data-page="payments"] .dp-btn-ghost:hover  { border-color: var(--primary); color: var(--primary); }
 
-/* ── Edit form ───────────────────────────────────────────────────────────── */
+/* â”€â”€ Edit form â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="payments"] .dp-form { padding: 14px 18px; }
 [data-page="payments"] .ef-row { margin-bottom: 12px; }
 [data-page="payments"] .ef-row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
@@ -3184,7 +3211,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="payments"] .ef-input option { background: var(--bg); color: var(--text); }
 [data-page="payments"] .ef-input::placeholder { color: var(--text-muted); }
 
-/* ── Toggles ─────────────────────────────────────────────────────────────── */
+/* â”€â”€ Toggles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="payments"] .toggle-row { display: flex; align-items: center; justify-content: space-between; padding: 8px 18px; border-bottom: 1px solid rgba(0, 245, 255, 0.04); }
 [data-page="payments"] .toggle-label { font-family: var(--font-mono); font-size: 9px; color: var(--text-soft); letter-spacing: 1px; }
 [data-page="payments"] .toggle { position: relative; width: 40px; height: 20px; cursor: pointer; }
@@ -3194,7 +3221,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="payments"] .toggle input:checked + .toggle-track { background: rgba(0, 255, 136, .15); border-color: var(--success); }
 [data-page="payments"] .toggle input:checked ~ .toggle-thumb { transform: translateX(20px); background: var(--success); box-shadow: 0 0 6px var(--success); }
 
-/* ── Image area ─────────────────────────────────────────────────────────── */
+/* â”€â”€ Image area â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="payments"] .img-area { padding: 14px 18px; border-bottom: 1px solid var(--border); }
 [data-page="payments"] .img-area-title { font-family: var(--font-display); font-size: 8px; color: var(--text-muted); letter-spacing: 2px; margin-bottom: 10px; }
 [data-page="payments"] .img-preview { width: 100%; max-height: 200px; object-fit: contain; border: 1px solid var(--primary); background: var(--surface); cursor: pointer; }
@@ -3205,14 +3232,14 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="payments"] .img-btn { flex: 1; font-family: var(--font-display); font-size: 7px; padding: 6px; border: 1px solid var(--border); color: var(--text-muted); background: transparent; cursor: pointer; letter-spacing: 1px; transition: all .15s; text-align: center; border-radius: var(--radius); }
 [data-page="payments"] .img-btn:hover { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
 
-/* ── Lightbox ────────────────────────────────────────────────────────────── */
+/* â”€â”€ Lightbox â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="payments"] .lightbox { display: none; position: fixed; inset: 0; background: rgba(0, 0, 0, .94); z-index: 800; align-items: center; justify-content: center; flex-direction: column; gap: 16px; }
 [data-page="payments"] .lightbox.show { display: flex; }
 [data-page="payments"] .lightbox img { max-width: 88vw; max-height: 74vh; border: 1px solid var(--primary); box-shadow: 0 0 40px var(--primary-soft); }
 [data-page="payments"] .lb-caption { font-family: var(--font-mono); font-size: 9px; color: var(--text-soft); letter-spacing: 1px; }
 [data-page="payments"] .lb-close { font-family: var(--font-display); font-size: 10px; color: var(--danger); border: 1px solid var(--danger); padding: 8px 22px; cursor: pointer; letter-spacing: 2px; background: rgba(255, 34, 68, .08); border-radius: var(--radius); }
 
-/* ─── [data-page="compliance"] ────────────────────────────────────────────── */
+/* â”€â”€â”€ [data-page="compliance"] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="compliance"] .alert-bar {
   position: fixed;
   top: 46px; left: 0; right: 0;
@@ -3372,7 +3399,21 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   text-align: center;
 }
 
-/* ── Compliance right panel: filter bar + table ─────────────────────────── */
+/* â”€â”€ Compliance â€” topbar typography enforcement */
+[data-page="compliance"] .topbar-meta {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+}
+[data-page="compliance"] .operator-name {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 400;
+}
+
+/* â”€â”€ Compliance right panel: filter bar + table â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="compliance"] .right-panel {
   flex: 1;
   display: flex;
@@ -3462,7 +3503,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   background: rgba(255, 136, 0, 0.05);
 }
 
-/* ── Priority dot ─────────────────────────────────────────────────────── */
+/* â”€â”€ Priority dot â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="compliance"] .td-priority {
   text-align: center;
   width: 28px;
@@ -3483,7 +3524,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="compliance"] .p-med  { background: var(--info); }
 [data-page="compliance"] .p-low  { background: var(--text-muted); }
 
-/* ── Category badges ─────────────────────────────────────────────────── */
+/* â”€â”€ Category badges â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="compliance"] .cat-badge {
   font-family: var(--font-display);
   font-size: 7px;
@@ -3507,7 +3548,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="compliance"] .cat-erp   { border-color: rgba(255, 136, 0, .35);  color: var(--warning); }
 [data-page="compliance"] .cat-other { border-color: var(--border-strong);    color: var(--text-muted); }
 
-/* ── Table cell text styles ──────────────────────────────────────────── */
+/* â”€â”€ Table cell text styles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="compliance"] .td-desc {
   font-family: var(--font-num);
   font-size: 12px;
@@ -3524,7 +3565,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="compliance"] .td-freq { font-family: var(--font-mono); font-size: 11px; color: var(--text-soft); }
 [data-page="compliance"] .td-due  { font-family: var(--font-num);  font-size: 13px; font-weight: 600; color: var(--text); white-space: nowrap; -webkit-font-smoothing: antialiased; }
 
-/* ── Countdown ───────────────────────────────────────────────────────── */
+/* â”€â”€ Countdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="compliance"] .countdown {
   display: flex;
   flex-direction: column;
@@ -3558,7 +3599,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="compliance"] .countdown:has(.cd-soon)     .cd-lbl-left { color: var(--warning); }
 [data-page="compliance"] .countdown:has(.cd-ok)       .cd-lbl-left { color: var(--text-muted); }
 
-/* ── Status pills ────────────────────────────────────────────────────── */
+/* â”€â”€ Status pills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="compliance"] .pill {
   font-family: var(--font-display);
   font-size: 7px;
@@ -3577,7 +3618,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="compliance"] .pill-compliant { border-color: rgba(0, 255, 136, .45);  color: var(--success); background: rgba(0, 255, 136, .06); }
 [data-page="compliance"] .pill-resolved  { border-color: var(--border-strong);    color: var(--text-muted); }
 
-/* ── Row action button ───────────────────────────────────────────────── */
+/* â”€â”€ Row action button â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="compliance"] .action-btn {
   background: transparent;
   border: 1px solid var(--border);
@@ -3597,7 +3638,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   background: var(--primary-soft);
 }
 
-/* ── Detail panel slide-out (right side) ─────────────────────────────── */
+/* â”€â”€ Detail panel slide-out (right side) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="compliance"] .detail-panel {
   position: fixed;
   top: 0;
@@ -3722,7 +3763,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="compliance"] .dp-btn-ghost { border-color: var(--border-strong); color: var(--text-muted); }
 [data-page="compliance"] .dp-btn-ghost:hover { border-color: var(--primary); color: var(--primary); }
 
-/* ── Cybersecurity & AI panel (replaces network status) ────────────── */
+/* â”€â”€ Cybersecurity & AI panel (replaces network status) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="compliance"] .cyber-box {
   border: 1px solid var(--border);
   background: rgba(255, 136, 0, 0.04);
@@ -3796,15 +3837,15 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   text-shadow: 0 0 6px var(--success);
 }
 
-/* ─── [data-page="comms"] ─────────────────────────────────────────────────── */
+/* â”€â”€â”€ [data-page="comms"] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
-/* ── Topbar helpers ── */
+/* â”€â”€ Topbar helpers â”€â”€ */
 [data-page="comms"] .topbar-left { display: flex; align-items: center; gap: 14px; }
 [data-page="comms"] .operator-label { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 3px; }
 [data-page="comms"] .topbar-meta { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 1px; }
 [data-page="comms"] .operator-name { font-family: var(--font-num); font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: .5px; }
 
-/* ── Layout: dash-strip → actionbar → main ─────────────────────── */
+/* â”€â”€ Layout: dash-strip â†’ actionbar â†’ main â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="comms"] .dash-strip {
   position: fixed;
   top: 46px; left: 0; right: 0;
@@ -3860,7 +3901,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   white-space: nowrap;
 }
 
-/* ── Bars chart (BY CATEGORY) ── */
+/* â”€â”€ Bars chart (BY CATEGORY) â”€â”€ */
 [data-page="comms"] .dash-bars {
   flex-shrink: 0;
   width: 200px;
@@ -3888,7 +3929,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   color: var(--text); width: 18px; text-align: right; flex-shrink: 0;
 }
 
-/* ── Action bar (filter buttons + ADD COMM) ── */
+/* â”€â”€ Action bar (filter buttons + ADD COMM) â”€â”€ */
 [data-page="comms"] .actionbar {
   position: fixed;
   top: 156px; left: 0; right: 0;
@@ -3950,7 +3991,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="comms"] .add-menu-item:last-child { border-bottom: none; }
 [data-page="comms"] .add-menu-item:hover { background: rgba(244, 160, 181, 0.10); color: var(--pk); }
 
-/* ── Main split (log list + detail area) ── */
+/* â”€â”€ Main split (log list + detail area) â”€â”€ */
 [data-page="comms"] .main {
   position: fixed;
   top: 196px; bottom: 78px;
@@ -3971,7 +4012,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   color: var(--text-muted); letter-spacing: 2px;
 }
 
-/* ── Log items in list — flat layout, single top line ── */
+/* â”€â”€ Log items in list â€” flat layout, single top line â”€â”€ */
 [data-page="comms"] .log-item {
   padding: 11px 14px 11px 16px;
   border-bottom: 1px solid var(--border);
@@ -4046,7 +4087,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   margin-left: 4px;
 }
 
-/* ── Type badge / cat pill / status dot ── */
+/* â”€â”€ Type badge / cat pill / status dot â”€â”€ */
 [data-page="comms"] .type-badge {
   font-family: var(--font-display); font-size: 7px;
   padding: 2px 6px; border: 1px solid;
@@ -4078,7 +4119,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   flex-shrink: 0;
 }
 
-/* ── Detail area (right pane) ── */
+/* â”€â”€ Detail area (right pane) â”€â”€ */
 [data-page="comms"] .detail-area {
   flex: 1; min-width: 0; min-height: 0;
   display: flex; flex-direction: column;
@@ -4104,7 +4145,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   color: var(--text-muted); letter-spacing: 3px;
 }
 
-/* ── Detail hero header ── */
+/* â”€â”€ Detail hero header â”€â”€ */
 [data-page="comms"] .det-hero {
   padding: 12px 18px;
   border-bottom: 1px solid var(--border);
@@ -4148,7 +4189,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   white-space: nowrap; flex-shrink: 0;
 }
 
-/* ── Detail field grid ── */
+/* â”€â”€ Detail field grid â”€â”€ */
 [data-page="comms"] .det-field {
   padding: 10px 22px;
   display: flex; align-items: center; justify-content: space-between;
@@ -4167,7 +4208,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   word-break: break-word;
 }
 
-/* ── Detail notes section ── */
+/* â”€â”€ Detail notes section â”€â”€ */
 [data-page="comms"] .det-notes {
   padding: 16px 22px;
   border-top: 1px solid var(--border);
@@ -4183,7 +4224,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   white-space: pre-wrap;
 }
 
-/* ── Detail actions (footer buttons) ── */
+/* â”€â”€ Detail actions (footer buttons) â”€â”€ */
 [data-page="comms"] .detail-actions {
   flex-shrink: 0;
   padding: 12px 18px;
@@ -4212,7 +4253,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="comms"] .da-btn-ghost  { border-color: var(--border); color: var(--text-muted); }
 [data-page="comms"] .da-btn-ghost:hover  { border-color: var(--pk); color: var(--pk); }
 
-/* ── Edit panel (slide-out) ── */
+/* â”€â”€ Edit panel (slide-out) â”€â”€ */
 [data-page="comms"] .edit-panel {
   position: fixed;
   top: 46px; right: -560px; bottom: 78px;
@@ -4315,7 +4356,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 }
 [data-page="comms"] .ep-btn-save:hover { background: rgba(244, 160, 181, 0.18); }
 
-/* ── Modal (Add Comm) ── */
+/* â”€â”€ Modal (Add Comm) â”€â”€ */
 [data-page="comms"] .modal-overlay {
   display: none;
   position: fixed; inset: 0;
@@ -4410,18 +4451,18 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 }
 [data-page="comms"] .btn-pk:hover { background: rgba(244, 160, 181, 0.18); }
 
-/* ─── [data-page="reports"] ───────────────────────────────────────────────── */
+/* â”€â”€â”€ [data-page="reports"] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
-/* ── Accent alias: reports page uses --rp (lime) ── */
+/* â”€â”€ Accent alias: reports page uses --rp (lime) â”€â”€ */
 [data-page="reports"] { --primary: var(--rp); --primary-soft: rgba(168,255,62,0.08); }
 
-/* ── Topbar helpers ── */
+/* â”€â”€ Topbar helpers â”€â”€ */
 [data-page="reports"] .topbar-left   { display: flex; align-items: center; gap: 14px; }
 [data-page="reports"] .topbar-meta   { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 1px; }
 [data-page="reports"] .operator-label { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 2px; }
 [data-page="reports"] .operator-name  { font-family: var(--font-num); font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: .5px; }
 
-/* ── Ticker (analytics feed) ── */
+/* â”€â”€ Ticker (analytics feed) â”€â”€ */
 [data-page="reports"] .ticker-wrap {
   position: fixed; top: 46px; left: 0; right: 0; height: 26px;
   background: rgba(2, 12, 20, 0.97);
@@ -4444,7 +4485,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   color: var(--text-soft); letter-spacing: .5px;
 }
 
-/* ── Ticker color helpers ── */
+/* â”€â”€ Ticker color helpers â”€â”€ */
 [data-page="reports"] .c-sys    { color: var(--rp); }
 [data-page="reports"] .c-ok     { color: var(--success); }
 [data-page="reports"] .c-pay    { color: var(--cyan); }
@@ -4454,14 +4495,14 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="reports"] .c-warn   { color: var(--warning); }
 [data-page="reports"] .sep { color: var(--border-strong); padding: 0 4px; }
 
-/* ── Stat value color helpers ── */
+/* â”€â”€ Stat value color helpers â”€â”€ */
 [data-page="reports"] .sv-g { color: var(--success); }
 [data-page="reports"] .sv-o { color: var(--warning); }
 [data-page="reports"] .sv-r { color: var(--danger); }
 [data-page="reports"] .sv-c  { color: var(--cyan); }
 [data-page="reports"] .sv-rp { color: var(--rp); }
 
-/* ── Statsbar (below ticker) ── */
+/* â”€â”€ Statsbar (below ticker) â”€â”€ */
 [data-page="reports"] .statsbar {
   position: fixed;
   top: 72px; left: 0; right: 0;
@@ -4486,7 +4527,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 }
 [data-page="reports"] .stat-val {
   font-family: var(--font-num); font-weight: 700;
-  font-size: 22px; color: var(--rp); /* default — sv-* overrides */
+  font-size: 22px; color: var(--rp); /* default â€” sv-* overrides */
   letter-spacing: .5px; white-space: nowrap;
 }
 [data-page="reports"] .stat-val.sv-c { color: var(--cyan) !important; }
@@ -4494,7 +4535,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="reports"] .stat-val.sv-r { color: var(--danger) !important; }
 [data-page="reports"] .stat-val.sv-g { color: var(--success) !important; }
 
-/* ── Report strip (full-width card with report cards inside) ── */
+/* â”€â”€ Report strip (full-width card with report cards inside) â”€â”€ */
 [data-page="reports"] .report-strip {
   padding: 12px 14px 14px;
 }
@@ -4509,7 +4550,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   gap: 7px;
 }
 
-/* ── Print button ── */
+/* â”€â”€ Print button â”€â”€ */
 [data-page="reports"] .print-btn {
   font-family: var(--font-display); font-size: 7px;
   padding: 4px 10px; border: 1px solid var(--border);
@@ -4519,7 +4560,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 }
 [data-page="reports"] .print-btn:hover { border-color: var(--rp); color: var(--rp); }
 
-/* ── Report table (rtable) ── */
+/* â”€â”€ Report table (rtable) â”€â”€ */
 [data-page="reports"] .rtable {
   width: 100%; border-collapse: collapse;
   font-family: var(--font-mono); font-size: 10px;
@@ -4540,7 +4581,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="reports"] .td-o { color: var(--warning); }
 [data-page="reports"] .td-r { color: var(--danger); }
 
-/* ── Modal (report detail viewer) ── */
+/* â”€â”€ Modal (report detail viewer) â”€â”€ */
 [data-page="reports"] .modal-overlay {
   display: none;
   position: fixed; inset: 0;
@@ -4716,7 +4757,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   font-family: var(--font-num);
   font-weight: 700;
   font-size: 19px;
-  color: var(--rp); /* default — sv-* overrides */
+  color: var(--rp); /* default â€” sv-* overrides */
 }
 [data-page="reports"] .kpi-num.sv-c  { color: var(--cyan) !important; }
 [data-page="reports"] .kpi-num.sv-o  { color: var(--warning) !important; }
@@ -4826,7 +4867,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="reports"] .hf-r  { background: linear-gradient(90deg, rgba(255, 34, 68, 0.35), var(--danger));  }
 [data-page="reports"] .hf-c  { background: linear-gradient(90deg, rgba(0, 245, 255, 0.35), var(--cyan));    }
 
-/* ─── [data-page="workorders"] ────────────────────────────────────────────── */
+/* â”€â”€â”€ [data-page="workorders"] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 /* Alias old var names to Pro tokens */
 [data-page="workorders"] {
@@ -4836,7 +4877,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   --panel: var(--surface);
 }
 
-/* ── Layout ─────────────────────────────────────────────────────────────── */
+/* â”€â”€ Layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .statsbar {
   top: 72px; height: 56px;
 }
@@ -4851,14 +4892,14 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   overflow: hidden;
 }
 
-/* ── Topbar helpers ─────────────────────────────────────────────────────── */
+/* â”€â”€ Topbar helpers â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .tb-group    { display: flex; align-items: center; gap: 14px; }
 [data-page="workorders"] .tb-tag      { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 3px; }
 [data-page="workorders"] .tb-op-label { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); letter-spacing: 2px; }
 [data-page="workorders"] .op-name     { font-family: var(--font-num); font-size: 14px; font-weight: 700; color: var(--text); letter-spacing: .5px; }
 [data-page="workorders"] .ticker-scroll { overflow: hidden; flex: 1; }
 
-/* ── Ticker ──────────────────────────────────────────────────────────────── */
+/* â”€â”€ Ticker â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .ticker-wrap {
   position: fixed; top: 46px; left: 0; right: 0; height: 26px;
   background: rgba(2, 12, 20, 0.95);
@@ -4876,7 +4917,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="workorders"] .ticker-track { display: flex; animation: tick 55s linear infinite; white-space: nowrap; }
 [data-page="workorders"] .ti { padding: 0 28px; font-family: var(--font-mono); font-size: 10px; letter-spacing: .5px; }
 
-/* ── Left panel ─────────────────────────────────────────────────────────── */
+/* â”€â”€ Left panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .left-panel {
   width: 290px; flex-shrink: 0;
   border-right: 1px solid var(--border);
@@ -4895,7 +4936,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   text-shadow: 0 0 8px rgba(138, 184, 94, 0.3);
 }
 
-/* ── Calendar ────────────────────────────────────────────────────────────── */
+/* â”€â”€ Calendar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .cal-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px; }
 [data-page="workorders"] .cal-month { font-family: var(--font-display); font-size: 9px; color: var(--wo); letter-spacing: 2px; }
 [data-page="workorders"] .cal-nav { background: transparent; border: none; color: var(--text-muted); font-size: 16px; cursor: pointer; padding: 0 6px; line-height: 1; transition: color .15s; }
@@ -4925,23 +4966,23 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="workorders"] .cal-day.selected { background: rgba(138, 184, 94, .2); color: var(--wo); box-shadow: 0 0 8px rgba(138, 184, 94, .3); }
 [data-page="workorders"] .cal-day.other-month { opacity: .25; }
 
-/* ── Mini category gauges ────────────────────────────────────────────────── */
+/* â”€â”€ Mini category gauges â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .mini-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 6px; }
 [data-page="workorders"] .mini-card { display: flex; flex-direction: column; align-items: center; padding: 4px; border: 1px solid var(--border); background: var(--surface); border-radius: var(--radius); }
 [data-page="workorders"] .mini-label { font-family: var(--font-display); font-size: 6px; letter-spacing: 1px; color: var(--text-muted); text-align: center; margin-top: 2px; }
 [data-page="workorders"] .mini-val { font-family: var(--font-num); font-size: 18px; font-weight: 700; }
 
-/* ── Tech roster ─────────────────────────────────────────────────────────── */
+/* â”€â”€ Tech roster â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .tech-row { display: flex; align-items: center; gap: 8px; padding: 5px 0; border-bottom: 1px solid rgba(138, 184, 94, 0.06); }
 [data-page="workorders"] .tech-row:last-child { border-bottom: none; }
 [data-page="workorders"] .tech-dot { width: 8px; height: 8px; border-radius: 50%; flex-shrink: 0; }
 [data-page="workorders"] .tech-name { font-family: var(--font-num); font-size: 11px; font-weight: 600; color: var(--text); flex: 1; }
 [data-page="workorders"] .tech-count { font-family: var(--font-mono); font-size: 9px; color: var(--text-muted); }
 
-/* ── Right panel ─────────────────────────────────────────────────────────── */
+/* â”€â”€ Right panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .right-panel { flex: 1; display: flex; flex-direction: column; min-height: 0; overflow: hidden; }
 
-/* ── Filter bar ─────────────────────────────────────────────────────────── */
+/* â”€â”€ Filter bar â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .filterbar {
   position: static; z-index: auto;
   height: 38px; flex-shrink: 0;
@@ -4962,7 +5003,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="workorders"] .add-btn { font-family: var(--font-display); font-size: 8px; padding: 5px 12px; border: 1px solid var(--success); color: var(--success); background: rgba(0, 255, 136, .06); cursor: pointer; letter-spacing: 1px; border-radius: var(--radius); transition: all .15s; flex-shrink: 0; }
 [data-page="workorders"] .add-btn:hover { background: rgba(0, 255, 136, .15); }
 
-/* ── WO Cards — horizontal layout ────────────────────────────────────────── */
+/* â”€â”€ WO Cards â€” horizontal layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .cards-wrap { flex: 1; overflow-y: auto; padding: 3px 10px 80px; display: flex; flex-direction: column; gap: 5px; }
 [data-page="workorders"] .wo-card {
   background: var(--surface); border: 1px solid var(--border);
@@ -5001,7 +5042,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 
 [data-page="workorders"] .card-status { flex-shrink: 0; display: flex; flex-direction: column; align-items: flex-end; gap: 5px; min-width: 112px; }
 
-/* ── Countdown ───────────────────────────────────────────────────────────── */
+/* â”€â”€ Countdown â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .countdown { display: flex; flex-direction: column; align-items: flex-end; }
 [data-page="workorders"] .cd-num { font-family: var(--font-num); font-weight: 700; font-size: 22px; line-height: 1; }
 [data-page="workorders"] .cd-lbl { display: none; }
@@ -5010,7 +5051,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="workorders"] .cd-red { color: var(--danger); text-shadow: 0 0 8px rgba(255,34,68,.4); }
 [data-page="workorders"] .cd-dim { color: var(--text-muted); }
 
-/* ── Status pills ────────────────────────────────────────────────────────── */
+/* â”€â”€ Status pills â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .pill { font-family: var(--font-display); font-size: 6px; padding: 2px 6px; border: 1px solid; letter-spacing: 1px; white-space: nowrap; border-radius: var(--radius); }
 [data-page="workorders"] .pill-open  { border-color: var(--wo); color: var(--wo); }
 [data-page="workorders"] .pill-inprog { border-color: var(--warning); color: var(--warning); animation: inprogPulse 2s ease-in-out infinite; }
@@ -5021,7 +5062,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="workorders"] .pill-crit  { border-color: var(--danger); color: #fff; background: rgba(255,34,68,.25); animation: critPulse 1.5s ease-in-out infinite; }
 [data-page="workorders"] .pill-canc  { border-color: var(--text-muted); color: var(--text-muted); opacity: .5; }
 
-/* ── Priority rules ──────────────────────────────────────────────────────── */
+/* â”€â”€ Priority rules â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .row-critical td { background: rgba(255, 34, 68, 0.06); }
 [data-page="workorders"] .priority-CRITICAL,
 [data-page="workorders"] .pill.priority-CRITICAL { color: var(--danger); border-color: var(--danger); background: rgba(255, 34, 68, 0.1); }
@@ -5032,7 +5073,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="workorders"] .priority-LOW,
 [data-page="workorders"] .pill.priority-LOW { color: var(--text-muted); border-color: var(--border); background: transparent; }
 
-/* ── Detail panel ────────────────────────────────────────────────────────── */
+/* â”€â”€ Detail panel â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .detail-panel { position: fixed; top: 128px; right: -480px; bottom: 78px; width: 480px; background: var(--bg); border-left: 1px solid var(--border-strong); z-index: 300; display: flex; flex-direction: column; transition: right .25s ease; box-shadow: -20px 0 60px rgba(0,0,0,.8); }
 [data-page="workorders"] .detail-panel.open { right: 0; }
 [data-page="workorders"] .dp-header { padding: 14px 18px; border-bottom: 1px solid var(--border); background: linear-gradient(135deg, rgba(138,184,94,.08), transparent); flex-shrink: 0; position: relative; }
@@ -5059,7 +5100,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="workorders"] .dp-btn-gho { border-color: var(--border); color: var(--text-muted); }
 [data-page="workorders"] .dp-btn-gho:hover { border-color: var(--wo); color: var(--wo); }
 
-/* ── Modal ────────────────────────────────────────────────────────────────── */
+/* â”€â”€ Modal â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.7); z-index: 500; align-items: center; justify-content: center; }
 [data-page="workorders"] .modal-overlay.show { display: flex; }
 [data-page="workorders"] .modal { background: var(--bg); border: 1px solid var(--border-strong); width: 560px; max-width: 94vw; border-radius: var(--radius); overflow: hidden; box-shadow: 0 20px 60px rgba(0,0,0,.7); }
@@ -5081,10 +5122,10 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="workorders"] .btn-gho { border-color: var(--border); color: var(--text-muted); }
 [data-page="workorders"] .btn-gho:hover { border-color: var(--wo); color: var(--wo); }
 
-/* ── Nav alert ────────────────────────────────────────────────────────────── */
+/* â”€â”€ Nav alert â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="workorders"] .navalert { position: absolute; top: 5px; right: 5px; background: var(--danger); color: #fff; font-family: var(--font-display); font-size: 7px; width: 14px; height: 14px; border-radius: 50%; display: flex; align-items: center; justify-content: center; }
 
-/* ─── [data-page="system"] ────────────────────────────────────────────────── */
+/* â”€â”€â”€ [data-page="system"] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="system"] .main {
   position: fixed;
   top: 72px; bottom: 78px;
@@ -5120,7 +5161,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 .mk-cust-disc     { width: 6px; height: 6px; background: var(--red);   border-radius: 50%; opacity: .7; }
 .mk-pump  { width: 16px; height: 16px; background: var(--orange); border-radius: 50%; border: 2px solid rgba(255, 255, 255, .8); display: flex; align-items: center; justify-content: center; font-size: 7px; font-weight: 700; color: #fff; font-family: var(--font-display); cursor: pointer; box-shadow: 0 0 8px rgba(255, 136, 0, .5); }
 
-/* ── System page — full layout (overrides global filterbar/topbar offsets) ── */
+/* â”€â”€ System page â€” full layout (overrides global filterbar/topbar offsets) â”€â”€ */
 [data-page="system"] .topbar {
   position: fixed; top: 0; left: 0; right: 0; height: 46px;
   background: rgba(2, 12, 20, 0.95);
@@ -5203,7 +5244,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   text-shadow: 0 0 8px var(--primary-soft);
 }
 
-/* ── Topbar helper classes ──────────────────────────────────────────── */
+/* â”€â”€ Topbar helper classes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="system"] .tb-tag {
   font-family: var(--font-mono);
   font-size: 9px;
@@ -5242,7 +5283,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   padding: 4px 0;
 }
 
-/* ── System list rows ───────────────────────────────────────────────── */
+/* â”€â”€ System list rows â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="system"] .sys-row {
   display: flex;
   align-items: center;
@@ -5293,7 +5334,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   color: var(--text-muted);
 }
 
-/* ── Config rows ────────────────────────────────────────────────────── */
+/* â”€â”€ Config rows â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="system"] .cfg-row {
   display: flex;
   justify-content: space-between;
@@ -5316,7 +5357,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   color: var(--text);
 }
 
-/* ── Asset rows + colored bubbles ────────────────────────────────────── */
+/* â”€â”€ Asset rows + colored bubbles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="system"] .asset-row {
   display: flex;
   align-items: center;
@@ -5361,7 +5402,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="system"] .as-maint   { border-color: var(--warning); color: var(--warning); background: rgba(255, 136, 0, 0.06); }
 [data-page="system"] .as-offline { border-color: var(--danger);  color: var(--danger);  background: rgba(255, 34, 68, 0.06); }
 
-/* ── Map area + layer toggles ────────────────────────────────────────── */
+/* â”€â”€ Map area + layer toggles â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="system"] .map-area {
   flex: 1;
   position: relative;
@@ -5421,7 +5462,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   white-space: nowrap;
 }
 
-/* ── Detail panel (slide-out from right) ─────────────────────────────── */
+/* â”€â”€ Detail panel (slide-out from right) â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="system"] .detail-panel {
   position: fixed;
   top: 120px;
@@ -5557,7 +5598,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   color: var(--primary);
 }
 
-/* ─── [data-page="portal"] ────────────────────────────────────────────────── */
+/* â”€â”€â”€ [data-page="portal"] â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="portal"] {
   font-family: var(--font-num);
   overflow: hidden;
@@ -5606,7 +5647,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   font-family: var(--font-mono);
 }
 
-/* Stat strip — fixed 4-column header below topbar */
+/* Stat strip â€” fixed 4-column header below topbar */
 [data-page="portal"] .statstrip {
   position: fixed;
   top: 50px; left: 0; right: 0;
@@ -6402,7 +6443,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   [data-page="portal"] .inv-toolbar { display: none; }
 }
 
-/* ─── [data-page="portal"] working enterprise layout ──────────────────────── */
+/* â”€â”€â”€ [data-page="portal"] working portal layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 /* Main wrapper */
 [data-page="portal"] .main {
@@ -6666,7 +6707,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   border-radius: 4px;
 }
 
-/* ─── [data-page="mig"]  Migration Portal Mockup ──────────────────────────── */
+/* â”€â”€â”€ [data-page="mig"]  Migration Portal Mockup â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 [data-page="mig"] {
   background: var(--bg);
   color: var(--text);
@@ -6713,40 +6754,35 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   [data-page="compliance"] .mini-svg  { width: 58px; height: 42px; }
 }
 
-/* ──────────────────────────────────────────────────────────────────────────
+/* â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
    END OF FILE
-   ────────────────────────────────────────────────────────────────────────── */
+   â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
 
 /* ============================================================================
-   INDEX PAGE — Card panel sizing fixes
+   INDEX PAGE â€” Card panel sizing fixes
    ============================================================================ */
-[data-page="index"] .directory-panel,
-[data-page="command"] .directory-panel {
+[data-page="index"] .directory-panel{
   flex: 1 1 auto;
   min-height: 200px;
   display: flex; flex-direction: column;
   overflow: hidden;
 }
-[data-page="index"] .panel-scroll,
-[data-page="command"] .panel-scroll {
+[data-page="index"] .panel-scroll{
   flex: 1; min-height: 0;
   overflow-y: auto;
   overflow-x: hidden;
 }
-[data-page="index"] .calllog-panel,
-[data-page="command"] .calllog-panel {
+[data-page="index"] .calllog-panel{
   flex: 0 0 160px;
   display: flex; flex-direction: column;
   overflow: hidden;
 }
-[data-page="index"] .clog,
-[data-page="command"] .clog {
+[data-page="index"] .clog{
   flex: 1; min-height: 0;
   overflow-y: auto;
   padding: 4px 0;
 }
-[data-page="index"] .empty-msg,
-[data-page="command"] .empty-msg {
+[data-page="index"] .empty-msg{
   padding: 24px 12px;
   text-align: center;
   color: var(--text-muted);
@@ -6756,16 +6792,14 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 }
 
 /* Address cell + system count inline */
-[data-page="index"] .atable .addr,
-[data-page="command"] .atable .addr {
+[data-page="index"] .atable .addr{
   color: rgba(200, 234, 240, 0.78);
   font-family: var(--font-num);
   font-size: 12px;
   font-weight: 500;
   white-space: nowrap;
 }
-[data-page="index"] .atable .acct-count,
-[data-page="command"] .atable .acct-count {
+[data-page="index"] .atable .acct-count{
   color: var(--text-soft);
   font-family: var(--font-num);
   font-size: 11px;
@@ -6833,18 +6867,16 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 }
 
 /* ============================================================================
-   COMPLIANCE LIST — cleaner spacing inside compliance card
+   COMPLIANCE LIST â€” cleaner spacing inside compliance card
    ============================================================================ */
-[data-page="index"] .comp-list,
-[data-page="command"] .comp-list {
+[data-page="index"] .comp-list{
   display: flex; flex-direction: column;
 }
 
 /* ============================================================================
-   COMMAND OVERLAY MODALS — BWN + Account Quick-Card (Pro dark theme)
+   COMMAND OVERLAY MODALS â€” BWN + Account Quick-Card (Pro dark theme)
    ============================================================================ */
-[data-page="index"] .cmd-overlay,
-[data-page="command"] .cmd-overlay {
+[data-page="index"] .cmd-overlay{
   position: fixed; inset: 0;
   background: rgba(2, 12, 20, 0.85);
   backdrop-filter: blur(2px);
@@ -6855,14 +6887,12 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   transition: opacity .15s;
   pointer-events: none;
 }
-[data-page="index"] .cmd-overlay.show,
-[data-page="command"] .cmd-overlay.show {
+[data-page="index"] .cmd-overlay.show{
   visibility: visible;
   opacity: 1;
   pointer-events: auto;
 }
-[data-page="index"] .cmd-modal,
-[data-page="command"] .cmd-modal {
+[data-page="index"] .cmd-modal{
   background: var(--bg);
   border: 1px solid var(--border-strong);
   box-shadow: 0 0 80px rgba(0, 245, 255, 0.10), 0 0 200px rgba(0, 0, 0, 0.6);
@@ -6873,28 +6903,24 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   border-radius: var(--radius);
   position: relative;
 }
-[data-page="index"] .cmd-modal::before,
-[data-page="command"] .cmd-modal::before {
+[data-page="index"] .cmd-modal::before{
   content: '';
   position: absolute;
   top: 0; left: 0; right: 0;
   height: 1px;
   background: linear-gradient(90deg, transparent, var(--primary), transparent);
 }
-[data-page="index"] .cmd-modal-hdr,
-[data-page="command"] .cmd-modal-hdr {
+[data-page="index"] .cmd-modal-hdr{
   padding: 14px 18px;
   border-bottom: 1px solid var(--border);
   background: linear-gradient(135deg, var(--primary-soft), transparent);
   display: flex; align-items: center; justify-content: space-between;
   gap: 12px;
 }
-[data-page="index"] .cmd-modal-hdr-right,
-[data-page="command"] .cmd-modal-hdr-right {
+[data-page="index"] .cmd-modal-hdr-right{
   display: flex; align-items: center; gap: 10px;
 }
-[data-page="index"] .cmd-modal-close,
-[data-page="command"] .cmd-modal-close {
+[data-page="index"] .cmd-modal-close{
   background: none; border: none;
   color: var(--text-muted);
   font-size: 16px;
@@ -6903,26 +6929,21 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   padding: 4px 8px;
   transition: color .15s;
 }
-[data-page="index"] .cmd-modal-close:hover,
-[data-page="command"] .cmd-modal-close:hover { color: var(--primary); }
+[data-page="index"] .cmd-modal-close:hover{ color: var(--primary); }
 
-/* BWN modal — DANGER variant */
-[data-page="index"] .cmd-modal-bwn,
-[data-page="command"] .cmd-modal-bwn {
+/* BWN modal â€” DANGER variant */
+[data-page="index"] .cmd-modal-bwn{
   border-color: var(--danger);
   box-shadow: 0 0 80px rgba(255, 34, 68, 0.20), 0 0 200px rgba(0, 0, 0, 0.7);
 }
-[data-page="index"] .cmd-modal-bwn::before,
-[data-page="command"] .cmd-modal-bwn::before {
+[data-page="index"] .cmd-modal-bwn::before{
   background: linear-gradient(90deg, transparent, var(--danger), transparent);
 }
-[data-page="index"] .cmd-modal-hdr-danger,
-[data-page="command"] .cmd-modal-hdr-danger {
+[data-page="index"] .cmd-modal-hdr-danger{
   background: linear-gradient(135deg, rgba(255, 34, 68, 0.14), transparent);
   border-bottom-color: rgba(255, 34, 68, 0.30);
 }
-[data-page="index"] .cmd-modal-title-danger,
-[data-page="command"] .cmd-modal-title-danger {
+[data-page="index"] .cmd-modal-title-danger{
   font-family: var(--font-display);
   font-size: 12px;
   color: var(--danger);
@@ -6930,21 +6951,17 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   margin-bottom: 4px;
   text-shadow: 0 0 12px rgba(255, 34, 68, 0.5);
 }
-[data-page="index"] .cmd-modal-sub,
-[data-page="command"] .cmd-modal-sub {
+[data-page="index"] .cmd-modal-sub{
   font-family: var(--font-mono);
   font-size: 10px;
   color: var(--text-soft);
   letter-spacing: 1px;
 }
-[data-page="index"] .cmd-modal-close-danger:hover,
-[data-page="command"] .cmd-modal-close-danger:hover { color: var(--danger); }
+[data-page="index"] .cmd-modal-close-danger:hover{ color: var(--danger); }
 
-[data-page="index"] .cmd-bwn-body,
-[data-page="command"] .cmd-bwn-body { padding: 16px 18px; overflow-y: auto; }
+[data-page="index"] .cmd-bwn-body{ padding: 16px 18px; overflow-y: auto; }
 
-[data-page="index"] .cmd-bwn-alert,
-[data-page="command"] .cmd-bwn-alert {
+[data-page="index"] .cmd-bwn-alert{
   display: flex; align-items: flex-start; gap: 12px;
   padding: 10px 14px;
   background: rgba(255, 34, 68, 0.08);
@@ -6952,40 +6969,34 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   border-radius: var(--radius);
   margin-bottom: 14px;
 }
-[data-page="index"] .cmd-bwn-alert-icon,
-[data-page="command"] .cmd-bwn-alert-icon {
+[data-page="index"] .cmd-bwn-alert-icon{
   font-size: 22px; flex-shrink: 0; color: var(--danger);
 }
-[data-page="index"] .cmd-bwn-alert-title,
-[data-page="command"] .cmd-bwn-alert-title {
+[data-page="index"] .cmd-bwn-alert-title{
   font-family: var(--font-display);
   font-size: 9px;
   color: var(--danger);
   letter-spacing: 2px;
   margin-bottom: 4px;
 }
-[data-page="index"] .cmd-bwn-alert-desc,
-[data-page="command"] .cmd-bwn-alert-desc {
+[data-page="index"] .cmd-bwn-alert-desc{
   font-size: 11px;
   font-family: var(--font-num);
   color: var(--text);
   line-height: 1.5;
 }
-[data-page="index"] .cmd-bwn-checklist,
-[data-page="command"] .cmd-bwn-checklist {
+[data-page="index"] .cmd-bwn-checklist{
   display: flex; flex-direction: column;
   gap: 6px;
 }
-[data-page="index"] .cmd-bwn-check,
-[data-page="command"] .cmd-bwn-check {
+[data-page="index"] .cmd-bwn-check{
   display: flex; align-items: center; gap: 10px;
   padding: 7px 10px;
   border: 1px solid var(--border);
   background: var(--surface);
   border-radius: var(--radius);
 }
-[data-page="index"] .cmd-bwn-chk-icon,
-[data-page="command"] .cmd-bwn-chk-icon {
+[data-page="index"] .cmd-bwn-chk-icon{
   font-size: 14px;
   flex-shrink: 0;
   width: 22px; text-align: center;
@@ -6998,8 +7009,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="command"] .cmd-bwn-chk-icon.ok   { color: var(--success); }
 [data-page="command"] .cmd-bwn-chk-icon.warn { color: var(--warning); }
 [data-page="command"] .cmd-bwn-chk-icon.dim  { color: var(--text-muted); }
-[data-page="index"] .cmd-bwn-chk-label,
-[data-page="command"] .cmd-bwn-chk-label {
+[data-page="index"] .cmd-bwn-chk-label{
   font-family: var(--font-mono);
   font-size: 9px;
   color: var(--text);
@@ -7007,8 +7017,7 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   text-transform: uppercase;
   display: inline;
 }
-[data-page="index"] .cmd-bwn-chk-val,
-[data-page="command"] .cmd-bwn-chk-val {
+[data-page="index"] .cmd-bwn-chk-val{
   font-family: var(--font-display);
   font-size: 9px;
   letter-spacing: 1.5px;
@@ -7023,14 +7032,12 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
 [data-page="command"] .cmd-bwn-chk-val.warn { color: var(--warning); }
 [data-page="command"] .cmd-bwn-chk-val.dim  { color: var(--text-muted); }
 
-[data-page="index"] .cmd-bwn-foot,
-[data-page="command"] .cmd-bwn-foot {
+[data-page="index"] .cmd-bwn-foot{
   padding: 12px 18px;
   border-top: 1px solid var(--border);
   display: flex; gap: 8px;
 }
-[data-page="index"] .cmd-bwn-btn,
-[data-page="command"] .cmd-bwn-btn {
+[data-page="index"] .cmd-bwn-btn{
   flex: 1;
   padding: 10px 14px;
   font-family: var(--font-display);
@@ -7043,40 +7050,29 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   border-radius: var(--radius);
   text-transform: uppercase;
 }
-[data-page="index"] .cmd-bwn-btn-close,
-[data-page="command"] .cmd-bwn-btn-close { border-color: var(--border-strong); color: var(--text-muted); }
-[data-page="index"] .cmd-bwn-btn-close:hover,
-[data-page="command"] .cmd-bwn-btn-close:hover { color: var(--text); border-color: var(--text-soft); }
-[data-page="index"] .cmd-bwn-btn-danger,
-[data-page="command"] .cmd-bwn-btn-danger { border-color: var(--danger); color: var(--danger); background: rgba(255, 34, 68, 0.08); }
-[data-page="index"] .cmd-bwn-btn-danger:hover,
-[data-page="command"] .cmd-bwn-btn-danger:hover { background: rgba(255, 34, 68, 0.18); }
-[data-page="index"] .cmd-bwn-btn-primary,
-[data-page="command"] .cmd-bwn-btn-primary { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
-[data-page="index"] .cmd-bwn-btn-primary:hover,
-[data-page="command"] .cmd-bwn-btn-primary:hover { background: rgba(0, 245, 255, 0.18); }
+[data-page="index"] .cmd-bwn-btn-close{ border-color: var(--border-strong); color: var(--text-muted); }
+[data-page="index"] .cmd-bwn-btn-close:hover{ color: var(--text); border-color: var(--text-soft); }
+[data-page="index"] .cmd-bwn-btn-danger{ border-color: var(--danger); color: var(--danger); background: rgba(255, 34, 68, 0.08); }
+[data-page="index"] .cmd-bwn-btn-danger:hover{ background: rgba(255, 34, 68, 0.18); }
+[data-page="index"] .cmd-bwn-btn-primary{ border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+[data-page="index"] .cmd-bwn-btn-primary:hover{ background: rgba(0, 245, 255, 0.18); }
 
 /* Account Quick-Card */
-[data-page="index"] .cmd-modal-acct,
-[data-page="command"] .cmd-modal-acct { max-width: 560px; }
-[data-page="index"] .cmd-modal-id,
-[data-page="command"] .cmd-modal-id { display: flex; flex-direction: column; gap: 4px; }
-[data-page="index"] .cmd-acnum,
-[data-page="command"] .cmd-acnum {
+[data-page="index"] .cmd-modal-acct{ max-width: 560px; }
+[data-page="index"] .cmd-modal-id{ display: flex; flex-direction: column; gap: 4px; }
+[data-page="index"] .cmd-acnum{
   font-family: var(--font-display);
   font-size: 11px;
   color: var(--primary);
   letter-spacing: 2.5px;
 }
-[data-page="index"] .cmd-acname,
-[data-page="command"] .cmd-acname {
+[data-page="index"] .cmd-acname{
   font-family: var(--font-num);
   font-size: 22px;
   font-weight: 700;
   color: var(--text);
 }
-[data-page="index"] .cmd-acstat,
-[data-page="command"] .cmd-acstat {
+[data-page="index"] .cmd-acstat{
   display: inline-block;
   padding: 4px 12px;
   border: 1px solid var(--success);
@@ -7086,20 +7082,15 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   letter-spacing: 1.8px;
   border-radius: var(--radius-sm);
 }
-[data-page="index"] .cmd-acbody,
-[data-page="command"] .cmd-acbody { padding: 0; overflow-y: auto; }
-[data-page="index"] .cmd-acgrid,
-[data-page="command"] .cmd-acgrid {
+[data-page="index"] .cmd-acbody{ padding: 0; overflow-y: auto; }
+[data-page="index"] .cmd-acgrid{
   display: flex; flex-direction: column;
 }
-[data-page="index"] .cmd-acgrid-col,
-[data-page="command"] .cmd-acgrid-col {
+[data-page="index"] .cmd-acgrid-col{
   padding: 6px 18px;
 }
-[data-page="index"] .cmd-acgrid-title,
-[data-page="command"] .cmd-acgrid-title { display: none; }
-[data-page="index"] .cmd-acrow,
-[data-page="command"] .cmd-acrow {
+[data-page="index"] .cmd-acgrid-title{ display: none; }
+[data-page="index"] .cmd-acrow{
   display: flex;
   justify-content: space-between;
   align-items: baseline;
@@ -7107,10 +7098,8 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   border-bottom: 1px solid rgba(0, 245, 255, 0.06);
   gap: 12px;
 }
-[data-page="index"] .cmd-acrow:last-child,
-[data-page="command"] .cmd-acrow:last-child { border-bottom: none; }
-[data-page="index"] .cmd-acrl,
-[data-page="command"] .cmd-acrl {
+[data-page="index"] .cmd-acrow:last-child{ border-bottom: none; }
+[data-page="index"] .cmd-acrl{
   font-family: var(--font-mono);
   font-size: 10px;
   letter-spacing: 1.5px;
@@ -7118,28 +7107,24 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   white-space: nowrap;
   text-transform: uppercase;
 }
-[data-page="index"] .cmd-acrv,
-[data-page="command"] .cmd-acrv {
+[data-page="index"] .cmd-acrv{
   font-family: var(--font-num);
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
   text-align: right;
 }
-[data-page="index"] .cmd-acrv-big,
-[data-page="command"] .cmd-acrv-big {
+[data-page="index"] .cmd-acrv-big{
   font-size: 20px;
   font-weight: 800;
   color: var(--primary);
 }
-[data-page="index"] .cmd-acbtns,
-[data-page="command"] .cmd-acbtns {
+[data-page="index"] .cmd-acbtns{
   display: flex; gap: 8px;
   padding: 12px 18px;
   border-top: 1px solid var(--border);
 }
-[data-page="index"] .cmd-acbtn,
-[data-page="command"] .cmd-acbtn {
+[data-page="index"] .cmd-acbtn{
   flex: 1;
   padding: 10px 8px;
   font-family: var(--font-display);
@@ -7153,26 +7138,18 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   text-align: center;
   text-transform: uppercase;
 }
-[data-page="index"] .cmd-acbtn-pri,
-[data-page="command"] .cmd-acbtn-pri { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
-[data-page="index"] .cmd-acbtn-pri:hover,
-[data-page="command"] .cmd-acbtn-pri:hover { background: rgba(0, 245, 255, 0.18); }
-[data-page="index"] .cmd-acbtn-green,
-[data-page="command"] .cmd-acbtn-green { border-color: var(--border); color: var(--text-muted); }
-[data-page="index"] .cmd-acbtn-green:hover,
-[data-page="command"] .cmd-acbtn-green:hover { border-color: var(--success); color: var(--success); background: rgba(0, 255, 136, 0.06); }
-[data-page="index"] .cmd-acbtn-dim,
-[data-page="command"] .cmd-acbtn-dim { border-color: var(--border); color: var(--text-muted); }
-[data-page="index"] .cmd-acbtn-dim:hover,
-[data-page="command"] .cmd-acbtn-dim:hover { border-color: var(--primary); color: var(--primary); }
-[data-page="index"] .cmd-acbtn-close,
-[data-page="command"] .cmd-acbtn-close { border-color: var(--border); color: var(--text-muted); }
-[data-page="index"] .cmd-acbtn-close:hover,
-[data-page="command"] .cmd-acbtn-close:hover { border-color: var(--text-soft); color: var(--text); }
+[data-page="index"] .cmd-acbtn-pri{ border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+[data-page="index"] .cmd-acbtn-pri:hover{ background: rgba(0, 245, 255, 0.18); }
+[data-page="index"] .cmd-acbtn-green{ border-color: var(--border); color: var(--text-muted); }
+[data-page="index"] .cmd-acbtn-green:hover{ border-color: var(--success); color: var(--success); background: rgba(0, 255, 136, 0.06); }
+[data-page="index"] .cmd-acbtn-dim{ border-color: var(--border); color: var(--text-muted); }
+[data-page="index"] .cmd-acbtn-dim:hover{ border-color: var(--primary); color: var(--primary); }
+[data-page="index"] .cmd-acbtn-close{ border-color: var(--border); color: var(--text-muted); }
+[data-page="index"] .cmd-acbtn-close:hover{ border-color: var(--text-soft); color: var(--text); }
 
 /* ============================================================================
-   BILLING — Bill Detail Modal inner classes (.bd-*)
-   Replaces all hardcoded Enterprise inline styles in the JS-generated HTML
+   BILLING â€” Bill Detail Modal inner classes (.bd-*)
+   Replaces hardcoded legacy inline styles in the JS-generated HTML
    ============================================================================ */
 .bd-wrap         { padding: 10px 14px; }
 .bd-grid2        { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px; }
@@ -7242,177 +7219,94 @@ body[data-page="login"] .corner.br { top: auto; bottom: 10px; left: auto; right:
   color: var(--text-muted);
 }
 
-/* billing table — invoice print button cleanup */
+/* billing â€” PAY quick button (table inline action) */
+[data-page="billing"] .pay-quick {
+  font-family: var(--font-display);
+  font-size: 7px;
+  padding: 3px 8px;
+  border: 1px solid var(--border);
+  color: var(--text-muted);
+  background: transparent;
+  cursor: pointer;
+  letter-spacing: 1px;
+  border-radius: var(--radius);
+  transition: all .15s;
+  white-space: nowrap;
+}
+[data-page="billing"] .pay-quick:hover {
+  border-color: var(--success);
+  color: var(--success);
+  background: rgba(0,255,136,.06);
+}
+/* billing table â€” invoice print button variant */
 [data-page="billing"] .pay-quick.inv-btn {
   border-color: var(--border);
   color: var(--primary);
 }
 
-/* ─── [data-page="mig"] Migration Workbench ──────────────────────────────── */
-
-/* ── Step bar items ──────────────────────────────────────────────────────── */
-[data-page="mig"] .step-item {
-  display: flex; align-items: center; gap: 7px;
-  padding: 0 18px;
-  border-right: 1px solid var(--border);
-  font-family: var(--font-mono); font-size: 9px; letter-spacing: 1.5px;
+/* â”€â”€ Billing â€” topbar typography enforcement */
+[data-page="billing"] .topbar-meta {
+  font-family: var(--font-mono);
+  font-size: 9px;
   color: var(--text-muted);
-  cursor: default;
-  position: relative;
-  flex-shrink: 0;
+  letter-spacing: 2px;
 }
-[data-page="mig"] .step-item.active {
-  color: var(--cyan);
-  background: rgba(0, 245, 255, .04);
+[data-page="billing"] .operator-name {
+  color: var(--primary);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  font-weight: 400;
 }
-[data-page="mig"] .step-item.active::after {
-  content: '';
-  position: absolute; bottom: 0; left: 0; right: 0;
-  height: 2px;
-  background: var(--cyan);
-}
-[data-page="mig"] .step-item.done { color: var(--success); }
-[data-page="mig"] .step-n {
-  font-family: var(--font-display); font-size: 8px; font-weight: 700;
-  width: 18px; height: 18px;
-  border: 1px solid; border-radius: 50%;
-  display: flex; align-items: center; justify-content: center;
-  flex-shrink: 0;
-}
-[data-page="mig"] .step-item.active .step-n  { border-color: var(--cyan);    color: var(--cyan);    }
-[data-page="mig"] .step-item.done   .step-n  { border-color: var(--success); color: var(--success); }
-[data-page="mig"] .step-item:not(.active):not(.done) .step-n {
-  border-color: var(--border); color: var(--text-muted);
-}
-[data-page="mig"] .step-lbl { text-transform: uppercase; }
 
-/* ── Drop zones ──────────────────────────────────────────────────────────── */
-[data-page="mig"] .drop-zone {
-  border: 1px dashed var(--border);
-  background: var(--surface);
-  padding: 12px;
+/* â”€â”€ Billing â€” modal size variants â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+[data-page="billing"] .modal-sm { max-width: 420px; }
+[data-page="billing"] .modal-title-danger { color: var(--danger); }
+
+/* â”€â”€ Billing â€” bill detail modal layout â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+[data-page="billing"] .modal-bill-detail {
+  width: 90%;
+  max-width: 560px;
+  max-height: 82vh;
+  display: flex;
+  flex-direction: column;
+}
+[data-page="billing"] .bd-modal-body {
+  flex: 1;
+  overflow-y: auto;
+  padding: 0;
+}
+[data-page="billing"] .modal-x-hidden { display: none; }
+
+/* â”€â”€ Billing â€” payment modal feedback â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+[data-page="billing"] .pay-acct-feedback {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  margin-top: 4px;
+  min-height: 14px;
+}
+[data-page="billing"] .pay-acct-ok  { color: var(--success); }
+[data-page="billing"] .pay-acct-err { color: var(--danger); }
+
+/* â”€â”€ Billing â€” payment balance row visibility â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+[data-page="billing"] .pay-balance-hidden { display: none; }
+
+/* â”€â”€ Billing â€” required field star â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+[data-page="billing"] .req-star { color: var(--danger); }
+
+/* â”€â”€ Billing â€” bill detail inner classes â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€ */
+[data-page="billing"] .bd-lbl-mt { margin-top: 4px; }
+
+/* Amount due color variants (replaces JS inline style="color:...") */
+[data-page="billing"] .amt-danger  { color: var(--danger); }
+[data-page="billing"] .amt-success { color: var(--success); }
+
+/* No-bill placeholder message */
+[data-page="billing"] .no-bill-msg {
   text-align: center;
-  cursor: pointer;
-  transition: all .2s;
-  position: relative;
+  padding: 20px;
+  color: var(--text-muted);
+  font-size: 10px;
+  letter-spacing: 1px;
+  font-family: var(--font-mono);
 }
-[data-page="mig"] .drop-zone:hover {
-  border-color: var(--border-strong);
-  background: var(--primary-soft);
-}
-[data-page="mig"] .drop-zone.loaded {
-  border-color: var(--success);
-  border-style: solid;
-  background: rgba(0, 255, 136, .04);
-}
-[data-page="mig"] .drop-zone.dragover {
-  border-color: var(--cyan);
-  background: rgba(0, 245, 255, .08);
-}
-[data-page="mig"] .dz-icon  { font-size: 22px; margin-bottom: 4px; opacity: .5; }
-[data-page="mig"] .dz-label { font-family: var(--font-display); font-size: 8px;  color: var(--text-muted); letter-spacing: 2px; }
-[data-page="mig"] .dz-sub   { font-family: var(--font-mono);    font-size: 7px;  color: var(--text-muted); letter-spacing: 1px; margin-top: 2px; }
-[data-page="mig"] .dz-note  { font-family: var(--font-mono);    font-size: 9px;  color: var(--text-soft);  margin-top: 4px; letter-spacing: .5px; }
-[data-page="mig"] .drop-zone.loaded .dz-note { color: var(--success); }
-
-/* ── Field mapping rows ──────────────────────────────────────────────────── */
-[data-page="mig"] .map-section-hdr {
-  padding: 7px 14px;
-  font-family: var(--font-display); font-size: 8px; letter-spacing: 2.5px;
-  background: var(--surface-strong);
-  border-bottom: 1px solid var(--border);
-  position: sticky; top: 0; z-index: 5;
-  display: flex; align-items: center; gap: 8px;
-}
-[data-page="mig"] .map-row {
-  display: flex; align-items: center; gap: 0;
-  border-bottom: 1px solid rgba(0, 245, 255, .03);
-  min-height: 36px;
-}
-[data-page="mig"] .map-row:hover { background: rgba(0, 245, 255, .03); }
-[data-page="mig"] .map-src {
-  width: 180px; flex-shrink: 0; padding: 6px 12px;
-  font-family: var(--font-mono); font-size: 10px; color: var(--text-soft);
-  border-right: 1px solid var(--border);
-}
-[data-page="mig"] .map-arr {
-  padding: 0 10px; font-size: 14px; color: var(--text-muted); flex-shrink: 0;
-}
-[data-page="mig"] .map-target { flex: 1; padding: 4px 8px; }
-[data-page="mig"] .map-target select {
-  width: 100%;
-  background: var(--surface);
-  border: 1px solid var(--border);
-  color: var(--cyan);
-  font-family: var(--font-mono); font-size: 10px;
-  padding: 4px 8px; outline: none;
-}
-[data-page="mig"] .map-target select:focus  { border-color: var(--border-strong); }
-[data-page="mig"] .map-target select option { background: var(--bg); color: var(--text); }
-[data-page="mig"] .map-conf {
-  width: 52px; flex-shrink: 0; text-align: center; padding: 0 4px;
-  font-family: var(--font-display); font-size: 7px; letter-spacing: 1px;
-}
-[data-page="mig"] .conf-hi  { color: var(--success); }
-[data-page="mig"] .conf-med { color: var(--warning);  }
-[data-page="mig"] .conf-lo  { color: var(--danger);   }
-[data-page="mig"] .map-note {
-  width: 140px; flex-shrink: 0; padding: 0 10px;
-  font-family: var(--font-mono); font-size: 9px;
-  color: var(--text-muted); letter-spacing: .3px;
-}
-
-/* ── Flag cards ──────────────────────────────────────────────────────────── */
-[data-page="mig"] .flag-card {
-  border: 1px solid; padding: 8px 10px; margin-bottom: 6px;
-  border-radius: var(--radius);
-}
-[data-page="mig"] .flag-warn { border-color: rgba(255, 136, 0, .4);  background: rgba(255, 136, 0, .05);  }
-[data-page="mig"] .flag-ok   { border-color: rgba(0, 255, 136, .3);  background: rgba(0, 255, 136, .03);  }
-[data-page="mig"] .flag-info { border-color: var(--border);           background: var(--surface);           }
-[data-page="mig"] .flag-err  { border-color: rgba(255, 34, 68, .4);  background: rgba(255, 34, 68, .06);  }
-[data-page="mig"] .flag-title {
-  font-family: var(--font-mono); font-size: 9px;
-  letter-spacing: 1px; margin-bottom: 3px;
-}
-[data-page="mig"] .flag-warn .flag-title { color: var(--warning);   }
-[data-page="mig"] .flag-ok   .flag-title { color: var(--success);   }
-[data-page="mig"] .flag-info .flag-title { color: var(--text-soft); }
-[data-page="mig"] .flag-err  .flag-title { color: var(--danger);    }
-[data-page="mig"] .flag-body {
-  font-family: var(--font-num); font-size: 11px;
-  color: var(--text-soft); line-height: 1.4;
-}
-
-/* ── Export blocks ───────────────────────────────────────────────────────── */
-[data-page="mig"] .export-block {
-  background: var(--surface);
-  border: 1px solid var(--border);
-  overflow: hidden;
-}
-[data-page="mig"] .export-block-hdr {
-  padding: 8px 14px;
-  border-bottom: 1px solid var(--border);
-  display: flex; align-items: center; justify-content: space-between;
-  background: var(--surface-strong);
-}
-[data-page="mig"] .export-block-title {
-  font-family: var(--font-display); font-size: 9px;
-  color: var(--primary); letter-spacing: 2px;
-}
-[data-page="mig"] .export-sql {
-  font-family: var(--font-mono); font-size: 10px; color: var(--text-soft);
-  padding: 12px 14px;
-  overflow-x: auto; white-space: pre;
-  max-height: 260px; overflow-y: auto;
-  line-height: 1.7;
-  background: rgba(0, 0, 0, .3);
-}
-
-/* ── SQL syntax highlight ────────────────────────────────────────────────── */
-[data-page="mig"] .sql-kw   { color: var(--cyan);       }
-[data-page="mig"] .sql-str  { color: var(--success);    }
-[data-page="mig"] .sql-num  { color: var(--warning);    }
-[data-page="mig"] .sql-tbl  { color: var(--yellow);     }
-[data-page="mig"] .sql-col  { color: var(--text);       }
-[data-page="mig"] .sql-null { color: var(--text-muted); }
