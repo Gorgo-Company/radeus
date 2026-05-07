@@ -1,9 +1,9 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>RADEUS — Comply</title>
+<title>RADEUS â€” Comply</title>
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="./styles/main.css">
 
@@ -17,45 +17,45 @@
 <!-- TOP BAR -->
 <div class="topbar">
   <a class="logo" href="index.html">RADEUS</a>
-  <div style="display:flex;align-items:center;gap:14px">
+  <div class="topbar-left">
     <div class="sdot"></div>
     <span class="operator-label">COMPLIANCE</span>
     <select class="sys-select" id="sysSelect" onchange="switchSystem(this.value)">
-      <option value="">⬡ LOADING...</option>
+      <option value="">â¬¡ LOADING...</option>
     </select>
   </div>
-  <div style="display:flex;align-items:center;gap:14px">
-    <span class="topbar-meta">OPERATOR: <span id="operatorName" class="operator-name">—</span></span>
+  <div class="topbar-left">
+    <span class="topbar-meta">OPERATOR: <span id="operatorName" class="operator-name">â€”</span></span>
     <span id="clock">--:--:--</span>
   </div>
 </div>
 
 <!-- ALERT BAR -->
 <div class="alert-bar clear" id="alertBar">
-  <div class="alert-tag ok" id="alertTag">⬡ STATUS</div>
+  <div class="alert-tag ok" id="alertTag">â¬¡ STATUS</div>
   <div class="alert-scroll">
     <div class="alert-track" id="alertTrack">
-      <span class="alert-item" id="alertContent" style="color:var(--success)">ALL SYSTEMS NOMINAL — NO ACTIVE VIOLATIONS DETECTED — COMPLIANCE STATUS: MONITORING</span>
-      <span class="alert-item" style="color:var(--success)">ALL SYSTEMS NOMINAL — NO ACTIVE VIOLATIONS DETECTED — COMPLIANCE STATUS: MONITORING</span>
+      <span class="alert-item" id="alertContent" style="color:var(--success)">ALL SYSTEMS NOMINAL â€” NO ACTIVE VIOLATIONS DETECTED â€” COMPLIANCE STATUS: MONITORING</span>
+      <span class="alert-item" style="color:var(--success)">ALL SYSTEMS NOMINAL â€” NO ACTIVE VIOLATIONS DETECTED â€” COMPLIANCE STATUS: MONITORING</span>
     </div>
   </div>
 </div>
 
 <!-- STATS BAR -->
 <div class="statsbar" id="statsBar">
-  <div class="stat-cell"><div class="stat-label">TOTAL ITEMS</div><div class="stat-val sv-or" id="st-total">—</div></div>
-  <div class="stat-cell"><div class="stat-label">OVERDUE</div><div class="stat-val sv-red" id="st-overdue">—</div></div>
-  <div class="stat-cell"><div class="stat-label">DUE ≤30 DAYS</div><div class="stat-val sv-yellow" id="st-soon">—</div></div>
-  <div class="stat-cell"><div class="stat-label">ACTIVE VIOLATIONS</div><div class="stat-val sv-red" id="st-active">—</div></div>
-  <div class="stat-cell"><div class="stat-label">COMPLIANT %</div><div class="stat-val sv-green" id="st-pct">—</div></div>
-  <div class="stat-cell"><div class="stat-label">ACTIVE BWN</div><div class="stat-val sv-red" id="st-bwn">—</div></div>
+  <div class="stat-cell"><div class="stat-label">TOTAL ITEMS</div><div class="stat-val sv-or" id="st-total">â€”</div></div>
+  <div class="stat-cell"><div class="stat-label">OVERDUE</div><div class="stat-val sv-red" id="st-overdue">â€”</div></div>
+  <div class="stat-cell"><div class="stat-label">DUE â‰¤30 DAYS</div><div class="stat-val sv-yellow" id="st-soon">â€”</div></div>
+  <div class="stat-cell"><div class="stat-label">ACTIVE VIOLATIONS</div><div class="stat-val sv-red" id="st-active">â€”</div></div>
+  <div class="stat-cell"><div class="stat-label">COMPLIANT %</div><div class="stat-val sv-green" id="st-pct">â€”</div></div>
+  <div class="stat-cell"><div class="stat-label">ACTIVE BWN</div><div class="stat-val sv-red" id="st-bwn">â€”</div></div>
 </div>
 
 <!-- MAIN -->
 <div class="main" id="mainArea">
   <div class="left-panel">
     <div class="lp-section">
-      <div class="lp-title">⬡ SYSTEM COMPLIANCE</div>
+      <div class="lp-title">â¬¡ SYSTEM COMPLIANCE</div>
       <div class="gauge-wrap">
         <svg class="gauge-svg" viewBox="0 0 200 200" id="radarSvg">
           <defs>
@@ -71,7 +71,7 @@
           <line class="gauge-sweep" id="sweepLine" x1="100" y1="100" x2="100" y2="25" stroke="rgba(255,136,0,.6)" stroke-width="1.5"/>
           <circle cx="100" cy="100" r="92" fill="none" stroke="var(--border)" stroke-width=".5"/>
           <circle cx="100" cy="100" r="88" fill="none" stroke="var(--border-strong)" stroke-width=".5" stroke-dasharray="4 4"/>
-          <text class="gauge-center-val" id="gaugePct" x="100" y="96">—</text>
+          <text class="gauge-center-val" id="gaugePct" x="100" y="96">â€”</text>
           <text class="gauge-center-lbl" x="100" y="112">COMPLIANT</text>
           <circle cx="100" cy="100" r="55" fill="none" stroke="var(--border)" stroke-width="1"/>
         </svg>
@@ -80,36 +80,36 @@
     </div>
 
     <div class="lp-section">
-      <div class="lp-title">◎ CATEGORY STATUS</div>
+      <div class="lp-title">â—Ž CATEGORY STATUS</div>
       <div class="mini-grid">
         <div class="mini-gauge" id="mini-bwn">
           <svg class="mini-svg" width="70" height="56" viewBox="0 0 70 56"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-bwn" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--danger)" stroke-linecap="round" fill="none" stroke-width="5"/><text x="35" y="42" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="13" fill="var(--danger)" id="val-bwn">0</text></svg>
           <div class="mini-label">BOIL WATER</div><div class="mini-sub" id="sub-bwn">ACTIVE</div>
         </div>
         <div class="mini-gauge" id="mini-tcr">
-          <svg class="mini-svg" width="70" height="56" viewBox="0 0 70 56"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-tcr" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--success)" stroke-linecap="round" fill="none" stroke-width="5" stroke-dasharray="0 88"/><text x="35" y="42" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="13" fill="var(--success)" id="val-tcr">—</text></svg>
+          <svg class="mini-svg" width="70" height="56" viewBox="0 0 70 56"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-tcr" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--success)" stroke-linecap="round" fill="none" stroke-width="5" stroke-dasharray="0 88"/><text x="35" y="42" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="13" fill="var(--success)" id="val-tcr">â€”</text></svg>
           <div class="mini-label">SAMPLING</div><div class="mini-sub" id="sub-tcr">TCR / LCR / DBP</div>
         </div>
         <div class="mini-gauge" id="mini-rep">
-          <svg class="mini-svg" width="70" height="56" viewBox="0 0 70 56"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-rep" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--warning)" stroke-linecap="round" fill="none" stroke-width="5" stroke-dasharray="0 88"/><text x="35" y="42" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="13" fill="var(--warning)" id="val-rep">—</text></svg>
+          <svg class="mini-svg" width="70" height="56" viewBox="0 0 70 56"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-rep" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--warning)" stroke-linecap="round" fill="none" stroke-width="5" stroke-dasharray="0 88"/><text x="35" y="42" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="13" fill="var(--warning)" id="val-rep">â€”</text></svg>
           <div class="mini-label">REPORTING</div><div class="mini-sub" id="sub-rep">CCR / MOR / LSLI</div>
         </div>
         <div class="mini-gauge" id="mini-survey">
-          <svg class="mini-svg" width="70" height="56" viewBox="0 0 70 56"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-survey" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--primary)" stroke-linecap="round" fill="none" stroke-width="5" stroke-dasharray="88 88"/><text x="35" y="42" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="13" fill="var(--primary)" id="val-survey">—</text></svg>
+          <svg class="mini-svg" width="70" height="56" viewBox="0 0 70 56"><path class="mini-arc-bg" d="M 7,44 A 28,28 0 0,1 63,44" stroke-linecap="round"/><path class="mini-arc" id="arc-survey" d="M 7,44 A 28,28 0 0,1 63,44" stroke="var(--primary)" stroke-linecap="round" fill="none" stroke-width="5" stroke-dasharray="88 88"/><text x="35" y="42" text-anchor="middle" font-family="'Rajdhani',sans-serif" font-weight="700" font-size="13" fill="var(--primary)" id="val-survey">â€”</text></svg>
           <div class="mini-label">SURVEYS / ERP</div><div class="mini-sub" id="sub-survey">SANITARY / PLANS</div>
         </div>
       </div>
     </div>
 
     <div class="lp-section">
-      <div class="lp-title">◎ CYBERSECURITY &amp; AI</div>
+      <div class="lp-title">â—Ž CYBERSECURITY &amp; AI</div>
       <div class="cyber-box">
         <div class="cyber-row">
           <div class="cyber-status">
             <div class="cyber-dot"></div>
             <div class="cyber-status-text">PROTECTED</div>
           </div>
-          <a class="cyber-trial-btn" href="https://gorgo-company.github.io/watersecure/" target="_blank" rel="noopener">▶ TRIAL</a>
+          <a class="cyber-trial-btn" href="https://gorgo-company.github.io/watersecure/" target="_blank" rel="noopener">â–¶ TRIAL</a>
         </div>
         <div class="cyber-desc">AI threat detection &amp; AWIA-aligned cyber assessment.</div>
       </div>
@@ -127,13 +127,13 @@
       <button class="fbtn" onclick="setFilter('SAMPLING',this)">SAMPLING</button>
       <button class="fbtn" onclick="setFilter('REPORTING',this)">REPORTING</button>
       <div class="f-right">
-        <span class="row-count" id="rowCount">— ITEMS</span>
+        <span class="row-count" id="rowCount">â€” ITEMS</span>
         <button class="add-btn" onclick="openAddModal()">+ ADD ITEM</button>
       </div>
     </div>
     <div class="table-wrap">
       <table class="atable">
-        <thead><tr><th>●</th><th>CAT</th><th>DESCRIPTION</th><th>REGULATION</th><th>FREQ</th><th>DUE DATE</th><th style="text-align:right">DAYS</th><th>STATUS</th><th></th></tr></thead>
+        <thead><tr><th>â—</th><th>CAT</th><th>DESCRIPTION</th><th>REGULATION</th><th>FREQ</th><th>DUE DATE</th><th style="text-align:right">DAYS</th><th>STATUS</th><th></th></tr></thead>
         <tbody id="complyTable"><tr class="loading-row"><td colspan="9">LOADING COMPLIANCE DATA...</td></tr></tbody>
       </table>
     </div>
@@ -144,8 +144,8 @@
 <div class="detail-panel" id="detailPanel">
   <div class="dp-header">
     <div class="dp-title" id="dp-title">COMPLIANCE DETAIL</div>
-    <div class="dp-sub" id="dp-sub">—</div>
-    <button class="dp-close" onclick="closeDetail()">✕</button>
+    <div class="dp-sub" id="dp-sub">â€”</div>
+    <button class="dp-close" onclick="closeDetail()">âœ•</button>
   </div>
   <div class="dp-body" id="dp-body"></div>
   <div class="dp-footer" id="dp-footer"></div>
@@ -154,17 +154,17 @@
 <!-- ADD MODAL -->
 <div class="modal-overlay" id="addModal">
   <div class="modal">
-    <div class="modal-header"><div class="modal-title">+ ADD COMPLIANCE ITEM</div><button class="modal-x" onclick="closeModal()">✕</button></div>
+    <div class="modal-header"><div class="modal-title">+ ADD COMPLIANCE ITEM</div><button class="modal-x" onclick="closeModal()">âœ•</button></div>
     <div class="modal-body">
       <div class="frow"><div class="flabel">DESCRIPTION *</div><input class="finput" id="m-desc" type="text" placeholder="e.g. Monthly Bacteriological Samples"></div>
       <div class="frow2">
         <div><div class="flabel">CATEGORY</div>
           <select class="finput" id="m-cat">
-            <option value="BWN">BWN — Boil Water Notice</option><option value="CCR">CCR — Consumer Confidence</option>
-            <option value="LSLI">LSLI — Lead Svc Line Inv</option><option value="TCR">TCR — Total Coliform</option>
-            <option value="DBP">DBP — Disinfection Byproducts</option><option value="LCR">LCR — Lead &amp; Copper Rule</option>
-            <option value="MOR">MOR — Monthly Op Report</option><option value="SANITARY">SANITARY — Sanitary Survey</option>
-            <option value="ERP">ERP — Emergency Response Plan</option><option value="PFAS">PFAS — Per/Polyfluoroalkyl</option>
+            <option value="BWN">BWN â€” Boil Water Notice</option><option value="CCR">CCR â€” Consumer Confidence</option>
+            <option value="LSLI">LSLI â€” Lead Svc Line Inv</option><option value="TCR">TCR â€” Total Coliform</option>
+            <option value="DBP">DBP â€” Disinfection Byproducts</option><option value="LCR">LCR â€” Lead &amp; Copper Rule</option>
+            <option value="MOR">MOR â€” Monthly Op Report</option><option value="SANITARY">SANITARY â€” Sanitary Survey</option>
+            <option value="ERP">ERP â€” Emergency Response Plan</option><option value="PFAS">PFAS â€” Per/Polyfluoroalkyl</option>
             <option value="OTHER">OTHER</option>
           </select>
         </div>
@@ -193,7 +193,7 @@
             <option value="STATE">State Agency</option><option value="LOCAL">Local</option>
           </select>
         </div>
-        <div><div class="flabel">REGULATION / CITATION</div><input class="finput" id="m-reg" type="text" placeholder="e.g. 40 CFR §141.86"></div>
+        <div><div class="flabel">REGULATION / CITATION</div><input class="finput" id="m-reg" type="text" placeholder="e.g. 40 CFR Â§141.86"></div>
       </div>
       <div class="frow"><div class="flabel">NOTES</div><input class="finput" id="m-notes" type="text" placeholder="Additional details, contacts, links..."></div>
     </div>
@@ -208,16 +208,16 @@
 
 <!-- BOTTOM NAV -->
 <div class="botnav">
-  <a class="navbtn" href="index.html"><span class="navicon">⬡</span>COMMAND</a>
-  <a class="navbtn" href="accounts.html"><span class="navicon">👤</span>ACCOUNTS</a>
-  <a class="navbtn" href="readings.html"><span class="navicon">⏱️</span>READINGS</a>
-  <a class="navbtn" href="billing.html"><span class="navicon">🧾</span>BILLING</a>
-  <a class="navbtn active" href="compliance.html"><span class="navicon">📋</span>COMPLY</a>
-  <a class="navbtn" href="payments.html"><span class="navicon">💵</span>PAYMENTS</a>
-  <a class="navbtn" href="workorders.html"><span class="navicon">🔧</span>WO's</a>
-  <a class="navbtn" href="reports.html"><span class="navicon">📊</span>REPORTS</a>
-  <a class="navbtn" href="comms.html"><span class="navicon">📡</span>COMMS</a>
-  <a class="navbtn" href="system.html"><span class="navicon">⚙</span>SYSTEM</a>
+  <a class="navbtn" href="index.html"><span class="navicon">â¬¡</span>COMMAND</a>
+  <a class="navbtn" href="accounts.html"><span class="navicon">ðŸ‘¤</span>ACCOUNTS</a>
+  <a class="navbtn" href="readings.html"><span class="navicon">â±ï¸</span>READINGS</a>
+  <a class="navbtn" href="billing.html"><span class="navicon">ðŸ§¾</span>BILLING</a>
+  <a class="navbtn active" href="compliance.html"><span class="navicon">ðŸ“‹</span>COMPLY</a>
+  <a class="navbtn" href="payments.html"><span class="navicon">ðŸ’µ</span>PAYMENTS</a>
+  <a class="navbtn" href="workorders.html"><span class="navicon">ðŸ”§</span>WO's</a>
+  <a class="navbtn" href="reports.html"><span class="navicon">ðŸ“Š</span>REPORTS</a>
+  <a class="navbtn" href="comms.html"><span class="navicon">ðŸ“¡</span>COMMS</a>
+  <a class="navbtn" href="system.html"><span class="navicon">âš™</span>SYSTEM</a>
 </div>
 
 <script>
@@ -235,7 +235,7 @@ let selectedEvent  = null;
 function tick(){document.getElementById('clock').textContent=new Date().toTimeString().slice(0,8);}
 setInterval(tick,1000); tick();
 
-// boot animation removed for Enterprise
+// boot animation removed for RADEUS PRO
 setTimeout(() => drawTickMarks(), 200);
 
 async function supa(table, params='', method='GET', body=null) {
@@ -257,7 +257,7 @@ function toast(msg, type='', dur=2800) {
   el._t = setTimeout(()=>el.classList.remove('show'), dur);
 }
 
-function fmtDate(s){ if(!s)return '—'; const d=new Date(s+'T00:00:00'); return `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}/${d.getFullYear()}`; }
+function fmtDate(s){ if(!s)return 'â€”'; const d=new Date(s+'T00:00:00'); return `${String(d.getMonth()+1).padStart(2,'0')}/${String(d.getDate()).padStart(2,'0')}/${d.getFullYear()}`; }
 function daysUntil(due){ if(!due)return null; const d=new Date(due+'T00:00:00'); const t=new Date(); t.setHours(0,0,0,0); return Math.round((d-t)/(1000*60*60*24)); }
 function today(){ return new Date().toISOString().split('T')[0]; }
 
@@ -292,7 +292,7 @@ function prioDot(p) {
 function countdownHtml(ev, status) {
   if (status==='ACTIVE')   return `<div class="countdown"><div class="cd-num cd-critical">ACTIVE</div><div class="cd-lbl cd-lbl-left">VIOLATION</div></div>`;
   if (status==='RESOLVED') return `<div class="countdown"><div class="cd-num cd-ok" style="font-size:11px">CLOSED</div></div>`;
-  if (!ev.due_date)        return `<div class="countdown"><div class="cd-num cd-na">—</div></div>`;
+  if (!ev.due_date)        return `<div class="countdown"><div class="cd-num cd-na">â€”</div></div>`;
   const d = daysUntil(ev.due_date);
   if (d < 0) return `<div class="countdown"><div class="cd-num cd-overdue">${Math.abs(d)}d</div><div class="cd-lbl cd-lbl-left">OVERDUE</div></div>`;
   if (d===0) return `<div class="countdown"><div class="cd-num cd-critical">TODAY</div></div>`;
@@ -307,10 +307,10 @@ async function loadSystems() {
   allSystems = systems;
   const sel = document.getElementById('sysSelect');
   if(systems.length===1){
-    sel.innerHTML=`<option value="${systems[0].system_id}">⬡ ${systems[0].system_name.toUpperCase()}</option>`;
+    sel.innerHTML=`<option value="${systems[0].system_id}">â¬¡ ${systems[0].system_name.toUpperCase()}</option>`;
     activeSystemId = systems[0].system_id;
   } else {
-    sel.innerHTML = '<option value="ALL">⬡ ALL SYSTEMS</option>'+systems.map(s=>`<option value="${s.system_id}">⬡ ${s.system_name.toUpperCase()}</option>`).join('');
+    sel.innerHTML = '<option value="ALL">â¬¡ ALL SYSTEMS</option>'+systems.map(s=>`<option value="${s.system_id}">â¬¡ ${s.system_name.toUpperCase()}</option>`).join('');
     sel.value='ALL';
     activeSystemId = null;
   }
@@ -335,8 +335,8 @@ function updateStats() {
 
 function updateAlertBar() {
   const bar=document.getElementById('alertBar');const tag=document.getElementById('alertTag');const track=document.getElementById('alertTrack');const criticals=allEvents.filter(e=>['ACTIVE','OVERDUE'].includes(e._status));
-  if(!criticals.length){bar.className='alert-bar clear';tag.className='alert-tag ok';tag.textContent='⬡ STATUS';const msg='ALL SYSTEMS NOMINAL — NO ACTIVE VIOLATIONS — COMPLIANCE STATUS: MONITORING';track.innerHTML=`<span class="alert-item" style="color:var(--success)">${msg}</span><span class="alert-item" style="color:var(--success)">${msg}</span>`;return;}
-  bar.className='alert-bar critical';tag.className='alert-tag crit';tag.textContent='⚠ BREACH';const items=criticals.map(e=>`<span class="alert-item" style="color:var(--danger)">⚠ ${e._status} — ${e.description||e.event_type} — ${e.regulation||''}  ·  </span>`).join('');track.innerHTML=items+items;
+  if(!criticals.length){bar.className='alert-bar clear';tag.className='alert-tag ok';tag.textContent='â¬¡ STATUS';const msg='ALL SYSTEMS NOMINAL â€” NO ACTIVE VIOLATIONS â€” COMPLIANCE STATUS: MONITORING';track.innerHTML=`<span class="alert-item" style="color:var(--success)">${msg}</span><span class="alert-item" style="color:var(--success)">${msg}</span>`;return;}
+  bar.className='alert-bar critical';tag.className='alert-tag crit';tag.textContent='âš  BREACH';const items=criticals.map(e=>`<span class="alert-item" style="color:var(--danger)">âš  ${e._status} â€” ${e.description||e.event_type} â€” ${e.regulation||''}  Â·  </span>`).join('');track.innerHTML=items+items;
 }
 
 function drawTickMarks() {
@@ -380,7 +380,7 @@ function updateMiniGauges() {
 
 function renderNodeGrid() {
   const grid=document.getElementById('nodeGrid');if(!grid||!allSystems.length)return;
-  grid.innerHTML=allSystems.map(s=>{const short=s.system_name.replace(/\s*(NEW\s*WATER\s*SYSTEM|NWS|WATER)\s*/gi,'').trim().slice(0,8).toUpperCase();return`<div class="sys-node" onclick="switchSystemByCode('${s.system_id}')" title="${s.system_name}"><div class="node-hex" style="color:var(--text-muted)">⬡</div><div class="node-name">${short}</div></div>`;}).join('');
+  grid.innerHTML=allSystems.map(s=>{const short=s.system_name.replace(/\s*(NEW\s*WATER\s*SYSTEM|NWS|WATER)\s*/gi,'').trim().slice(0,8).toUpperCase();return`<div class="sys-node" onclick="switchSystemByCode('${s.system_id}')" title="${s.system_name}"><div class="node-hex" style="color:var(--text-muted)">â¬¡</div><div class="node-name">${short}</div></div>`;}).join('');
 }
 
 
@@ -398,16 +398,16 @@ function renderTable() {
   const tbody=document.getElementById('complyTable');
   if(!filtered.length){tbody.innerHTML='<tr class="loading-row"><td colspan="9" style="color:var(--text-muted)">NO ITEMS MATCH FILTER</td></tr>';return;}
   tbody.innerHTML='';
-  filtered.forEach(ev=>{const s=ev._status;const tr=document.createElement('tr');if(s==='ACTIVE')tr.classList.add('row-critical');if(s==='OVERDUE')tr.classList.add('row-overdue');if(selectedEvent?.event_id===ev.event_id)tr.classList.add('selected');tr.onclick=()=>openDetail(ev);tr.innerHTML=`<td class="td-priority">${prioDot(ev.priority)}</td><td>${catBadge(ev.category)}</td><td class="td-desc">${ev.description||ev.event_type||'—'}</td><td class="td-reg">${ev.regulation||'—'}</td><td class="td-freq">${(ev.frequency||'').replace('ANNUAL','YR').replace('MONTHLY','MO').replace('QUARTERLY','QTR').replace('DAILY','DLY').replace('WEEKLY','WK').replace('EVENT','EVT').replace('9YEAR','9YR').replace('5YEAR','5YR').replace('3YEAR','3YR')}</td><td class="td-due">${fmtDate(ev.due_date)}</td><td style="text-align:right">${countdownHtml(ev,s)}</td><td>${statusPill(s)}</td><td><button class="action-btn" onclick="event.stopPropagation();openDetail(allEvents.find(e=>e.event_id==='${ev.event_id}'))">···</button></td>`;tbody.appendChild(tr);});
+  filtered.forEach(ev=>{const s=ev._status;const tr=document.createElement('tr');if(s==='ACTIVE')tr.classList.add('row-critical');if(s==='OVERDUE')tr.classList.add('row-overdue');if(selectedEvent?.event_id===ev.event_id)tr.classList.add('selected');tr.onclick=()=>openDetail(ev);tr.innerHTML=`<td class="td-priority">${prioDot(ev.priority)}</td><td>${catBadge(ev.category)}</td><td class="td-desc">${ev.description||ev.event_type||'â€”'}</td><td class="td-reg">${ev.regulation||'â€”'}</td><td class="td-freq">${(ev.frequency||'').replace('ANNUAL','YR').replace('MONTHLY','MO').replace('QUARTERLY','QTR').replace('DAILY','DLY').replace('WEEKLY','WK').replace('EVENT','EVT').replace('9YEAR','9YR').replace('5YEAR','5YR').replace('3YEAR','3YR')}</td><td class="td-due">${fmtDate(ev.due_date)}</td><td style="text-align:right">${countdownHtml(ev,s)}</td><td>${statusPill(s)}</td><td><button class="action-btn" onclick="event.stopPropagation();openDetail(allEvents.find(e=>e.event_id==='${ev.event_id}'))">Â·Â·Â·</button></td>`;tbody.appendChild(tr);});
 }
 
 function openDetail(ev) {
   if(!ev)return;selectedEvent=ev;renderTable();
-  document.getElementById('dp-title').textContent=`${ev.category||'COMPLY'} — ${ev._status}`;
-  document.getElementById('dp-sub').textContent=ev.regulation||ev.event_type||'—';
-  document.getElementById('dp-body').innerHTML=`<div class="dp-section"><div class="dp-section-title">EVENT DETAIL</div><div class="dp-row"><div class="dp-label">DESCRIPTION</div><div class="dp-val">${ev.description||'—'}</div></div><div class="dp-row"><div class="dp-label">CATEGORY</div><div class="dp-val">${catBadge(ev.category)} ${statusPill(ev._status)}</div></div><div class="dp-row"><div class="dp-label">PRIORITY</div><div class="dp-val">${prioDot(ev.priority)} ${ev.priority||'—'}</div></div><div class="dp-row"><div class="dp-label">REGULATION</div><div class="dp-val">${ev.regulation||'—'}</div></div><div class="dp-row"><div class="dp-label">AGENCY</div><div class="dp-val">${ev.agency||'—'}</div></div><div class="dp-row"><div class="dp-label">FREQUENCY</div><div class="dp-val">${ev.frequency||'—'}</div></div></div><div class="dp-section"><div class="dp-section-title">DATES</div><div class="dp-row"><div class="dp-label">EVENT DATE</div><div class="dp-val">${fmtDate(ev.event_date)}</div></div><div class="dp-row"><div class="dp-label">DUE DATE</div><div class="dp-val">${fmtDate(ev.due_date)}</div></div><div class="dp-row"><div class="dp-label">DAYS REMAINING</div><div class="dp-val" style="${ev.due_date&&daysUntil(ev.due_date)<0?'color:var(--danger)':''}">${ev.due_date?(daysUntil(ev.due_date)<0?'OVERDUE BY '+Math.abs(daysUntil(ev.due_date))+' DAYS':daysUntil(ev.due_date)+' DAYS'):'—'}</div></div>${ev.resolved_date?`<div class="dp-row"><div class="dp-label">RESOLVED</div><div class="dp-val" style="color:var(--success)">${fmtDate(ev.resolved_date)}</div></div>`:''}</div>${ev.notes?`<div class="dp-section"><div class="dp-section-title">NOTES</div><div class="dp-notes">${ev.notes}</div></div>`:''}`;
+  document.getElementById('dp-title').textContent=`${ev.category||'COMPLY'} â€” ${ev._status}`;
+  document.getElementById('dp-sub').textContent=ev.regulation||ev.event_type||'â€”';
+  document.getElementById('dp-body').innerHTML=`<div class="dp-section"><div class="dp-section-title">EVENT DETAIL</div><div class="dp-row"><div class="dp-label">DESCRIPTION</div><div class="dp-val">${ev.description||'â€”'}</div></div><div class="dp-row"><div class="dp-label">CATEGORY</div><div class="dp-val">${catBadge(ev.category)} ${statusPill(ev._status)}</div></div><div class="dp-row"><div class="dp-label">PRIORITY</div><div class="dp-val">${prioDot(ev.priority)} ${ev.priority||'â€”'}</div></div><div class="dp-row"><div class="dp-label">REGULATION</div><div class="dp-val">${ev.regulation||'â€”'}</div></div><div class="dp-row"><div class="dp-label">AGENCY</div><div class="dp-val">${ev.agency||'â€”'}</div></div><div class="dp-row"><div class="dp-label">FREQUENCY</div><div class="dp-val">${ev.frequency||'â€”'}</div></div></div><div class="dp-section"><div class="dp-section-title">DATES</div><div class="dp-row"><div class="dp-label">EVENT DATE</div><div class="dp-val">${fmtDate(ev.event_date)}</div></div><div class="dp-row"><div class="dp-label">DUE DATE</div><div class="dp-val">${fmtDate(ev.due_date)}</div></div><div class="dp-row"><div class="dp-label">DAYS REMAINING</div><div class="dp-val" style="${ev.due_date&&daysUntil(ev.due_date)<0?'color:var(--danger)':''}">${ev.due_date?(daysUntil(ev.due_date)<0?'OVERDUE BY '+Math.abs(daysUntil(ev.due_date))+' DAYS':daysUntil(ev.due_date)+' DAYS'):'â€”'}</div></div>${ev.resolved_date?`<div class="dp-row"><div class="dp-label">RESOLVED</div><div class="dp-val" style="color:var(--success)">${fmtDate(ev.resolved_date)}</div></div>`:''}</div>${ev.notes?`<div class="dp-section"><div class="dp-section-title">NOTES</div><div class="dp-notes">${ev.notes}</div></div>`:''}`;
   const isActive=ev._status==='ACTIVE';
-  document.getElementById('dp-footer').innerHTML=`${isActive?`<button class="dp-btn dp-btn-g" onclick="markResolved('${ev.event_id}')">✓ MARK RESOLVED</button>`:''}<button class="dp-btn dp-btn-or" onclick="openCompEdit('${ev.event_id}')">✏️ EDIT</button><button class="dp-btn dp-btn-or" onclick="editStatus('${ev.event_id}','RESOLVED')">CLOSE ITEM</button><button class="dp-btn dp-btn-ghost" onclick="closeDetail()">✕ CLOSE</button>`;
+  document.getElementById('dp-footer').innerHTML=`${isActive?`<button class="dp-btn dp-btn-g" onclick="markResolved('${ev.event_id}')">âœ“ MARK RESOLVED</button>`:''}<button class="dp-btn dp-btn-or" onclick="openCompEdit('${ev.event_id}')">âœï¸ EDIT</button><button class="dp-btn dp-btn-or" onclick="editStatus('${ev.event_id}','RESOLVED')">CLOSE ITEM</button><button class="dp-btn dp-btn-ghost" onclick="closeDetail()">âœ• CLOSE</button>`;
   document.getElementById('detailPanel').classList.add('open');
 }
 
@@ -430,7 +430,7 @@ document.addEventListener('keydown', e => { if(e.key==='Escape'){closeDetail();c
 function openCompEdit(eventId){
   const ev=allEvents.find(e=>e.event_id===eventId);if(!ev)return;
   document.getElementById('compEditModal').classList.add('show');
-  document.getElementById('ce-title-val').textContent=(ev.category||'EVENT')+' — '+(ev.event_type||ev.description||'').substring(0,40);
+  document.getElementById('ce-title-val').textContent=(ev.category||'EVENT')+' â€” '+(ev.event_type||ev.description||'').substring(0,40);
   document.getElementById('ce-desc').value=ev.description||'';
   document.getElementById('ce-cat').value=ev.category||'MONITORING';
   document.getElementById('ce-priority').value=ev.priority||'ROUTINE';
@@ -459,7 +459,7 @@ async function saveCompEdit(){
   };
   if(body.status==='RESOLVED')body.resolved_date=today();
   const r=await supa('compliance_events',`?event_id=eq.${eventId}`,'PATCH',body);
-  if(r!==null){toast('✓ COMPLIANCE ITEM UPDATED','ok');closeCompEdit();closeDetail();loadEvents();}
+  if(r!==null){toast('âœ“ COMPLIANCE ITEM UPDATED','ok');closeCompEdit();closeDetail();loadEvents();}
   else toast('ERROR UPDATING','err');
 }
 
@@ -472,9 +472,9 @@ window.addEventListener('DOMContentLoaded', loadSystems);
     <div class="modal-header">
       <div>
         <div class="modal-title">EDIT COMPLIANCE ITEM</div>
-        <div class="modal-sub" id="ce-title-val">—</div>
+        <div class="modal-sub" id="ce-title-val">â€”</div>
       </div>
-      <button class="modal-x" onclick="closeCompEdit()">✕</button>
+      <button class="modal-x" onclick="closeCompEdit()">âœ•</button>
     </div>
     <input type="hidden" id="ce-eventId">
     <div class="modal-body">
@@ -554,7 +554,7 @@ function signOut(){const s=getSession();if(s?.access_token){fetch(`${_SUPA_URL}/
 })();
 </script>
 <style>
-/* Sonar sweep — red, horizontal line moving top to bottom */
+/* Sonar sweep â€” red, horizontal line moving top to bottom */
 .sonar-line {
   position: fixed;
   left: 0; right: 0;

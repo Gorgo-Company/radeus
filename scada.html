@@ -1,0 +1,386 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RADEUS — SCADA</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles/main.css">
+<style>
+  :root {
+    --scada: #00d4ff;
+    --scada-dim: #0099bb;
+    --scada-glow: rgba(0, 212, 255, 0.18);
+    --scada-glow-strong: rgba(0, 212, 255, 0.35);
+  }
+
+  body[data-page="scada"] .sdot { background: var(--scada); box-shadow: 0 0 8px var(--scada); }
+  body[data-page="scada"] .operator-label { color: var(--scada); letter-spacing: 0.18em; }
+  body[data-page="scada"] .logo { color: var(--scada); text-shadow: 0 0 12px var(--scada-dim); }
+  body[data-page="scada"] .alert-bar { border-color: var(--scada-dim); }
+  body[data-page="scada"] .alert-tag { background: var(--scada-dim); color: #000; }
+  body[data-page="scada"] .lp-title { color: var(--scada); border-bottom-color: var(--scada-dim); }
+  body[data-page="scada"] .stat-val { color: var(--scada); }
+
+  /* SCADA-specific overrides */
+  .scada-coming-soon {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    gap: 2.4rem;
+    padding: 4rem 2rem;
+    text-align: center;
+  }
+
+  .scada-icon-wrap {
+    position: relative;
+    width: 160px;
+    height: 160px;
+  }
+
+  .scada-ring {
+    position: absolute;
+    border-radius: 50%;
+    border: 1px solid var(--scada-dim);
+    animation: scada-pulse 3s ease-in-out infinite;
+  }
+  .scada-ring-1 { inset: 0; opacity: 0.8; animation-delay: 0s; }
+  .scada-ring-2 { inset: -18px; opacity: 0.5; animation-delay: 0.6s; }
+  .scada-ring-3 { inset: -36px; opacity: 0.25; animation-delay: 1.2s; }
+
+  @keyframes scada-pulse {
+    0%, 100% { transform: scale(1); opacity: inherit; }
+    50% { transform: scale(1.04); opacity: 0.15; }
+  }
+
+  .scada-icon-inner {
+    position: absolute;
+    inset: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .scada-svg-icon {
+    width: 80px;
+    height: 80px;
+    filter: drop-shadow(0 0 12px var(--scada));
+  }
+
+  .scada-title {
+    font-family: 'Orbitron', monospace;
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: var(--scada);
+    text-shadow: 0 0 20px var(--scada-dim);
+    letter-spacing: 0.25em;
+    line-height: 1;
+  }
+
+  .scada-subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.85rem;
+    color: var(--text-dim);
+    letter-spacing: 0.12em;
+    max-width: 520px;
+    line-height: 1.7;
+  }
+
+  .scada-badge {
+    display: inline-block;
+    background: var(--scada-glow);
+    border: 1px solid var(--scada-dim);
+    color: var(--scada);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    letter-spacing: 0.2em;
+    padding: 0.45rem 1.2rem;
+    border-radius: 2px;
+  }
+
+  .scada-feature-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1rem;
+    max-width: 680px;
+    width: 100%;
+    margin-top: 1rem;
+  }
+
+  .scada-feature-card {
+    background: rgba(0, 212, 255, 0.04);
+    border: 1px solid rgba(0, 212, 255, 0.15);
+    border-top: 2px solid var(--scada-dim);
+    padding: 1.2rem 1rem;
+    text-align: left;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .scada-feature-card::before {
+    content: '';
+    position: absolute;
+    top: 0; left: 0; right: 0;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--scada), transparent);
+    opacity: 0.5;
+  }
+
+  .scada-feature-label {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.65rem;
+    color: var(--scada-dim);
+    letter-spacing: 0.15em;
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+  }
+
+  .scada-feature-name {
+    font-family: 'Rajdhani', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 600;
+    color: var(--text);
+    letter-spacing: 0.04em;
+  }
+
+  .scada-status-dot {
+    display: inline-block;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--scada-dim);
+    opacity: 0.4;
+    margin-right: 0.5rem;
+    vertical-align: middle;
+  }
+
+  .scada-back-link {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+    text-decoration: none;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 2px;
+    transition: color 0.2s, border-color 0.2s;
+  }
+  .scada-back-link:hover { color: var(--scada); border-color: var(--scada); }
+
+  /* Scan line animation overlay */
+  .scada-scan {
+    position: fixed;
+    top: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(90deg, transparent, var(--scada-glow-strong), transparent);
+    animation: scan-line 6s linear infinite;
+    pointer-events: none;
+    z-index: 999;
+    opacity: 0.6;
+  }
+
+  @keyframes scan-line {
+    0% { top: 60px; opacity: 0; }
+    5% { opacity: 0.6; }
+    95% { opacity: 0.6; }
+    100% { top: 100vh; opacity: 0; }
+  }
+
+  /* Nav active state for SCADA */
+  .nav-link[href="scada.html"] {
+    color: var(--scada);
+    border-left: 2px solid var(--scada);
+    background: rgba(0, 212, 255, 0.06);
+  }
+</style>
+</head>
+<body data-page="scada">
+
+<div class="scada-scan"></div>
+<div class="sonar-line"></div>
+<div class="corner tl"></div><div class="corner tr"></div>
+<div class="corner bl"></div><div class="corner br"></div>
+
+<!-- TOP BAR -->
+<div class="topbar">
+  <a class="logo" href="index.html">RADEUS</a>
+  <div class="topbar-left">
+    <div class="sdot"></div>
+    <span class="operator-label">SCADA</span>
+    <select class="sys-select" id="sysSelect" onchange="switchSystem(this.value)">
+      <option value="">⬡ LOADING...</option>
+    </select>
+  </div>
+  <div class="topbar-left">
+    <span class="topbar-meta">OPERATOR: <span id="operatorName" class="operator-name">—</span></span>
+    <span id="clock">--:--:--</span>
+  </div>
+</div>
+
+<!-- ALERT BAR -->
+<div class="alert-bar clear" id="alertBar">
+  <div class="alert-tag ok" id="alertTag">⬡ STATUS</div>
+  <div class="alert-scroll">
+    <div class="alert-track" id="alertTrack">
+      <span class="alert-item" style="color:var(--scada)">SCADA MODULE INITIALIZING — TELEMETRY LAYER PENDING — REAL-TIME CONTROL INTERFACE IN DEVELOPMENT</span>
+      <span class="alert-item" style="color:var(--scada)">SCADA MODULE INITIALIZING — TELEMETRY LAYER PENDING — REAL-TIME CONTROL INTERFACE IN DEVELOPMENT</span>
+    </div>
+  </div>
+</div>
+
+<!-- STATS BAR -->
+<div class="statsbar" id="statsBar">
+  <div class="stat-cell"><div class="stat-label">PUMP STATIONS</div><div class="stat-val" style="color:var(--scada)">—</div></div>
+  <div class="stat-cell"><div class="stat-label">ACTIVE ALARMS</div><div class="stat-val sv-red">—</div></div>
+  <div class="stat-cell"><div class="stat-label">TANK LEVEL</div><div class="stat-val" style="color:var(--scada)">—</div></div>
+  <div class="stat-cell"><div class="stat-label">FLOW RATE</div><div class="stat-val" style="color:var(--scada)">—</div></div>
+  <div class="stat-cell"><div class="stat-label">PRESSURE (PSI)</div><div class="stat-val" style="color:var(--scada)">—</div></div>
+  <div class="stat-cell"><div class="stat-label">SYSTEM STATUS</div><div class="stat-val sv-yellow">OFFLINE</div></div>
+</div>
+
+<!-- MAIN -->
+<div class="main" id="mainArea">
+
+  <!-- LEFT NAV -->
+  <div class="left-panel">
+    <div class="lp-section">
+      <div class="lp-title">⬡ MODULES</div>
+      <nav class="lp-nav">
+        <a class="nav-link" href="command.html">COMMAND</a>
+        <a class="nav-link" href="accounts.html">ACCOUNTS</a>
+        <a class="nav-link" href="readings.html">READINGS</a>
+        <a class="nav-link" href="billing.html">BILLING</a>
+        <a class="nav-link" href="payments.html">PAYMENTS</a>
+        <a class="nav-link" href="comms.html">COMMS</a>
+        <a class="nav-link" href="compliance.html">COMPLY</a>
+        <a class="nav-link" href="workorders.html">WORK ORDERS</a>
+        <a class="nav-link" href="scada.html">SCADA</a>
+        <a class="nav-link" href="reports.html">REPORTS</a>
+        <a class="nav-link" href="system.html">SYSTEM</a>
+      </nav>
+    </div>
+    <div class="lp-section" style="margin-top:auto;">
+      <div class="lp-title">⬡ SESSION</div>
+      <div class="lp-meta" id="sessionMeta" style="font-size:0.7rem; color:var(--text-dim); line-height:1.8;">
+        <div>USER: <span id="sessionUser" style="color:var(--text);">—</span></div>
+        <div>ORG: <span id="sessionOrg" style="color:var(--text);">—</span></div>
+      </div>
+      <button class="lp-btn" onclick="logout()" style="margin-top:1rem;">LOGOUT</button>
+    </div>
+  </div>
+
+  <!-- RIGHT PANEL — Coming Soon -->
+  <div class="right-panel" style="display:flex; flex-direction:column;">
+    <div class="scada-coming-soon">
+
+      <div class="scada-icon-wrap">
+        <div class="scada-ring scada-ring-1"></div>
+        <div class="scada-ring scada-ring-2"></div>
+        <div class="scada-ring scada-ring-3"></div>
+        <div class="scada-icon-inner">
+          <svg class="scada-svg-icon" viewBox="0 0 80 80" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <!-- Pump / pipeline icon -->
+            <circle cx="40" cy="40" r="28" stroke="#00d4ff" stroke-width="1.5" stroke-dasharray="4 3" opacity="0.4"/>
+            <circle cx="40" cy="40" r="18" stroke="#00d4ff" stroke-width="1" opacity="0.6"/>
+            <!-- Flow arrows -->
+            <line x1="8" y1="40" x2="22" y2="40" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="58" y1="40" x2="72" y2="40" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round"/>
+            <polyline points="18,35 24,40 18,45" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <polyline points="62,35 68,40 62,45" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+            <!-- Center hub -->
+            <circle cx="40" cy="40" r="6" fill="#00d4ff" opacity="0.85"/>
+            <circle cx="40" cy="40" r="3" fill="#000"/>
+            <!-- Vertical lines (tank fill indicators) -->
+            <line x1="40" y1="8" x2="40" y2="22" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round"/>
+            <line x1="40" y1="58" x2="40" y2="72" stroke="#00d4ff" stroke-width="1.5" stroke-linecap="round"/>
+            <!-- Tick marks on rings -->
+            <line x1="40" y1="12" x2="40" y2="16" stroke="#00d4ff" stroke-width="1" opacity="0.5"/>
+            <line x1="40" y1="64" x2="40" y2="68" stroke="#00d4ff" stroke-width="1" opacity="0.5"/>
+          </svg>
+        </div>
+      </div>
+
+      <div>
+        <div class="scada-title">SCADA</div>
+        <div style="font-family:'Share Tech Mono',monospace; font-size:0.7rem; color:var(--scada-dim); letter-spacing:0.2em; margin-top:0.4rem;">SUPERVISORY CONTROL & DATA ACQUISITION</div>
+      </div>
+
+      <div class="scada-badge">⬡ MODULE UNDER CONSTRUCTION — COMING SOON</div>
+
+      <div class="scada-subtitle">
+        Real-time telemetry, pump station monitoring, tank level visualization, pressure readings,
+        flow rate tracking, alarm management, and remote control interfaces for rural water system infrastructure.
+        Built for the operator in the field and the engineer at the desk.
+      </div>
+
+      <div class="scada-feature-grid">
+        <div class="scada-feature-card">
+          <div class="scada-feature-label">Module 01</div>
+          <div class="scada-feature-name"><span class="scada-status-dot"></span>Pump Station Monitor</div>
+        </div>
+        <div class="scada-feature-card">
+          <div class="scada-feature-label">Module 02</div>
+          <div class="scada-feature-name"><span class="scada-status-dot"></span>Tank Level Visualization</div>
+        </div>
+        <div class="scada-feature-card">
+          <div class="scada-feature-label">Module 03</div>
+          <div class="scada-feature-name"><span class="scada-status-dot"></span>Pressure & Flow Telemetry</div>
+        </div>
+        <div class="scada-feature-card">
+          <div class="scada-feature-label">Module 04</div>
+          <div class="scada-feature-name"><span class="scada-status-dot"></span>Alarm & Event Log</div>
+        </div>
+        <div class="scada-feature-card">
+          <div class="scada-feature-label">Module 05</div>
+          <div class="scada-feature-name"><span class="scada-status-dot"></span>Aerial Map Overlay</div>
+        </div>
+        <div class="scada-feature-card">
+          <div class="scada-feature-label">Module 06</div>
+          <div class="scada-feature-name"><span class="scada-status-dot"></span>Remote Control Interface</div>
+        </div>
+      </div>
+
+      <a class="scada-back-link" href="command.html">← RETURN TO COMMAND</a>
+
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // Clock
+  function tick() {
+    const now = new Date();
+    document.getElementById('clock').textContent =
+      now.toLocaleTimeString('en-US', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+  }
+  tick(); setInterval(tick, 1000);
+
+  // Session
+  function loadSession() {
+    try {
+      const staff = JSON.parse(localStorage.getItem('radeus_staff') || '{}');
+      const session = JSON.parse(localStorage.getItem('radeus_session') || '{}');
+      if (staff.name) document.getElementById('sessionUser').textContent = staff.name;
+      if (staff.org_id) document.getElementById('sessionOrg').textContent = staff.org_id.slice(0, 8) + '…';
+      if (session.system_name) {
+        const sel = document.getElementById('sysSelect');
+        sel.innerHTML = `<option value="${session.system_id || ''}">${session.system_name}</option>`;
+      }
+      if (staff.name) document.getElementById('operatorName').textContent = staff.name;
+    } catch(e) {}
+  }
+  loadSession();
+
+  function switchSystem(val) { /* multi-system switching — wired in later */ }
+
+  function logout() {
+    localStorage.removeItem('radeus_session');
+    localStorage.removeItem('radeus_staff');
+    window.location.href = 'login.html';
+  }
+</script>
+
+</body>
+</html>

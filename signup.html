@@ -1,0 +1,999 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>RADEUS — Sign Up</title>
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;600;700;900&family=Share+Tech+Mono&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="./styles/main.css">
+<style>
+/* ===== Onboarding-funnel scoped styles ===== */
+[data-page="signup"] {
+  min-height: 100vh;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding: 28px 16px 40px;
+  overflow-y: auto;
+}
+
+[data-page="signup"] .funnel {
+  position: relative; z-index: 1;
+  width: 560px; max-width: 96vw;
+  background: rgba(2, 12, 6, 0.96);
+  border: 1px solid var(--border-strong);
+  box-shadow: 0 0 80px rgba(0, 245, 255, 0.07),
+              0 30px 60px rgba(0, 0, 0, 0.6);
+}
+
+[data-page="signup"] .funnel-top {
+  padding: 28px 32px 20px;
+  border-bottom: 1px solid var(--border);
+  background: linear-gradient(135deg, rgba(0, 245, 255, 0.05), transparent);
+}
+
+[data-page="signup"] .funnel-top .row {
+  display: flex; align-items: center; justify-content: space-between;
+}
+
+[data-page="signup"] .funnel-tag {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--text-muted);
+  letter-spacing: 2px;
+  margin-top: 4px;
+}
+
+[data-page="signup"] .funnel-progress {
+  display: flex;
+  gap: 4px;
+  margin-top: 16px;
+}
+
+[data-page="signup"] .step-pip {
+  flex: 1;
+  height: 3px;
+  background: rgba(0, 245, 255, 0.08);
+  border-radius: 2px;
+  transition: background .25s;
+}
+
+[data-page="signup"] .step-pip.done { background: var(--cyan-dim); }
+[data-page="signup"] .step-pip.active { background: var(--cyan); box-shadow: 0 0 8px var(--cyan); }
+
+[data-page="signup"] .funnel-body { padding: 28px 32px 24px; }
+
+[data-page="signup"] .step { display: none; }
+[data-page="signup"] .step.active { display: block; }
+
+[data-page="signup"] .step-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+  text-shadow: 0 0 10px rgba(0, 245, 255, 0.3);
+}
+
+[data-page="signup"] .step-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  margin-bottom: 22px;
+  text-transform: uppercase;
+}
+
+[data-page="signup"] .field { margin-bottom: 16px; }
+
+[data-page="signup"] .field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+}
+
+[data-page="signup"] .field-row-3 {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 12px;
+}
+
+[data-page="signup"] .plan-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 16px;
+}
+
+[data-page="signup"] .plan-card {
+  border: 1px solid var(--border);
+  background: rgba(0, 245, 255, 0.02);
+  padding: 18px 16px;
+  cursor: pointer;
+  transition: all .15s;
+  position: relative;
+}
+
+[data-page="signup"] .plan-card:hover {
+  border-color: var(--cyan-dim);
+  background: rgba(0, 245, 255, 0.05);
+}
+
+[data-page="signup"] .plan-card.selected {
+  border-color: var(--cyan);
+  background: rgba(0, 245, 255, 0.08);
+  box-shadow: 0 0 16px rgba(0, 245, 255, 0.2);
+}
+
+[data-page="signup"] .plan-card .plan-name {
+  font-family: var(--font-display);
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--cyan);
+  letter-spacing: 2px;
+  margin-bottom: 6px;
+}
+
+[data-page="signup"] .plan-card .plan-price {
+  font-family: var(--font-num);
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 4px;
+}
+
+[data-page="signup"] .plan-card .plan-meta {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+}
+
+[data-page="signup"] .plan-card .plan-features {
+  margin-top: 12px;
+  font-family: var(--font-num);
+  font-size: 12px;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+[data-page="signup"] .org-type-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 8px;
+}
+
+[data-page="signup"] .org-type-card {
+  border: 1px solid var(--border);
+  background: rgba(0, 245, 255, 0.02);
+  padding: 10px 12px;
+  cursor: pointer;
+  transition: all .15s;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 1.5px;
+  color: var(--text-soft);
+  text-align: center;
+}
+
+[data-page="signup"] .org-type-card:hover {
+  border-color: var(--cyan-dim);
+  color: var(--text);
+}
+
+[data-page="signup"] .org-type-card.selected {
+  border-color: var(--cyan);
+  background: rgba(0, 245, 255, 0.08);
+  color: var(--cyan);
+}
+
+[data-page="signup"] .funnel-footer {
+  padding: 18px 32px 22px;
+  border-top: 1px solid var(--border);
+  display: flex; gap: 12px;
+  justify-content: flex-end;
+}
+
+[data-page="signup"] .funnel-footer .left-meta {
+  margin-right: auto;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--text-muted);
+  letter-spacing: 1.5px;
+  align-self: center;
+}
+
+[data-page="signup"] .next-btn {
+  padding: 11px 28px;
+  font-family: var(--font-display);
+  font-size: 10px;
+  letter-spacing: 3px;
+  border: 1px solid var(--cyan);
+  color: var(--cyan);
+  background: rgba(0, 245, 255, 0.06);
+  cursor: pointer;
+  transition: all .15s;
+}
+
+[data-page="signup"] .next-btn:hover:not(:disabled) {
+  background: rgba(0, 245, 255, 0.16);
+  box-shadow: 0 0 12px rgba(0, 245, 255, 0.3);
+}
+
+[data-page="signup"] .next-btn:disabled {
+  opacity: 0.4; cursor: not-allowed;
+}
+
+[data-page="signup"] .next-btn.success {
+  border-color: var(--success); color: var(--success);
+  background: rgba(0, 255, 136, 0.06);
+}
+[data-page="signup"] .next-btn.success:hover { background: rgba(0, 255, 136, 0.16); }
+
+[data-page="signup"] .err-msg {
+  display: none;
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: rgba(255, 34, 68, 0.08);
+  border: 1px solid rgba(255, 34, 68, 0.4);
+  color: var(--danger);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+[data-page="signup"] .err-msg.show { display: block; }
+
+[data-page="signup"] .ok-msg {
+  display: none;
+  margin-top: 14px;
+  padding: 10px 12px;
+  background: rgba(0, 255, 136, 0.06);
+  border: 1px solid rgba(0, 255, 136, 0.4);
+  color: var(--success);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+[data-page="signup"] .ok-msg.show { display: block; }
+
+[data-page="signup"] .small-link {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-decoration: none;
+}
+[data-page="signup"] .small-link:hover { color: var(--cyan); }
+
+[data-page="signup"] .check-row {
+  display: flex; align-items: center;
+  gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  color: var(--text-soft);
+  letter-spacing: 1px;
+  cursor: pointer;
+  user-select: none;
+  margin-top: 8px;
+}
+
+[data-page="signup"] .check-row input[type="checkbox"] {
+  margin: 0;
+  accent-color: var(--cyan);
+}
+
+[data-page="signup"] .summary-box {
+  border: 1px solid var(--border);
+  background: rgba(0, 245, 255, 0.02);
+  padding: 16px 18px;
+  margin-bottom: 16px;
+}
+
+[data-page="signup"] .summary-row {
+  display: flex; justify-content: space-between;
+  padding: 6px 0;
+  border-bottom: 1px dotted rgba(0, 245, 255, 0.08);
+  font-family: var(--font-mono);
+  font-size: 10px;
+}
+
+[data-page="signup"] .summary-row:last-child { border-bottom: none; }
+
+[data-page="signup"] .summary-row .label {
+  color: var(--text-muted);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  font-size: 9px;
+}
+
+[data-page="signup"] .summary-row .val {
+  color: var(--text);
+  font-family: var(--font-num);
+  font-size: 12px;
+  font-weight: 500;
+}
+
+[data-page="signup"] .welcome-icon {
+  font-size: 48px;
+  text-align: center;
+  margin: 8px 0 16px;
+  color: var(--success);
+  text-shadow: 0 0 20px var(--success);
+}
+
+[data-page="signup"] .welcome-msg {
+  font-family: var(--font-num);
+  font-size: 14px;
+  line-height: 1.6;
+  color: var(--text-soft);
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+[data-page="signup"] .pay-info {
+  border: 1px solid var(--cyan);
+  background: rgba(0, 245, 255, 0.04);
+  padding: 14px 16px;
+  margin-bottom: 16px;
+  font-family: var(--font-num);
+  font-size: 12px;
+  color: var(--text-soft);
+  line-height: 1.6;
+}
+
+[data-page="signup"] .pay-info strong {
+  color: var(--cyan);
+  font-family: var(--font-display);
+  font-size: 11px;
+  letter-spacing: 1.5px;
+}
+</style>
+</head>
+<body data-page="signup">
+
+<div class="funnel">
+  <div class="funnel-top">
+    <div class="row">
+      <span class="logo">RADEUS</span>
+      <span class="funnel-tag">WATER UTILITY MANAGEMENT PLATFORM</span>
+    </div>
+    <div class="funnel-progress" id="progressBar">
+      <div class="step-pip active" data-step="1"></div>
+      <div class="step-pip" data-step="2"></div>
+      <div class="step-pip" data-step="3"></div>
+      <div class="step-pip" data-step="4"></div>
+      <div class="step-pip" data-step="5"></div>
+      <div class="step-pip" data-step="6"></div>
+    </div>
+  </div>
+
+  <div class="funnel-body">
+
+    <!-- ============ STEP 1: ACCOUNT (auth user) ============ -->
+    <div class="step active" data-step="1">
+      <div class="step-title">CREATE YOUR ACCOUNT</div>
+      <div class="step-sub">Step 1 of 6 · Admin authentication</div>
+
+      <div class="field">
+        <label class="flabel">FULL NAME</label>
+        <input class="finput" id="acctName" type="text" placeholder="Christopher Martin" autocomplete="name">
+      </div>
+      <div class="field">
+        <label class="flabel">EMAIL ADDRESS</label>
+        <input class="finput" id="acctEmail" type="email" placeholder="manager@yourcompany.com" autocomplete="email">
+      </div>
+      <div class="field">
+        <label class="flabel">CREATE PASSWORD</label>
+        <input class="finput" id="acctPass" type="password" placeholder="••••••••••" autocomplete="new-password">
+      </div>
+      <div class="field">
+        <label class="flabel">CONFIRM PASSWORD</label>
+        <input class="finput" id="acctPass2" type="password" placeholder="••••••••••" autocomplete="new-password">
+      </div>
+
+      <div class="err-msg" id="err1"></div>
+      <div class="ok-msg" id="ok1"></div>
+    </div>
+
+    <!-- ============ STEP 2: ORG INFO ============ -->
+    <div class="step" data-step="2">
+      <div class="step-title">YOUR ORGANIZATION</div>
+      <div class="step-sub">Step 2 of 6 · Tell us about your company</div>
+
+      <div class="field">
+        <label class="flabel">LEGAL COMPANY NAME</label>
+        <input class="finput" id="orgName" type="text" placeholder="New Water Systems, Inc.">
+      </div>
+
+      <div class="field">
+        <label class="flabel">ORGANIZATION TYPE</label>
+        <div class="org-type-grid" id="orgTypeGrid">
+          <div class="org-type-card" data-val="IOU">INVESTOR-OWNED UTILITY</div>
+          <div class="org-type-card" data-val="WSC">WATER SUPPLY CORP</div>
+          <div class="org-type-card" data-val="MUNICIPALITY">CITY / MUNICIPALITY</div>
+          <div class="org-type-card" data-val="COOP">CO-OPERATIVE</div>
+          <div class="org-type-card" data-val="OTHER">OTHER</div>
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="flabel">PHONE</label>
+          <input class="finput" id="orgPhone" type="tel" placeholder="(555) 555-5555">
+        </div>
+        <div class="field">
+          <label class="flabel">CONTACT EMAIL</label>
+          <input class="finput" id="orgEmail" type="email" placeholder="office@yourcompany.com">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="flabel">MAILING ADDRESS</label>
+        <input class="finput" id="orgAddr" type="text" placeholder="PO BOX 317">
+      </div>
+
+      <div class="field-row-3">
+        <div class="field">
+          <label class="flabel">CITY</label>
+          <input class="finput" id="orgCity" type="text" placeholder="Barker">
+        </div>
+        <div class="field">
+          <label class="flabel">STATE</label>
+          <input class="finput" id="orgState" type="text" maxlength="2" placeholder="TX" value="TX">
+        </div>
+        <div class="field">
+          <label class="flabel">ZIP</label>
+          <input class="finput" id="orgZip" type="text" placeholder="77413">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="flabel">COMPANY WEBSITE (OPTIONAL)</label>
+        <input class="finput" id="orgWeb" type="text" placeholder="www.yourcompany.com">
+      </div>
+
+      <div class="err-msg" id="err2"></div>
+    </div>
+
+    <!-- ============ STEP 3: PLAN ============ -->
+    <div class="step" data-step="3">
+      <div class="step-title">CHOOSE YOUR PLAN</div>
+      <div class="step-sub">Step 3 of 6 · Single or multi-system</div>
+
+      <div class="plan-grid" id="planGrid">
+        <div class="plan-card" data-plan="single">
+          <div class="plan-name">SINGLE SYSTEM</div>
+          <div class="plan-price">$199<span style="font-size:11px;color:var(--text-muted);">/mo</span></div>
+          <div class="plan-meta">For one water system</div>
+          <div class="plan-features">
+            • Full RADEUS dashboard<br>
+            • Customer / billing / readings<br>
+            • Compliance tracking<br>
+            • Customer payment portal
+          </div>
+        </div>
+        <div class="plan-card" data-plan="multi">
+          <div class="plan-name">MULTI-SYSTEM</div>
+          <div class="plan-price">$399<span style="font-size:11px;color:var(--text-muted);">/mo</span></div>
+          <div class="plan-meta">Unlimited systems</div>
+          <div class="plan-features">
+            • Everything in single<br>
+            • Unlimited water systems<br>
+            • All-systems dashboard view<br>
+            • Cross-system reporting
+          </div>
+        </div>
+      </div>
+
+      <div class="err-msg" id="err3"></div>
+    </div>
+
+    <!-- ============ STEP 4: FIRST WATER SYSTEM ============ -->
+    <div class="step" data-step="4">
+      <div class="step-title">YOUR FIRST WATER SYSTEM</div>
+      <div class="step-sub">Step 4 of 6 · You can add more later</div>
+
+      <div class="field">
+        <label class="flabel">WATER SYSTEM NAME</label>
+        <input class="finput" id="wsName" type="text" placeholder="Solar Village NWS">
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="flabel">SYSTEM CODE / ABBR.</label>
+          <input class="finput" id="wsCode" type="text" placeholder="SVNWSTX" maxlength="20" style="text-transform:uppercase;">
+        </div>
+        <div class="field">
+          <label class="flabel">COUNTY</label>
+          <input class="finput" id="wsCounty" type="text" placeholder="Kerr">
+        </div>
+      </div>
+
+      <div class="field-row">
+        <div class="field">
+          <label class="flabel">SYSTEM PHONE</label>
+          <input class="finput" id="wsPhone" type="tel" placeholder="(281) 606-5461">
+        </div>
+        <div class="field">
+          <label class="flabel">SYSTEM WEBSITE</label>
+          <input class="finput" id="wsWeb" type="text" placeholder="www.solarvillagenws.com">
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="flabel">PWS / TCEQ ID (OPTIONAL)</label>
+        <input class="finput" id="wsTceq" type="text" placeholder="TX1234567">
+      </div>
+
+      <div class="check-row">
+        <input type="checkbox" id="wsAddrSame" checked>
+        <label for="wsAddrSame">SYSTEM SHARES MAILING ADDRESS WITH ORGANIZATION</label>
+      </div>
+
+      <div id="wsAddrFields" style="display:none; margin-top:14px;">
+        <div class="field">
+          <label class="flabel">SYSTEM MAILING ADDRESS</label>
+          <input class="finput" id="wsAddr" type="text">
+        </div>
+        <div class="field-row-3">
+          <div class="field">
+            <label class="flabel">CITY</label>
+            <input class="finput" id="wsCity" type="text">
+          </div>
+          <div class="field">
+            <label class="flabel">STATE</label>
+            <input class="finput" id="wsStateField" type="text" maxlength="2" value="TX">
+          </div>
+          <div class="field">
+            <label class="flabel">ZIP</label>
+            <input class="finput" id="wsZip" type="text">
+          </div>
+        </div>
+      </div>
+
+      <div class="err-msg" id="err4"></div>
+    </div>
+
+    <!-- ============ STEP 5: PAYMENT / BETA CODE ============ -->
+    <div class="step" data-step="5">
+      <div class="step-title">PAYMENT</div>
+      <div class="step-sub">Step 5 of 6 · Subscription confirmation</div>
+
+      <div class="pay-info" id="payInfo">
+        <strong>HOW IT WORKS</strong><br>
+        After payment, you'll receive a <em>RADEUS receipt code</em> via email.
+        Enter that code below to activate your subscription. Have a beta access
+        code? Enter it here too — same field.
+      </div>
+
+      <div class="field">
+        <label class="flabel">RADEUS RECEIPT OR BETA ACCESS CODE</label>
+        <input class="finput" id="payCode" type="text" placeholder="NWS-BETA-2026 or RDS-2026-XXXXXX" autocomplete="off" style="text-transform:uppercase;">
+      </div>
+
+      <div style="margin-top:12px;">
+        <a class="small-link" href="#" id="payNowLink">↗ I HAVEN'T PAID YET — TAKE ME TO PAYMENT</a>
+      </div>
+
+      <div class="err-msg" id="err5"></div>
+      <div class="ok-msg" id="ok5"></div>
+    </div>
+
+    <!-- ============ STEP 6: WELCOME ============ -->
+    <div class="step" data-step="6">
+      <div class="step-title">WELCOME TO RADEUS</div>
+      <div class="step-sub">Step 6 of 6 · Almost there</div>
+
+      <div class="welcome-icon">✓</div>
+
+      <div class="welcome-msg" id="welcomeMsg">
+        Your account is ready. Here's a summary of what we've set up:
+      </div>
+
+      <div class="summary-box" id="summaryBox"></div>
+
+      <div class="welcome-msg">
+        Click below to log in and start your migration.<br>
+        <span style="font-family:var(--font-mono);font-size:9px;color:var(--text-muted);letter-spacing:1px;">
+          You'll land on your migration dashboard where you can upload your existing customer data.
+        </span>
+      </div>
+
+      <div class="err-msg" id="err6"></div>
+    </div>
+  </div>
+
+  <div class="funnel-footer">
+    <div class="left-meta" id="footerMeta">SECURED BY SUPABASE AUTH</div>
+    <button class="next-btn" id="backBtn" style="display:none;border-color:var(--text-muted);color:var(--text-muted);">← BACK</button>
+    <button class="next-btn" id="nextBtn">CONTINUE →</button>
+  </div>
+</div>
+
+<script>
+// =======================================================
+// RADEUS Onboarding Funnel
+// =======================================================
+const SUPA_URL = 'https://bvpesxpptgdwkhsewhke.supabase.co';
+const SUPA_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImJ2cGVzeHBwdGdkd2toc2V3aGtlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYzNzcwNTksImV4cCI6MjA5MTk1MzA1OX0._th9UdQKqIWvqgTrxxpd5IfTlexCUeyWC5aGwRJYZj8';
+
+// State container
+const state = {
+  step: 1,
+  totalSteps: 6,
+  // collected as user proceeds
+  account: { name: '', email: '', password: '' },
+  org:     { name: '', type: '', phone: '', email: '', addr: '', city: '', state: 'TX', zip: '', web: '' },
+  plan:    null,                // 'single' | 'multi'
+  ws:      { name: '', code: '', county: '', phone: '', web: '', tceq: '', addrSame: true, addr: '', city: '', state: 'TX', zip: '' },
+  payCode: '',
+  // post-creation
+  authUserId: null,
+  orgId: null,
+  systemId: null,
+  session: null
+};
+
+// ---------- helpers ----------
+const $ = (id) => document.getElementById(id);
+function showError(id, msg) { const el = $(id); el.textContent = msg; el.classList.add('show'); $('ok' + id.slice(3))?.classList.remove('show'); }
+function showOk(id, msg)    { const el = $(id); el.textContent = msg; el.classList.add('show'); $('err' + id.slice(2))?.classList.remove('show'); }
+function clearMsgs() { document.querySelectorAll('.err-msg, .ok-msg').forEach(e => e.classList.remove('show')); }
+
+function setStep(n) {
+  state.step = n;
+  document.querySelectorAll('.step').forEach(s => s.classList.toggle('active', +s.dataset.step === n));
+  document.querySelectorAll('.step-pip').forEach(p => {
+    const i = +p.dataset.step;
+    p.classList.toggle('active', i === n);
+    p.classList.toggle('done', i < n);
+  });
+  $('backBtn').style.display = n > 1 && n < 6 ? 'inline-block' : 'none';
+  const btn = $('nextBtn');
+  if (n === 1) btn.textContent = 'CREATE ACCOUNT →';
+  else if (n === 2) btn.textContent = 'CONTINUE →';
+  else if (n === 3) btn.textContent = 'CONTINUE →';
+  else if (n === 4) btn.textContent = 'CONTINUE →';
+  else if (n === 5) btn.textContent = 'ACTIVATE SUBSCRIPTION →';
+  else if (n === 6) btn.textContent = 'GO TO MIGRATION DASHBOARD →';
+  $('footerMeta').textContent = `STEP ${n} OF ${state.totalSteps} · SECURED BY SUPABASE`;
+  clearMsgs();
+}
+
+// ---------- selection handlers ----------
+document.querySelectorAll('.org-type-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.org-type-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    state.org.type = card.dataset.val;
+  });
+});
+
+document.querySelectorAll('.plan-card').forEach(card => {
+  card.addEventListener('click', () => {
+    document.querySelectorAll('.plan-card').forEach(c => c.classList.remove('selected'));
+    card.classList.add('selected');
+    state.plan = card.dataset.plan;
+  });
+});
+
+$('wsAddrSame').addEventListener('change', e => {
+  $('wsAddrFields').style.display = e.target.checked ? 'none' : 'block';
+});
+
+// ---------- pre-fill convenience ----------
+// If user came in with email param, pre-fill
+const params = new URLSearchParams(window.location.search);
+if (params.get('email')) $('acctEmail').value = params.get('email');
+
+// ---------- step validators (advance forward only) ----------
+async function validateStep1() {
+  const name  = $('acctName').value.trim();
+  const email = $('acctEmail').value.trim().toLowerCase();
+  const pass  = $('acctPass').value;
+  const pass2 = $('acctPass2').value;
+  if (!name) return 'FULL NAME IS REQUIRED.';
+  if (!email || !email.includes('@')) return 'VALID EMAIL ADDRESS IS REQUIRED.';
+  if (!pass || pass.length < 8) return 'PASSWORD MUST BE AT LEAST 8 CHARACTERS.';
+  if (pass !== pass2) return 'PASSWORDS DO NOT MATCH.';
+  state.account = { name, email, password: pass };
+  return null;
+}
+
+function validateStep2() {
+  const name = $('orgName').value.trim();
+  if (!name) return 'COMPANY NAME IS REQUIRED.';
+  if (!state.org.type) return 'PLEASE SELECT AN ORGANIZATION TYPE.';
+  state.org.name  = name;
+  state.org.phone = $('orgPhone').value.trim();
+  state.org.email = $('orgEmail').value.trim();
+  state.org.addr  = $('orgAddr').value.trim();
+  state.org.city  = $('orgCity').value.trim();
+  state.org.state = $('orgState').value.trim().toUpperCase() || 'TX';
+  state.org.zip   = $('orgZip').value.trim();
+  state.org.web   = $('orgWeb').value.trim();
+  return null;
+}
+
+function validateStep3() {
+  if (!state.plan) return 'PLEASE SELECT A PLAN.';
+  return null;
+}
+
+function validateStep4() {
+  const name = $('wsName').value.trim();
+  const code = $('wsCode').value.trim().toUpperCase();
+  if (!name) return 'WATER SYSTEM NAME IS REQUIRED.';
+  if (!code) return 'SYSTEM CODE IS REQUIRED (E.G. SVNWSTX).';
+  state.ws.name   = name;
+  state.ws.code   = code;
+  state.ws.county = $('wsCounty').value.trim();
+  state.ws.phone  = $('wsPhone').value.trim();
+  state.ws.web    = $('wsWeb').value.trim();
+  state.ws.tceq   = $('wsTceq').value.trim();
+  state.ws.addrSame = $('wsAddrSame').checked;
+  if (!state.ws.addrSame) {
+    state.ws.addr  = $('wsAddr').value.trim();
+    state.ws.city  = $('wsCity').value.trim();
+    state.ws.state = ($('wsStateField').value.trim() || 'TX').toUpperCase();
+    state.ws.zip   = $('wsZip').value.trim();
+  } else {
+    state.ws.addr  = state.org.addr;
+    state.ws.city  = state.org.city;
+    state.ws.state = state.org.state;
+    state.ws.zip   = state.org.zip;
+  }
+  return null;
+}
+
+function validateStep5() {
+  const code = $('payCode').value.trim().toUpperCase();
+  if (!code) return 'ENTER YOUR RADEUS RECEIPT OR BETA ACCESS CODE.';
+  state.payCode = code;
+  return null;
+}
+
+// ---------- Supabase calls ----------
+async function supaSignUp(email, password) {
+  const res = await fetch(`${SUPA_URL}/auth/v1/signup`, {
+    method: 'POST',
+    headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+  return { res, data: await res.json() };
+}
+
+async function supaSignIn(email, password) {
+  const res = await fetch(`${SUPA_URL}/auth/v1/token?grant_type=password`, {
+    method: 'POST',
+    headers: { 'apikey': SUPA_KEY, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ email, password })
+  });
+  return { res, data: await res.json() };
+}
+
+async function supaInsert(table, body, accessToken) {
+  const res = await fetch(`${SUPA_URL}/rest/v1/${table}`, {
+    method: 'POST',
+    headers: {
+      'apikey': SUPA_KEY,
+      'Authorization': `Bearer ${accessToken}`,
+      'Content-Type': 'application/json',
+      'Prefer': 'return=representation'
+    },
+    body: JSON.stringify(body)
+  });
+  const data = await res.json();
+  return { res, data };
+}
+
+// ---------- step actions ----------
+async function doStep1Create() {
+  const err = await validateStep1();
+  if (err) return showError('err1', err);
+  const btn = $('nextBtn');
+  btn.disabled = true; btn.textContent = 'CREATING ACCOUNT...';
+  try {
+    // Try sign up
+    let { res, data } = await supaSignUp(state.account.email, state.account.password);
+
+    if (!res.ok) {
+      // If user already exists, try sign in instead (allow continuation of partial signup)
+      if (data.msg && /already|registered|exists/i.test(data.msg)) {
+        const { res: r2, data: d2 } = await supaSignIn(state.account.email, state.account.password);
+        if (!r2.ok) throw new Error(d2.error_description || d2.msg || 'EMAIL ALREADY REGISTERED — PASSWORD INCORRECT.');
+        state.session = d2;
+        state.authUserId = d2.user.id;
+        showOk('ok1', 'EXISTING ACCOUNT FOUND. CONTINUING...');
+      } else {
+        throw new Error(data.error_description || data.msg || 'SIGN UP FAILED.');
+      }
+    } else {
+      // Sign up succeeded — but Supabase may require email confirmation. For beta we sign in directly.
+      const { res: r2, data: d2 } = await supaSignIn(state.account.email, state.account.password);
+      if (r2.ok) {
+        state.session = d2;
+        state.authUserId = d2.user.id;
+      } else {
+        // signup may have created user but auto-login failed — keep going anyway
+        state.authUserId = data.user?.id || data.id;
+      }
+      showOk('ok1', 'ACCOUNT CREATED.');
+    }
+    setTimeout(() => setStep(2), 600);
+  } catch (e) {
+    showError('err1', e.message || 'SIGN UP FAILED.');
+  } finally {
+    btn.disabled = false; btn.textContent = 'CREATE ACCOUNT →';
+  }
+}
+
+async function doStep5Activate() {
+  const err = validateStep5();
+  if (err) return showError('err5', err);
+  const btn = $('nextBtn');
+  btn.disabled = true; btn.textContent = 'ACTIVATING...';
+  try {
+    if (!state.session?.access_token) {
+      // try sign-in again to get fresh token
+      const { res, data } = await supaSignIn(state.account.email, state.account.password);
+      if (!res.ok) throw new Error('SESSION LOST. PLEASE SIGN IN AT /login.');
+      state.session = data;
+      state.authUserId = data.user.id;
+    }
+    const tok = state.session.access_token;
+
+    // 1. Create organization
+    const orgPayload = {
+      org_name: state.org.name,
+      org_type: state.org.type,
+      address: state.org.addr || null,
+      city: state.org.city || null,
+      state: state.org.state || 'TX',
+      zip: state.org.zip || null,
+      phone: state.org.phone || null,
+      email: state.org.email || state.account.email,
+      website: state.org.web || null,
+      admin_user_id: state.authUserId,
+      multi_system_enabled: state.plan === 'multi',
+      onboarding_complete: true,
+      beta_access_code: state.payCode
+    };
+    const orgRes = await supaInsert('organizations', orgPayload, tok);
+    if (!orgRes.res.ok) throw new Error('ORG CREATE FAILED: ' + (orgRes.data.message || orgRes.data.code || JSON.stringify(orgRes.data)));
+    state.orgId = orgRes.data[0].org_id;
+
+    // 2. Create water system
+    const wsPayload = {
+      org_id: state.orgId,
+      system_code: state.ws.code,
+      system_name: state.ws.name,
+      state: state.ws.state || 'TX',
+      county: state.ws.county || null,
+      tceq_id: state.ws.tceq || null,
+      website: state.ws.web || null,
+      phone: state.ws.phone || null,
+      address: state.ws.addr || null,
+      city: state.ws.city || null,
+      zip: state.ws.zip || null,
+      // Rate defaults — operator sets real values via system screen later
+      base_rate: 0,
+      usage_rate: 0,
+      late_fee_amount: 0,
+      late_fee_pct: 0,
+      statement_day: 15,
+      due_day: 0,
+      late_day: 1,
+      bill_run_day: 15,
+      rate_schedule: 1,
+      tax_rate_state: 0,
+      tax_rate_local: 0,
+      tax_rate_county: 0
+    };
+    const wsRes = await supaInsert('water_systems', wsPayload, tok);
+    if (!wsRes.res.ok) throw new Error('WATER SYSTEM CREATE FAILED: ' + (wsRes.data.message || wsRes.data.code || JSON.stringify(wsRes.data)));
+    state.systemId = wsRes.data[0].system_id;
+
+    // 3. Create staff record (admin/owner)
+    const staffPayload = {
+      org_id: state.orgId,
+      name: state.account.name,
+      role: 'OWNER_ADMIN',
+      email: state.account.email,
+      phone: state.org.phone || null,
+      active: true,
+      auth_user_id: state.authUserId
+    };
+    await supaInsert('staff', staffPayload, tok);
+
+    // 4. Initialize migration_status row at FILE_UPLOAD stage
+    const msPayload = {
+      system_id: state.systemId,
+      org_id: state.orgId,
+      stage: 'ACCOUNT_SETUP',
+      notes: 'Account created via signup funnel. Awaiting data files.'
+    };
+    await supaInsert('migration_status', msPayload, tok);
+
+    // 5. Persist session for downstream pages
+    const sess = {
+      access_token: state.session.access_token,
+      refresh_token: state.session.refresh_token,
+      expires_at: state.session.expires_at || (Math.floor(Date.now()/1000) + 3600),
+      user: state.session.user
+    };
+    localStorage.setItem('radeus_session', JSON.stringify(sess));
+    localStorage.setItem('radeus_staff', JSON.stringify({
+      staff_id: null, name: state.account.name, role: 'OWNER_ADMIN',
+      email: state.account.email, active: true, org_id: state.orgId,
+      _user_id: state.authUserId
+    }));
+
+    showOk('ok5', 'SUBSCRIPTION ACTIVATED. ACCOUNT READY.');
+    setTimeout(() => {
+      buildSummary();
+      setStep(6);
+    }, 700);
+  } catch (e) {
+    showError('err5', (e.message || 'ACTIVATION FAILED.').toString().toUpperCase());
+  } finally {
+    btn.disabled = false; btn.textContent = 'ACTIVATE SUBSCRIPTION →';
+  }
+}
+
+function buildSummary() {
+  const planLabel = state.plan === 'multi' ? 'MULTI-SYSTEM ($399/MO)' : 'SINGLE-SYSTEM ($199/MO)';
+  $('summaryBox').innerHTML = `
+    <div class="summary-row"><span class="label">ADMIN</span><span class="val">${state.account.name}</span></div>
+    <div class="summary-row"><span class="label">EMAIL</span><span class="val">${state.account.email}</span></div>
+    <div class="summary-row"><span class="label">ORGANIZATION</span><span class="val">${state.org.name}</span></div>
+    <div class="summary-row"><span class="label">TYPE</span><span class="val">${state.org.type}</span></div>
+    <div class="summary-row"><span class="label">PLAN</span><span class="val">${planLabel}</span></div>
+    <div class="summary-row"><span class="label">FIRST SYSTEM</span><span class="val">${state.ws.name} (${state.ws.code})</span></div>
+    <div class="summary-row"><span class="label">SUBSCRIPTION</span><span class="val">${state.payCode}</span></div>
+  `;
+}
+
+// ---------- next/back wiring ----------
+$('nextBtn').addEventListener('click', async () => {
+  const n = state.step;
+  if (n === 1) return doStep1Create();
+  if (n === 2) {
+    const err = validateStep2();
+    if (err) return showError('err2', err);
+    return setStep(3);
+  }
+  if (n === 3) {
+    const err = validateStep3();
+    if (err) return showError('err3', err);
+    return setStep(4);
+  }
+  if (n === 4) {
+    const err = validateStep4();
+    if (err) return showError('err4', err);
+    return setStep(5);
+  }
+  if (n === 5) return doStep5Activate();
+  if (n === 6) {
+    window.location.href = 'migration.html';
+  }
+});
+
+$('backBtn').addEventListener('click', () => {
+  if (state.step > 1 && state.step < 6) setStep(state.step - 1);
+});
+
+$('payNowLink').addEventListener('click', e => {
+  e.preventDefault();
+  // Future: open Square checkout
+  alert("Payment portal will open here. For beta, enter your beta access code in the field above.");
+});
+
+// Init
+setStep(1);
+</script>
+</body>
+</html>

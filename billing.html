@@ -137,14 +137,14 @@
     </div>
     <div class="modal-body">
       <div class="frow">
-        <div class="flabel">ACCOUNT # <span style="color:var(--danger)">*</span></div>
+        <div class="flabel">ACCOUNT # <span class="req-star">*</span></div>
         <input class="finput" type="text" id="pay-acct" list="acct-list" placeholder="e.g. DRBY01" oninput="onPayAcctInput(this.value)" autocomplete="off">
         <datalist id="acct-list"></datalist>
-        <div id="pay-acct-name" style="font-family:'Share Tech Mono',monospace;font-size:9px;color:var(--success);letter-spacing:1px;margin-top:4px;min-height:14px;"></div>
+        <div id="pay-acct-name" class="pay-acct-feedback"></div>
       </div>
       <div class="frow2">
-        <div><div class="flabel">PAYMENT DATE <span style="color:var(--danger)">*</span></div><input class="finput" type="date" id="pay-date"></div>
-        <div><div class="flabel">AMOUNT <span style="color:var(--danger)">*</span></div><input class="finput" type="number" id="pay-amount" step="0.01" min="0" placeholder="0.00"></div>
+        <div><div class="flabel">PAYMENT DATE <span class="req-star">*</span></div><input class="finput" type="date" id="pay-date"></div>
+        <div><div class="flabel">AMOUNT <span class="req-star">*</span></div><input class="finput" type="number" id="pay-amount" step="0.01" min="0" placeholder="0.00"></div>
       </div>
       <div class="frow2">
         <div><div class="flabel">METHOD</div>
@@ -157,7 +157,7 @@
         <div><div class="flabel">REFERENCE #</div><input class="finput" type="text" id="pay-ref" placeholder="Check# / confirmation..."></div>
       </div>
       <div class="frow"><div class="flabel">NOTES</div><input class="finput" type="text" id="pay-notes" placeholder="Optional notes..."></div>
-      <div id="pay-balance-row" style="display:none;margin-top:4px;" class="bill-detail">
+      <div id="pay-balance-row" class="bill-detail pay-balance-hidden">
         <div class="bd-row"><span class="bd-label">CURRENT BALANCE</span><span class="bd-val" id="pay-prev-bal">—</span></div>
         <div class="bd-row"><span class="bd-label">PAYMENT AMOUNT</span><span class="bd-val" id="pay-after-val">—</span></div>
         <div class="bd-row"><span class="bd-label">BALANCE AFTER</span><span class="bd-total" id="pay-remaining">—</span></div>
@@ -172,9 +172,9 @@
 
 <!-- CLOSE CYCLE CONFIRM -->
 <div class="modal-overlay" id="closeModal">
-  <div class="modal" style="max-width:420px">
+  <div class="modal modal-sm">
     <div class="modal-header">
-      <div class="modal-title" style="color:var(--danger)">⬛ CLOSE BILLING CYCLE</div>
+      <div class="modal-title modal-title-danger">⬛ CLOSE BILLING CYCLE</div>
       <button class="modal-x" onclick="closeModal('closeModal')">✕</button>
     </div>
     <div class="confirm-body">
@@ -341,7 +341,6 @@ async function loadCycleRegister(cycle) {
   ]);
   cycleBills={}; (bills||[]).forEach(b=>{cycleBills[b.account_id]=b;});
   allAccounts=accounts||[];
-  // Load reads by account_ids (meter_reads has no system_id)
   cycleReads={};
   if(allAccounts.length){
     const acctIds=allAccounts.map(a=>a.account_id).join(',');
@@ -368,7 +367,6 @@ function showGallery() {
 }
 
 async function loadGalleryStats(){
-  // Aggregate totals across all cycles for the current system filter
   const sf=activeSystemId?`system_id=eq.${activeSystemId}`:`system_id=in.(${allSystems.map(s=>s.system_id).join(',')})`;
   const [bills, accts, bals] = await Promise.all([
     supa('bills',`?${sf}&select=period_total,total_amount`),
@@ -437,9 +435,51 @@ function emailBillsStub(){toast('EMAIL BILLS — COMING SOON\nSUPABASE EDGE FUNC
 
 function populateAcctList(){const dl=document.getElementById('acct-list');dl.innerHTML=allAccounts.map(a=>{const name=a.customers?.full_name||'';return`<option value="${a.account_number}">${a.account_number}${name?' — '+name:''}`;}).join('');}
 
-function openPayModal(acctNum){document.getElementById('pay-acct').value=acctNum||'';document.getElementById('pay-date').value=today();document.getElementById('pay-amount').value='';document.getElementById('pay-ref').value='';document.getElementById('pay-notes').value='';document.getElementById('pay-acct-name').textContent='';document.getElementById('pay-balance-row').style.display='none';openModal('payModal');if(acctNum){onPayAcctInput(acctNum);setTimeout(()=>document.getElementById('pay-amount').focus(),100);}}
+function openPayModal(acctNum){
+  document.getElementById('pay-acct').value=acctNum||'';
+  document.getElementById('pay-date').value=today();
+  document.getElementById('pay-amount').value='';
+  document.getElementById('pay-ref').value='';
+  document.getElementById('pay-notes').value='';
+  const nameEl=document.getElementById('pay-acct-name');
+  nameEl.textContent='';
+  nameEl.className='pay-acct-feedback';
+  const balRow=document.getElementById('pay-balance-row');
+  balRow.classList.add('pay-balance-hidden');
+  openModal('payModal');
+  if(acctNum){onPayAcctInput(acctNum);setTimeout(()=>document.getElementById('pay-amount').focus(),100);}
+}
 
-function onPayAcctInput(val){const acct=allAccounts.find(a=>a.account_number===val.trim());const nameEl=document.getElementById('pay-acct-name');const balRow=document.getElementById('pay-balance-row');if(acct){const name=acct.customers?.full_name||'';nameEl.textContent=name?'✓ '+name.toUpperCase():'✓ ACCOUNT FOUND';const bal=accountBalances[acct.account_id];if(bal!==undefined){const curBal=parseFloat(bal.current_balance||0);document.getElementById('pay-prev-bal').textContent=fmtMoney(curBal);document.getElementById('pay-after-val').textContent='—';document.getElementById('pay-remaining').textContent='—';balRow.style.display='block';document.getElementById('pay-amount').oninput=function(){const amt=parseFloat(this.value)||0;document.getElementById('pay-after-val').textContent=fmtMoney(amt);const after=curBal-amt;const remEl=document.getElementById('pay-remaining');remEl.textContent=fmtMoney(after);remEl.style.color=after<=0?'var(--green)':after>0?'var(--red)':'var(--yellow)';};};}else{nameEl.textContent=val.trim()?'✗ ACCOUNT NOT FOUND':'';nameEl.style.color=val.trim()?'var(--red)':'';balRow.style.display='none';}}
+function onPayAcctInput(val){
+  const acct=allAccounts.find(a=>a.account_number===val.trim());
+  const nameEl=document.getElementById('pay-acct-name');
+  const balRow=document.getElementById('pay-balance-row');
+  if(acct){
+    const name=acct.customers?.full_name||'';
+    nameEl.textContent=name?'✓ '+name.toUpperCase():'✓ ACCOUNT FOUND';
+    nameEl.className='pay-acct-feedback pay-acct-ok';
+    const bal=accountBalances[acct.account_id];
+    if(bal!==undefined){
+      const curBal=parseFloat(bal.current_balance||0);
+      document.getElementById('pay-prev-bal').textContent=fmtMoney(curBal);
+      document.getElementById('pay-after-val').textContent='—';
+      document.getElementById('pay-remaining').textContent='—';
+      balRow.classList.remove('pay-balance-hidden');
+      document.getElementById('pay-amount').oninput=function(){
+        const amt=parseFloat(this.value)||0;
+        document.getElementById('pay-after-val').textContent=fmtMoney(amt);
+        const after=curBal-amt;
+        const remEl=document.getElementById('pay-remaining');
+        remEl.textContent=fmtMoney(after);
+        remEl.style.color=after<=0?'var(--green)':after>0?'var(--red)':'var(--yellow)';
+      };
+    }
+  } else {
+    nameEl.textContent=val.trim()?'✗ ACCOUNT NOT FOUND':'';
+    nameEl.className=val.trim()?'pay-acct-feedback pay-acct-err':'pay-acct-feedback';
+    balRow.classList.add('pay-balance-hidden');
+  }
+}
 
 async function submitPayment(){const acctNum=document.getElementById('pay-acct').value.trim();const date=document.getElementById('pay-date').value;const amount=parseFloat(document.getElementById('pay-amount').value);const method=document.getElementById('pay-method').value;const ref=document.getElementById('pay-ref').value.trim();const notes=document.getElementById('pay-notes').value.trim();if(!acctNum||!date||!amount||isNaN(amount)||amount<=0){toast('ACCOUNT, DATE, AND AMOUNT REQUIRED','err');return;}const acct=allAccounts.find(a=>a.account_number===acctNum);if(!acct){toast('ACCOUNT NOT FOUND: '+acctNum,'err');return;}const sourceId=`${acctNum}-PAY-${date}-${Date.now()}`;const result=await supa('payments','','POST',{account_id:acct.account_id,system_id:activeSystemId,payment_date:date,amount,payment_method:method,reference_number:ref||null,notes:notes||null,deposited:false,returned:false,in_closed_cycle:activeCycle?.status==='CLOSED',source_id:sourceId,posted_by:'ADMIN'});if(result){toast(`PAYMENT POSTED — ${acctNum} — ${fmtMoney(amount)}`,'ok',3500);closeModal('payModal');const fresh=await supa('account_balances',`?system_id=eq.${activeSystemId}&select=*`);if(fresh){accountBalances={};fresh.forEach(b=>accountBalances[b.account_id]=b);}updateStats();renderRegister();}else{toast('ERROR POSTING PAYMENT — CHECK CONSOLE','err');}}
 
@@ -458,7 +498,7 @@ function openBillDetail(accountId){
   document.getElementById('bd-status').className='bd-status-badge';
   document.getElementById('bd-status').style.color=status==='PAID'?'var(--success)':status==='OVERDUE'?'var(--danger)':'var(--primary)';
   const cRow=(l,v,cls='')=>`<div class="bd-crow"><span class="bd-crow-lbl">${l}</span><span class="bd-crow-val ${cls}">${v}</span></div>`;
- 
+
   let html='';
   if(!bill){
     html+=`<div class="bd-wrap"><div class="bd-grid2">
@@ -466,18 +506,18 @@ function openBillDetail(accountId){
       <div><div class="bd-lbl">ACCOUNT</div><div class="bd-val-acct">${acct.account_number}</div></div>
       <div><div class="bd-lbl">ADDRESS</div><div class="bd-val-addr">${addr}${city?', '+city:''}</div></div>
       <div><div class="bd-lbl">TYPE</div><div class="bd-val">${acct.account_type||'RESIDENTIAL'}</div></div>
-    </div><div style="text-align:center;padding:20px;color:var(--text-muted);font-size:10px;letter-spacing:1px">NO BILL GENERATED FOR THIS CYCLE</div></div>`;
+    </div><div class="no-bill-msg">NO BILL GENERATED FOR THIS CYCLE</div></div>`;
   } else {
     html+=`<div class="bd-wrap">`;
     html+=`<div class="bd-grid2">`;
     html+=`<div>
       <div class="bd-lbl">CUSTOMER</div><div class="bd-val-lg">${name}</div>
-      <div class="bd-lbl" style="margin-top:4px">ADDRESS</div><div class="bd-val-addr">${addr}${city?', '+city:''}</div>
+      <div class="bd-lbl bd-lbl-mt">ADDRESS</div><div class="bd-val-addr">${addr}${city?', '+city:''}</div>
     </div>`;
     html+=`<div>
       <div class="bd-lbl">ACCOUNT</div><div class="bd-val-acct">${acct.account_number} &middot; ${acct.account_type||'RES'}</div>
       <div class="bd-stats-row">
-        <div class="bd-stat"><div class="bd-mini-lbl">AMOUNT DUE</div><div class="bd-stat-amt" style="color:${curBal>0?'var(--danger)':'var(--success)'}">${fmtMoney(curBal||0)}</div></div>
+        <div class="bd-stat"><div class="bd-mini-lbl">AMOUNT DUE</div><div class="bd-stat-amt ${curBal>0?'amt-danger':'amt-success'}">${fmtMoney(curBal||0)}</div></div>
         <div class="bd-stat"><div class="bd-mini-lbl">LAST PMT</div><div class="bd-stat-pmt">${bal?.last_payment_date?fmtMoney(bal.last_payment_amount):'—'}</div></div>
       </div>
     </div>`;
@@ -514,17 +554,12 @@ function openBillDetail(accountId){
 }
 function closeBillDetail(){document.getElementById('billDetailModal').classList.remove('show');}
 
-function printBillRow(accountId){
-  openInvoice(accountId);
-  // Do NOT call window.print() here — that would print the billing screen.
-  // The invoice window has its own PRINT INVOICE button.
-}
+function printBillRow(accountId){openInvoice(accountId);}
 
 function openInvoice(accountId){
   const acct=allAccounts.find(a=>a.account_id===accountId);if(!acct)return;
   const bill=cycleBills[accountId];const bal=accountBalances[accountId];if(!bill)return;
   const read=cycleReads?.[accountId];
-  // Utility info
   const sys=systemConfig||allSystems.find(s=>s.system_id===bill.system_id)||{};
   const sysName=sys.system_name||'Water System';
   const sysAddr=sys.billing_address||'';
@@ -533,16 +568,13 @@ function openInvoice(accountId){
   const sysWeb=sys.website||'';
   const sysEmail=sys.billing_email||'';
   const sysLogo=sys.logo_url||'';
-  // Late fee calculation: flat amount OR percentage of base_rate
   const sysLateFeeAmt=parseFloat(sys.late_fee_amount||0);
   const sysLateFeePct=parseFloat(sys.late_fee_pct||0);
   const calcLateFee=(baseR)=>{if(sysLateFeePct>0)return Math.round(baseR*sysLateFeePct)/100;return sysLateFeeAmt;};
-  // Customer info
   const name=acct.customers?.full_name||'—';
   const svcAddr=acct.service_addresses?.street||'—';
   const svcCity=(acct.service_addresses?.city||'')+(acct.service_addresses?.state?' '+acct.service_addresses.state:'');
   const svcZip=acct.service_addresses?.zip||'';
-  // Bill amounts
   const stmtDate=bill.statement_date?new Date(bill.statement_date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
   const dueDate=bill.due_date?new Date(bill.due_date+'T00:00:00').toLocaleDateString('en-US',{month:'short',day:'numeric',year:'numeric'}):'—';
   const stmtLong=bill.statement_date?new Date(bill.statement_date+'T00:00:00').toLocaleDateString('en-US',{month:'long',day:'numeric',year:'numeric'}):'—';
@@ -557,7 +589,6 @@ function openInvoice(accountId){
   const lateFee=parseFloat(bill.late_fee||0);
   const periodTotal=parseFloat(bill.period_total||0);
   const totalDue=parseFloat(bal?.current_balance||periodTotal);
-  // Reading info
   const prevRead=read?String(Number(read.previous_read)):'—';
   const currRead=read?String(Number(read.current_read)):'—';
   const usageGalStr=read?String(Number(read.usage_gallons)):'—';
@@ -567,7 +598,6 @@ function openInvoice(accountId){
   const fm=n=>'$'+parseFloat(n||0).toLocaleString('en-US',{minimumFractionDigits:2,maximumFractionDigits:2});
   const w=window.open('','_blank','width=760,height=1000');
   const css=`@page{margin:.55in;size:letter portrait;}*{margin:0;padding:0;box-sizing:border-box;}body{font-family:"Segoe UI","Helvetica Neue",Arial,sans-serif;color:#1a2e3b;background:#fff;font-size:11.5px;line-height:1.4;}
-/* UTILITY HEADER */
 .ub-top{display:grid;grid-template-columns:1fr 1fr;background:#fff;padding:22px 32px 16px;border-bottom:3px solid #2c7ba2;}
 .ub-util-logo{max-height:60px;max-width:180px;margin-bottom:6px;display:block;}
 .ub-util-name{font-size:20px;font-weight:800;color:#2c7ba2;letter-spacing:-.3px;}
@@ -578,7 +608,6 @@ function openInvoice(accountId){
 .ub-summary-row:last-child{border-bottom:none;}
 .ub-summary-row.total{background:#f0f6f9;font-weight:700;font-size:12px;}
 .ub-summary-row.due{background:#2c7ba2;color:#fff;font-weight:700;font-size:13px;padding:8px 14px;}
-/* CUSTOMER BLOCK */
 .ub-customer{display:grid;grid-template-columns:1fr 1fr;padding:18px 32px;border-bottom:1px solid #d9e8f0;gap:20px;}
 .ub-acct-info{font-size:11px;line-height:1.8;color:#1a2e3b;}
 .ub-acct-label{font-size:9px;color:#5f7b8c;letter-spacing:1.5px;font-weight:600;text-transform:uppercase;margin-bottom:2px;}
@@ -586,7 +615,6 @@ function openInvoice(accountId){
 .ub-acct-table{width:100%;border-collapse:collapse;font-size:11px;}
 .ub-acct-table td{padding:3px 8px;border:1px solid #d9e8f0;}
 .ub-acct-table td:first-child{color:#5f7b8c;font-weight:600;width:44%;background:#f8fbfd;}
-/* READINGS */
 .ub-reads{padding:16px 32px;border-bottom:1px solid #d9e8f0;}
 .ub-section-title{font-size:10px;font-weight:700;color:#2c7ba2;letter-spacing:1.5px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:8px;}
 .ub-section-title::after{content:'';flex:1;height:1px;background:#d9e8f0;}
@@ -597,7 +625,6 @@ function openInvoice(accountId){
 .ub-reads-table td:first-child{text-align:left;font-weight:600;background:#f8fbfd;}
 .ub-reads-table tr:last-child td{border-bottom:none;}
 .ub-reads-table .usage-cell{color:#2c7ba2;font-weight:700;}
-/* CHARGES */
 .ub-charges{padding:16px 32px;border-bottom:1px solid #d9e8f0;}
 .ub-charges-table{width:100%;border-collapse:collapse;font-size:11.5px;}
 .ub-charges-table th{text-align:left;padding:6px 12px;font-size:9.5px;color:#5f7b8c;letter-spacing:1px;border-bottom:2px solid #d9e8f0;font-weight:600;}
@@ -607,12 +634,10 @@ function openInvoice(accountId){
 .ub-charges-table .prev-row td{background:#fff9ee;color:#8a6410;}
 .ub-charges-table .late-row td{color:#bf6157;}
 .ub-charges-table .total-row td{border-top:2px solid #2c7ba2;background:#f0f6f9;font-weight:700;font-size:13px;padding-top:9px;padding-bottom:9px;}
-/* PAYMENT DUE BOX */
 .ub-due{margin:0 32px 18px;background:#2c7ba2;color:#fff;border-radius:6px;display:flex;justify-content:space-between;align-items:center;padding:14px 22px;}
 .ub-due-label{font-size:10px;font-weight:600;letter-spacing:1.5px;opacity:.85;}
 .ub-due-amount{font-size:22px;font-weight:800;}
 .ub-due-date{font-size:10px;opacity:.85;margin-top:2px;}
-/* DETACH */
 .ub-detach{border-top:2px dashed #b0c8d8;margin:20px 32px 0;padding-top:14px;}
 .ub-detach-title{font-size:9px;color:#8fa6b4;text-align:center;letter-spacing:2px;margin-bottom:12px;}
 .ub-detach-row{display:grid;grid-template-columns:1fr 1fr 1fr 1fr 1.4fr;gap:0;border:1px solid #2c7ba2;border-radius:4px;overflow:hidden;font-size:11px;}
@@ -624,14 +649,11 @@ function openInvoice(accountId){
 .ub-detach-cell.pay-due{background:#2c7ba2;color:#fff;}
 .ub-detach-cell.pay-due .ub-detach-cell-label{color:rgba(255,255,255,.75);}
 .ub-detach-cell.pay-due .ub-detach-cell-val{color:#fff;}
-/* FOOTER */
 .ub-footer{padding:14px 32px 20px;text-align:center;font-size:10px;color:#8fa6b4;line-height:1.8;}
 .no-print{text-align:center;padding:20px 32px 28px;border-top:1px dashed #d9e8f0;}
 @media print{@page{margin:.55in;size:letter portrait;-webkit-print-color-adjust:exact;print-color-adjust:exact;}.no-print{display:none!important;}.ub-top,.ub-customer,.ub-reads,.ub-charges{padding-left:0;padding-right:0;}.ub-due{margin-left:0;margin-right:0;}.ub-detach{margin-left:0;margin-right:0;}}`;
 
   w.document.write('<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Invoice — '+acct.account_number+'</title><style>'+css+'</style></head><body>');
-
-  // HEADER: utility left, summary right
   let summaryRows='';
   if(prevBal!==0)summaryRows+='<div class="ub-summary-row"><span>Previous Balance</span><span>'+fm(prevBal)+'</span></div>';
   const lastPmtAmt=parseFloat(bal?.last_payment_amount||0);
@@ -639,26 +661,19 @@ function openInvoice(accountId){
   if(lastPmtAmt>0)summaryRows+='<div class="ub-summary-row"><span>Payment Received'+(lastPmtDate?' ('+lastPmtDate+')':'')+'</span><span style="color:#348b67">'+fm(lastPmtAmt)+' CR</span></div>';
   summaryRows+='<div class="ub-summary-row"><span>Current Charges</span><span>'+fm(periodTotal)+'</span></div>';
   summaryRows+='<div class="ub-summary-row due"><span>Total Amount Due '+dueDate+'</span><span>'+fm(totalDue)+'</span></div>';
-
   w.document.write('<div class="ub-top">');
   w.document.write('<div>'+(sysLogo?'<img class="ub-util-logo" src="'+sysLogo+'" onerror="this.style.display=\'none\'">':'')+'<div class="ub-util-name">'+sysName+'</div><div class="ub-util-addr">'+(sysAddr?sysAddr+'<br>':'')+(sysCity?sysCity+'<br>':'')+(sysPhone?'&#128222; '+sysPhone+'<br>':'')+(sysEmail?'&#9993; '+sysEmail+'<br>':'')+(sysWeb?'&#127760; '+sysWeb:'')+'</div></div>');
   w.document.write('<div><div class="ub-summary"><div class="ub-summary-hdr">Account Summary — '+stmtLong+'</div>'+summaryRows+'</div></div>');
   w.document.write('</div>');
-
-  // CUSTOMER + ACCOUNT INFO
   w.document.write('<div class="ub-customer">');
   w.document.write('<div><div class="ub-acct-label">Bill To</div><div class="ub-acct-name">'+name+'</div><div style="font-size:11px;color:#1a2e3b;line-height:1.7;margin-top:4px">'+svcAddr+'<br>'+svcCity+(svcZip?' '+svcZip:'')+'</div></div>');
   w.document.write('<div><table class="ub-acct-table"><tr><td>Account Number</td><td><strong>'+acct.account_number+'</strong></td></tr><tr><td>Account Type</td><td>'+(acct.account_type||'Residential')+'</td></tr><tr><td>Statement Date</td><td>'+stmtLong+'</td></tr><tr><td>Due Date</td><td><strong>'+dueLong+'</strong></td></tr><tr><td>Service Address</td><td>'+svcAddr+', '+svcCity+'</td></tr></table></div>');
   w.document.write('</div>');
-
-  // METER READINGS
   w.document.write('<div class="ub-reads">');
   w.document.write('<div class="ub-section-title">Meter Readings</div>');
   w.document.write('<table class="ub-reads-table"><thead><tr><th>Service Period</th><th>Previous Reading</th><th>Previous Date</th><th>Current Reading</th><th>Current Date</th><th>Consumption</th><th>Units</th></tr></thead><tbody>');
   w.document.write('<tr><td>'+stmtDate+'</td><td>'+prevRead+'</td><td>'+readStart+'</td><td>'+currRead+(isEst?' <em style="font-size:9px;color:#b8822f">(Est.)</em>':'')+'</td><td>'+readEnd+'</td><td class="usage-cell">'+usageGalStr+'</td><td>Gallons</td></tr>');
   w.document.write('</tbody></table></div>');
-
-  // CHARGES
   w.document.write('<div class="ub-charges">');
   w.document.write('<div class="ub-section-title">Current Charges</div>');
   w.document.write('<table class="ub-charges-table"><thead><tr><th>Description</th><th>Rate / Details</th><th>Amount</th></tr></thead><tbody>');
@@ -670,11 +685,7 @@ function openInvoice(accountId){
   if(lateFee>0)w.document.write('<tr class="late-row"><td>Late Fee</td><td>Past due penalty</td><td>'+fm(lateFee)+'</td></tr>');
   w.document.write('<tr class="total-row"><td colspan="2"><strong>Current Charges Total</strong></td><td><strong>'+fm(periodTotal)+'</strong></td></tr>');
   w.document.write('</tbody></table></div>');
-
-  // AMOUNT DUE
   if(totalDue>0){w.document.write('<div class="ub-due"><div><div class="ub-due-label">TOTAL AMOUNT DUE</div><div class="ub-due-date">Due by '+dueLong+'</div></div><div class="ub-due-amount">'+fm(totalDue)+'</div></div>');}
-
-  // DETACH STRIP
   w.document.write('<div class="ub-detach"><div class="ub-detach-title">✂  PLEASE DETACH AND RETURN THIS PORTION WITH YOUR PAYMENT  ✂</div>');
   w.document.write('<div class="ub-detach-row">');
   w.document.write('<div class="ub-detach-cell"><div class="ub-detach-cell-label">Account Number</div><div class="ub-detach-cell-val">'+acct.account_number+'</div></div>');
@@ -683,29 +694,21 @@ function openInvoice(accountId){
   const afterDueAmt=totalDue+calcLateFee(baseRate);w.document.write('<div class="ub-detach-cell"><div class="ub-detach-cell-label">If Paying After '+dueDate+'</div><div class="ub-detach-cell-val" style="color:#2c7ba2;font-weight:700">'+fm(afterDueAmt)+'</div></div>');
   w.document.write('<div class="ub-detach-cell amount-enclosed"><div class="ub-detach-cell-label">Amount Enclosed</div><div class="ub-detach-cell-val">$____________</div></div>');
   w.document.write('</div></div>');
-
-  // FOOTER
   w.document.write('<div class="ub-footer">Make checks payable to: <strong>'+sysName+'</strong>'+(sysAddr?' &nbsp;&middot;&nbsp; '+sysAddr+(sysCity?', '+sysCity:''):'')+' &nbsp;&middot;&nbsp; Powered by RADEUS<br>Questions? '+(sysPhone?sysPhone+' &nbsp;&middot;&nbsp; ':'')+( sysEmail?sysEmail+' &nbsp;&middot;&nbsp; ':''+(sysWeb?sysWeb:''))+'</div>');
-
-  // PRINT BUTTONS
   w.document.write('<div class="no-print"><button onclick="window.print()" style="padding:11px 28px;background:#2c7ba2;color:#fff;border:none;border-radius:8px;font-size:13px;cursor:pointer;margin-right:10px">&#128424; PRINT INVOICE</button><button onclick="window.close()" style="padding:11px 28px;background:#f0f6f9;color:#1a2e3b;border:1px solid #d9e8f0;border-radius:8px;font-size:13px;cursor:pointer">CLOSE</button></div>');
   w.document.write('</body></html>');
   w.document.close();
 }
 
-// Deep-link handler: ?bill_id=xxx auto-opens that bill's invoice
 async function handleDeepLink() {
   const urlParams = new URLSearchParams(window.location.search);
   const billId = urlParams.get('bill_id');
   if (!billId) return false;
-  // Fetch the bill to find its cycle and account
   const bills = await supa('bills', `?bill_id=eq.${billId}&select=*`);
   if (!bills || !bills.length) return false;
   const bill = bills[0];
-  // Find that cycle
   const cycle = allCycles.find(c => c.cycle_id === bill.cycle_id);
   if (!cycle) return false;
-  // Load the cycle register, then open invoice
   await loadCycleRegister(cycle);
   setTimeout(() => { try { openInvoice(bill.account_id); } catch(e){ console.error('Invoice open failed', e); } }, 300);
   return true;
@@ -719,15 +722,15 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 <!-- BILL DETAIL POPOUT -->
 <div class="modal-overlay" id="billDetailModal">
-  <div class="modal" style="width:90%;max-width:560px;max-height:82vh;display:flex;flex-direction:column">
+  <div class="modal modal-bill-detail">
     <div class="modal-header">
       <div>
         <div class="modal-title" id="bd-title">BILL DETAIL</div>
         <div id="bd-status" class="bd-status-badge">—</div>
       </div>
-      <button class="modal-x" onclick="closeBillDetail()" style="display:none">✕</button>
+      <button class="modal-x modal-x-hidden">✕</button>
     </div>
-    <div class="modal-body" id="bd-body" style="flex:1;overflow-y:auto;padding:0"></div>
+    <div class="modal-body bd-modal-body" id="bd-body"></div>
     <div class="modal-footer">
       <button class="btn btn-ghost" onclick="closeBillDetail()">CLOSE</button>
       <button class="btn btn-y" id="bd-invoice-btn" style="display:none">⎙ VIEW INVOICE</button>

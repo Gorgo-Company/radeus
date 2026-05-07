@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Radeus — Migration Portal</title>
+  <link rel="stylesheet" href="./styles/main.css">
+</head>
+<body data-page="mig">
+
+<div class="topbar">
+  <div class="logo">⬡ RADEUS</div>
+  <div class="tsep"></div>
+  <span class="tlbl">MODULE</span><span class="tval" style="margin-left:6px">MIGRATION PORTAL</span>
+  <div class="tsep"></div>
+  <span class="tlbl">SYSTEM</span><span class="tval" style="margin-left:6px">SVNWSTX</span>
+  <div class="tright">
+    <span class="pill p-amber">INTERNAL ADMIN</span>
+    <span class="pill p-cyan">STEP 3 OF 7</span>
+  </div>
+</div>
+
+<div class="stepbar">
+  <div class="step done"><span class="step-n">✓</span>CLIENT PROFILE</div>
+  <div class="step done"><span class="step-n">✓</span>FILES RECEIVED</div>
+  <div class="step active"><span class="step-n">3</span>FIELD MAPPING</div>
+  <div class="step"><span class="step-n">4</span>VALIDATION</div>
+  <div class="step"><span class="step-n">5</span>APPROVAL</div>
+  <div class="step"><span class="step-n">6</span>SUPABASE IMPORT</div>
+  <div class="step"><span class="step-n">7</span>AUDIT LOGGED</div>
+</div>
+
+<div class="workspace">
+
+  <!-- LEFT: what we actually know -->
+  <div class="rail">
+    <div class="rail-head"><div class="rail-title">MIGRATION SESSION</div></div>
+    <div class="rail-body">
+
+      <div class="info-block">
+        <div class="ib-label">Client</div>
+        <div class="ib-row"><span class="ib-key">System code</span><span class="ib-val cyan">SVNWSTX</span></div>
+        <div class="ib-row"><span class="ib-key">Org</span><span class="ib-val">Scenic Valley Water</span></div>
+        <div class="ib-row"><span class="ib-key">State</span><span class="ib-val">TX</span></div>
+      </div>
+
+      <div class="info-block">
+        <div class="ib-label">Source Files</div>
+        <div class="file-row">
+          <div>
+            <div class="fr-name">Customer.xlsx</div>
+            <div class="fr-meta">23 rows · 96 columns</div>
+          </div>
+          <span class="fr-check">✓</span>
+        </div>
+        <div class="file-row">
+          <div>
+            <div class="fr-name">CustHist.xlsx</div>
+            <div class="fr-meta">775 rows · 35 columns</div>
+          </div>
+          <span class="fr-check">✓</span>
+        </div>
+      </div>
+
+      <div class="info-block">
+        <div class="ib-label">Record Counts</div>
+        <div class="ib-row"><span class="ib-key">Customers</span><span class="ib-val cyan">23</span></div>
+        <div class="ib-row"><span class="ib-key">Accounts</span><span class="ib-val cyan">23</span></div>
+        <div class="ib-row"><span class="ib-key">Addresses</span><span class="ib-val cyan">23</span></div>
+        <div class="ib-row"><span class="ib-key">Transactions</span><span class="ib-val cyan">775</span></div>
+        <div class="ib-row"><span class="ib-key">Join key</span><span class="ib-val">CustID</span></div>
+      </div>
+
+      <div class="info-block">
+        <div class="ib-label">Insert Order</div>
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--text-muted);line-height:2.2">
+          1 → customers<br>
+          2 → service_addresses<br>
+          3 → accounts (FK 1+2)<br>
+          4 → account_balances (FK 3)<br>
+          5 → transactions bulk (FK 3)<br>
+          6 → audit log → storage
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- CENTER: field mapping -->
+  <div class="center">
+    <div class="ph">
+      <span class="ptitle">SOURCE COLUMNS → RADEUS SCHEMA</span>
+      <div style="display:flex;gap:6px">
+        <span class="pill p-green">22 MAPPED</span>
+        <span class="pill" style="background:var(--surface);color:var(--text-soft);border:1px solid var(--border-strong)">74 SKIPPED</span>
+      </div>
+    </div>
+    <div class="pbody">
+
+      <div class="src-lbl"><span>CUSTOMER.XLSX — SOURCE COLUMNS</span><span style="color:var(--text-soft)">96 cols · 23 rows</span></div>
+      <div class="col-cloud">
+        <span class="chip ch-map">Cust Name</span>
+        <span class="chip ch-map">Address1</span>
+        <span class="chip ch-map">Address2</span>
+        <span class="chip ch-map">City_St_zip</span>
+        <span class="chip ch-map">Phone_Nbr</span>
+        <span class="chip ch-map">Email</span>
+        <span class="chip ch-map">Account Nbr</span>
+        <span class="chip ch-warn">Service Adr ⚠</span>
+        <span class="chip ch-map">Inactivate</span>
+        <span class="chip ch-map">Deposit</span>
+        <span class="chip ch-map">Balance</span>
+        <span class="chip ch-map">Notes</span>
+        <span class="chip ch-map">latitude</span>
+        <span class="chip ch-map">longitude</span>
+        <span class="chip ch-map">CustID</span>
+        <span class="chip ch-skip">Work_Nbr</span>
+        <span class="chip ch-skip">mtrRollover</span>
+        <span class="chip ch-skip">Flag / Flag 1 / Flag 2</span>
+        <span class="chip ch-skip">Other1–3</span>
+        <span class="chip ch-skip">chgSewer</span>
+        <span class="chip ch-skip">rateSched</span>
+        <span class="chip ch-skip">amrreg / amrtype</span>
+        <span class="chip ch-skip">ot1 / ot2</span>
+        <span class="chip ch-skip">Units / LocID</span>
+        <span class="chip ch-skip">mtrType / mtrId</span>
+        <span class="chip ch-skip">ChgFee / Overide</span>
+        <span class="chip ch-skip">+ 68 more skipped</span>
+      </div>
+
+      <div class="src-lbl"><span>CUSTHIST.XLSX — SOURCE COLUMNS</span><span style="color:var(--text-soft)">35 cols · 775 rows</span></div>
+      <div class="col-cloud">
+        <span class="chip ch-map">Trans Date</span>
+        <span class="chip ch-map">Trans Type</span>
+        <span class="chip ch-map">Amount</span>
+        <span class="chip ch-map">Previous Balance</span>
+        <span class="chip ch-map">Total Amount</span>
+        <span class="chip ch-map">Memo</span>
+        <span class="chip ch-map">DueDate</span>
+        <span class="chip ch-map">CustID</span>
+        <span class="chip ch-map">Beginning Reading</span>
+        <span class="chip ch-map">Beginning Date</span>
+        <span class="chip ch-map">Current Reading</span>
+        <span class="chip ch-map">Current Date</span>
+        <span class="chip ch-map">Useage</span>
+        <span class="chip ch-map">BaseRate</span>
+        <span class="chip ch-skip">proRate</span>
+        <span class="chip ch-skip">estReading</span>
+        <span class="chip ch-skip">mtrMult</span>
+        <span class="chip ch-skip">Posted</span>
+        <span class="chip ch-skip">LogDate</span>
+        <span class="chip ch-skip">Route</span>
+      </div>
+
+      <div class="ms-lbl">— customers</div>
+      <div class="mrow"><div class="mf mf-s">Cust Name</div><div class="mf-arr">→</div><div class="mf mf-t tc">customers.full_name</div><div class="conf c-hi">HIGH</div><div class="mnote">direct</div></div>
+      <div class="mrow"><div class="mf mf-s">Address1 + Address2</div><div class="mf-arr">→</div><div class="mf mf-t tc">customers.billing_address</div><div class="conf c-hi">HIGH</div><div class="mnote">concat if Address2 present</div></div>
+      <div class="mrow"><div class="mf mf-s">City_St_zip [parse]</div><div class="mf-arr">→</div><div class="mf mf-t tc">customers.billing_city / state</div><div class="conf c-med">MED</div><div class="mnote">split on comma + regex</div></div>
+      <div class="mrow"><div class="mf mf-s">Phone_Nbr</div><div class="mf-arr">→</div><div class="mf mf-t tc">customers.phone_primary</div><div class="conf c-hi">HIGH</div><div class="mnote">direct</div></div>
+      <div class="mrow"><div class="mf mf-s">Email</div><div class="mf-arr">→</div><div class="mf mf-t tc">customers.email</div><div class="conf c-hi">HIGH</div><div class="mnote">direct · nullable</div></div>
+      <div class="mrow"><div class="mf mf-s">Notes</div><div class="mf-arr">→</div><div class="mf mf-t tc">customers.notes</div><div class="conf c-hi">HIGH</div><div class="mnote">direct</div></div>
+
+      <div class="ms-lbl">— accounts</div>
+      <div class="mrow"><div class="mf mf-s">Account Nbr</div><div class="mf-arr">→</div><div class="mf mf-t ta">accounts.account_number</div><div class="conf c-hi">HIGH</div><div class="mnote">preserve original</div></div>
+      <div class="mrow"><div class="mf mf-s">Inactivate [bool]</div><div class="mf-arr">→</div><div class="mf mf-t ta">accounts.status</div><div class="conf c-hi">HIGH</div><div class="mnote">True→INACTIVE · False→ACTIVE</div></div>
+      <div class="mrow"><div class="mf mf-s">Deposit</div><div class="mf-arr">→</div><div class="mf mf-t ta">accounts.deposit</div><div class="conf c-hi">HIGH</div><div class="mnote">direct</div></div>
+
+      <div class="ms-lbl">— account_balances</div>
+      <div class="mrow"><div class="mf mf-s">Balance</div><div class="mf-arr">→</div><div class="mf mf-t tba">account_balances.current_balance</div><div class="conf c-hi">HIGH</div><div class="mnote">carry-forward seed</div></div>
+
+      <div class="ms-lbl">— service_addresses</div>
+      <div class="mrow"><div class="mf mf-s" style="color:var(--warning)">Service Adr ⚠</div><div class="mf-arr">→</div><div class="mf mf-t tad">service_addresses.street</div><div class="conf c-med">MED</div><div class="mnote">auto-strip embedded city/state</div></div>
+      <div class="mrow"><div class="mf mf-s">City_St_zip [parse]</div><div class="mf-arr">→</div><div class="mf mf-t tad">service_addresses.city / state / zip</div><div class="conf c-med">MED</div><div class="mnote">same parse as billing</div></div>
+      <div class="mrow"><div class="mf mf-s">latitude / longitude</div><div class="mf-arr">→</div><div class="mf mf-t tad">service_addresses.lat / lng</div><div class="conf c-lo">LOW</div><div class="mnote">all zeros · geocode post-import</div></div>
+
+      <div class="ms-lbl">— transactions · 775 rows · bulk insert</div>
+      <div class="mrow"><div class="mf mf-s">Trans Date</div><div class="mf-arr">→</div><div class="mf mf-t ttx">transactions.trans_date</div><div class="conf c-hi">HIGH</div><div class="mnote">direct</div></div>
+      <div class="mrow"><div class="mf mf-s">Trans Type</div><div class="mf-arr">→</div><div class="mf mf-t ttx">transactions.trans_type</div><div class="conf c-hi">HIGH</div><div class="mnote">B / P / I passthrough</div></div>
+      <div class="mrow"><div class="mf mf-s">Amount</div><div class="mf-arr">→</div><div class="mf mf-t ttx">transactions.amount</div><div class="conf c-hi">HIGH</div><div class="mnote">direct</div></div>
+      <div class="mrow"><div class="mf mf-s">Previous Balance</div><div class="mf-arr">→</div><div class="mf mf-t ttx">transactions.previous_balance</div><div class="conf c-hi">HIGH</div><div class="mnote">direct</div></div>
+      <div class="mrow"><div class="mf mf-s">Total Amount</div><div class="mf-arr">→</div><div class="mf mf-t ttx">transactions.total_amount</div><div class="conf c-hi">HIGH</div><div class="mnote">direct</div></div>
+      <div class="mrow"><div class="mf mf-s">Memo</div><div class="mf-arr">→</div><div class="mf mf-t ttx">transactions.memo</div><div class="conf c-hi">HIGH</div><div class="mnote">direct</div></div>
+      <div class="mrow"><div class="mf mf-s">DueDate</div><div class="mf-arr">→</div><div class="mf mf-t ttx">transactions.due_date</div><div class="conf c-hi">HIGH</div><div class="mnote">direct</div></div>
+      <div class="mrow"><div class="mf mf-s">CustID [join key]</div><div class="mf-arr">→</div><div class="mf mf-t ttx">transactions.account_id</div><div class="conf c-hi">HIGH</div><div class="mnote">FK resolved at runtime</div></div>
+
+    </div>
+  </div>
+
+  <!-- RIGHT: flags + actions -->
+  <div class="right">
+    <div class="sgrid">
+      <div class="sc"><div class="sn" style="color:var(--primary)">23</div><div class="sl">Customers</div></div>
+      <div class="sc"><div class="sn" style="color:#7d8eb6">23</div><div class="sl">Accounts</div></div>
+      <div class="sc"><div class="sn" style="color:var(--success)">23</div><div class="sl">Addresses</div></div>
+      <div class="sc"><div class="sn" style="color:var(--info)">775</div><div class="sl">Transactions</div></div>
+    </div>
+
+    <div style="padding:7px 10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px;flex-shrink:0">
+      <span class="pill p-amber" style="font-size:8px">2 FLAGS</span>
+      <span style="font-family:var(--font-mono);font-size:9px;color:var(--text-muted)">NON-BLOCKING</span>
+    </div>
+
+    <div class="flags">
+      <div class="fc fw">
+        <div class="ft">⚠ Embedded city in street field</div>
+        <div class="fb">1 row (Edward Toll · SVNWSTX04). Script auto-corrects on import. Verify in audit log.</div>
+      </div>
+      <div class="fc fw">
+        <div class="ft">⚠ Zero lat/lng — all 23 rows</div>
+        <div class="fb">Coordinates not exported from source system. Map pins blank until geocoded post-import.</div>
+      </div>
+      <div class="fc fok">
+        <div class="ft">✓ CustID join integrity</div>
+        <div class="fb">All 775 transaction rows have valid CustID references. No orphan records.</div>
+      </div>
+      <div class="fc fok">
+        <div class="ft">✓ Account numbers intact</div>
+        <div class="fb">Original account numbers preserved. No duplicates across 23 accounts.</div>
+      </div>
+      <div class="fc fi">
+        <div class="ft">ℹ Email sparse</div>
+        <div class="fb">1 of 23 customers has email. Nullable field — not a blocker.</div>
+      </div>
+    </div>
+
+    <div class="abar">
+      <div class="arow">
+        <button class="btn bg" onclick="doRun(true)">DRY RUN</button>
+        <button class="btn bd" onclick="doReject()">REJECT</button>
+      </div>
+      <button class="btn br" onclick="doRun(false)">APPROVE &amp; IMPORT TO SUPABASE →</button>
+      <div class="anote">Direct insert · audit CSV auto-saved to storage</div>
+    </div>
+  </div>
+
+</div>
+
+<!-- MIGRATION OVERLAY -->
+<div class="overlay" id="overlay">
+  <div class="mbox" id="mbox">
+    <div class="mhd">
+      <div class="spin" id="spin"></div>
+      <div>
+        <div class="mtitle" id="mtitle">IMPORTING — SVNWSTX</div>
+        <div class="msub" id="msub">Initializing…</div>
+      </div>
+    </div>
+    <div class="mbd">
+      <div class="prog-rail"><div class="prog-fill" id="prog"></div></div>
+      <div class="sgrid2">
+        <div class="sc2 pending" id="s-c"><span style="font-size:13px">👤</span><div><div class="sc2-lbl">CUSTOMERS</div><div class="sc2-n" id="sv-c">—</div></div></div>
+        <div class="sc2 pending" id="s-a"><span style="font-size:13px">📍</span><div><div class="sc2-lbl">ADDRESSES</div><div class="sc2-n" id="sv-a">—</div></div></div>
+        <div class="sc2 pending" id="s-ac"><span style="font-size:13px">🗂</span><div><div class="sc2-lbl">ACCOUNTS</div><div class="sc2-n" id="sv-ac">—</div></div></div>
+        <div class="sc2 pending" id="s-b"><span style="font-size:13px">💰</span><div><div class="sc2-lbl">BALANCES</div><div class="sc2-n" id="sv-b">—</div></div></div>
+        <div class="sc2 pending" id="s-t" style="grid-column:span 2"><span style="font-size:13px">📋</span><div><div class="sc2-lbl">TRANSACTIONS — BULK</div><div class="sc2-n" id="sv-t">—</div></div></div>
+      </div>
+      <div class="log" id="log"></div>
+    </div>
+    <div class="mft">
+      <span class="mst" id="elapsed">Elapsed: 0.0s</span>
+      <span class="pill p-cyan" id="mpct">0%</span>
+    </div>
+  </div>
+
+  <div class="cplt" id="cplt">
+    <div class="cplt-ico">✅</div>
+    <div class="cplt-title" id="cplt-title">MIGRATION COMPLETE</div>
+    <div class="cplt-sub" id="cplt-sub"></div>
+    <div class="cplt-stats">
+      <div class="cs"><div class="csn" style="color:var(--primary)">23</div><div class="csl">Customers</div></div>
+      <div class="cs"><div class="csn" style="color:#7d8eb6">23</div><div class="csl">Accounts</div></div>
+      <div class="cs"><div class="csn" style="color:var(--info)">775</div><div class="csl">Transactions</div></div>
+      <div class="cs"><div class="csn" style="color:var(--success)">0</div><div class="csl">Errors</div></div>
+    </div>
+    <div class="cplt-btns">
+      <button class="btn bg" style="font-size:9px;flex:none;padding:9px 14px" onclick="closeOverlay()">CLOSE</button>
+      <button class="btn bg" style="font-size:9px;flex:none;padding:9px 14px">VIEW AUDIT LOG</button>
+    </div>
+  </div>
+</div>
+
+<script>
+let migTimer;
+
+function log(type, msg) {
+  const l = document.getElementById('log');
+  const d = document.createElement('div');
+  d.className = 'll-' + type;
+  d.textContent = new Date().toTimeString().slice(0,8) + '  ' + msg;
+  l.appendChild(d);
+  l.scrollTop = l.scrollHeight;
+}
+function prog(p) {
+  document.getElementById('prog').style.width = p + '%';
+  document.getElementById('mpct').textContent = p + '%';
+}
+function stage(id, state, val) {
+  document.getElementById('s-' + id).className = 'sc2 ' + state;
+  if (val !== undefined) document.getElementById('sv-' + id).textContent = val;
+}
+
+function doRun(dry) {
+  document.getElementById('mbox').style.display = 'block';
+  document.getElementById('cplt').classList.remove('vis');
+  document.getElementById('overlay').classList.add('vis');
+  document.getElementById('mtitle').textContent = (dry ? '[DRY RUN] ' : 'IMPORTING — ') + 'SVNWSTX';
+  document.getElementById('msub').textContent = 'Initializing migration runner…';
+  document.getElementById('log').innerHTML = '';
+  document.getElementById('spin').style.display = 'block';
+  ['c','a','ac','b','t'].forEach(s => { stage(s, 'pending'); document.getElementById('sv-' + s).textContent = '—'; });
+  prog(0);
+
+  const start = Date.now();
+  migTimer = setInterval(() => {
+    document.getElementById('elapsed').textContent = 'Elapsed: ' + ((Date.now() - start) / 1000).toFixed(1) + 's';
+  }, 100);
+
+  const p = dry ? '[DRY] ' : '';
+  const steps = [
+    [300,  () => { document.getElementById('msub').textContent='Inserting customers…'; stage('c','running','…'); log('info', p+'→ customers — 23 rows'); }],
+    [900,  () => { stage('c','done','23 ✓'); prog(18); log('ok', p+'✓ 23 customers inserted'); }],
+    [1000, () => { document.getElementById('msub').textContent='Inserting service addresses…'; stage('a','running','…'); log('info', p+'→ service_addresses — 23 rows · 1 street auto-corrected'); }],
+    [1700, () => { stage('a','done','23 ✓'); prog(35); log('ok', p+'✓ 23 addresses inserted'); }],
+    [1800, () => { document.getElementById('msub').textContent='Creating accounts…'; stage('ac','running','…'); log('info', p+'→ accounts — FK: customer_id + address_id'); }],
+    [2500, () => { stage('ac','done','23 ✓'); prog(52); log('ok', p+'✓ 23 accounts inserted'); }],
+    [2600, () => { document.getElementById('msub').textContent='Seeding balances…'; stage('b','running','…'); log('info', p+'→ account_balances — carry-forward seed'); }],
+    [3100, () => { stage('b','done','23 ✓'); prog(65); log('ok', p+'✓ 23 opening balances seeded'); }],
+    [3200, () => { document.getElementById('msub').textContent='Bulk inserting 775 transactions…'; stage('t','running','…'); log('info', p+'→ transactions — 775 rows bulk · FK: account_id'); }],
+    [4600, () => { stage('t','done','775 ✓'); prog(92); log('ok', p+'✓ 775 transactions inserted'); }],
+    [4800, () => { log('info', p+'→ audit CSV → Supabase Storage / migration-logs/SVNWSTX/'); prog(100); }],
+    [5300, () => {
+      log('ok', p+'✓ Audit log saved: migration_audit_SVNWSTX_' + new Date().toISOString().slice(0,10) + '.csv');
+      log('ok', p+'Migration complete — 0 errors');
+      clearInterval(migTimer);
+      document.getElementById('spin').style.display = 'none';
+      document.getElementById('msub').textContent = dry ? 'Dry run complete. No data written.' : 'Import complete.';
+      setTimeout(() => {
+        document.getElementById('mbox').style.display = 'none';
+        document.getElementById('cplt').classList.add('vis');
+        document.getElementById('cplt-title').textContent = dry ? 'DRY RUN COMPLETE' : 'MIGRATION COMPLETE';
+        document.getElementById('cplt-sub').textContent = 'SVNWSTX · ' + (dry ? 'no data written' : 'imported successfully to Supabase');
+      }, 500);
+    }],
+  ];
+  steps.forEach(([d, fn]) => setTimeout(fn, d));
+}
+
+function doReject() {
+  if (confirm('Reject this migration? A reason will be logged.')) {
+    alert('Migration rejected and logged.');
+    closeOverlay();
+  }
+}
+
+function closeOverlay() {
+  clearInterval(migTimer);
+  document.getElementById('overlay').classList.remove('vis');
+  document.getElementById('spin').style.display = 'block';
+}
+</script>
+</body>
+</html>
